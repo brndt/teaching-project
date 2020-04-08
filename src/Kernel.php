@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LaSalle\StudentTeacher;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
