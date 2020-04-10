@@ -6,16 +6,16 @@ namespace LaSalle\StudentTeacher\User\Domain;
 
 class User
 {
-    private string $email;
-    private string $password;
-    private string $firstName;
-    private string $lastName;
-    private string $role;
-    private ?int $id;
-    private ?string $image;
-    private ?string $experience;
-    private ?\DateTimeImmutable $created;
-    private ?string $education;
+    protected string $email;
+    protected string $password;
+    protected string $firstName;
+    protected string $lastName;
+    protected string $role;
+    protected ?int $id;
+    protected ?string $image;
+    protected ?string $experience;
+    protected ?\DateTimeImmutable $created;
+    protected ?string $education;
 
     public function __construct(
         string $email,

@@ -1,0 +1,28 @@
+security:
+    encoders:
+        LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser: bcrypt
+    providers:
+        user_provider:
+            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\CustomUserProvider
+    firewalls:
+
+        login:
+            pattern:  ^/api/sign_in
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path:               /api/sign_in
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+
+        register:
+            pattern:  ^/api/sign_up
+            stateless: true
+            anonymous: true
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator

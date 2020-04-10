@@ -4,72 +4,51 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller;
 
-use LaSalle\GroupOne\Logging\Application\LogEntryResponse;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
-use LaSalle\StudentTeacher\User\Application\UserResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class LoginHTMLController
+/**
+ * Class ApiController
+ *
+ * @Route("/api")
+ */
+final class LoginHTMLController extends AbstractFOSRestController
 {
-    private SearchUserByEmail $searchUser;
-
-    public function __construct(SearchUserByEmail $searchUser)
-    {
-        $this->searchUser = $searchUser;
-    }
-
     /**
-     * @Route("/api/sign_in", name="sign_in", methods={"POST"})
+     * @Rest\Post("/sign_in", name="sign_in")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="User was logged in successfully"
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="User was not logged in successfully"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="_username",
+     *     in="body",
+     *     type="string",
+     *     description="The username",
+     *     schema={
+     *     }
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="_password",
+     *     in="body",
+     *     type="string",
+     *     description="The password",
+     *     schema={}
+     * )
+     *
+     * @SWG\Tag(name="User")
      */
-    public function signIn(Request $request)
+    public function signIn()
     {
-        $response = new Response();
-        $userInfo = json_decode($request->getContent());
-
-        $userResponse = $this->searchUser->__invoke(new SearchUserByEmailRequest($userInfo->email));
-
-        if (null == $userResponse) {
-            $response->setContent(
-                json_encode(
-                    [
-                        'message' => 'Can\'t find user by this email',
-                        'code' => 404
-                    ]
-                )
-            );
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-
-        $response->setContent(
-            json_encode(
-                [
-                    'user' => $this->transformUserResponseToArray($userResponse),
-                    'code' => 200
-                ]
-            )
-        );
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
-    }
-
-    private function transformUserResponseToArray(UserResponse $user): array
-    {
-        return [
-            'email' => $user->getEmail(),
-            'password' => $user->getPassword(),
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-            'role' => $user->getRole(),
-            'id' => $user->getId(),
-            'image' => $user->getImage(),
-            'education' => $user->getEducation(),
-            'experience' => $user->getExperience(),
-            'created' => $user->getCreated()
-        ];
     }
 }
