@@ -35,6 +35,31 @@ final class UserDBALRepository implements UserRepository
             ->execute();
     }
 
+    public function update(User $user): void
+    {
+        $this->connection->createQueryBuilder()
+            ->update('user_account')
+            ->set('email', ':email')
+            ->set('password', ':password')
+            ->set('first_name', ':first_name')
+            ->set('last_name', ':last_name')
+            ->set('image', ':image')
+            ->set('role', ':role')
+            ->set('education', ':education')
+            ->set('experience', ':experience')
+            ->where('email = :email')
+
+            ->setParameter('email', $user->getEmail(), 'string')
+            ->setParameter('password', $user->getPassword(), 'string')
+            ->setParameter('first_name', $user->getFirstName(), 'string')
+            ->setParameter('last_name', $user->getLastName(), 'string')
+            ->setParameter('education', $user->getEducation(), 'string')
+            ->setParameter('experience', $user->getExperience(), 'string')
+            ->setParameter('role', $user->getRole(), 'string')
+            ->setParameter('image', $user->getImage(), 'string')
+            ->execute();
+    }
+
     public function searchByEmail(string $email): ?User
     {
         $searchUserQuery = $this->connection->createQueryBuilder()

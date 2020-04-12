@@ -23,5 +23,8 @@ services:
         resource: '../src/User/Infrastructure/Framework/Controller'
         tags: ['controller.service_arguments']
 
+    Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken:
+        '@gesdinet.jwtrefreshtoken'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
