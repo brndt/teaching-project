@@ -6,19 +6,21 @@ namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation;
 
 final class BasicUserInformationResponse
 {
-    protected int $id;
-    protected string $email;
-    protected string $firstName;
-    protected string $lastName;
-    protected ?string $image;
-    protected ?string $education;
-    protected ?string $experience;
+    private int $id;
+    private string $email;
+    private string $firstName;
+    private string $lastName;
+    private array $roles;
+    private ?string $image;
+    private ?string $education;
+    private ?string $experience;
 
     public function __construct(
         int $id,
         string $email,
         string $firstName,
         string $lastName,
+        array $roles,
         ?string $image = null,
         ?string $education = null,
         ?string $experience = null
@@ -27,6 +29,7 @@ final class BasicUserInformationResponse
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->roles = $roles;
         $this->image = $image;
         $this->education = $education;
         $this->experience = $experience;
@@ -50,6 +53,11 @@ final class BasicUserInformationResponse
     public function getLastName(): string
     {
         return $this->lastName;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
     }
 
     public function getImage(): ?string

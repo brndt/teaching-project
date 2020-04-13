@@ -29,6 +29,7 @@ final class SearchBasicUserInformationById
             $user->getEmail(),
             $user->getFirstName(),
             $user->getLastName(),
+            $user->getRoles()->toPrimitives(),
             $user->getImage(),
             $user->getEducation(),
             $user->getExperience(),

@@ -67,13 +67,13 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
             return $this->handleView($view);
         }
 
-        $userResponse = ($this->updateUser)(
+        ($this->updateUser)(
             new UpdateBasicUserInformationRequest(
                 $id, $email, $firstName, $lastName, $education, $experience, $image
             )
         );
 
-        $view = $this->view($userResponse, Response::HTTP_OK);
+        $view = $this->view(['message' => 'Your account has been successfully changed'], Response::HTTP_OK);
         return $this->handleView($view);
     }
 }

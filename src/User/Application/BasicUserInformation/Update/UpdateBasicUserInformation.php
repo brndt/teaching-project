@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 
-use LaSalle\StudentTeacher\User\Application\BasicUserInformation\BasicUserInformationResponse;
 use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
@@ -17,7 +16,7 @@ final class UpdateBasicUserInformation
         $this->repository = $repository;
     }
 
-    public function __invoke(UpdateBasicUserInformationRequest $request): BasicUserInformationResponse
+    public function __invoke(UpdateBasicUserInformationRequest $request): void
     {
         $user = new User();
         $user->setId($request->getId());
@@ -29,15 +28,5 @@ final class UpdateBasicUserInformation
         $user->setExperience($request->getExperience());
 
         $this->repository->updateBasicInformation($user);
-
-        return new BasicUserInformationResponse(
-            $user->getId(),
-            $user->getEmail(),
-            $user->getFirstName(),
-            $user->getLastName(),
-            $request->getImage(),
-            $request->getEducation(),
-            $request->getExperience(),
-        );
     }
 }

@@ -6,13 +6,13 @@ namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 
 final class UpdateBasicUserInformationRequest
 {
-    protected int $id;
-    protected string $email;
-    protected string $firstName;
-    protected string $lastName;
-    protected string $image;
-    protected string $education;
-    protected string $experience;
+    private int $id;
+    private string $email;
+    private string $firstName;
+    private string $lastName;
+    private string $image;
+    private string $education;
+    private string $experience;
 
     public function __construct(
         int $id,
