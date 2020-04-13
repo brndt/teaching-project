@@ -1,6 +1,6 @@
 security:
     encoders:
-        LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser: bcrypt
+        LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser: bcrypt
     providers:
         user_provider:
             id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\CustomUserProvider

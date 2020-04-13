@@ -10,7 +10,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\CreateUser;
 use LaSalle\StudentTeacher\User\Application\CreateUserRequest;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
+use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\UniqueEmail;
 use Symfony\Component\HttpFoundation\Response;

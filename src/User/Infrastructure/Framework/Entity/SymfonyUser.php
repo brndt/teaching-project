@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\User;
+namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity;
 
 use LaSalle\StudentTeacher\User\Domain\User;
 use Symfony\Component\Security\Core\User\UserInterface;

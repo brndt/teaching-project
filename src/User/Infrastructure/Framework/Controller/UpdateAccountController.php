@@ -9,9 +9,10 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
+use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
 use LaSalle\StudentTeacher\User\Application\UpdateUser;
 use LaSalle\StudentTeacher\User\Application\UpdateUserRequest;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
+use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -38,7 +39,7 @@ final class UpdateAccountController extends AbstractFOSRestController
      */
     public function putAction(ParamFetcher $paramFetcher, int $id, UserPasswordEncoderInterface $encoder)
     {
-        $username = $paramFetcher->get('username');
+        $email = $paramFetcher->get('username');
         $password = $paramFetcher->get('password');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
@@ -54,12 +55,22 @@ final class UpdateAccountController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
+        $userResponse = $this->searchUser->__invoke(new SearchUserByEmailRequest($this->getUser()->getEmail()));
+
+        if (null !== $userResponse && $email !== $userResponse->getEmail()) {
+            $view = $this->view(
+                ['message' => 'Your new email is already registered'],
+                Response::HTTP_BAD_REQUEST
+            );
+            return $this->handleView($view);
+        }
+
         $roles = $this->getUser()->getRoles();
         $encodedPassword = $encoder->encodePassword(new SymfonyUser(), $password);
 
         $userResponse = ($this->updateUser)(
             new UpdateUserRequest(
-                $username, $encodedPassword, $firstName, $lastName, $roles, $id, $education, $experience, $image
+                $email, $encodedPassword, $firstName, $lastName, $roles, $id, $education, $experience, $image
             )
         );
 

@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
 use LaSalle\StudentTeacher\User\Domain\Roles;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
+use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
