@@ -2,20 +2,25 @@ security:
     encoders:
         LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser: bcrypt
     providers:
-        user_provider:
-            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\CustomUserProvider
+        email_user_provider:
+            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\EmailUserProvider
+        fos_userbundle:
+            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\UuidUserProvider
+
     firewalls:
 
         refresh:
             pattern:  ^/api/refresh_token
             stateless: true
             anonymous: true
+            provider: fos_userbundle
 
         login:
             pattern:  ^/api/sign_in
             stateless: true
             anonymous: true
             json_login:
+                provider: email_user_provider
                 check_path:               /api/sign_in
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
@@ -25,10 +30,17 @@ security:
             stateless: true
             anonymous: true
 
+        get_account:
+            pattern:  ^/api/account
+            methods: [GET]
+            stateless: true
+            anonymous: true
+
         api:
             pattern:   ^/api
             anonymous: false
             stateless: true
+            provider: fos_userbundle
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator

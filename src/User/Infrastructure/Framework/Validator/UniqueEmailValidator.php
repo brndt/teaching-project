@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator;
 
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmail;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmailRequest;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -24,7 +24,7 @@ final class UniqueEmailValidator extends ConstraintValidator
             return;
         }
 
-        $existingEmail = $this->searchUser->__invoke(new SearchUserByEmailRequest($value));
+        $existingEmail = ($this->searchUser)(new SearchUserByEmailRequest($value));
 
         if (!$existingEmail) {
             return;

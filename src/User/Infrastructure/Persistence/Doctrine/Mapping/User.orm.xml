@@ -4,6 +4,7 @@
         <id name="id" type="integer">
             <generator strategy="AUTO"/>
         </id>
+        <field name="uuid" type="string" unique="true" nullable="false"/>
         <field name="email" type="string" unique="true" nullable="false"/>
         <field name="firstName" type="string" nullable="false"/>
         <field name="lastName" type="string" nullable="false"/>

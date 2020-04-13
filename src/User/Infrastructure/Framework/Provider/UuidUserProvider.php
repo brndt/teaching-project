@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByUuid;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByUuidRequest;
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -13,34 +13,35 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-final class CustomUserProvider implements UserProviderInterface
+final class UuidUserProvider implements UserProviderInterface
 {
-    private SearchUserByEmail $searchUser;
+    private SearchUserByUuid $searchUser;
 
-    public function __construct(SearchUserByEmail $searchUser)
+    public function __construct(SearchUserByUuid $searchUser)
     {
         $this->searchUser = $searchUser;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($uuid)
     {
-        $searchUserResponse = $this->searchUser->__invoke(new SearchUserByEmailRequest($username));
+        $searchUserResponse = $this->searchUser->__invoke(new SearchUserByUuidRequest($uuid));
 
         if (!$searchUserResponse) {
-            throw new UsernameNotFoundException('No user found for username ' . $username);
+            throw new UsernameNotFoundException('No user found for uuid ' . $uuid);
         }
 
         $user = new SymfonyUser();
+        $user->setId($searchUserResponse->getId());
+        $user->setUuid($searchUserResponse->getUuid());
         $user->setEmail($searchUserResponse->getEmail());
         $user->setPassword($searchUserResponse->getPassword());
         $user->setFirstName($searchUserResponse->getFirstName());
         $user->setLastName($searchUserResponse->getLastName());
         $user->setRoles(Roles::fromPrimitives($searchUserResponse->getRoles()));
-        $user->setId($searchUserResponse->getId());
         $user->setImage($searchUserResponse->getImage());
         $user->setEducation($searchUserResponse->getEducation());
         $user->setExperience($searchUserResponse->getExperience());
-        $user->setCreated($searchUserResponse->getCreated());
+        $user->setCreated(new \DateTimeImmutable($searchUserResponse->getCreated()));
         return $user;
     }
 

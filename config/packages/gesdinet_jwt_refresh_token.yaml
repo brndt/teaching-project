@@ -1,0 +1,3 @@
+gesdinet_jwt_refresh_token:
+  user_provider: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\UuidUserProvider
+  user_identity_field: uuid

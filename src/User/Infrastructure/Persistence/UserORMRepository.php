@@ -28,12 +28,11 @@ final class UserORMRepository implements UserRepository
         $this->entityManager->flush();
     }
 
-    public function update(User $user): void
+    public function updateBasicInformation(User $user): void
     {
         $userUpdated = $this->doctrineRepository->findOneBy(['id' => $user->getId()]);
 
         $userUpdated->setEmail($user->getEmail());
-        $userUpdated->setPassword($user->getPassword());
         $userUpdated->setFirstName($user->getFirstName());
         $userUpdated->setLastName($user->getLastName());
         $userUpdated->setEducation($user->getEducation());
@@ -49,6 +48,24 @@ final class UserORMRepository implements UserRepository
         return $this->doctrineRepository->findOneBy(
             [
                 'email' => $email,
+            ]
+        );
+    }
+
+    public function searchByUuid(string $uuid): ?User
+    {
+        return $this->doctrineRepository->findOneBy(
+            [
+                'uuid' => $uuid,
+            ]
+        );
+    }
+
+    public function searchById(int $id): ?User
+    {
+        return $this->doctrineRepository->findOneBy(
+            [
+                'id' => $id,
             ]
         );
     }

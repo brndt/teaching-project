@@ -7,6 +7,7 @@ namespace LaSalle\StudentTeacher\User\Domain;
 class User
 {
     protected string $email;
+    protected string $uuid;
     protected string $password;
     protected string $firstName;
     protected string $lastName;
@@ -20,6 +21,11 @@ class User
     public function setId(?int $id): void
     {
         $this->id = $id;
+    }
+
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
     }
 
     public function setEmail(string $email): void
@@ -70,6 +76,11 @@ class User
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getPassword(): string

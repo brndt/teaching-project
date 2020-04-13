@@ -8,39 +8,40 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
-use LaSalle\StudentTeacher\User\Application\UpdateUser;
-use LaSalle\StudentTeacher\User\Application\UpdateUserRequest;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
+use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update\UpdateBasicUserInformation;
+use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update\UpdateBasicUserInformationRequest;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmail;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmailRequest;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserById;
+use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByIdRequest;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-final class UpdateAccountController extends AbstractFOSRestController
+final class UpdateBasicUserInformationController extends AbstractFOSRestController
 {
-    private UpdateUser $updateUser;
+    private UpdateBasicUserInformation $updateUser;
     private SearchUserByEmail $searchUser;
+    private SearchUserByEmail $searchUserByEmail;
+    private SearchUserById $searchUserById;
 
-    public function __construct(UpdateUser $updateUser, SearchUserByEmail $searchUser)
+    public function __construct(UpdateBasicUserInformation $updateUser, SearchUserByEmail $searchUserByEmail, SearchUserById $searchUserById)
     {
         $this->updateUser = $updateUser;
-        $this->searchUser = $searchUser;
+        $this->searchUserByEmail = $searchUserByEmail;
+        $this->searchUserById = $searchUserById;
     }
 
     /**
-     * @Rest\Put("/api/account/{id}")
+     * @Rest\Patch("/api/account/{id}")
      * @RequestParam(name="username")
-     * @RequestParam(name="password")
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
      * @RequestParam(name="image")
      * @RequestParam(name="education")
      * @RequestParam(name="experience")
      */
-    public function putAction(ParamFetcher $paramFetcher, int $id, UserPasswordEncoderInterface $encoder)
+    public function patchAction(ParamFetcher $paramFetcher, int $id)
     {
         $email = $paramFetcher->get('username');
-        $password = $paramFetcher->get('password');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
         $image = $paramFetcher->get('image');
@@ -49,15 +50,16 @@ final class UpdateAccountController extends AbstractFOSRestController
 
         if ($id !== $this->getUser()->getId()) {
             $view = $this->view(
-                ['message' => 'You don\'t have permission to get profile'],
+                ['message' => 'You don\'t have permission to update this profile'],
                 Response::HTTP_FORBIDDEN
             );
             return $this->handleView($view);
         }
 
-        $userResponse = $this->searchUser->__invoke(new SearchUserByEmailRequest($this->getUser()->getEmail()));
+        $newEmailIsExist = ($this->searchUserByEmail)(new SearchUserByEmailRequest($email));
+        $userByOldEmail = ($this->searchUserById)(new SearchUserByIdRequest($id));
 
-        if (null !== $userResponse && $email !== $userResponse->getEmail()) {
+        if (null !== $newEmailIsExist && $email !== $userByOldEmail->getEmail()) {
             $view = $this->view(
                 ['message' => 'Your new email is already registered'],
                 Response::HTTP_BAD_REQUEST
@@ -65,12 +67,9 @@ final class UpdateAccountController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
-        $roles = $this->getUser()->getRoles();
-        $encodedPassword = $encoder->encodePassword(new SymfonyUser(), $password);
-
         $userResponse = ($this->updateUser)(
-            new UpdateUserRequest(
-                $email, $encodedPassword, $firstName, $lastName, $roles, $id, $education, $experience, $image
+            new UpdateBasicUserInformationRequest(
+                $id, $email, $firstName, $lastName, $education, $experience, $image
             )
         );
 

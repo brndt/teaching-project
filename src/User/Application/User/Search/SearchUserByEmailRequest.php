@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\User\Application;
+namespace LaSalle\StudentTeacher\User\Application\User\Search;
 
 final class SearchUserByEmailRequest
 {

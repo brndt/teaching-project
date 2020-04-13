@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\User\Application;
+namespace LaSalle\StudentTeacher\User\Application\User\Create;
 
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
@@ -17,11 +17,12 @@ final class CreateUser
         $this->repository = $repository;
     }
 
-    public function __invoke(CreateUserRequest $request): UserResponse
+    public function __invoke(CreateUserRequest $request): void
     {
         $roles = Roles::fromPrimitives($request->getRoles());
 
         $user = new User();
+        $user->setUuid($request->getUuid());
         $user->setEmail($request->getEmail());
         $user->setPassword($request->getPassword());
         $user->setFirstName($request->getFirstName());
@@ -31,13 +32,6 @@ final class CreateUser
 
         $this->repository->save($user);
 
-        return new UserResponse(
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getFirstName(),
-            $user->getLastName(),
-            $roles->toPrimitives()
-        );
     }
 
 }

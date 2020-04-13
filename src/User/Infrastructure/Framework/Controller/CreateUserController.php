@@ -8,16 +8,16 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\User\Application\CreateUser;
-use LaSalle\StudentTeacher\User\Application\CreateUserRequest;
+use LaSalle\StudentTeacher\User\Application\User\Create\CreateUser;
+use LaSalle\StudentTeacher\User\Application\User\Create\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\UniqueEmail;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
-final class RegistrationController extends AbstractFOSRestController
+final class CreateUserController extends AbstractFOSRestController
 {
     private CreateUser $createUser;
 
@@ -41,14 +41,18 @@ final class RegistrationController extends AbstractFOSRestController
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
         $roles = $paramFetcher->get('roles');
+        $uuid = Uuid::uuid4()->toString();
 
         $encodedPassword = $encoder->encodePassword(new SymfonyUser(), $password);
 
-        $userResponse = $this->createUser->__invoke(
-            new CreateUserRequest($username, $encodedPassword, $firstName, $lastName, $roles)
+        ($this->createUser)(
+            new CreateUserRequest($username, $uuid, $encodedPassword, $firstName, $lastName, $roles)
         );
 
-        $view = $this->view($userResponse, Response::HTTP_OK);
+        $view = $this->view(
+            ['message' => 'User has been created'],
+            Response::HTTP_OK
+        );
         return $this->handleView($view);
     }
 
