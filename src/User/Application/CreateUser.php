@@ -27,6 +27,8 @@ final class CreateUser
         $user->setFirstName($request->getFirstName());
         $user->setLastName($request->getLastName());
         $user->setRoles($roles);
+        $user->setCreated(new \DateTimeImmutable());
+
 
         $this->repository->save($user);
 

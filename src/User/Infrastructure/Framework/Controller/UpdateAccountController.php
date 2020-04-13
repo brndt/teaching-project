@@ -9,13 +9,11 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
-use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
 use LaSalle\StudentTeacher\User\Application\UpdateUser;
 use LaSalle\StudentTeacher\User\Application\UpdateUserRequest;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
+use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UpdateAccountController extends AbstractFOSRestController
 {
@@ -38,7 +36,7 @@ final class UpdateAccountController extends AbstractFOSRestController
      * @RequestParam(name="education")
      * @RequestParam(name="experience")
      */
-    public function putAction(ParamFetcher $paramFetcher, int $id)
+    public function putAction(ParamFetcher $paramFetcher, int $id, UserPasswordEncoderInterface $encoder)
     {
         $username = $paramFetcher->get('username');
         $password = $paramFetcher->get('password');
@@ -56,10 +54,13 @@ final class UpdateAccountController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
+        $symfonyUser = new SymfonyUser();
+        $encodedPassword = $encoder->encodePassword($symfonyUser, $password);
+
         $userResponse = ($this->updateUser)(
             new UpdateUserRequest(
                 $username,
-                $password,
+                $encodedPassword,
                 $firstName,
                 $lastName,
                 $this->getUser()->getRoles(),

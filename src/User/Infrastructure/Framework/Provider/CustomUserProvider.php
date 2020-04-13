@@ -7,12 +7,11 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
 use LaSalle\StudentTeacher\User\Domain\Roles;
-use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class CustomUserProvider implements UserProviderInterface
 {
@@ -28,7 +27,7 @@ final class CustomUserProvider implements UserProviderInterface
         $searchUserResponse = $this->searchUser->__invoke(new SearchUserByEmailRequest($username));
 
         if (!$searchUserResponse) {
-            throw new UsernameNotFoundException('No user found for username '.$username);
+            throw new UsernameNotFoundException('No user found for username ' . $username);
         }
 
         $user = new SymfonyUser();

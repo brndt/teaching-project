@@ -10,8 +10,6 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\CreateUser;
 use LaSalle\StudentTeacher\User\Application\CreateUserRequest;
-use LaSalle\StudentTeacher\User\Domain\Role;
-use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\UniqueEmail;
@@ -44,15 +42,7 @@ final class RegistrationController extends AbstractFOSRestController
         $lastName = $paramFetcher->get('lastName');
         $roles = $paramFetcher->get('roles');
 
-        $rolesAsValueObject = Roles::fromPrimitives($paramFetcher->get('roles'));
-
         $symfonyUser = new SymfonyUser();
-        $symfonyUser->setEmail($username);
-        $symfonyUser->setPassword($password);
-        $symfonyUser->setFirstName($firstName);
-        $symfonyUser->setLastName($lastName);
-        $symfonyUser->setRoles($rolesAsValueObject);
-
         $encodedPassword = $encoder->encodePassword($symfonyUser, $password);
 
         $userResponse = $this->createUser->__invoke(

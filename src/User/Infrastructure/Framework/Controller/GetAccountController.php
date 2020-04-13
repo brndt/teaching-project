@@ -6,13 +6,9 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RequestParam;
-use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class GetAccountController extends AbstractFOSRestController
@@ -29,7 +25,6 @@ final class GetAccountController extends AbstractFOSRestController
      */
     public function getAction(int $id, JWTEncoderInterface $encoder)
     {
-
         if ($id !== $this->getUser()->getId()) {
             $view = $this->view(
                 ['message' => 'You don\'t have permission to get profile'],

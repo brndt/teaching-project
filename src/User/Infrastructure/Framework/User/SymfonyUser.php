@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\User;
 
-use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 

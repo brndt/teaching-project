@@ -14,7 +14,7 @@ final class RolesType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return new Roles(json_decode($value));
+        return Roles::fromPrimitives(json_decode($value));
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
