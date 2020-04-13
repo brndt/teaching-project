@@ -22,6 +22,17 @@ final class SearchUserByEmail
         if (null === $user) {
             return null;
         }
-        return new UserResponse($user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName(), $user->getRoles()->toPrimitives(), $user->getId(), $user->getImage(), $user->getEducation(), $user->getExperience(), $user->getCreated());
+        return new UserResponse(
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getRoles()->toPrimitives(),
+            $user->getId(),
+            $user->getImage(),
+            $user->getEducation(),
+            $user->getExperience(),
+            $user->getCreated()
+        );
     }
 }

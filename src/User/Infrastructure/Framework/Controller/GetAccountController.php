@@ -23,7 +23,7 @@ final class GetAccountController extends AbstractFOSRestController
     /**
      * @Rest\Get("/api/account/{id}")
      */
-    public function getAction(int $id, JWTEncoderInterface $encoder)
+    public function getAction(int $id)
     {
         if ($id !== $this->getUser()->getId()) {
             $view = $this->view(

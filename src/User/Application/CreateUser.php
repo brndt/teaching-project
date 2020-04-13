@@ -29,7 +29,6 @@ final class CreateUser
         $user->setRoles($roles);
         $user->setCreated(new \DateTimeImmutable());
 
-
         $this->repository->save($user);
 
         return new UserResponse(

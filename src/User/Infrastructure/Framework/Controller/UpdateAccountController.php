@@ -54,20 +54,12 @@ final class UpdateAccountController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
-        $symfonyUser = new SymfonyUser();
-        $encodedPassword = $encoder->encodePassword($symfonyUser, $password);
+        $roles = $this->getUser()->getRoles();
+        $encodedPassword = $encoder->encodePassword(new SymfonyUser(), $password);
 
         $userResponse = ($this->updateUser)(
             new UpdateUserRequest(
-                $username,
-                $encodedPassword,
-                $firstName,
-                $lastName,
-                $this->getUser()->getRoles(),
-                $id,
-                $education,
-                $experience,
-                $image
+                $username, $encodedPassword, $firstName, $lastName, $roles, $id, $education, $experience, $image
             )
         );
 

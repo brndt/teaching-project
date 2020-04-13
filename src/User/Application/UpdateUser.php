@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application;
 
-use LaSalle\StudentTeacher\User\Domain\Role;
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
@@ -35,6 +34,17 @@ final class UpdateUser
         $user->setCreated($request->getCreated());
 
         $this->repository->update($user);
-        return new UserResponse($user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName(), $user->getRoles()->toPrimitives(), $user->getId(), $request->getImage(), $request->getEducation(), $request->getExperience(), $request->getCreated());
+        return new UserResponse(
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getRoles()->toPrimitives(),
+            $user->getId(),
+            $request->getImage(),
+            $request->getEducation(),
+            $request->getExperience(),
+            $request->getCreated()
+        );
     }
 }

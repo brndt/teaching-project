@@ -32,7 +32,7 @@ final class RegistrationController extends AbstractFOSRestController
      * @RequestParam(name="password", requirements=@Password)
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
-     * @RequestParam(name="roles")
+     * @RequestParam(name="roles", map=true, requirements="ROLE_STUDENT|ROLE_TEACHER")
      */
     public function postAction(ParamFetcher $paramFetcher, UserPasswordEncoderInterface $encoder): Response
     {
@@ -42,8 +42,7 @@ final class RegistrationController extends AbstractFOSRestController
         $lastName = $paramFetcher->get('lastName');
         $roles = $paramFetcher->get('roles');
 
-        $symfonyUser = new SymfonyUser();
-        $encodedPassword = $encoder->encodePassword($symfonyUser, $password);
+        $encodedPassword = $encoder->encodePassword(new SymfonyUser(), $password);
 
         $userResponse = $this->createUser->__invoke(
             new CreateUserRequest($username, $encodedPassword, $firstName, $lastName, $roles)
