@@ -14,7 +14,7 @@ final class RefreshTokenController extends AbstractFOSRestController
     /**
      * @Rest\Post("/api/refresh_token", name="token_refresh")
      */
-    public function refreshToken(Request $request, RefreshToken $refreshToken)
+    public function postAction(Request $request, RefreshToken $refreshToken)
     {
         return $refreshToken->refresh($request);
     }

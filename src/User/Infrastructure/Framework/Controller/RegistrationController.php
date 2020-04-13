@@ -10,6 +10,8 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\CreateUser;
 use LaSalle\StudentTeacher\User\Application\CreateUserRequest;
+use LaSalle\StudentTeacher\User\Domain\Role;
+use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\UniqueEmail;
@@ -32,25 +34,33 @@ final class RegistrationController extends AbstractFOSRestController
      * @RequestParam(name="password", requirements=@Password)
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
-     * @RequestParam(name="role", requirements="student|teacher")
+     * @RequestParam(name="roles")
      */
-    public function signUp(ParamFetcher $paramFetcher, UserPasswordEncoderInterface $encoder): Response
+    public function postAction(ParamFetcher $paramFetcher, UserPasswordEncoderInterface $encoder): Response
     {
         $username = $paramFetcher->get('username');
         $password = $paramFetcher->get('password');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
-        $role = $paramFetcher->get('role');
+        $roles = $paramFetcher->get('roles');
 
-        $symfonyUser = new SymfonyUser($username, $password, $firstName, $lastName, $role);
+        $rolesAsValueObject = Roles::fromPrimitives($paramFetcher->get('roles'));
+
+        $symfonyUser = new SymfonyUser();
+        $symfonyUser->setEmail($username);
+        $symfonyUser->setPassword($password);
+        $symfonyUser->setFirstName($firstName);
+        $symfonyUser->setLastName($lastName);
+        $symfonyUser->setRoles($rolesAsValueObject);
 
         $encodedPassword = $encoder->encodePassword($symfonyUser, $password);
 
         $userResponse = $this->createUser->__invoke(
-            new CreateUserRequest($username, $encodedPassword, $firstName, $lastName, $role)
+            new CreateUserRequest($username, $encodedPassword, $firstName, $lastName, $roles)
         );
 
         $view = $this->view($userResponse, Response::HTTP_OK);
         return $this->handleView($view);
     }
+
 }

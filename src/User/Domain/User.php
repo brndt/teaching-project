@@ -10,35 +10,61 @@ class User
     protected string $password;
     protected string $firstName;
     protected string $lastName;
-    protected string $role;
+    protected Roles $roles;
     protected ?int $id;
     protected ?string $image;
     protected ?string $experience;
     protected ?\DateTimeImmutable $created;
     protected ?string $education;
 
-    public function __construct(
-        string $email,
-        string $password,
-        string $firstName,
-        string $lastName,
-        string $role,
-        int $id = null,
-        string $image = null,
-        string $education = null,
-        string $experience = null,
-        \DateTimeImmutable $created = null
-    ) {
-        $this->email = $email;
-        $this->password = $password;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->role = $role;
+    public function setId(?int $id): void
+    {
         $this->id = $id;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function setRoles(Roles $roles): void
+    {
+        $this->roles = $roles;
+    }
+
+    public function setImage(?string $image): void
+    {
         $this->image = $image;
-        $this->education = $education;
+    }
+
+    public function setExperience(?string $experience): void
+    {
         $this->experience = $experience;
+    }
+
+    public function setCreated(?\DateTimeImmutable $created): void
+    {
         $this->created = $created;
+    }
+
+    public function setEducation(?string $education): void
+    {
+        $this->education = $education;
     }
 
     public function getEmail(): string
@@ -61,9 +87,9 @@ class User
         return $this->lastName;
     }
 
-    public function getRole(): string
+    public function getRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 
     public function getId(): ?int

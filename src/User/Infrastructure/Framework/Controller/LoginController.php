@@ -12,7 +12,7 @@ final class LoginController extends AbstractFOSRestController
     /**
      * @Rest\Post("/api/sign_in", name="sign_in")
      */
-    public function signIn()
+    public function postAction()
     {
     }
 }

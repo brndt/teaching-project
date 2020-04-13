@@ -10,7 +10,7 @@ final class UserResponse
     private string $password;
     private string $firstName;
     private string $lastName;
-    private string $role;
+    private array $roles;
     private ?int $id;
     private ?string $image;
     private ?string $experience;
@@ -22,7 +22,7 @@ final class UserResponse
         string $password,
         string $firstName,
         string $lastName,
-        string $role,
+        array $roles,
         int $id = null,
         string $image = null,
         string $education = null,
@@ -33,7 +33,7 @@ final class UserResponse
         $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->role = $role;
+        $this->roles = $roles;
         $this->id = $id;
         $this->image = $image;
         $this->education = $education;
@@ -61,9 +61,9 @@ final class UserResponse
         return $this->lastName;
     }
 
-    public function getRole(): string
+    public function getRoles(): array
     {
-        return $this->role;
+        return $this->roles;
     }
 
     public function getId(): ?int

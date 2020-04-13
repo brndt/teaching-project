@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence;
 
 use Doctrine\DBAL\Connection;
+use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
@@ -26,12 +27,12 @@ final class UserDBALRepository implements UserRepository
             ->setValue('first_name', ':first_name')
             ->setValue('last_name', ':last_name')
             ->setValue('created', 'now()')
-            ->setValue('role', ':role')
+            ->setValue('roles', ':roles')
             ->setParameter('email', $user->getEmail(), 'string')
             ->setParameter('password', $user->getPassword(), 'string')
             ->setParameter('first_name', $user->getFirstName(), 'string')
             ->setParameter('last_name', $user->getLastName(), 'string')
-            ->setParameter('role', $user->getRole(), 'string')
+            ->setParameter('roles', $user->getRoles(), 'roles')
             ->execute();
     }
 
@@ -44,19 +45,19 @@ final class UserDBALRepository implements UserRepository
             ->set('first_name', ':first_name')
             ->set('last_name', ':last_name')
             ->set('image', ':image')
-            ->set('role', ':role')
+            ->set('roles', ':roles')
             ->set('education', ':education')
             ->set('experience', ':experience')
-            ->where('email = :email')
-
+            ->where('id = :id')
             ->setParameter('email', $user->getEmail(), 'string')
             ->setParameter('password', $user->getPassword(), 'string')
             ->setParameter('first_name', $user->getFirstName(), 'string')
             ->setParameter('last_name', $user->getLastName(), 'string')
             ->setParameter('education', $user->getEducation(), 'string')
             ->setParameter('experience', $user->getExperience(), 'string')
-            ->setParameter('role', $user->getRole(), 'string')
+            ->setParameter('roles', $user->getRoles(), 'roles')
             ->setParameter('image', $user->getImage(), 'string')
+            ->setParameter('id', $user->getId(), 'integer')
             ->execute();
     }
 
@@ -74,17 +75,18 @@ final class UserDBALRepository implements UserRepository
             return null;
         }
 
-        return new User(
-            $userAsArray['email'],
-            $userAsArray['password'],
-            $userAsArray['first_name'],
-            $userAsArray['last_name'],
-            $userAsArray['role'],
-            $userAsArray['id'],
-            $userAsArray['image'],
-            $userAsArray['education'],
-            $userAsArray['experience'],
-            new \DateTimeImmutable($userAsArray['created'])
-        );
+        $user = new User();
+        $user->setEmail($userAsArray['email']);
+        $user->setPassword($userAsArray['password']);
+        $user->setFirstName($userAsArray['first_name']);
+        $user->setLastName($userAsArray['last_name']);
+        $user->setRoles(Roles::fromPrimitives(json_decode($userAsArray['roles'])));
+        $user->setId($userAsArray['id']);
+        $user->setImage($userAsArray['image']);
+        $user->setEducation($userAsArray['education']);
+        $user->setExperience($userAsArray['experience']);
+        $user->setCreated(new \DateTimeImmutable($userAsArray['created']));
+
+        return $user;
     }
 }

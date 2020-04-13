@@ -6,6 +6,8 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmail;
 use LaSalle\StudentTeacher\User\Application\SearchUserByEmailRequest;
+use LaSalle\StudentTeacher\User\Domain\Roles;
+use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\User\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -29,13 +31,18 @@ final class CustomUserProvider implements UserProviderInterface
             throw new UsernameNotFoundException('No user found for username '.$username);
         }
 
-        return new SymfonyUser(
-            $searchUserResponse->getEmail(),
-            $searchUserResponse->getPassword(),
-            $searchUserResponse->getFirstName(),
-            $searchUserResponse->getLastName(),
-            $searchUserResponse->getRole()
-        );
+        $user = new SymfonyUser();
+        $user->setEmail($searchUserResponse->getEmail());
+        $user->setPassword($searchUserResponse->getPassword());
+        $user->setFirstName($searchUserResponse->getFirstName());
+        $user->setLastName($searchUserResponse->getLastName());
+        $user->setRoles(Roles::fromPrimitives($searchUserResponse->getRoles()));
+        $user->setId($searchUserResponse->getId());
+        $user->setImage($searchUserResponse->getImage());
+        $user->setEducation($searchUserResponse->getEducation());
+        $user->setExperience($searchUserResponse->getExperience());
+        $user->setCreated($searchUserResponse->getCreated());
+        return $user;
     }
 
     public function refreshUser(UserInterface $user)
@@ -43,7 +50,7 @@ final class CustomUserProvider implements UserProviderInterface
         if (!$user instanceof SymfonyUser) {
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
-        return $this->loadUserByUsername($user->getUsername());
+        return $this->loadUserByUsername($user->getEmail());
     }
 
 

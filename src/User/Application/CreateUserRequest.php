@@ -10,16 +10,15 @@ final class CreateUserRequest
     private string $password;
     private string $firstName;
     private string $lastName;
-    private string $role;
+    private array $roles;
 
-
-    public function __construct(string $email, string $password, string $firstName, string $lastName, string $role)
+    public function __construct(string $email, string $password, string $firstName, string $lastName, array $roles)
     {
         $this->email = $email;
         $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->role = $role;
+        $this->roles = $roles;
     }
 
     public function getEmail(): string
@@ -42,8 +41,8 @@ final class CreateUserRequest
         return $this->lastName;
     }
 
-    public function getRole(): string
+    public function getRoles(): array
     {
-        return $this->role;
+        return $this->roles;
     }
 }
