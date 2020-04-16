@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByUuid;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByUuidRequest;
 use LaSalle\StudentTeacher\User\Domain\Roles;
@@ -24,9 +25,9 @@ final class UuidUserProvider implements UserProviderInterface
 
     public function loadUserByUsername($uuid)
     {
-        $searchUserResponse = $this->searchUser->__invoke(new SearchUserByUuidRequest($uuid));
-
-        if (!$searchUserResponse) {
+        try {
+            $searchUserResponse = ($this->searchUser)(new SearchUserByUuidRequest($uuid));
+        } catch (UserNotFoundException $e) {
             throw new UsernameNotFoundException('No user found for uuid ' . $uuid);
         }
 

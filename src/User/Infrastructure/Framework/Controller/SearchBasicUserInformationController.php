@@ -8,7 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationById;
 use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationByIdRequest;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchBasicUserInformationController extends AbstractFOSRestController
@@ -25,12 +25,12 @@ final class SearchBasicUserInformationController extends AbstractFOSRestControll
      */
     public function getAction(int $id)
     {
-        $userResponse = ($this->searchUser)(new SearchBasicUserInformationByIdRequest($id));
-
-        if (null === $userResponse) {
+        try {
+            $userResponse = ($this->searchUser)(new SearchBasicUserInformationByIdRequest($id));
+        } catch (UserNotFoundException $e) {
             $view = $this->view(
-                ['message' => 'Can\'t find user with this id'],
-                Response::HTTP_FORBIDDEN
+                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'There\'s no user with such id'],
+                Response::HTTP_NOT_FOUND
             );
             return $this->handleView($view);
         }

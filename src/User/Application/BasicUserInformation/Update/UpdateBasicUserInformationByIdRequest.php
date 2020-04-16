@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 
-final class UpdateBasicUserInformationRequest
+final class UpdateBasicUserInformationByIdRequest
 {
     private int $id;
     private string $email;

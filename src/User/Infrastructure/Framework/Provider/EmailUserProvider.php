@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmail;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmailRequest;
 use LaSalle\StudentTeacher\User\Domain\Roles;
@@ -24,10 +25,10 @@ final class EmailUserProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
-        $searchUserResponse = ($this->searchUser)(new SearchUserByEmailRequest($username));
-
-        if (!$searchUserResponse) {
-            throw new UsernameNotFoundException('No user found for username ' . $username);
+        try {
+            $searchUserResponse = ($this->searchUser)(new SearchUserByEmailRequest($username));
+        } catch (UserNotFoundException $e) {
+            throw new UsernameNotFoundException('No user found for email ' . $username);
         }
 
         $user = new SymfonyUser();

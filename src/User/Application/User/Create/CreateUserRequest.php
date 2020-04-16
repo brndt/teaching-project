@@ -13,8 +13,14 @@ final class CreateUserRequest
     private string $lastName;
     private array $roles;
 
-    public function __construct(string $email, string $uuid, string $password, string $firstName, string $lastName, array $roles)
-    {
+    public function __construct(
+        string $email,
+        string $uuid,
+        string $password,
+        string $firstName,
+        string $lastName,
+        array $roles
+    ) {
         $this->email = $email;
         $this->uuid = $uuid;
         $this->password = $password;

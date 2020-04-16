@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\User\Create;
 
+use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
@@ -19,6 +21,12 @@ final class CreateUser
 
     public function __invoke(CreateUserRequest $request): void
     {
+        $user = $this->repository->searchByEmail($request->getEmail());
+
+        if (null !== $user) {
+            throw new UserAlreadyExistsException();
+        }
+
         $roles = Roles::fromPrimitives($request->getRoles());
 
         $user = new User();

@@ -20,7 +20,7 @@ final class LogoutController extends AbstractFOSRestController
 
         if (null === $token) {
             $view = $this->view(
-                ['message' => 'There\'s no refresh token by this user'],
+                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'There\'s no refresh token found by this user'],
                 Response::HTTP_NOT_FOUND
             );
             return $this->handleView($view);
@@ -29,7 +29,7 @@ final class LogoutController extends AbstractFOSRestController
         $tokenManager->delete($token);
 
         $view = $this->view(
-            ['message' => 'Refresh token has been deleted'],
+            ['code' => Response::HTTP_OK, 'message' => 'Refresh token has been deleted'],
             Response::HTTP_OK
         );
         return $this->handleView($view);

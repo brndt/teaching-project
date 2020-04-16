@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\User\Search;
 
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\User\UserResponse;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
@@ -16,12 +17,12 @@ final class SearchUserByEmail
         $this->repository = $repository;
     }
 
-    public function __invoke(SearchUserByEmailRequest $request): ?UserResponse
+    public function __invoke(SearchUserByEmailRequest $request): UserResponse
     {
         $user = $this->repository->searchByEmail($request->getEmail());
 
         if (null === $user) {
-            return null;
+            throw new UserNotFoundException();
         }
 
         return new UserResponse(

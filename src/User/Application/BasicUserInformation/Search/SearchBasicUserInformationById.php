@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search;
 
 use LaSalle\StudentTeacher\User\Application\BasicUserInformation\BasicUserInformationResponse;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
 final class SearchBasicUserInformationById
@@ -16,12 +17,12 @@ final class SearchBasicUserInformationById
         $this->repository = $repository;
     }
 
-    public function __invoke(SearchBasicUserInformationByIdRequest $request): ?BasicUserInformationResponse
+    public function __invoke(SearchBasicUserInformationByIdRequest $request): BasicUserInformationResponse
     {
         $user = $this->repository->searchById($request->getId());
 
         if (null === $user) {
-            return null;
+            throw new UserNotFoundException();
         }
 
         return new BasicUserInformationResponse(

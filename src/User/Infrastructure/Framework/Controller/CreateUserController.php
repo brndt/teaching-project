@@ -8,11 +8,11 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\User\Create\CreateUser;
 use LaSalle\StudentTeacher\User\Application\User\Create\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\UniqueEmail;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -28,7 +28,7 @@ final class CreateUserController extends AbstractFOSRestController
 
     /**
      * @Rest\Post("/api/sign_up", name="sign_up")
-     * @RequestParam(name="username", requirements=@UniqueEmail)
+     * @RequestParam(name="username")
      * @RequestParam(name="password", requirements=@Password)
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
@@ -45,12 +45,20 @@ final class CreateUserController extends AbstractFOSRestController
 
         $encodedPassword = $encoder->encodePassword(new SymfonyUser(), $password);
 
-        ($this->createUser)(
-            new CreateUserRequest($username, $uuid, $encodedPassword, $firstName, $lastName, $roles)
-        );
+        try {
+            ($this->createUser)(
+                new CreateUserRequest($username, $uuid, $encodedPassword, $firstName, $lastName, $roles)
+            );
+        } catch (UserAlreadyExistsException $e) {
+            $view = $this->view(
+                ['code' => Response::HTTP_BAD_REQUEST, 'message' => 'User with this email already has been registered'],
+                Response::HTTP_BAD_REQUEST
+            );
+            return $this->handleView($view);
+        }
 
         $view = $this->view(
-            ['message' => 'User has been created'],
+            ['code' => Response::HTTP_OK, 'message' => 'User has been created'],
             Response::HTTP_OK
         );
         return $this->handleView($view);
