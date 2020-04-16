@@ -1,0 +1,11 @@
+<doctrine-mapping>
+    <entity name="LaSalle\StudentTeacher\Token\Domain\RefreshToken" table="refresh_tokens"
+            repository-class="LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\RefreshTokenDoctrineRepository">
+        <id name="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="refreshToken" type="string" unique="true" nullable="false"/>
+        <field name="username" type="string" nullable="false"/>
+        <field name="valid" type="datetime" nullable="false"/>
+    </entity>
+</doctrine-mapping>

@@ -6,43 +6,21 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Request\RequestRefreshToken;
+use LaSalle\StudentTeacher\Token\Application\RefreshToken\Save\SaveRefreshToken;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 final class LoginController extends AbstractFOSRestController
 {
-    protected JWTTokenManagerInterface $jwtManager;
-    private RefreshTokenManagerInterface $refreshTokenManager;
-    private $ttl;
-    private ValidatorInterface $validator;
-    private RequestStack $requestStack;
-    private $userIdentityField;
-    private $tokenParameterName;
-    private $singleUse;
+    private JWTTokenManagerInterface $jwtManager;
+    private SaveRefreshToken $saveRefreshToken;
 
     public function __construct(
         JWTTokenManagerInterface $jwtManager,
-        RefreshTokenManagerInterface $refreshTokenManager,
-        $ttl,
-        ValidatorInterface $validator,
-        RequestStack $requestStack,
-        $userIdentityField,
-        $tokenParameterName,
-        $singleUse
+        SaveRefreshToken $saveRefreshToken
     ) {
         $this->jwtManager = $jwtManager;
-        $this->refreshTokenManager = $refreshTokenManager;
-        $this->ttl = $ttl;
-        $this->validator = $validator;
-        $this->requestStack = $requestStack;
-        $this->userIdentityField = $userIdentityField;
-        $this->tokenParameterName = $tokenParameterName;
-        $this->singleUse = $singleUse;
+        $this->saveRefreshToken = $saveRefreshToken;
     }
 
     /**
@@ -53,54 +31,16 @@ final class LoginController extends AbstractFOSRestController
         if (null === $jwt) {
             $jwt = $this->jwtManager->create($this->getUser());
         }
-        $data['token'] = $jwt;
 
-        $request = $this->requestStack->getCurrentRequest();
+        $datetime = new \DateTime();
+        $datetime->modify('+ 2592000 seconds');
 
-        $refreshTokenString = RequestRefreshToken::getRefreshToken($request, $this->tokenParameterName);
+        $refreshTokenResponse = $this->saveRefreshToken->__invoke($this->getUser()->getUuid(), $datetime);
 
-        if ($refreshTokenString && true === $this->singleUse) {
-            $refreshToken = $this->refreshTokenManager->get($refreshTokenString);
-            $refreshTokenString = null;
-
-            if ($refreshToken instanceof RefreshTokenInterface) {
-                $this->refreshTokenManager->delete($refreshToken);
-            }
-        }
-
-        if ($refreshTokenString) {
-            $data[$this->tokenParameterName] = $refreshTokenString;
-        } else {
-            $datetime = new \DateTime();
-            $datetime->modify('+' . $this->ttl . ' seconds');
-
-            $refreshToken = $this->refreshTokenManager->create();
-
-            $accessor = new PropertyAccessor();
-            $userIdentityFieldValue = $accessor->getValue($this->getUser(), $this->userIdentityField);
-
-            $refreshToken->setUsername($userIdentityFieldValue);
-            $refreshToken->setRefreshToken();
-            $refreshToken->setValid($datetime);
-
-            $valid = false;
-            while (false === $valid) {
-                $valid = true;
-                $errors = $this->validator->validate($refreshToken);
-                if ($errors->count() > 0) {
-                    foreach ($errors as $error) {
-                        if ('refreshToken' === $error->getPropertyPath()) {
-                            $valid = false;
-                            $refreshToken->setRefreshToken();
-                        }
-                    }
-                }
-            }
-
-            $this->refreshTokenManager->save($refreshToken);
-            $data[$this->tokenParameterName] = $refreshToken->getRefreshToken();
-        }
-
-        return $data;
+        $view = $this->view(
+            ['token' => $jwt, 'refresh_token' => $refreshTokenResponse->getRefreshToken()],
+            Response::HTTP_OK
+        );
+        return $this->handleView($view);
     }
 }

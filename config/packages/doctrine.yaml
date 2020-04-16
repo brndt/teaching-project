@@ -16,3 +16,8 @@ doctrine:
                 type: xml
                 dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Mapping'
                 prefix: LaSalle\StudentTeacher\User\Domain
+            RefreshToken:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Token/Infrastructure/Persistence/Doctrine/Mapping'
+                prefix: LaSalle\StudentTeacher\Token\Domain

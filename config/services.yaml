@@ -36,7 +36,5 @@ services:
       - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
 
   LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\LoginController:
-    arguments: [ "@lexik_jwt_authentication.jwt_manager","@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "@validator", "@request_stack", "%gesdinet_jwt_refresh_token.user_identity_field%", "%gesdinet_jwt_refresh_token.token_parameter_name%", "%gesdinet_jwt_refresh_token.single_use%" ]
-
-  LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\RefreshTokenController:
-    arguments: [ "@gesdinet.jwtrefreshtoken.authenticator", "@gesdinet.jwtrefreshtoken.user_provider", "@lexik_jwt_authentication.handler.authentication_success", "@lexik_jwt_authentication.handler.authentication_failure", "@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "%gesdinet_jwt_refresh_token.security.firewall%", "%gesdinet_jwt_refresh_token.ttl_update%"]
+    arguments:
+      $jwtManager: "@lexik_jwt_authentication.jwt_manager"
