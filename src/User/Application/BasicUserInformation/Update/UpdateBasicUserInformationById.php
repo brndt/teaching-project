@@ -6,7 +6,6 @@ namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
 final class UpdateBasicUserInformationById
@@ -37,15 +36,13 @@ final class UpdateBasicUserInformationById
             throw new UserAlreadyExistsException();
         }
 
-        $user = new User();
-        $user->setId($request->getId());
-        $user->setEmail($request->getEmail());
-        $user->setFirstName($request->getFirstName());
-        $user->setLastName($request->getLastName());
-        $user->setImage($request->getImage());
-        $user->setEducation($request->getEducation());
-        $user->setExperience($request->getExperience());
+        $userToUpdate->setEmail($request->getEmail());
+        $userToUpdate->setFirstName($request->getFirstName());
+        $userToUpdate->setLastName($request->getLastName());
+        $userToUpdate->setImage($request->getImage());
+        $userToUpdate->setEducation($request->getEducation());
+        $userToUpdate->setExperience($request->getExperience());
 
-        $this->repository->updateBasicInformation($user);
+        $this->repository->updateBasicInformation($userToUpdate);
     }
 }

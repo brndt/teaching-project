@@ -52,7 +52,7 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
         try {
             ($this->updateUser)(
                 new UpdateBasicUserInformationByIdRequest(
-                    $id, $email, $firstName, $lastName, $education, $experience, $image
+                    $id, $email, $firstName, $lastName, $image, $experience, $education
                 )
             );
         } catch (UserNotFoundException $e) {

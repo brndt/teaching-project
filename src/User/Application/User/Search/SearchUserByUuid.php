@@ -26,17 +26,17 @@ final class SearchUserByUuid
         }
 
         return new UserResponse(
-            $user->getId(),
             $user->getUuid(),
             $user->getEmail(),
             $user->getPassword(),
             $user->getFirstName(),
             $user->getLastName(),
             $user->getRoles()->toPrimitives(),
+            $user->getCreated()->format('Y-m-d H:i:s'),
+            $user->getId(),
             $user->getImage(),
-            $user->getEducation(),
             $user->getExperience(),
-            $user->getCreated()->format('Y-m-d H:i:s')
+            $user->getEducation(),
         );
     }
 }

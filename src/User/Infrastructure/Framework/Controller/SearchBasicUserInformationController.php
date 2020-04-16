@@ -9,6 +9,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationById;
 use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationByIdRequest;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchBasicUserInformationController extends AbstractFOSRestController
@@ -23,7 +24,7 @@ final class SearchBasicUserInformationController extends AbstractFOSRestControll
     /**
      * @Rest\Get("/api/account/{id}")
      */
-    public function getAction(int $id)
+    public function getAction(int $id, LoggerInterface $logger)
     {
         try {
             $userResponse = ($this->searchUser)(new SearchBasicUserInformationByIdRequest($id));

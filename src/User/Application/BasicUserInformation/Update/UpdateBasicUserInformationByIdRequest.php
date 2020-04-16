@@ -11,8 +11,8 @@ final class UpdateBasicUserInformationByIdRequest
     private string $firstName;
     private string $lastName;
     private string $image;
-    private string $education;
     private string $experience;
+    private string $education;
 
     public function __construct(
         int $id,
@@ -20,16 +20,16 @@ final class UpdateBasicUserInformationByIdRequest
         string $firstName,
         string $lastName,
         string $image,
-        string $education,
-        string $experience
+        string $experience,
+        string $education
     ) {
         $this->id = $id;
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->image = $image;
-        $this->education = $education;
         $this->experience = $experience;
+        $this->education = $education;
     }
 
     public function getId(): ?int
@@ -57,14 +57,14 @@ final class UpdateBasicUserInformationByIdRequest
         return $this->image;
     }
 
-    public function getEducation(): ?string
-    {
-        return $this->education;
-    }
-
     public function getExperience(): ?string
     {
         return $this->experience;
+    }
+
+    public function getEducation(): ?string
+    {
+        return $this->education;
     }
 
 }

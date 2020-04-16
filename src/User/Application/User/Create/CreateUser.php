@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\User\Create;
 
+use LaSalle\StudentTeacher\Shared\Domain\DomainEventBus;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
@@ -13,10 +13,12 @@ use LaSalle\StudentTeacher\User\Domain\UserRepository;
 final class CreateUser
 {
     private UserRepository $repository;
+    private DomainEventBus $eventBus;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, DomainEventBus $eventBus)
     {
         $this->repository = $repository;
+        $this->eventBus = $eventBus;
     }
 
     public function __invoke(CreateUserRequest $request): void
@@ -29,17 +31,21 @@ final class CreateUser
 
         $roles = Roles::fromPrimitives($request->getRoles());
 
-        $user = new User();
-        $user->setUuid($request->getUuid());
-        $user->setEmail($request->getEmail());
-        $user->setPassword($request->getPassword());
-        $user->setFirstName($request->getFirstName());
-        $user->setLastName($request->getLastName());
-        $user->setRoles($roles);
-        $user->setCreated(new \DateTimeImmutable());
+        $user = User::create(
+            $request->getUuid(),
+            $request->getEmail(),
+            $request->getPassword(),
+            $request->getFirstName(),
+            $request->getLastName(),
+            $roles,
+            new \DateTimeImmutable()
+        );
 
         $this->repository->save($user);
 
+        foreach ($user->pullDomainEvents() as $domainEvent) {
+            $this->eventBus->dispatch($domainEvent);
+        }
     }
 
 }

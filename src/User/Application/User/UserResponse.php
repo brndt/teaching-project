@@ -6,47 +6,43 @@ namespace LaSalle\StudentTeacher\User\Application\User;
 
 final class UserResponse
 {
-    private int $id;
+    private string $uuid;
     private string $email;
     private string $password;
     private string $firstName;
     private string $lastName;
     private array $roles;
+    private string $created;
+    private ?int $id;
     private ?string $image;
     private ?string $education;
     private ?string $experience;
-    private string $created;
-    private string $uuid;
+
 
     public function __construct(
-        int $id,
         string $uuid,
         string $email,
         string $password,
         string $firstName,
         string $lastName,
         array $roles,
+        string $created,
+        ?int $id,
         ?string $image,
-        ?string $education,
         ?string $experience,
-        string $created
+        ?string $education
     ) {
-        $this->id = $id;
         $this->uuid = $uuid;
         $this->email = $email;
         $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = $roles;
-        $this->image = $image;
-        $this->education = $education;
-        $this->experience = $experience;
         $this->created = $created;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
+        $this->id = $id;
+        $this->image = $image;
+        $this->experience = $experience;
+        $this->education = $education;
     }
 
     public function getUuid(): string
@@ -59,7 +55,7 @@ final class UserResponse
         return $this->email;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -79,6 +75,16 @@ final class UserResponse
         return $this->roles;
     }
 
+    public function getCreated(): string
+    {
+        return $this->created;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
@@ -92,11 +98,6 @@ final class UserResponse
     public function getExperience(): ?string
     {
         return $this->experience;
-    }
-
-    public function getCreated(): ?string
-    {
-        return $this->created;
     }
 
 }

@@ -31,19 +31,19 @@ final class EmailUserProvider implements UserProviderInterface
             throw new UsernameNotFoundException('No user found for email ' . $username);
         }
 
-        $user = new SymfonyUser();
-        $user->setId($searchUserResponse->getId());
-        $user->setUuid($searchUserResponse->getUuid());
-        $user->setEmail($searchUserResponse->getEmail());
-        $user->setPassword($searchUserResponse->getPassword());
-        $user->setFirstName($searchUserResponse->getFirstName());
-        $user->setLastName($searchUserResponse->getLastName());
-        $user->setRoles(Roles::fromPrimitives($searchUserResponse->getRoles()));
-        $user->setImage($searchUserResponse->getImage());
-        $user->setEducation($searchUserResponse->getEducation());
-        $user->setExperience($searchUserResponse->getExperience());
-        $user->setCreated(new \DateTimeImmutable($searchUserResponse->getCreated()));
-        return $user;
+        return new SymfonyUser(
+            $searchUserResponse->getUuid(),
+            $searchUserResponse->getEmail(),
+            $searchUserResponse->getPassword(),
+            $searchUserResponse->getFirstName(),
+            $searchUserResponse->getLastName(),
+            Roles::fromPrimitives($searchUserResponse->getRoles()),
+            new \DateTimeImmutable($searchUserResponse->getCreated()),
+            $searchUserResponse->getId(),
+            $searchUserResponse->getImage(),
+            $searchUserResponse->getExperience(),
+            $searchUserResponse->getEducation()
+        );
     }
 
     public function refreshUser(UserInterface $user)
