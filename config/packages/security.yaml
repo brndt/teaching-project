@@ -22,8 +22,8 @@ security:
             json_login:
                 provider: email_user_provider
                 check_path:               /api/sign_in
-                success_handler:          lexik_jwt_authentication.handler.authentication_success
-                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                #success_handler:          lexik_jwt_authentication.handler.authentication_success
+                #failure_handler:          lexik_jwt_authentication.handler.authentication_failure
 
         register:
             pattern:  ^/api/sign_up

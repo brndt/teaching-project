@@ -6,34 +6,37 @@
 parameters:
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    LaSalle\StudentTeacher\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  LaSalle\StudentTeacher\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\:
-        resource: '../src/User/Infrastructure/Framework/Controller'
-        tags: ['controller.service_arguments']
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\:
+    resource: '../src/User/Infrastructure/Framework/Controller'
+    tags: ['controller.service_arguments']
 
-    Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken:
-        '@gesdinet.jwtrefreshtoken'
+  Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken:
+    '@gesdinet.jwtrefreshtoken'
 
-    acme_api.event.jwt_created_listener:
-        class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Listener\JWTCreatedListener
-        tags:
-            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+  acme_api.event.jwt_created_listener:
+    class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Listener\JWTCreatedListener
+    tags:
+      - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
-    LaSalle\StudentTeacher\User\Application\Event\SendEmailOnUserCreated:
-      tags:
-        - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
+  LaSalle\StudentTeacher\User\Application\Event\SendEmailOnUserCreated:
+    tags:
+      - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+  LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\LoginController:
+    arguments: [ "@lexik_jwt_authentication.jwt_manager","@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "@validator", "@request_stack", "%gesdinet_jwt_refresh_token.user_identity_field%", "%gesdinet_jwt_refresh_token.token_parameter_name%", "%gesdinet_jwt_refresh_token.single_use%" ]
+
+  LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\RefreshTokenController:
+    arguments: [ "@gesdinet.jwtrefreshtoken.authenticator", "@gesdinet.jwtrefreshtoken.user_provider", "@lexik_jwt_authentication.handler.authentication_success", "@lexik_jwt_authentication.handler.authentication_failure", "@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "%gesdinet_jwt_refresh_token.security.firewall%", "%gesdinet_jwt_refresh_token.ttl_update%"]
