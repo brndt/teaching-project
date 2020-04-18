@@ -11,8 +11,6 @@ use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\User\Create\CreateUser;
 use LaSalle\StudentTeacher\User\Application\User\Create\CreateUserRequest;
-use LaSalle\StudentTeacher\User\Domain\Roles;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,22 +42,9 @@ final class CreateUserController extends AbstractFOSRestController
         $roles = $paramFetcher->get('roles');
         $uuid = Uuid::uuid4()->toString();
 
-        $encodedPassword = $encoder->encodePassword(
-            new SymfonyUser(
-                $uuid,
-                $email,
-                $password,
-                $firstName,
-                $lastName,
-                Roles::fromPrimitives($roles),
-                new \DateTimeImmutable()
-            ),
-            $password
-        );
-
         try {
             ($this->createUser)(
-                new CreateUserRequest($email, $uuid, $encodedPassword, $firstName, $lastName, $roles)
+                new CreateUserRequest($email, $uuid, $password, $firstName, $lastName, $roles)
             );
         } catch (UserAlreadyExistsException $e) {
             $view = $this->view(

@@ -29,15 +29,13 @@ final class CreateUser
             throw new UserAlreadyExistsException();
         }
 
-        $roles = Roles::fromPrimitives($request->getRoles());
-
         $user = User::create(
             $request->getUuid(),
             $request->getEmail(),
-            $request->getPassword(),
+            password_hash($request->getPassword(), PASSWORD_DEFAULT),
             $request->getFirstName(),
             $request->getLastName(),
-            $roles,
+            Roles::fromPrimitives($request->getRoles()),
             new \DateTimeImmutable()
         );
 

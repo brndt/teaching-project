@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPasswordById;
 use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPasswordByIdRequest;
@@ -42,19 +43,13 @@ final class UpdatePasswordController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
-        $oldPasswordIsValid = $encoder->isPasswordValid($this->getUser(), $oldPassword);
-
-        if (false === $oldPasswordIsValid) {
-            $view = $this->view(['message' => 'Your old password was entered incorrectly'], Response::HTTP_BAD_REQUEST);
-            return $this->handleView($view);
-        }
-
-        $newEncodedPassword = $encoder->encodePassword($this->getUser(), $newPassword);
-
         try {
-            ($this->updatePassword)(new UpdateUserPasswordByIdRequest($id, $newEncodedPassword));
+            ($this->updatePassword)(new UpdateUserPasswordByIdRequest($id, $oldPassword, $newPassword));
         } catch (UserNotFoundException $e) {
             $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
+            return $this->handleView($view);
+        } catch (OldPasswordIncorrectException $e) {
+            $view = $this->view(['message' => 'Your old password was entered incorrectly'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);
         }
 

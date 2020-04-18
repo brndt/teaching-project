@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Password\Update;
 
+use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
@@ -24,7 +25,11 @@ final class UpdateUserPasswordById
             throw new UserNotFoundException();
         }
 
-        $userToUpdate->setPassword($request->getNewPassword());
+        if (false === password_verify($request->getOldPassword(), $userToUpdate->getPassword())) {
+            throw new OldPasswordIncorrectException();
+        }
+
+        $userToUpdate->setPassword(password_hash($request->getNewPassword(), PASSWORD_DEFAULT));
 
         $this->repository->updatePassword($userToUpdate);
     }
