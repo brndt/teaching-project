@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Password\Update;
 
-use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
