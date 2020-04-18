@@ -6,39 +6,50 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Save\SaveRefreshToken;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use LaSalle\StudentTeacher\Token\Application\RefreshToken\Save\SaveRefreshTokenRequest;
+use LaSalle\StudentTeacher\Token\Application\Token\Create\CreateToken;
+use LaSalle\StudentTeacher\Token\Application\Token\Create\CreateTokenRequest;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class LoginController extends AbstractFOSRestController
 {
-    private JWTTokenManagerInterface $jwtManager;
+    private CreateToken $createToken;
     private SaveRefreshToken $saveRefreshToken;
 
     public function __construct(
-        JWTTokenManagerInterface $jwtManager,
+        CreateToken $createToken,
         SaveRefreshToken $saveRefreshToken
     ) {
-        $this->jwtManager = $jwtManager;
+        $this->createToken = $createToken;
         $this->saveRefreshToken = $saveRefreshToken;
     }
 
     /**
      * @Rest\Post("/api/sign_in", name="sign_in")
      */
-    public function postAction($jwt = null)
+    public function postAction()
     {
-        if (null === $jwt) {
-            $jwt = $this->jwtManager->create($this->getUser());
+        try {
+            $tokenResponse = ($this->createToken)(new CreateTokenRequest($this->getUser()->getUuid()));
+        } catch (TokenNotFoundException $e) {
+            $view = $this->view(['message' => 'Can\'t create token'], Response::HTTP_BAD_REQUEST);
+            return $this->handleView($view);
+        } catch (UserNotFoundException $e) {
+            $view = $this->view(['message' => 'There\'s no user with such data'], Response::HTTP_NOT_FOUND);
+            return $this->handleView($view);
         }
 
         $datetime = new \DateTime();
         $datetime->modify('+ 2592000 seconds');
+        $refreshToken = bin2hex(openssl_random_pseudo_bytes(64));
 
-        $refreshTokenResponse = $this->saveRefreshToken->__invoke($this->getUser()->getUuid(), $datetime);
+        $refreshTokenResponse = $this->saveRefreshToken->__invoke(new SaveRefreshTokenRequest($this->getUser()->getUuid(), $refreshToken, $datetime));
 
         $view = $this->view(
-            ['token' => $jwt, 'refresh_token' => $refreshTokenResponse->getRefreshToken()],
+            ['token' => $tokenResponse->getToken(), 'refresh_token' => $refreshTokenResponse->getRefreshToken()],
             Response::HTTP_OK
         );
         return $this->handleView($view);

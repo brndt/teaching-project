@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\RefreshToken\Update;
 
-use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
+use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsInvalidException;
+use LaSalle\StudentTeacher\Token\Application\RefreshToken\RefreshTokenResponse;
 use LaSalle\StudentTeacher\Token\Domain\RefreshToken;
 use LaSalle\StudentTeacher\Token\Domain\RefreshTokenRepository;
 
@@ -17,15 +18,22 @@ final class UpdateRefreshTokenValidationDateByTokenValue
         $this->repository = $repository;
     }
 
-    public function __invoke(\DateTime $newValidation, string $token): RefreshToken
+    public function __invoke(\DateTime $newValidation, string $token): RefreshTokenResponse
     {
         $refreshToken = $this->repository->searchByTokenValue($token);
 
-        if (null === $refreshToken) {
-            throw new RefreshTokenNotFoundException();
+        if (null === $refreshToken || !$refreshToken->isValid()) {
+            throw new RefreshTokenIsInvalidException();
         }
 
-        return $this->repository->updateValidation($newValidation, $token);
+        $refreshTokenUpdated = $this->repository->updateValidation($newValidation, $token);
+
+        return new RefreshTokenResponse(
+            $refreshTokenUpdated->getUuid(),
+            $refreshTokenUpdated->getRefreshToken(),
+            $refreshTokenUpdated->getValid(),
+            $refreshTokenUpdated->getId()
+        );
 
     }
 }

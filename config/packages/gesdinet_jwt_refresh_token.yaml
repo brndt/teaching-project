@@ -1,6 +1,6 @@
-#gesdinet_jwt_refresh_token:
-  #user_provider: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\UuidUserProvider
-  #user_identity_field: uuid
-  #object_manager: LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\RefreshTokenDoctrineRepository
-  #refresh_token_class: LaSalle\StudentTeacher\RefreshToken\Domain\RefreshToken
+gesdinet_jwt_refresh_token:
+  user_provider: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\UuidUserProvider
+  user_identity_field: uuid
+  object_manager: LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\RefreshTokenDoctrineRepository
+  refresh_token_class: LaSalle\StudentTeacher\RefreshToken\Domain\RefreshToken
   #single_use: true

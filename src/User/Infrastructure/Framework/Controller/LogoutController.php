@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Delete\DeleteRefreshTokenByTokenValue;
+use LaSalle\StudentTeacher\Token\Application\RefreshToken\Delete\DeleteRefreshTokenByTokenValueRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 final class LogoutController extends AbstractFOSRestController
@@ -30,7 +31,7 @@ final class LogoutController extends AbstractFOSRestController
         $refreshTokenValue = $paramFetcher->get('refresh_token');
 
         try {
-            ($this->deleteRefreshToken)($refreshTokenValue);
+            ($this->deleteRefreshToken)(new DeleteRefreshTokenByTokenValueRequest($refreshTokenValue));
         } catch (RefreshTokenNotFoundException $e) {
             $view = $this->view(
                 ['code' => Response::HTTP_NOT_FOUND, 'message' => 'Refresh token is invalid'],

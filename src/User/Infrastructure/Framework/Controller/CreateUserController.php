@@ -63,16 +63,13 @@ final class CreateUserController extends AbstractFOSRestController
             );
         } catch (UserAlreadyExistsException $e) {
             $view = $this->view(
-                ['code' => Response::HTTP_BAD_REQUEST, 'message' => 'User with this email already has been registered'],
+                ['message' => 'User with this email already has been registered'],
                 Response::HTTP_BAD_REQUEST
             );
             return $this->handleView($view);
         }
 
-        $view = $this->view(
-            ['code' => Response::HTTP_OK, 'message' => 'User has been created'],
-            Response::HTTP_OK
-        );
+        $view = $this->view(['message' => 'User has been created'], Response::HTTP_OK);
         return $this->handleView($view);
     }
 

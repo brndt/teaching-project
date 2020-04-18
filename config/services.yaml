@@ -34,7 +34,3 @@ services:
   LaSalle\StudentTeacher\User\Application\Event\SendEmailOnUserCreated:
     tags:
       - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
-
-  LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\LoginController:
-    arguments:
-      $jwtManager: "@lexik_jwt_authentication.jwt_manager"

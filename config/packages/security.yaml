@@ -13,7 +13,6 @@ security:
             pattern:  ^/api/refresh_token
             stateless: true
             anonymous: true
-            provider: fos_userbundle
 
         login:
             pattern:  ^/api/sign_in

@@ -43,7 +43,7 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
 
         if ($id !== $this->getUser()->getId()) {
             $view = $this->view(
-                ['code' => Response::HTTP_FORBIDDEN, 'message' => 'You don\'t have permission to update this profile'],
+                ['message' => 'You don\'t have permission to update this profile'],
                 Response::HTTP_FORBIDDEN
             );
             return $this->handleView($view);
@@ -56,23 +56,14 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
                 )
             );
         } catch (UserNotFoundException $e) {
-            $view = $this->view(
-                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'There\'s no user with such id'],
-                Response::HTTP_NOT_FOUND
-            );
+            $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
         } catch (UserAlreadyExistsException $e) {
-            $view = $this->view(
-                ['code' => Response::HTTP_BAD_REQUEST, 'message' => 'Your new email is already registered'],
-                Response::HTTP_BAD_REQUEST
-            );
+            $view = $this->view(['message' => 'Your new email is already registered'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);
         }
 
-        $view = $this->view(
-            ['code' => Response::HTTP_OK, 'message' => 'Your account has been successfully changed'],
-            Response::HTTP_OK
-        );
+        $view = $this->view(['message' => 'Your account has been successfully changed'], Response::HTTP_OK);
         return $this->handleView($view);
     }
 }

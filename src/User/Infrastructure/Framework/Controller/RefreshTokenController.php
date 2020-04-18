@@ -8,25 +8,24 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Security\Authenticator\RefreshTokenAuthenticator;
-use Gesdinet\JWTRefreshTokenBundle\Security\Provider\RefreshTokenProvider;
+use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsInvalidException;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\RefreshToken\Search\SearchRefreshTokenByTokenValue;
+use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Update\UpdateRefreshTokenValidationDateByTokenValue;
-use Symfony\Component\HttpFoundation\Request;
+use LaSalle\StudentTeacher\Token\Application\Token\Create\CreateToken;
+use LaSalle\StudentTeacher\Token\Application\Token\Create\CreateTokenRequest;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
 final class RefreshTokenController extends AbstractFOSRestController
 {
     private UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken;
+    private CreateToken $createToken;
 
-    public function __construct(UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken)
+    public function __construct(UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken, CreateToken $createToken)
     {
         $this->updateRefreshToken = $updateRefreshToken;
+        $this->createToken = $createToken;
     }
 
     /**
@@ -41,20 +40,26 @@ final class RefreshTokenController extends AbstractFOSRestController
         $datetime->modify('+ 2592000 seconds');
 
         try {
-            $refreshToken = ($this->updateRefreshToken)($datetime, $refreshTokenValue);
-        } catch (RefreshTokenNotFoundException $e) {
+            $refreshTokenResponse = ($this->updateRefreshToken)($datetime, $refreshTokenValue);
+        } catch (RefreshTokenIsInvalidException $e) {
             $view = $this->view(
-                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'Provided Refresh token is invalid or expired'],
+                ['message' => 'Provided Refresh token is invalid or expired'],
                 Response::HTTP_NOT_FOUND
             );
             return $this->handleView($view);
         }
 
-        $view = $this->view(
-            ['code' => Response::HTTP_OK, 'message' => 'Refresh token has been successfully updated'],
-            Response::HTTP_OK
-        );
-        return $this->handleView($view);
+        try {
+            $tokenResponse = ($this->createToken)(new CreateTokenRequest($refreshTokenResponse->getUuid()));
+        } catch (TokenNotFoundException $e) {
+            $view = $this->view(['message' => 'Can\'t create token'], Response::HTTP_BAD_REQUEST);
+            return $this->handleView($view);
+        } catch (UserNotFoundException $e) {
+            $view = $this->view(['message' => 'There\'s no user with such data'], Response::HTTP_NOT_FOUND);
+            return $this->handleView($view);
+        }
 
+        $view = $this->view(['token' => $tokenResponse->getToken(), 'refresh_token' => $refreshTokenResponse->getRefreshToken()], Response::HTTP_OK);
+        return $this->handleView($view);
     }
 }

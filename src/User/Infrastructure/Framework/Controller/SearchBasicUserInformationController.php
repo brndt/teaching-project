@@ -29,10 +29,7 @@ final class SearchBasicUserInformationController extends AbstractFOSRestControll
         try {
             $userResponse = ($this->searchUser)(new SearchBasicUserInformationByIdRequest($id));
         } catch (UserNotFoundException $e) {
-            $view = $this->view(
-                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'There\'s no user with such id'],
-                Response::HTTP_NOT_FOUND
-            );
+            $view = $this->view(['message' => 'There\'s no user with such id'],Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
         }
 

@@ -17,9 +17,9 @@ final class DeleteRefreshTokenByTokenValue
         $this->repository = $repository;
     }
 
-    public function __invoke(string $token): void
+    public function __invoke(DeleteRefreshTokenByTokenValueRequest $request): void
     {
-        $refreshToken = $this->repository->searchByTokenValue($token);
+        $refreshToken = $this->repository->searchByTokenValue($request->getRefreshTokenValue());
 
         if (null === $refreshToken) {
             throw new RefreshTokenNotFoundException();

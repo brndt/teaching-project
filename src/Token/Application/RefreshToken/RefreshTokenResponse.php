@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Token\Domain;
+namespace LaSalle\StudentTeacher\Token\Application\RefreshToken;
 
-final class RefreshToken
+final class RefreshTokenResponse
 {
     private ?int $id;
     private string $refreshToken;
@@ -19,7 +19,7 @@ final class RefreshToken
         $this->valid = $valid;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -37,30 +37,6 @@ final class RefreshToken
     public function getValid(): \DateTime
     {
         return $this->valid;
-    }
-
-    private function setRefreshToken($refreshToken)
-    {
-        $this->refreshToken = $refreshToken;
-    }
-
-    public function setUuid(string $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    public function setValid(\DateTime $valid): self
-    {
-        $this->valid = $valid;
-
-        return $this;
-    }
-
-    public function isValid()
-    {
-        return $this->valid >= new \DateTime();
     }
 
 }

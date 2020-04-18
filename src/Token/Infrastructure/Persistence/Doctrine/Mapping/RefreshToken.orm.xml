@@ -5,7 +5,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="refreshToken" type="string" unique="true" nullable="false"/>
-        <field name="username" type="string" nullable="false"/>
+        <field name="uuid" type="string" nullable="false"/>
         <field name="valid" type="datetime" nullable="false"/>
     </entity>
 </doctrine-mapping>
