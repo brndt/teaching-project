@@ -69,4 +69,14 @@ final class UserORMRepository implements UserRepository
             ]
         );
     }
+
+    public function updatePassword(User $user): void
+    {
+        $userToUpdate = $this->doctrineRepository->findOneBy(['id' => $user->getId()]);
+
+        $userToUpdate->setPassword($user->getPassword());
+
+        $this->entityManager->persist($userToUpdate);
+        $this->entityManager->flush();
+    }
 }
