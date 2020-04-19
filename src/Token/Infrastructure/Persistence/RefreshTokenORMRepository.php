@@ -44,16 +44,10 @@ final class RefreshTokenORMRepository implements RefreshTokenRepository
         return $token;
     }
 
-    public function updateValidation(\DateTime $validation, string $tokenValue): RefreshToken
+    public function update(RefreshToken $refreshToken): void
     {
-        $refreshToken = $this->doctrineRepository->findOneBy(
-            [
-                'refreshToken' => $tokenValue,
-            ]
-        );
-        $refreshToken->setValid($validation);
+        $this->doctrineRepository->findOneBy(['refreshToken' => $refreshToken->getRefreshToken()]);
         $this->entityManager->persist($refreshToken);
         $this->entityManager->flush();
-        return $refreshToken;
     }
 }

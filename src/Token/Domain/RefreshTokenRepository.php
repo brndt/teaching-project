@@ -9,5 +9,5 @@ interface RefreshTokenRepository
     public function searchByTokenValue(string $tokenValue): ?RefreshToken;
     public function delete(RefreshToken $token): void;
     public function save(RefreshToken $token): RefreshToken;
-    public function updateValidation(\DateTime $validation, string $tokenValue): RefreshToken;
+    public function update(RefreshToken $refreshToken): void;
 }

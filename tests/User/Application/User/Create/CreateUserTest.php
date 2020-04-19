@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\LaSalle\StudentTeacher\User\Application\Create;
+namespace Test\LaSalle\StudentTeacher\User\Application\User\Create;
 
 use LaSalle\StudentTeacher\Shared\Domain\DomainEventBus;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;

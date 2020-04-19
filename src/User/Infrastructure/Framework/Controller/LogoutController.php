@@ -34,7 +34,7 @@ final class LogoutController extends AbstractFOSRestController
             ($this->deleteRefreshToken)(new DeleteRefreshTokenByTokenValueRequest($refreshTokenValue));
         } catch (RefreshTokenNotFoundException $e) {
             $view = $this->view(
-                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'Refresh token is invalid'],
+                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'Refresh token is not found'],
                 Response::HTTP_NOT_FOUND
             );
             return $this->handleView($view);

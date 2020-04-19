@@ -19,7 +19,7 @@ final class RefreshToken
         $this->valid = $valid;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

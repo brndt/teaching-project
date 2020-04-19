@@ -12,6 +12,7 @@ use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsInvalidExce
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Update\UpdateRefreshTokenValidationDateByTokenValue;
+use LaSalle\StudentTeacher\Token\Application\RefreshToken\Update\UpdateRefreshTokenValidationDateByTokenValueRequest;
 use LaSalle\StudentTeacher\Token\Application\Token\Create\CreateToken;
 use LaSalle\StudentTeacher\Token\Application\Token\Create\CreateTokenRequest;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -22,8 +23,10 @@ final class RefreshTokenController extends AbstractFOSRestController
     private UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken;
     private CreateToken $createToken;
 
-    public function __construct(UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken, CreateToken $createToken)
-    {
+    public function __construct(
+        UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken,
+        CreateToken $createToken
+    ) {
         $this->updateRefreshToken = $updateRefreshToken;
         $this->createToken = $createToken;
     }
@@ -40,12 +43,14 @@ final class RefreshTokenController extends AbstractFOSRestController
         $datetime->modify('+ 2592000 seconds');
 
         try {
-            $refreshTokenResponse = ($this->updateRefreshToken)($datetime, $refreshTokenValue);
-        } catch (RefreshTokenIsInvalidException $e) {
-            $view = $this->view(
-                ['message' => 'Provided Refresh token is invalid or expired'],
-                Response::HTTP_NOT_FOUND
+            $refreshTokenResponse = ($this->updateRefreshToken)(
+                new UpdateRefreshTokenValidationDateByTokenValueRequest($datetime, $refreshTokenValue)
             );
+        } catch (RefreshTokenIsInvalidException $e) {
+            $view = $this->view(['message' => 'Refresh token is not found'], Response::HTTP_NOT_FOUND);
+            return $this->handleView($view);
+        } catch (RefreshTokenNotFoundException $e) {
+            $view = $this->view(['message' => 'Refresh token is expired'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);
         }
 
@@ -59,7 +64,10 @@ final class RefreshTokenController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
-        $view = $this->view(['token' => $tokenResponse->getToken(), 'refresh_token' => $refreshTokenResponse->getRefreshToken()], Response::HTTP_OK);
+        $view = $this->view(
+            ['token' => $tokenResponse->getToken(), 'refresh_token' => $refreshTokenResponse->getRefreshToken()],
+            Response::HTTP_OK
+        );
         return $this->handleView($view);
     }
 }
