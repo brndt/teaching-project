@@ -24,12 +24,12 @@ final class SearchBasicUserInformationController extends AbstractFOSRestControll
     /**
      * @Rest\Get("/api/account/{id}")
      */
-    public function getAction(int $id, LoggerInterface $logger)
+    public function getAction(int $id)
     {
         try {
             $userResponse = ($this->searchUser)(new SearchBasicUserInformationByIdRequest($id));
         } catch (UserNotFoundException $e) {
-            $view = $this->view(['message' => 'There\'s no user with such id'],Response::HTTP_NOT_FOUND);
+            $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
         }
 

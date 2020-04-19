@@ -44,10 +44,9 @@ final class LoginController extends AbstractFOSRestController
 
         $datetime = new \DateTime();
         $datetime->modify('+ 2592000 seconds');
-        $refreshToken = bin2hex(openssl_random_pseudo_bytes(64));
 
         $refreshTokenResponse = ($this->saveRefreshToken)(
-            new SaveRefreshTokenRequest($this->getUser()->getUuid(), $refreshToken, $datetime)
+            new SaveRefreshTokenRequest($this->getUser()->getUuid(), $datetime)
         );
 
         $view = $this->view(

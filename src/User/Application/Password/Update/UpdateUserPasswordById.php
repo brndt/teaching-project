@@ -6,15 +6,18 @@ namespace LaSalle\StudentTeacher\User\Application\Password\Update;
 
 use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\User\Domain\PasswordHashing;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
 final class UpdateUserPasswordById
 {
     private UserRepository $repository;
+    private PasswordHashing $passwordHashing;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, PasswordHashing $passwordHashing)
     {
         $this->repository = $repository;
+        $this->passwordHashing = $passwordHashing;
     }
 
     public function __invoke(UpdateUserPasswordByIdRequest $request): void
@@ -25,11 +28,11 @@ final class UpdateUserPasswordById
             throw new UserNotFoundException();
         }
 
-        if (false === password_verify($request->getOldPassword(), $userToUpdate->getPassword())) {
+        if (false === $this->passwordHashing->verify($request->getOldPassword(), $userToUpdate->getPassword())) {
             throw new OldPasswordIncorrectException();
         }
 
-        $userToUpdate->setPassword(password_hash($request->getNewPassword(), PASSWORD_DEFAULT));
+        $userToUpdate->setPassword($this->passwordHashing->hash_password($request->getNewPassword()));
 
         $this->repository->updatePassword($userToUpdate);
     }
