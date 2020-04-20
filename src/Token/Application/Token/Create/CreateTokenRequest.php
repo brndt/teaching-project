@@ -6,15 +6,15 @@ namespace LaSalle\StudentTeacher\Token\Application\Token\Create;
 
 final class CreateTokenRequest
 {
-    private string $uuid;
+    private string $userId;
 
-    public function __construct(string $uuid)
+    public function __construct(string $userId)
     {
-        $this->uuid = $uuid;
+        $this->userId = $userId;
     }
 
-    public function getUuid(): string
+    public function getUserId(): string
     {
-        return $this->uuid;
+        return $this->userId;
     }
 }

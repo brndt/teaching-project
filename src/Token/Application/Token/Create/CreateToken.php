@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\Token\Create;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Domain\TokenRepository;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -22,7 +23,7 @@ final class CreateToken
 
     public function __invoke(CreateTokenRequest $request): CreateTokenResponse
     {
-        $user = $this->userRepository->searchByUuid($request->getUuid());
+        $user = $this->userRepository->searchById(Uuid::fromString($request->getUserId()));
 
         if (null === $user) {
             throw new UserNotFoundException();

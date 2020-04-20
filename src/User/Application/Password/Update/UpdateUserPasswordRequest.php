@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Password\Update;
 
-final class UpdateUserPasswordByIdRequest
+final class UpdateUserPasswordRequest
 {
-    private int $id;
+    private string $id;
     private string $oldPassword;
     private string $newPassword;
 
-    public function __construct(int $id, string $oldPassword, string $newPassword)
+    public function __construct(string $id, string $oldPassword, string $newPassword)
     {
         $this->id = $id;
         $this->oldPassword = $oldPassword;
         $this->newPassword = $newPassword;
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

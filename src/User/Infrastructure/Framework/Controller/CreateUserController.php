@@ -12,9 +12,7 @@ use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException
 use LaSalle\StudentTeacher\User\Application\User\Create\CreateUser;
 use LaSalle\StudentTeacher\User\Application\User\Create\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class CreateUserController extends AbstractFOSRestController
 {
@@ -33,18 +31,17 @@ final class CreateUserController extends AbstractFOSRestController
      * @RequestParam(name="lastName")
      * @RequestParam(name="roles", map=true, requirements="ROLE_STUDENT|ROLE_TEACHER")
      */
-    public function postAction(ParamFetcher $paramFetcher, UserPasswordEncoderInterface $encoder): Response
+    public function postAction(ParamFetcher $paramFetcher): Response
     {
         $email = $paramFetcher->get('username');
         $password = $paramFetcher->get('password');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
         $roles = $paramFetcher->get('roles');
-        $uuid = Uuid::uuid4()->toString();
 
         try {
             ($this->createUser)(
-                new CreateUserRequest($email, $uuid, $password, $firstName, $lastName, $roles)
+                new CreateUserRequest($email, $password, $firstName, $lastName, $roles)
             );
         } catch (UserAlreadyExistsException $e) {
             $view = $this->view(

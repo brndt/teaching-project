@@ -6,24 +6,22 @@ namespace LaSalle\StudentTeacher\Token\Application\RefreshToken\Update;
 
 final class UpdateRefreshTokenValidationDateByTokenValueRequest
 {
-    private \DateTime $newValidation;
+    private \DateTime $newValidationDate;
     private string $refreshToken;
 
-    public function __construct(\DateTime $newValidation, string $refreshToken)
+    public function __construct(\DateTime $newValidationDate, string $refreshToken)
     {
-        $this->newValidation = $newValidation;
+        $this->newValidationDate = $newValidationDate;
         $this->refreshToken = $refreshToken;
     }
 
-    public function getNewValidation(): \DateTime
+    public function getNewValidationDate(): \DateTime
     {
-        return $this->newValidation;
+        return $this->newValidationDate;
     }
 
     public function getRefreshToken(): string
     {
         return $this->refreshToken;
     }
-
-
 }

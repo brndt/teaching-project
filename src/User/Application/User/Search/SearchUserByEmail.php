@@ -26,14 +26,13 @@ final class SearchUserByEmail
         }
 
         return new UserResponse(
-            $user->getUuid(),
+            $user->getId()->getValue(),
             $user->getEmail(),
             $user->getPassword(),
             $user->getFirstName(),
             $user->getLastName(),
             $user->getRoles()->toPrimitives(),
             $user->getCreated()->format('Y-m-d H:i:s'),
-            $user->getId(),
             $user->getImage(),
             $user->getExperience(),
             $user->getEducation(),

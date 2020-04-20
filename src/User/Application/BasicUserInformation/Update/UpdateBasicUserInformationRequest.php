@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 
-final class UpdateBasicUserInformationByIdRequest
+final class UpdateBasicUserInformationRequest
 {
-    private int $id;
+    private string $id;
     private string $email;
     private string $firstName;
     private string $lastName;
@@ -15,7 +15,7 @@ final class UpdateBasicUserInformationByIdRequest
     private string $education;
 
     public function __construct(
-        int $id,
+        string $id,
         string $email,
         string $firstName,
         string $lastName,
@@ -32,7 +32,7 @@ final class UpdateBasicUserInformationByIdRequest
         $this->education = $education;
     }
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }

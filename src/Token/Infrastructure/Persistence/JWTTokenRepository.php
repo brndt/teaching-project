@@ -21,7 +21,15 @@ final class JWTTokenRepository implements TokenRepository
 
     public function create(User $user): Token
     {
-        $symfonyUser = new SymfonyUser($user->getUuid(), $user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName(), $user->getRoles(), $user->getCreated());
+        $symfonyUser = new SymfonyUser(
+            $user->getId(),
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getRoles(),
+            $user->getCreated()
+        );
         $tokenValue = $this->tokenManager->create($symfonyUser);
         return new Token($tokenValue);
     }

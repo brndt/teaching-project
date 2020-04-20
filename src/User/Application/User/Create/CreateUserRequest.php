@@ -7,7 +7,6 @@ namespace LaSalle\StudentTeacher\User\Application\User\Create;
 final class CreateUserRequest
 {
     private string $email;
-    private string $uuid;
     private string $password;
     private string $firstName;
     private string $lastName;
@@ -15,23 +14,16 @@ final class CreateUserRequest
 
     public function __construct(
         string $email,
-        string $uuid,
         string $password,
         string $firstName,
         string $lastName,
         array $roles
     ) {
         $this->email = $email;
-        $this->uuid = $uuid;
         $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = $roles;
-    }
-
-    public function getUuid(): string
-    {
-        return $this->uuid;
     }
 
     public function getEmail(): string

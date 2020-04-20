@@ -8,7 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsInvalidException;
+use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Update\UpdateRefreshTokenValidationDateByTokenValue;
@@ -39,23 +39,22 @@ final class RefreshTokenController extends AbstractFOSRestController
     {
         $refreshTokenValue = $paramFetcher->get('refresh_token');
 
-        $datetime = new \DateTime();
-        $datetime->modify('+ 2592000 seconds');
+        $dateTime = new \DateTime('+ 2592000 seconds');
 
         try {
             $refreshTokenResponse = ($this->updateRefreshToken)(
-                new UpdateRefreshTokenValidationDateByTokenValueRequest($datetime, $refreshTokenValue)
+                new UpdateRefreshTokenValidationDateByTokenValueRequest($dateTime, $refreshTokenValue)
             );
-        } catch (RefreshTokenIsInvalidException $e) {
+        } catch (RefreshTokenNotFoundException $e) {
             $view = $this->view(['message' => 'Refresh token is not found'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
-        } catch (RefreshTokenNotFoundException $e) {
+        } catch (RefreshTokenIsExpiredException $e) {
             $view = $this->view(['message' => 'Refresh token is expired'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);
         }
 
         try {
-            $tokenResponse = ($this->createToken)(new CreateTokenRequest($refreshTokenResponse->getUuid()));
+            $tokenResponse = ($this->createToken)(new CreateTokenRequest($refreshTokenResponse->getUserId()));
         } catch (TokenNotFoundException $e) {
             $view = $this->view(['message' => 'Can\'t create token'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);

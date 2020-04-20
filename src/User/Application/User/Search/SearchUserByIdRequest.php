@@ -6,14 +6,14 @@ namespace LaSalle\StudentTeacher\User\Application\User\Search;
 
 final class SearchUserByIdRequest
 {
-    private int $id;
+    private string $id;
 
-    public function __construct(int $id)
+    public function __construct(string $id)
     {
         $this->id = $id;
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

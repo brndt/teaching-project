@@ -6,25 +6,25 @@ namespace LaSalle\StudentTeacher\User\Domain\Event;
 
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\DomainEvent;
-use Ramsey\Uuid\Uuid;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class UserCreatedDomainEvent implements DomainEvent
 {
-    private string $id;
-    private string $aggregateUuid;
+    private Uuid $id;
+    private Uuid $aggregateUuid;
     private string $email;
     private string $firstName;
     private string $lastName;
     private DateTimeImmutable $occurredOn;
 
     public function __construct(
-        string $aggregateUuid,
+        Uuid $aggregateUuid,
         string $email,
         string $firstName,
         string $lastName,
         DateTimeImmutable $occurredOn
     ) {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = Uuid::generate();
         $this->aggregateUuid = $aggregateUuid;
         $this->email = $email;
         $this->firstName = $firstName;
@@ -32,7 +32,7 @@ final class UserCreatedDomainEvent implements DomainEvent
         $this->occurredOn = $occurredOn;
     }
 
-    public function getId(): string
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -42,7 +42,7 @@ final class UserCreatedDomainEvent implements DomainEvent
         return $this->occurredOn;
     }
 
-    public function getAggregateUuid(): string
+    public function getAggregateUuid(): Uuid
     {
         return $this->aggregateUuid;
     }

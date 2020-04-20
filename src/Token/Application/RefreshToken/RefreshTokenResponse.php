@@ -6,20 +6,20 @@ namespace LaSalle\StudentTeacher\Token\Application\RefreshToken;
 
 final class RefreshTokenResponse
 {
-    private ?int $id;
+    private string $id;
     private string $refreshToken;
-    private string $uuid;
-    private \DateTime $valid;
+    private string $userId;
+    private \DateTime $expirationDate;
 
-    public function __construct(string $uuid, string $refreshToken, \DateTime $valid, int $id = null)
+    public function __construct(string $id, string $refreshToken, string $userId, \DateTime $expirationDate)
     {
         $this->id = $id;
         $this->refreshToken = $refreshToken;
-        $this->uuid = $uuid;
-        $this->valid = $valid;
+        $this->userId = $userId;
+        $this->expirationDate = $expirationDate;
     }
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -29,14 +29,14 @@ final class RefreshTokenResponse
         return $this->refreshToken;
     }
 
-    public function getUuid(): string
+    public function getUserId(): string
     {
-        return $this->uuid;
+        return $this->userId;
     }
 
-    public function getValid(): \DateTime
+    public function getExpirationDate(): \DateTime
     {
-        return $this->valid;
+        return $this->expirationDate;
     }
 
 }

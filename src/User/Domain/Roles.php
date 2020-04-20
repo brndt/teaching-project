@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\User\Domain;
 
 final class Roles
 {
-    private array $roles = [];
+    private array $roles;
 
     public function __construct(Role ...$roles)
     {

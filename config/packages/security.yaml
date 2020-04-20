@@ -5,7 +5,7 @@ security:
         email_user_provider:
             id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\EmailUserProvider
         fos_userbundle:
-            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\UuidUserProvider
+            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\IdUserProvider
 
     firewalls:
 

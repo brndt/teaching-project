@@ -6,17 +6,16 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationById;
-use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationByIdRequest;
+use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformation;
+use LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search\SearchBasicUserInformationRequest;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchBasicUserInformationController extends AbstractFOSRestController
 {
-    private SearchBasicUserInformationById $searchUser;
+    private SearchBasicUserInformation $searchUser;
 
-    public function __construct(SearchBasicUserInformationById $searchUser)
+    public function __construct(SearchBasicUserInformation $searchUser)
     {
         $this->searchUser = $searchUser;
     }
@@ -24,10 +23,10 @@ final class SearchBasicUserInformationController extends AbstractFOSRestControll
     /**
      * @Rest\Get("/api/account/{id}")
      */
-    public function getAction(int $id)
+    public function getAction(string $id)
     {
         try {
-            $userResponse = ($this->searchUser)(new SearchBasicUserInformationByIdRequest($id));
+            $userResponse = ($this->searchUser)(new SearchBasicUserInformationRequest($id));
         } catch (UserNotFoundException $e) {
             $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);

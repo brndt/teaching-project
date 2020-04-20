@@ -33,7 +33,7 @@ final class LoginController extends AbstractFOSRestController
     public function postAction()
     {
         try {
-            $tokenResponse = ($this->createToken)(new CreateTokenRequest($this->getUser()->getUuid()));
+            $tokenResponse = ($this->createToken)(new CreateTokenRequest($this->getUser()->getId()->getValue()));
         } catch (TokenNotFoundException $e) {
             $view = $this->view(['message' => 'Can\'t create token'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);
@@ -42,11 +42,10 @@ final class LoginController extends AbstractFOSRestController
             return $this->handleView($view);
         }
 
-        $datetime = new \DateTime();
-        $datetime->modify('+ 2592000 seconds');
+        $dateTime = new \DateTime('+ 2592000 seconds');
 
         $refreshTokenResponse = ($this->saveRefreshToken)(
-            new SaveRefreshTokenRequest($this->getUser()->getUuid(), $datetime)
+            new SaveRefreshTokenRequest($this->getUser()->getId()->getValue(), $dateTime)
         );
 
         $view = $this->view(

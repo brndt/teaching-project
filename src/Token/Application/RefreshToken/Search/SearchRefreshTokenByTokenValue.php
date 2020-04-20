@@ -6,7 +6,6 @@ namespace LaSalle\StudentTeacher\Token\Application\RefreshToken\Search;
 
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\RefreshTokenResponse;
-use LaSalle\StudentTeacher\Token\Domain\RefreshToken;
 use LaSalle\StudentTeacher\Token\Domain\RefreshTokenRepository;
 
 final class SearchRefreshTokenByTokenValue
@@ -27,10 +26,10 @@ final class SearchRefreshTokenByTokenValue
         }
 
         return new RefreshTokenResponse(
-            $refreshToken->getUuid(),
+            $refreshToken->getId()->getValue(),
             $refreshToken->getRefreshToken(),
-            $refreshToken->getValid(),
-            $refreshToken->getId()
+            $refreshToken->getUserId()->getValue(),
+            $refreshToken->getExpirationDate()
         );
     }
 }

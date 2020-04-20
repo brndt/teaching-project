@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmail;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByEmailRequest;
@@ -23,23 +24,22 @@ final class EmailUserProvider implements UserProviderInterface
         $this->searchUser = $searchUser;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($email)
     {
         try {
-            $searchUserResponse = ($this->searchUser)(new SearchUserByEmailRequest($username));
+            $searchUserResponse = ($this->searchUser)(new SearchUserByEmailRequest($email));
         } catch (UserNotFoundException $e) {
-            throw new UsernameNotFoundException('No user found for email ' . $username);
+            throw new UsernameNotFoundException('No user found for email ' . $email);
         }
 
         return new SymfonyUser(
-            $searchUserResponse->getUuid(),
+            Uuid::fromString($searchUserResponse->getId()),
             $searchUserResponse->getEmail(),
             $searchUserResponse->getPassword(),
             $searchUserResponse->getFirstName(),
             $searchUserResponse->getLastName(),
             Roles::fromPrimitives($searchUserResponse->getRoles()),
             new \DateTimeImmutable($searchUserResponse->getCreated()),
-            $searchUserResponse->getId(),
             $searchUserResponse->getImage(),
             $searchUserResponse->getExperience(),
             $searchUserResponse->getEducation()

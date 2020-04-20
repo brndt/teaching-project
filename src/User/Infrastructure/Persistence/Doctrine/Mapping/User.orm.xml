@@ -1,10 +1,7 @@
 <doctrine-mapping>
     <entity name="LaSalle\StudentTeacher\User\Domain\User" table="user_account"
             repository-class="LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\UserDoctrineRepository">
-        <id name="id" type="integer">
-            <generator strategy="AUTO"/>
-        </id>
-        <field name="uuid" type="string" unique="true" nullable="false"/>
+        <id name="id" type="uuid" />
         <field name="email" type="string" unique="true" nullable="false"/>
         <field name="firstName" type="string" nullable="false"/>
         <field name="lastName" type="string" nullable="false"/>

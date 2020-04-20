@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Password\Update;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\PasswordHashing;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
-final class UpdateUserPasswordById
+final class UpdateUserPassword
 {
     private UserRepository $repository;
     private PasswordHashing $passwordHashing;
@@ -20,9 +21,9 @@ final class UpdateUserPasswordById
         $this->passwordHashing = $passwordHashing;
     }
 
-    public function __invoke(UpdateUserPasswordByIdRequest $request): void
+    public function __invoke(UpdateUserPasswordRequest $request): void
     {
-        $userToUpdate = $this->repository->searchById($request->getId());
+        $userToUpdate = $this->repository->searchById(Uuid::fromString($request->getId()));
 
         if (null === $userToUpdate) {
             throw new UserNotFoundException();

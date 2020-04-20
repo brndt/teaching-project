@@ -6,67 +6,75 @@ namespace LaSalle\StudentTeacher\User\Domain;
 
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\DomainEvent;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 
 class User
 {
+    protected Uuid $id;
     protected string $email;
-    protected string $uuid;
     protected string $password;
     protected string $firstName;
     protected string $lastName;
     protected Roles $roles;
     protected \DateTimeImmutable $created;
-    protected ?int $id;
     protected ?string $image;
     protected ?string $experience;
     protected ?string $education;
     private array $eventStream;
 
     public function __construct(
-        string $uuid,
+        Uuid $id,
         string $email,
         string $password,
         string $firstName,
         string $lastName,
         Roles $roles,
         DateTimeImmutable $created,
-        ?int $id = null,
         ?string $image = null,
         ?string $experience = null,
         ?string $education = null
     ) {
-        $this->uuid = $uuid;
+        $this->id = $id;
         $this->email = $email;
         $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = $roles;
         $this->created = $created;
-        $this->id = $id;
         $this->image = $image;
         $this->experience = $experience;
         $this->education = $education;
     }
 
     public static function create(
-        string $uuid,
+        Uuid $id,
         string $email,
         string $password,
         string $firstName,
         string $lastName,
         Roles $roles,
         DateTimeImmutable $created,
-        ?int $id = null,
         ?string $image = null,
         ?string $experience = null,
         ?string $education = null
     ): self {
-        $instance = new static($uuid, $email, $password, $firstName, $lastName, $roles, $created, $id, $image, $experience, $education);
+        $instance = new static(
+            $id,
+            $email,
+            $password,
+            $firstName,
+            $lastName,
+            $roles,
+            $created,
+            $image,
+            $experience,
+            $education
+        );
 
         $instance->recordThat(
             new UserCreatedDomainEvent(
-                $instance->getUuid(),
+                $instance->getId(),
                 $instance->getEmail(),
                 $instance->getFirstName(),
                 $instance->getLastName(),
@@ -88,16 +96,6 @@ class User
     private function recordThat(DomainEvent $event): void
     {
         $this->eventStream[] = $event;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function setUuid(string $uuid): void
-    {
-        $this->uuid = $uuid;
     }
 
     public function setEmail(string $email): void
@@ -150,9 +148,9 @@ class User
         return $this->email;
     }
 
-    public function getUuid(): string
+    public function getId(): Uuid
     {
-        return $this->uuid;
+        return $this->id;
     }
 
     public function getPassword(): string
@@ -173,11 +171,6 @@ class User
     public function getRoles()
     {
         return $this->roles;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getImage(): ?string

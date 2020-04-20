@@ -6,23 +6,23 @@ namespace LaSalle\StudentTeacher\Token\Application\RefreshToken\Save;
 
 final class SaveRefreshTokenRequest
 {
-    private string $uuid;
-    private \DateTime $valid;
+    private string $userId;
+    private \DateTime $expirationDate;
 
-    public function __construct(string $uuid, \DateTime $valid)
+    public function __construct(string $userId, \DateTime $expirationDate)
     {
-        $this->uuid = $uuid;
-        $this->valid = $valid;
+        $this->userId = $userId;
+        $this->expirationDate = $expirationDate;
     }
 
-    public function getUuid(): string
+    public function getUserId(): string
     {
-        return $this->uuid;
+        return $this->userId;
     }
 
-    public function getValid(): \DateTime
+    public function getExpirationDate(): \DateTime
     {
-        return $this->valid;
+        return $this->expirationDate;
     }
 
 }

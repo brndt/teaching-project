@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation;
 
 final class BasicUserInformationResponse
 {
-    private int $id;
+    private string $id;
     private string $email;
     private string $firstName;
     private string $lastName;
@@ -16,7 +16,7 @@ final class BasicUserInformationResponse
     private ?string $education;
 
     public function __construct(
-        int $id,
+        string $id,
         string $email,
         string $firstName,
         string $lastName,
@@ -35,7 +35,7 @@ final class BasicUserInformationResponse
         $this->education = $education;
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

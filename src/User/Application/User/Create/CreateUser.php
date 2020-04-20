@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\User\Create;
 
 use LaSalle\StudentTeacher\Shared\Domain\DomainEventBus;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Domain\PasswordHashing;
 use LaSalle\StudentTeacher\User\Domain\Roles;
@@ -33,7 +34,7 @@ final class CreateUser
         }
 
         $user = User::create(
-            $request->getUuid(),
+            Uuid::generate(),
             $request->getEmail(),
             $this->passwordHashing->hash_password($request->getPassword()),
             $request->getFirstName(),

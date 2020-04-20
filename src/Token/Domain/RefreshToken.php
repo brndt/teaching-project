@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Domain;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+
 final class RefreshToken
 {
-    private ?int $id;
+    private Uuid $id;
     private string $refreshToken;
-    private string $uuid;
-    private \DateTime $valid;
+    private Uuid $userId;
+    private \DateTime $expirationDate;
 
-    public function __construct(string $uuid, string $refreshToken, \DateTime $valid, int $id = null)
+    public function __construct(Uuid $id, string $refreshToken, Uuid $userId, \DateTime $expirationDate)
     {
         $this->id = $id;
         $this->refreshToken = $refreshToken;
-        $this->uuid = $uuid;
-        $this->valid = $valid;
+        $this->userId = $userId;
+        $this->expirationDate = $expirationDate;
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -29,14 +31,14 @@ final class RefreshToken
         return $this->refreshToken;
     }
 
-    public function getUuid(): string
+    public function getUserId(): Uuid
     {
-        return $this->uuid;
+        return $this->userId;
     }
 
-    public function getValid(): \DateTime
+    public function getExpirationDate(): \DateTime
     {
-        return $this->valid;
+        return $this->expirationDate;
     }
 
     private function setRefreshToken($refreshToken)
@@ -44,23 +46,23 @@ final class RefreshToken
         $this->refreshToken = $refreshToken;
     }
 
-    public function setUuid(string $uuid): self
+    public function setUserId(Uuid $userId): self
     {
-        $this->uuid = $uuid;
+        $this->userId = $userId;
 
         return $this;
     }
 
-    public function setValid(\DateTime $valid): self
+    public function setValid(\DateTime $expirationDate): self
     {
-        $this->valid = $valid;
+        $this->expirationDate = $expirationDate;
 
         return $this;
     }
 
-    public function isValid()
+    public function isExpired()
     {
-        return $this->valid >= new \DateTime();
+        return $this->expirationDate <= new \DateTime();
     }
 
 }

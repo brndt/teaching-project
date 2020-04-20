@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\RefreshToken\Update;
 
-use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsInvalidException;
+use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Update\UpdateRefreshTokenValidationDateByTokenValue;
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\Update\UpdateRefreshTokenValidationDateByTokenValueRequest;
@@ -65,7 +65,7 @@ final class UpdateRefreshTokenValidationDateByTokenValueTest extends TestCase
      */
     public function refreshTokenIsInvalidShouldThrowAnException()
     {
-        $this->expectException(RefreshTokenIsInvalidException::class);
+        $this->expectException(RefreshTokenIsExpiredException::class);
         $refreshToken = $this->createRandomExpiredRefreshToken();
         $this->repository->save($refreshToken);
         $this->executeUpdateRefreshToken();

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
-final class UpdateBasicUserInformationById
+final class UpdateBasicUserInformation
 {
     private UserRepository $repository;
 
@@ -17,9 +18,9 @@ final class UpdateBasicUserInformationById
         $this->repository = $repository;
     }
 
-    public function __invoke(UpdateBasicUserInformationByIdRequest $request): void
+    public function __invoke(UpdateBasicUserInformationRequest $request): void
     {
-        $userToUpdate = $this->repository->searchById($request->getId());
+        $userToUpdate = $this->repository->searchById(Uuid::fromString($request->getId()));
 
         if (null === $userToUpdate) {
             throw new UserNotFoundException();

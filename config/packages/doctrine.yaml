@@ -4,7 +4,8 @@ doctrine:
         driver: 'pdo_pgsql'
         charset: utf8
         types:
-            roles: LaSalle\GroupOne\Logging\Infrastructure\Persistence\Doctrine\Type\RolesType
+            roles: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\RolesType
+            uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
 
     orm:
         auto_generate_proxy_classes: true

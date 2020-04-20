@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Search;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\BasicUserInformation\BasicUserInformationResponse;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
-final class SearchBasicUserInformationById
+final class SearchBasicUserInformation
 {
     private UserRepository $repository;
 
@@ -17,16 +18,16 @@ final class SearchBasicUserInformationById
         $this->repository = $repository;
     }
 
-    public function __invoke(SearchBasicUserInformationByIdRequest $request): BasicUserInformationResponse
+    public function __invoke(SearchBasicUserInformationRequest $request): BasicUserInformationResponse
     {
-        $user = $this->repository->searchById($request->getId());
+        $user = $this->repository->searchById(Uuid::fromString($request->getId()));
 
         if (null === $user) {
             throw new UserNotFoundException();
         }
 
         return new BasicUserInformationResponse(
-            $user->getId(),
+            $user->getId()->getValue(),
             $user->getEmail(),
             $user->getFirstName(),
             $user->getLastName(),

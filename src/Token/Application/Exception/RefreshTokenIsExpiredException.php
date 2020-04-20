@@ -7,10 +7,10 @@ namespace LaSalle\StudentTeacher\Token\Application\Exception;
 use Exception;
 use Throwable;
 
-final class RefreshTokenIsInvalidException extends Exception
+final class RefreshTokenIsExpiredException extends Exception
 {
     public function __construct($code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf('Refresh Token is invalid or expired'), $code, $previous);
+        parent::__construct(sprintf('Refresh Token is expired'), $code, $previous);
     }
 }

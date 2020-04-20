@@ -1,11 +1,9 @@
 <doctrine-mapping>
     <entity name="LaSalle\StudentTeacher\Token\Domain\RefreshToken" table="refresh_tokens"
             repository-class="LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\RefreshTokenDoctrineRepository">
-        <id name="id" type="integer">
-            <generator strategy="AUTO"/>
-        </id>
+        <id name="id" type="uuid"/>
         <field name="refreshToken" type="string" unique="true" nullable="false"/>
-        <field name="uuid" type="string" nullable="false"/>
-        <field name="valid" type="datetime" nullable="false"/>
+        <field name="userId" type="uuid" nullable="false"/>
+        <field name="expirationDate" type="datetime" nullable="false"/>
     </entity>
 </doctrine-mapping>

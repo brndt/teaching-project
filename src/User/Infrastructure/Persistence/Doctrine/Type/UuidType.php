@@ -6,20 +6,20 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use LaSalle\StudentTeacher\User\Domain\Roles;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
-final class RolesType extends Type
+final class UuidType extends Type
 {
-    const NAME = 'roles';
+    const NAME = 'uuid';
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return Roles::fromPrimitives(json_decode($value));
+        return Uuid::fromString($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return json_encode($value->toPrimitives());
+        return $value;
     }
 
     public function getName()
@@ -29,6 +29,6 @@ final class RolesType extends Type
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return 'JSON';
+        return 'VARCHAR';
     }
 }

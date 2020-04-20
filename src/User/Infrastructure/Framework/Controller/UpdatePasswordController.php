@@ -10,17 +10,16 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPasswordById;
-use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPasswordByIdRequest;
+use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPassword;
+use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPasswordRequest;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UpdatePasswordController extends AbstractFOSRestController
 {
-    private UpdateUserPasswordById $updatePassword;
+    private UpdateUserPassword $updatePassword;
 
-    public function __construct(UpdateUserPasswordById $updatePassword)
+    public function __construct(UpdateUserPassword $updatePassword)
     {
         $this->updatePassword = $updatePassword;
     }
@@ -30,12 +29,12 @@ final class UpdatePasswordController extends AbstractFOSRestController
      * @RequestParam(name="oldPassword", requirements=@Password)
      * @RequestParam(name="newPassword", requirements=@Password)
      */
-    public function patchAction(ParamFetcher $paramFetcher, int $id, UserPasswordEncoderInterface $encoder)
+    public function patchAction(ParamFetcher $paramFetcher, string $id)
     {
         $oldPassword = $paramFetcher->get('oldPassword');
         $newPassword = $paramFetcher->get('newPassword');
 
-        if ($id !== $this->getUser()->getId()) {
+        if ($id !== $this->getUser()->getId()->getValue()) {
             $view = $this->view(
                 ['message' => 'You don\'t have permission to update this profile'],
                 Response::HTTP_FORBIDDEN
@@ -44,7 +43,7 @@ final class UpdatePasswordController extends AbstractFOSRestController
         }
 
         try {
-            ($this->updatePassword)(new UpdateUserPasswordByIdRequest($id, $oldPassword, $newPassword));
+            ($this->updatePassword)(new UpdateUserPasswordRequest($id, $oldPassword, $newPassword));
         } catch (UserNotFoundException $e) {
             $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
