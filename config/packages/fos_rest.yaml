@@ -16,5 +16,5 @@ fos_rest:
   routing_loader:
     default_format:  json
     include_format:  false
-  exception:
-    enabled: true
+  #exception:
+  #  enabled: true

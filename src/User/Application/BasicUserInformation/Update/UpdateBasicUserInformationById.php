@@ -43,6 +43,6 @@ final class UpdateBasicUserInformationById
         $userToUpdate->setEducation($request->getEducation());
         $userToUpdate->setExperience($request->getExperience());
 
-        $this->repository->updateBasicInformation($userToUpdate);
+        $this->repository->save($userToUpdate);
     }
 }

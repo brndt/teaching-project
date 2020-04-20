@@ -24,11 +24,7 @@ final class RefreshTokenORMRepository implements RefreshTokenRepository
 
     public function searchByTokenValue(string $token): ?RefreshToken
     {
-        return $this->doctrineRepository->findOneBy(
-            [
-                'refreshToken' => $token,
-            ]
-        );
+        return $this->doctrineRepository->findOneBy(['refreshToken' => $token]);
     }
 
     public function delete(RefreshToken $token): void
@@ -37,17 +33,9 @@ final class RefreshTokenORMRepository implements RefreshTokenRepository
         $this->entityManager->flush();
     }
 
-    public function save(RefreshToken $token): RefreshToken
+    public function save(RefreshToken $token): void
     {
         $this->entityManager->persist($token);
-        $this->entityManager->flush();
-        return $token;
-    }
-
-    public function update(RefreshToken $refreshToken): void
-    {
-        $this->doctrineRepository->findOneBy(['refreshToken' => $refreshToken->getRefreshToken()]);
-        $this->entityManager->persist($refreshToken);
         $this->entityManager->flush();
     }
 }

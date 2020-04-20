@@ -14,10 +14,8 @@ final class UserORMRepository implements UserRepository
     private EntityManagerInterface $entityManager;
     private UserDoctrineRepository $doctrineRepository;
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        UserDoctrineRepository $doctrineRepository
-    ) {
+    public function __construct(EntityManagerInterface $entityManager, UserDoctrineRepository $doctrineRepository)
+    {
         $this->entityManager = $entityManager;
         $this->doctrineRepository = $doctrineRepository;
     }
@@ -28,55 +26,18 @@ final class UserORMRepository implements UserRepository
         $this->entityManager->flush();
     }
 
-    public function updateBasicInformation(User $user): void
-    {
-        $userUpdated = $this->doctrineRepository->findOneBy(['id' => $user->getId()]);
-
-        $userUpdated->setEmail($user->getEmail());
-        $userUpdated->setFirstName($user->getFirstName());
-        $userUpdated->setLastName($user->getLastName());
-        $userUpdated->setEducation($user->getEducation());
-        $userUpdated->setExperience($user->getExperience());
-        $userUpdated->setImage($user->getImage());
-
-        $this->entityManager->persist($userUpdated);
-        $this->entityManager->flush();
-    }
-
     public function searchByEmail(string $email): ?User
     {
-        return $this->doctrineRepository->findOneBy(
-            [
-                'email' => $email,
-            ]
-        );
+        return $this->doctrineRepository->findOneBy(['email' => $email]);
     }
 
     public function searchByUuid(string $uuid): ?User
     {
-        return $this->doctrineRepository->findOneBy(
-            [
-                'uuid' => $uuid,
-            ]
-        );
+        return $this->doctrineRepository->findOneBy(['uuid' => $uuid]);
     }
 
     public function searchById(int $id): ?User
     {
-        return $this->doctrineRepository->findOneBy(
-            [
-                'id' => $id,
-            ]
-        );
-    }
-
-    public function updatePassword(User $user): void
-    {
-        $userToUpdate = $this->doctrineRepository->findOneBy(['id' => $user->getId()]);
-
-        $userToUpdate->setPassword($user->getPassword());
-
-        $this->entityManager->persist($userToUpdate);
-        $this->entityManager->flush();
+        return $this->doctrineRepository->findOneBy(['id' => $id]);
     }
 }

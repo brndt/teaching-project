@@ -32,7 +32,7 @@ final class UpdateRefreshTokenValidationDateByTokenValue
 
         $refreshToken->setValid($request->getNewValidation());
 
-        $this->repository->update($refreshToken);
+        $this->repository->save($refreshToken);
 
         return new RefreshTokenResponse(
             $refreshToken->getUuid(),

@@ -21,13 +21,8 @@ final class InMemoryRefreshTokenRepository implements RefreshTokenRepository
         unset($this->refreshTokens[$token->getRefreshToken()]);
     }
 
-    public function save(RefreshToken $token): RefreshToken
+    public function save(RefreshToken $token): void
     {
-        return $this->refreshTokens[$token->getRefreshToken()] = $token;
-    }
-
-    public function update(RefreshToken $refreshToken): void
-    {
-        $this->refreshTokens[$refreshToken->getRefreshToken()] = $refreshToken;
+        $this->refreshTokens[$token->getRefreshToken()] = $token;
     }
 }

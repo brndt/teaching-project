@@ -9,7 +9,6 @@ use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
 final class InMemoryUserRepository implements UserRepository
 {
-
     private array $users = [];
 
     public function save(User $user): void
@@ -17,36 +16,26 @@ final class InMemoryUserRepository implements UserRepository
         $this->users[$user->getId()] = $user;
     }
 
-    public function updateBasicInformation(User $user): void
-    {
-        $this->users[$user->getId()] = $user;
-    }
-
-    public function updatePassword(User $user): void
-    {
-        $this->users[$user->getId()] = $user;
-    }
-
     public function searchByEmail(string $email): ?User
     {
-        $userToFind = null;
+        $userToSearch = null;
         foreach ($this->users as $user) {
             if ($email == $user->getEmail()) {
-                $userToFind = $user;
+                $userToSearch = $user;
             }
         }
-        return $userToFind;
+        return $userToSearch;
     }
 
     public function searchByUuid(string $uuid): ?User
     {
-        $userToFind = null;
+        $userToSearch = null;
         foreach ($this->users as $user) {
             if ($user == $user->getUuid()) {
-                $userToFind = $user;
+                $userToSearch = $user;
             }
         }
-        return $userToFind;
+        return $userToSearch;
     }
 
     public function searchById(int $id): ?User

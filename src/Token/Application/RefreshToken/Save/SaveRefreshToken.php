@@ -6,8 +6,8 @@ namespace LaSalle\StudentTeacher\Token\Application\RefreshToken\Save;
 
 use LaSalle\StudentTeacher\Token\Application\RefreshToken\RefreshTokenResponse;
 use LaSalle\StudentTeacher\Token\Domain\RefreshToken;
-use LaSalle\StudentTeacher\Token\Domain\RefreshTokenRepository;
 use LaSalle\StudentTeacher\Token\Domain\RefreshTokenGenerating;
+use LaSalle\StudentTeacher\Token\Domain\RefreshTokenRepository;
 
 final class SaveRefreshToken
 {
@@ -22,15 +22,14 @@ final class SaveRefreshToken
 
     public function __invoke(SaveRefreshTokenRequest $request): RefreshTokenResponse
     {
-        $refreshToken = $this->repository->save(
-            new RefreshToken($request->getUuid(), ($this->refreshTokenGenerating)(), $request->getValid())
-        );
+        $refreshToken = new RefreshToken($request->getUuid(), ($this->refreshTokenGenerating)(), $request->getValid());
+
+        $this->repository->save($refreshToken);
 
         return new RefreshTokenResponse(
             $refreshToken->getUuid(),
             $refreshToken->getRefreshToken(),
             $refreshToken->getValid(),
-            $refreshToken->getId()
         );
     }
 }

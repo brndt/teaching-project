@@ -34,6 +34,6 @@ final class UpdateUserPasswordById
 
         $userToUpdate->setPassword($this->passwordHashing->hash_password($request->getNewPassword()));
 
-        $this->repository->updatePassword($userToUpdate);
+        $this->repository->save($userToUpdate);
     }
 }
