@@ -26,7 +26,7 @@ final class CreateUserController extends AbstractFOSRestController
     /**
      * @Rest\Post("/api/sign_up", name="sign_up")
      * @RequestParam(name="username")
-     * @RequestParam(name="password", requirements=@Password)
+     * @RequestParam(name="password")
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
      * @RequestParam(name="roles", map=true, requirements="ROLE_STUDENT|ROLE_TEACHER")

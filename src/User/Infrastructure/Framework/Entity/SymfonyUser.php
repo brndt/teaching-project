@@ -15,7 +15,7 @@ final class SymfonyUser extends User implements UserInterface
 
     public function getRoles()
     {
-        return parent::getRoles()->toPrimitives();
+        return parent::getRoles()->toArrayOfPrimitives();
     }
 
     public function eraseCredentials()
@@ -24,6 +24,6 @@ final class SymfonyUser extends User implements UserInterface
 
     public function getUsername()
     {
-        return $this->getEmail();
+        return $this->getEmail()->toPrimitives();
     }
 }

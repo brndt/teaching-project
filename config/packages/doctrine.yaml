@@ -6,6 +6,9 @@ doctrine:
         types:
             roles: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\RolesType
             uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
+            password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
+            email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
+
 
     orm:
         auto_generate_proxy_classes: true

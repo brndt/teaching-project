@@ -8,6 +8,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserById;
 use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByIdRequest;
+use LaSalle\StudentTeacher\User\Domain\Email;
+use LaSalle\StudentTeacher\User\Domain\Password;
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -34,11 +36,11 @@ final class IdUserProvider implements UserProviderInterface
 
         return new SymfonyUser(
             Uuid::fromString($searchUserResponse->getId()),
-            $searchUserResponse->getEmail(),
-            $searchUserResponse->getPassword(),
+            new Email($searchUserResponse->getEmail()),
+            Password::fromHashedPassword($searchUserResponse->getPassword()),
             $searchUserResponse->getFirstName(),
             $searchUserResponse->getLastName(),
-            Roles::fromPrimitives($searchUserResponse->getRoles()),
+            Roles::fromArrayOfPrimitives($searchUserResponse->getRoles()),
             new \DateTimeImmutable($searchUserResponse->getCreated()),
             $searchUserResponse->getImage(),
             $searchUserResponse->getExperience(),

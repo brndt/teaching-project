@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\User\Application\User\Search;
 
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\User\UserResponse;
+use LaSalle\StudentTeacher\User\Domain\Email;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
 final class SearchUserByEmail
@@ -19,19 +20,19 @@ final class SearchUserByEmail
 
     public function __invoke(SearchUserByEmailRequest $request): UserResponse
     {
-        $user = $this->repository->searchByEmail($request->getEmail());
+        $user = $this->repository->searchByEmail(new Email($request->getEmail()));
 
         if (null === $user) {
             throw new UserNotFoundException();
         }
 
         return new UserResponse(
-            $user->getId()->getValue(),
-            $user->getEmail(),
-            $user->getPassword(),
+            $user->getId()->toPrimitives(),
+            $user->getEmail()->toPrimitives(),
+            $user->getPassword()->toPrimitives(),
             $user->getFirstName(),
             $user->getLastName(),
-            $user->getRoles()->toPrimitives(),
+            $user->getRoles()->toArrayOfPrimitives(),
             $user->getCreated()->format('Y-m-d H:i:s'),
             $user->getImage(),
             $user->getExperience(),

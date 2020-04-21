@@ -6,20 +6,21 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use LaSalle\StudentTeacher\User\Domain\Roles;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Password;
 
-final class RolesType extends Type
+final class PasswordType extends Type
 {
-    const NAME = 'roles';
+    const NAME = 'password';
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return Roles::fromArrayOfPrimitives(json_decode($value));
+        return Password::fromHashedPassword($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return json_encode($value->toArrayOfPrimitives());
+        return $value->toPrimitives();
     }
 
     public function getName()
@@ -29,6 +30,6 @@ final class RolesType extends Type
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return 'JSON';
+        return 'VARCHAR';
     }
 }

@@ -27,11 +27,11 @@ final class SearchBasicUserInformation
         }
 
         return new BasicUserInformationResponse(
-            $user->getId()->getValue(),
-            $user->getEmail(),
+            $user->getId()->toPrimitives(),
+            $user->getEmail()->toPrimitives(),
             $user->getFirstName(),
             $user->getLastName(),
-            $user->getRoles()->toPrimitives(),
+            $user->getRoles()->toArrayOfPrimitives(),
             $user->getImage(),
             $user->getEducation(),
             $user->getExperience(),

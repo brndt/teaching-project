@@ -27,7 +27,7 @@ class RoleTest extends TestCase
     public function adminRole()
     {
         $roleTemp = new Role("ROLE_ADMIN");
-        $this->assertEquals("ROLE_ADMIN",$roleTemp->getValue());
+        $this->assertEquals("ROLE_ADMIN",$roleTemp->toPrimitives());
     }
 
 }

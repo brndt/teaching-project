@@ -12,8 +12,8 @@ use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 class User
 {
     protected Uuid $id;
-    protected string $email;
-    protected string $password;
+    protected Email $email;
+    protected Password $password;
     protected string $firstName;
     protected string $lastName;
     protected Roles $roles;
@@ -25,8 +25,8 @@ class User
 
     public function __construct(
         Uuid $id,
-        string $email,
-        string $password,
+        Email $email,
+        Password $password,
         string $firstName,
         string $lastName,
         Roles $roles,
@@ -49,8 +49,8 @@ class User
 
     public static function create(
         Uuid $id,
-        string $email,
-        string $password,
+        Email $email,
+        Password $password,
         string $firstName,
         string $lastName,
         Roles $roles,
@@ -98,12 +98,12 @@ class User
         $this->eventStream[] = $event;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(Email $email): void
     {
         $this->email = $email;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(Password $password): void
     {
         $this->password = $password;
     }
@@ -143,7 +143,7 @@ class User
         $this->education = $education;
     }
 
-    public function getEmail(): string
+    public function getEmail(): Email
     {
         return $this->email;
     }
@@ -153,7 +153,7 @@ class User
         return $this->id;
     }
 
-    public function getPassword(): string
+    public function getPassword()
     {
         return $this->password;
     }

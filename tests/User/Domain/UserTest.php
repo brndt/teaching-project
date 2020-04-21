@@ -22,7 +22,7 @@ class UserTest extends TestCase
         $this->assertEmpty($userEmpty->getPassword());
         $this->assertEmpty($userEmpty->getFirstName());
         $this->assertEmpty($userEmpty->getLastName());
-        $this->assertEmpty($userEmpty->getRoles()->getValue());
+        $this->assertEmpty($userEmpty->getRoles()->toArrayOfRole());
         $this->assertEquals("DateTimeImmutable",$this->get_real_class($userEmpty->getCreated()));
 
         return $userEmpty;

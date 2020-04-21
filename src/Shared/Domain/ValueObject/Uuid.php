@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Shared\Domain\ValueObject;
 
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidUuidException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
 final class Uuid
@@ -13,7 +13,7 @@ final class Uuid
 
     public static function generate(): self
     {
-        return new self((string) RamseyUuid::uuid4());
+        return new self(RamseyUuid::uuid4()->toString());
     }
 
     public static function fromString(string $id): self
@@ -21,26 +21,7 @@ final class Uuid
         return new self($id);
     }
 
-    private function __construct(string $id)
-    {
-        $this->guardIdIsValid($id);
-
-        $this->id = $id;
-    }
-
-    private function guardIdIsValid(string $id): void
-    {
-        if (!RamseyUuid::isValid($id)) {
-            throw new InvalidUuidException();
-        }
-    }
-
-    public function equals($other): bool
-    {
-        return $this->id === $other->id;
-    }
-
-    public function getValue(): string
+    public function toPrimitives(): string
     {
         return $this->id;
     }
@@ -48,5 +29,23 @@ final class Uuid
     public function __toString(): string
     {
         return $this->id;
+    }
+
+    private function __construct(string $id)
+    {
+        $this->setUuid($id);
+    }
+
+    private function setUuid(string $id): void
+    {
+        $this->assertIdIsValid($id);
+        $this->id = $id;
+    }
+
+    private function assertIdIsValid(string $id): void
+    {
+        if (!RamseyUuid::isValid($id)) {
+            throw new InvalidUuidException();
+        }
     }
 }

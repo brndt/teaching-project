@@ -7,6 +7,7 @@ namespace LaSalle\StudentTeacher\User\Application\BasicUserInformation\Update;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\User\Domain\Email;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 
 final class UpdateBasicUserInformation
@@ -26,18 +27,18 @@ final class UpdateBasicUserInformation
             throw new UserNotFoundException();
         }
 
-        $userWithNewEmail = $this->repository->searchByEmail($request->getEmail());
+        $userWithNewEmail = $this->repository->searchByEmail(new Email($request->getEmail()));
 
         if (null === $userWithNewEmail) {
             $userWithNewEmail = null;
         }
 
-        if (null !== $userWithNewEmail && $request->getEmail() !== $userToUpdate->getEmail()
+        if (null !== $userWithNewEmail && $request->getEmail() !== $userToUpdate->getEmail()->toPrimitives()
         ) {
             throw new UserAlreadyExistsException();
         }
 
-        $userToUpdate->setEmail($request->getEmail());
+        $userToUpdate->setEmail(new Email($request->getEmail()));
         $userToUpdate->setFirstName($request->getFirstName());
         $userToUpdate->setLastName($request->getLastName());
         $userToUpdate->setImage($request->getImage());

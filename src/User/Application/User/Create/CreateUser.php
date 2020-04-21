@@ -7,6 +7,8 @@ namespace LaSalle\StudentTeacher\User\Application\User\Create;
 use LaSalle\StudentTeacher\Shared\Domain\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Domain\Email;
+use LaSalle\StudentTeacher\User\Domain\Password;
 use LaSalle\StudentTeacher\User\Domain\PasswordHashing;
 use LaSalle\StudentTeacher\User\Domain\Roles;
 use LaSalle\StudentTeacher\User\Domain\User;
@@ -15,19 +17,17 @@ use LaSalle\StudentTeacher\User\Domain\UserRepository;
 final class CreateUser
 {
     private UserRepository $repository;
-    private PasswordHashing $passwordHashing;
     private DomainEventBus $eventBus;
 
-    public function __construct(UserRepository $repository, PasswordHashing $passwordHashing, DomainEventBus $eventBus)
+    public function __construct(UserRepository $repository, DomainEventBus $eventBus)
     {
         $this->repository = $repository;
-        $this->passwordHashing = $passwordHashing;
         $this->eventBus = $eventBus;
     }
 
     public function __invoke(CreateUserRequest $request): void
     {
-        $user = $this->repository->searchByEmail($request->getEmail());
+        $user = $this->repository->searchByEmail(new Email($request->getEmail()));
 
         if (null !== $user) {
             throw new UserAlreadyExistsException();
@@ -35,11 +35,11 @@ final class CreateUser
 
         $user = User::create(
             Uuid::generate(),
-            $request->getEmail(),
-            $this->passwordHashing->hash_password($request->getPassword()),
+            new Email($request->getEmail()),
+            Password::fromPlainString($request->getPassword()),
             $request->getFirstName(),
             $request->getLastName(),
-            Roles::fromPrimitives($request->getRoles()),
+            Roles::fromArrayOfPrimitives($request->getRoles()),
             new \DateTimeImmutable()
         );
 

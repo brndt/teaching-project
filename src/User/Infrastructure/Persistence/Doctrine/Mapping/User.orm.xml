@@ -2,11 +2,11 @@
     <entity name="LaSalle\StudentTeacher\User\Domain\User" table="user_account"
             repository-class="LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\UserDoctrineRepository">
         <id name="id" type="uuid" />
-        <field name="email" type="string" unique="true" nullable="false"/>
+        <field name="email" type="email" unique="true" nullable="false"/>
         <field name="firstName" type="string" nullable="false"/>
         <field name="lastName" type="string" nullable="false"/>
         <field name="roles" type="roles" nullable="false"/>
-        <field name="password" type="string" nullable="false"/>
+        <field name="password" type="password" nullable="false"/>
         <field name="image" type="string" nullable="true"/>
         <field name="education" type="string" nullable="true"/>
         <field name="experience" type="string" nullable="true"/>

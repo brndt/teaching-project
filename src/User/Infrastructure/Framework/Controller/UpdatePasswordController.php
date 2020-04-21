@@ -12,7 +12,6 @@ use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectExcept
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPassword;
 use LaSalle\StudentTeacher\User\Application\Password\Update\UpdateUserPasswordRequest;
-use LaSalle\StudentTeacher\User\Infrastructure\Framework\Validator\Password;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdatePasswordController extends AbstractFOSRestController
@@ -26,15 +25,15 @@ final class UpdatePasswordController extends AbstractFOSRestController
 
     /**
      * @Rest\Patch("/api/account/{id}/update_password")
-     * @RequestParam(name="oldPassword", requirements=@Password)
-     * @RequestParam(name="newPassword", requirements=@Password)
+     * @RequestParam(name="oldPassword")
+     * @RequestParam(name="newPassword")
      */
     public function patchAction(ParamFetcher $paramFetcher, string $id)
     {
         $oldPassword = $paramFetcher->get('oldPassword');
         $newPassword = $paramFetcher->get('newPassword');
 
-        if ($id !== $this->getUser()->getId()->getValue()) {
+        if ($id !== $this->getUser()->getId()->toPrimitives()) {
             $view = $this->view(
                 ['message' => 'You don\'t have permission to update this profile'],
                 Response::HTTP_FORBIDDEN

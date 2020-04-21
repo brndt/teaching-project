@@ -7,19 +7,20 @@ namespace LaSalle\StudentTeacher\User\Domain\Event;
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Email;
 
 final class UserCreatedDomainEvent implements DomainEvent
 {
     private Uuid $id;
     private Uuid $aggregateUuid;
-    private string $email;
+    private Email $email;
     private string $firstName;
     private string $lastName;
     private DateTimeImmutable $occurredOn;
 
     public function __construct(
         Uuid $aggregateUuid,
-        string $email,
+        Email $email,
         string $firstName,
         string $lastName,
         DateTimeImmutable $occurredOn
@@ -47,7 +48,7 @@ final class UserCreatedDomainEvent implements DomainEvent
         return $this->aggregateUuid;
     }
 
-    public function getEmail(): string
+    public function getEmail(): Email
     {
         return $this->email;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Application\Exception;
+namespace LaSalle\StudentTeacher\Shared\Domain\Exception;
 
 use Exception;
 use Throwable;

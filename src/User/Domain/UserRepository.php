@@ -10,7 +10,7 @@ interface UserRepository
 {
     public function save(User $user): void;
 
-    public function searchByEmail(string $email): ?User;
+    public function searchByEmail(Email $email): ?User;
 
     public function searchById(Uuid $id): ?User;
 }

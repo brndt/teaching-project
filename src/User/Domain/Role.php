@@ -4,22 +4,29 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain;
 
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
+
 final class Role
 {
-    private string $value;
+    private string $role;
 
     private const STUDENT = 'ROLE_STUDENT';
     private const TEACHER = 'ROLE_TEACHER';
     private const ADMIN = 'ROLE_ADMIN';
 
-    public function __construct(string $value)
+    public function __construct(string $role)
     {
-        $this->setValue($value);
+        $this->setValue($role);
     }
 
-    public function getValue(): string
+    public function toPrimitives(): string
     {
-        return $this->value;
+        return $this->role;
+    }
+
+    public function __toString()
+    {
+        return $this->role;
     }
 
     public static function ArrayRoles(): array
@@ -31,16 +38,16 @@ final class Role
         ];
     }
 
-    public function setValue(string $role)
+    private function setValue(string $role)
     {
-        if (!in_array($role, $this->ArrayRoles())) {
-            throw new \Error('Invalid Role parameter');
-        }
-        $this->value = $role;
+        $this->assertValueInArray($role);
+        $this->role = $role;
     }
 
-    public function __toString()
+    private function assertValueInArray(string $role): void
     {
-        return $this->value;
+        if (!in_array($role, $this->ArrayRoles())) {
+            throw new InvalidRoleException();
+        }
     }
 }

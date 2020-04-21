@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence;
 
 use Doctrine\ORM\EntityManagerInterface;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Email;
 use LaSalle\StudentTeacher\User\Domain\User;
 use LaSalle\StudentTeacher\User\Domain\UserRepository;
 use LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\UserDoctrineRepository;
@@ -27,7 +28,7 @@ final class UserORMRepository implements UserRepository
         $this->entityManager->flush();
     }
 
-    public function searchByEmail(string $email): ?User
+    public function searchByEmail(Email $email): ?User
     {
         return $this->doctrineRepository->findOneBy(['email' => $email]);
     }

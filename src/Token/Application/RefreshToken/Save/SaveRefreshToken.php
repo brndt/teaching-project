@@ -33,9 +33,9 @@ final class SaveRefreshToken
         $this->repository->save($refreshToken);
 
         return new RefreshTokenResponse(
-            $refreshToken->getId()->getValue(),
+            $refreshToken->getId()->toPrimitives(),
             $refreshToken->getRefreshToken(),
-            $refreshToken->getUserId()->getValue(),
+            $refreshToken->getUserId()->toPrimitives(),
             $refreshToken->getExpirationDate()
         );
     }
