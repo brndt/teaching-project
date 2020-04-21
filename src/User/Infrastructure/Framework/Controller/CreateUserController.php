@@ -29,7 +29,7 @@ final class CreateUserController extends AbstractFOSRestController
      * @RequestParam(name="password")
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
-     * @RequestParam(name="roles", map=true, requirements="ROLE_STUDENT|ROLE_TEACHER")
+     * @RequestParam(name="roles")
      */
     public function postAction(ParamFetcher $paramFetcher): Response
     {

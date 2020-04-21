@@ -10,9 +10,9 @@ final class Role
 {
     private string $role;
 
-    private const STUDENT = 'ROLE_STUDENT';
-    private const TEACHER = 'ROLE_TEACHER';
-    private const ADMIN = 'ROLE_ADMIN';
+    private const STUDENT = 'student';
+    private const TEACHER = 'teacher';
+    private const ADMIN = 'admin';
 
     public function __construct(string $role)
     {
