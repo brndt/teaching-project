@@ -4,46 +4,30 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\User\Create;
 
-use LaSalle\StudentTeacher\Shared\Domain\DomainEventBus;
+use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
-use LaSalle\StudentTeacher\User\Application\User\Create\CreateUser;
-use LaSalle\StudentTeacher\User\Application\User\Create\CreateUserRequest;
-use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
-use LaSalle\StudentTeacher\User\Domain\PasswordHashing;
-use LaSalle\StudentTeacher\User\Domain\UserRepository;
+use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
+use LaSalle\StudentTeacher\User\Application\Service\CreateUser;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Test\LaSalle\StudentTeacher\User\Infrastructure\EventBus\InMemoryDomainEventBus;
-use Test\LaSalle\StudentTeacher\User\Infrastructure\EventBus\InMemoryDomainEventSubscriber;
-use Test\LaSalle\StudentTeacher\User\Infrastructure\Persistence\InMemoryUserRepository;
 
 final class CreateUserTest extends TestCase
 {
     private CreateUser $createUser;
-    private UserRepository $repository;
-    private MockObject $passwordHashing;
-    private DomainEventBus $eventBus;
+    private MockObject $repository;
+    private MockObject $eventBus;
 
     public function setUp(): void
     {
-        $this->repository = new InMemoryUserRepository();
-        $this->passwordHashing = $this->createMock(PasswordHashing::class);
-        $this->eventBus = new InMemoryDomainEventBus();
-        $this->createUser = new CreateUser($this->repository, $this->passwordHashing, $this->eventBus);
-    }
-
-    private function executeCreateUser()
-    {
-        return ($this->createUser)(
-            new CreateUserRequest(
-                'user@example.com',
-                'uuidgenerated',
-                '123456Aaa',
-                'Alex',
-                'Johnson',
-                ['ROLE_STUDENT']
-            )
-        );
+        $this->repository = $this->createMock(UserRepository::class);
+        $this->eventBus = $this->createMock(DomainEventBus::class);
+        $this->createUser = new CreateUser($this->repository, $this->eventBus);
     }
 
     /**
@@ -51,33 +35,41 @@ final class CreateUserTest extends TestCase
      */
     public function userAlreadyExistsShouldThrowAnException()
     {
+        $this->repository->method('searchByEmail')->willReturn($this->createRandomUser());
         $this->expectException(UserAlreadyExistsException::class);
-        $this->executeCreateUser();
-        $this->executeCreateUser();
+        ($this->createUser)($this->createRandomUserRequest());
     }
 
     /**
      * @test
      */
-    public function afterUserSignUpItShouldBeInTheRepository()
+    public function shouldSaveUserBecauseDoesntExist()
     {
-        $this->executeCreateUser();
+        $this->repository->method('searchByEmail')->willReturn(null);
+        $this->assertNull(($this->createUser)($this->createRandomUserRequest()));
+    }
 
-        $this->assertNotNull(
-            $this->repository->searchByEmail('user@example.com')
+    private function createRandomUser(): User
+    {
+        return new User(
+            Uuid::generate(),
+            new Email('hola@mundo.com'),
+            Password::fromPlainPassword('123456aa'),
+            'alex',
+            'johnson',
+            Roles::fromArrayOfPrimitives(['teacher']),
+            new \DateTimeImmutable()
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldPublishUserCreatedEvent()
+    private function createRandomUserRequest(): CreateUserRequest
     {
-        $subscriber = new InMemoryDomainEventSubscriber();
-        $this->eventBus->subscribe($subscriber);
-
-        $this->executeCreateUser();
-        $this->assertInstanceOf(UserCreatedDomainEvent::class, $subscriber->event);
-        $this->assertNotNull($subscriber->event->getId());
+        return new CreateUserRequest(
+            'user@example.com',
+            '123456aa',
+            'Alex',
+            'Johnson',
+            ['teacher']
+        );
     }
 }

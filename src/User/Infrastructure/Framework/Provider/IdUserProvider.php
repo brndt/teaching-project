@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserById;
-use LaSalle\StudentTeacher\User\Application\User\Search\SearchUserByIdRequest;
-use LaSalle\StudentTeacher\User\Domain\Email;
-use LaSalle\StudentTeacher\User\Domain\Password;
-use LaSalle\StudentTeacher\User\Domain\Roles;
+use LaSalle\StudentTeacher\User\Application\Request\SearchUserByIdRequest;
+use LaSalle\StudentTeacher\User\Application\Service\SearchUserById;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -35,16 +31,10 @@ final class IdUserProvider implements UserProviderInterface
         }
 
         return new SymfonyUser(
-            Uuid::fromString($searchUserResponse->getId()),
-            new Email($searchUserResponse->getEmail()),
-            Password::fromHashedPassword($searchUserResponse->getPassword()),
-            $searchUserResponse->getFirstName(),
-            $searchUserResponse->getLastName(),
-            Roles::fromArrayOfPrimitives($searchUserResponse->getRoles()),
-            new \DateTimeImmutable($searchUserResponse->getCreated()),
-            $searchUserResponse->getImage(),
-            $searchUserResponse->getExperience(),
-            $searchUserResponse->getEducation()
+            $searchUserResponse->getId(),
+            $searchUserResponse->getEmail(),
+            $searchUserResponse->getPassword(),
+            SymfonyUser::processValueToSymfonyRole($searchUserResponse->getRoles())
         );
     }
 

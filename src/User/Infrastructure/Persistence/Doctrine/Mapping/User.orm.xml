@@ -1,6 +1,5 @@
 <doctrine-mapping>
-    <entity name="LaSalle\StudentTeacher\User\Domain\User" table="user_account"
-            repository-class="LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\UserDoctrineRepository">
+    <entity name="LaSalle\StudentTeacher\User\Domain\Aggregate\User" table="user_account">
         <id name="id" type="uuid" />
         <field name="email" type="email" unique="true" nullable="false"/>
         <field name="firstName" type="string" nullable="false"/>

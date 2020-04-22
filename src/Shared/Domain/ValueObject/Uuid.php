@@ -21,7 +21,7 @@ final class Uuid
         return new self($id);
     }
 
-    public function toPrimitives(): string
+    public function toString(): string
     {
         return $this->id;
     }
@@ -38,13 +38,13 @@ final class Uuid
 
     private function setUuid(string $id): void
     {
-        $this->assertIdIsValid($id);
+        $this->assertUuidIsValid($id);
         $this->id = $id;
     }
 
-    private function assertIdIsValid(string $id): void
+    private function assertUuidIsValid(string $id): void
     {
-        if (!RamseyUuid::isValid($id)) {
+        if (false === RamseyUuid::isValid($id)) {
             throw new InvalidUuidException();
         }
     }

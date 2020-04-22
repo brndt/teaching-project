@@ -4,8 +4,7 @@
 namespace LaSalle\StudentTeacher\Domain;
 
 
-use LaSalle\StudentTeacher\User\Domain\Role;
-use PHPUnit\Framework\Error\Error;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use PHPUnit\Framework\TestCase;
 
 class RoleTest extends TestCase
@@ -27,7 +26,7 @@ class RoleTest extends TestCase
     public function adminRole()
     {
         $roleTemp = new Role("ROLE_ADMIN");
-        $this->assertEquals("ROLE_ADMIN",$roleTemp->toPrimitives());
+        $this->assertEquals("ROLE_ADMIN",$roleTemp->toString());
     }
 
 }

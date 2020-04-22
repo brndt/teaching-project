@@ -6,8 +6,7 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\Password;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 
 final class PasswordType extends Type
 {
@@ -20,7 +19,7 @@ final class PasswordType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value->toPrimitives();
+        return $value->toString();
     }
 
     public function getName()

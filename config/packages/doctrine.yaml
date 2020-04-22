@@ -1,27 +1,28 @@
 doctrine:
-    dbal:
-        url: '%env(resolve:DATABASE_URL)%'
-        driver: 'pdo_pgsql'
-        charset: utf8
-        types:
-            roles: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\RolesType
-            uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
-            password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
-            email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
+  dbal:
+    url: '%env(resolve:DATABASE_URL)%'
+    driver: 'pdo_pgsql'
+    charset: utf8
+    types:
+      roles: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\RolesType
+      uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
+      password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
+      email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
+      refreshTokenString: LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\Type\RefreshTokenStringType
 
 
-    orm:
-        auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
-        mappings:
-            User:
-                is_bundle: false
-                type: xml
-                dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Mapping'
-                prefix: LaSalle\StudentTeacher\User\Domain
-            RefreshToken:
-                is_bundle: false
-                type: xml
-                dir: '%kernel.project_dir%/src/Token/Infrastructure/Persistence/Doctrine/Mapping'
-                prefix: LaSalle\StudentTeacher\Token\Domain
+  orm:
+    auto_generate_proxy_classes: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    auto_mapping: true
+    mappings:
+      User:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\User\Domain\Aggregate
+      RefreshToken:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Token/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Token\Domain\Aggregate

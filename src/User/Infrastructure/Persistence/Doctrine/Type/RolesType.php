@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use LaSalle\StudentTeacher\User\Domain\Roles;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 
 final class RolesType extends Type
 {

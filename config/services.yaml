@@ -19,15 +19,12 @@ services:
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
-  LaSalle\StudentTeacher\User\Infrastructure\Framework\Controller\:
-    resource: '../src/User/Infrastructure/Framework/Controller'
+  LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller\:
+    resource: '../src/Shared/Infrastructure/Framework/Controller'
     tags: ['controller.service_arguments']
 
-  Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken:
-    '@gesdinet.jwtrefreshtoken'
-
   acme_api.event.jwt_created_listener:
-    class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Listener\JWTCreatedListener
+    class: LaSalle\StudentTeacher\Token\Infrastructure\Framework\Event\JWTCreatedListener
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
