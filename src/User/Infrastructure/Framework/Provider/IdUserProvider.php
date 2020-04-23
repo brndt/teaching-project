@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserByIdRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserById;
@@ -22,12 +23,12 @@ final class IdUserProvider implements UserProviderInterface
         $this->searchUser = $searchUser;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($id)
     {
         try {
-            $searchUserResponse = ($this->searchUser)(new SearchUserByIdRequest($username));
-        } catch (UserNotFoundException $e) {
-            throw new UsernameNotFoundException('No user found for id ' . $username);
+            $searchUserResponse = ($this->searchUser)(new SearchUserByIdRequest($id));
+        } catch (UserNotFoundException | InvalidArgumentValidationException $exception) {
+            throw new UsernameNotFoundException(sprintf('No user found for id ' . $id));
         }
 
         return new SymfonyUser(

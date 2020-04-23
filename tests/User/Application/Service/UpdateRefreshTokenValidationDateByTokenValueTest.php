@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\LaSalle\StudentTeacher\User\Application\RefreshToken\Update;
+namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
@@ -49,16 +49,6 @@ final class UpdateRefreshTokenValidationDateByTokenValueTest extends TestCase
     private function createRandomExpiredRefreshToken()
     {
         return new RefreshToken(Uuid::generate(), RefreshTokenString::generate(), Uuid::generate(), new \DateTime());
-    }
-
-    private function createRandomValidRefreshToken()
-    {
-        return new RefreshToken(
-            Uuid::generate(),
-            RefreshTokenString::generate(),
-            Uuid::generate(),
-            new \DateTime('+1 day')
-        );
     }
 
     private function createRandomValidRefreshTokenRequest()

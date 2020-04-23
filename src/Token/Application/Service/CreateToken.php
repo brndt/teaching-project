@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Request\CreateTokenRequest;
@@ -25,7 +27,13 @@ final class CreateToken
 
     public function __invoke(CreateTokenRequest $request): CreateTokenResponse
     {
-        $user = $this->userRepository->searchById(Uuid::fromString($request->getUserId()));
+        try {
+            $userId = Uuid::fromString($request->getUserId());
+        } catch (InvalidUuidException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+
+        $user = $this->userRepository->searchById($userId);
 
         if (null === $user) {
             throw new UserNotFoundException();

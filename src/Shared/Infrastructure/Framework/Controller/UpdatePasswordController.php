@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
@@ -48,6 +49,12 @@ final class UpdatePasswordController extends AbstractFOSRestController
             return $this->handleView($view);
         } catch (OldPasswordIncorrectException $e) {
             $view = $this->view(['message' => 'Your old password was entered incorrectly'], Response::HTTP_BAD_REQUEST);
+            return $this->handleView($view);
+        } catch (InvalidArgumentValidationException $error) {
+            $view = $this->view(
+                ['message' => $error->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
             return $this->handleView($view);
         }
 

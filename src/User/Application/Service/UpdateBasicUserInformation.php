@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateBasicUserInformationRequest;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
@@ -28,7 +30,13 @@ final class UpdateBasicUserInformation
             throw new UserNotFoundException();
         }
 
-        $userWithNewEmail = $this->repository->searchByEmail(new Email($request->getEmail()));
+        try {
+            $email = new Email($request->getEmail());
+        } catch (InvalidEmailException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+
+        $userWithNewEmail = $this->repository->searchByEmail($email);
 
         if (null === $userWithNewEmail) {
             $userWithNewEmail = null;
@@ -39,7 +47,7 @@ final class UpdateBasicUserInformation
             throw new UserAlreadyExistsException();
         }
 
-        $userToUpdate->setEmail(new Email($request->getEmail()));
+        $userToUpdate->setEmail($email);
         $userToUpdate->setFirstName($request->getFirstName());
         $userToUpdate->setLastName($request->getLastName());
         $userToUpdate->setImage($request->getImage());

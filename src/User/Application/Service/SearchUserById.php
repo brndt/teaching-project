@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserByIdRequest;
@@ -21,7 +23,11 @@ final class SearchUserById
 
     public function __invoke(SearchUserByIdRequest $request): UserResponse
     {
-        $user = $this->repository->searchById(Uuid::fromString($request->getId()));
+        try {
+            $user = $this->repository->searchById(Uuid::fromString($request->getId()));
+        } catch (InvalidUuidException $error) {
+            throw new InvalidArgumentValidationException($error->getMessage());
+        }
 
         if (null === $user) {
             throw new UserNotFoundException();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
@@ -17,6 +18,11 @@ final class Password
         return new self($hashedPassword);
     }
 
+    /**
+     * @throws InvalidPasswordLengthException
+     * @throws InvalidNumberContainingException
+     * @throws InvalidLetterContainingException
+     */
     public static function fromPlainPassword(string $plainPassword): self
     {
         self::assertMinimunLength($plainPassword);
@@ -59,14 +65,14 @@ final class Password
 
     private static function assertNumberContaining(string $password): void
     {
-        if (false === preg_match('/[0-9]/', $password)) {
+        if (0 === preg_match('/[0-9]/', $password)) {
             throw new InvalidNumberContainingException();
         }
     }
 
     private static function assertLetterContaining(string $password): void
     {
-        if (false === preg_match('/[A-Za-z]/', $password)) {
+        if (0 === preg_match('/[A-Za-z]/', $password)) {
             throw new InvalidLetterContainingException();
         }
     }

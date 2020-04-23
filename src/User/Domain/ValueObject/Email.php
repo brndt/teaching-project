@@ -10,6 +10,9 @@ final class Email
 {
     private string $email;
 
+    /**
+     * @throws InvalidEmailException
+     */
     public function __construct(string $email)
     {
         $this->setValue($email);

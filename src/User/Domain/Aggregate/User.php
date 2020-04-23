@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
@@ -75,8 +76,11 @@ final class User
             $education
         );
 
+        $domainEventId = Uuid::generate();
+
         $instance->recordThat(
             new UserCreatedDomainEvent(
+                $domainEventId,
                 $instance->getId(),
                 $instance->getEmail(),
                 $instance->getFirstName(),

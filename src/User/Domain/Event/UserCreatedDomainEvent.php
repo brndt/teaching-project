@@ -19,13 +19,14 @@ final class UserCreatedDomainEvent implements DomainEvent
     private DateTimeImmutable $occurredOn;
 
     public function __construct(
+        Uuid $id,
         Uuid $aggregateUuid,
         Email $email,
         string $firstName,
         string $lastName,
         DateTimeImmutable $occurredOn
     ) {
-        $this->id = Uuid::generate();
+        $this->id = $id;
         $this->aggregateUuid = $aggregateUuid;
         $this->email = $email;
         $this->firstName = $firstName;

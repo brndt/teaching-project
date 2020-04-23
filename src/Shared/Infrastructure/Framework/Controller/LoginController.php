@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Request\CreateTokenRequest;
 use LaSalle\StudentTeacher\Token\Application\Request\SaveRefreshTokenRequest;
@@ -40,13 +41,27 @@ final class LoginController extends AbstractFOSRestController
         } catch (UserNotFoundException $e) {
             $view = $this->view(['message' => 'There\'s no user with such data'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
+        } catch (InvalidArgumentValidationException $error) {
+            $view = $this->view(
+                ['message' => $error->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+            return $this->handleView($view);
         }
 
         $dateTime = new \DateTime('+ 2592000 seconds');
 
-        $refreshTokenResponse = ($this->saveRefreshToken)(
-            new SaveRefreshTokenRequest($this->getUser()->getId(), $dateTime)
-        );
+        try {
+            $refreshTokenResponse = ($this->saveRefreshToken)(
+                new SaveRefreshTokenRequest($this->getUser()->getId(), $dateTime)
+            );
+        } catch (InvalidArgumentValidationException $error) {
+            $view = $this->view(
+                ['message' => $error->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+            return $this->handleView($view);
+        }
 
         $view = $this->view(
             ['token' => $tokenResponse->getToken(), 'refresh_token' => $refreshTokenResponse->getRefreshToken()],

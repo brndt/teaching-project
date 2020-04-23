@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateBasicUserInformationRequest;
@@ -60,6 +61,12 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
             return $this->handleView($view);
         } catch (UserAlreadyExistsException $e) {
             $view = $this->view(['message' => 'Your new email is already registered'], Response::HTTP_BAD_REQUEST);
+            return $this->handleView($view);
+        } catch (InvalidArgumentValidationException $error) {
+            $view = $this->view(
+                ['message' => $error->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
             return $this->handleView($view);
         }
         $view = $this->view(['message' => 'Your account has been successfully changed'], Response::HTTP_OK);

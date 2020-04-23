@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
+
 final class Roles
 {
     private array $roles;
 
+    /**
+     * @throws InvalidRoleException
+     */
     public static function fromArrayOfPrimitives(array $roles): Roles
     {
         return new Roles(

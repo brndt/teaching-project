@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
+use http\Exception\InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserByEmailRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserByEmail;
@@ -26,8 +28,8 @@ final class EmailUserProvider implements UserProviderInterface
     {
         try {
             $searchUserResponse = ($this->searchUser)(new SearchUserByEmailRequest($email));
-        } catch (UserNotFoundException $e) {
-            throw new UsernameNotFoundException('No user found for email ' . $email);
+        } catch (UserNotFoundException | InvalidArgumentValidationException $exception) {
+            throw new UsernameNotFoundException(sprintf('No user found for email ' . $email));
         }
 
         return new SymfonyUser(
@@ -43,9 +45,8 @@ final class EmailUserProvider implements UserProviderInterface
         if (!$user instanceof SymfonyUser) {
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
-        return $this->loadUserByUsername($user->getEmail());
+        return $this->loadUserByUsername($user->getUsername());
     }
-
 
     public function supportsClass($class)
     {

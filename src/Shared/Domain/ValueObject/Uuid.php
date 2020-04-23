@@ -11,13 +11,17 @@ final class Uuid
 {
     private string $id;
 
-    public static function generate(): self
+    public static function  generate(): self
     {
         return new self(RamseyUuid::uuid4()->toString());
     }
 
+    /**
+     * @throws InvalidUuidException
+     */
     public static function fromString(string $id): self
     {
+        self::assertUuidIsValid($id);
         return new self($id);
     }
 
@@ -38,11 +42,10 @@ final class Uuid
 
     private function setUuid(string $id): void
     {
-        $this->assertUuidIsValid($id);
         $this->id = $id;
     }
 
-    private function assertUuidIsValid(string $id): void
+    private static function assertUuidIsValid(string $id): void
     {
         if (false === RamseyUuid::isValid($id)) {
             throw new InvalidUuidException();

@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Application\Service\CreateUser;
@@ -45,6 +46,12 @@ final class CreateUserController extends AbstractFOSRestController
         } catch (UserAlreadyExistsException $e) {
             $view = $this->view(
                 ['message' => 'User with this email already has been registered'],
+                Response::HTTP_BAD_REQUEST
+            );
+            return $this->handleView($view);
+        } catch (InvalidArgumentValidationException $error) {
+            $view = $this->view(
+                ['message' => $error->getMessage()],
                 Response::HTTP_BAD_REQUEST
             );
             return $this->handleView($view);
