@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchBasicUserInformationRequest;
@@ -19,16 +22,22 @@ final class SearchBasicUserInformation
         $this->repository = $repository;
     }
 
-    public function __invoke(SearchBasicUserInformationRequest $request): BasicUserInformationResponse
+    public function __invoke(Filters $filters, Order $order, ?int $limit, ?int $offset): array
     {
-        $user = $this->repository->searchById(Uuid::fromString($request->getId()));
+        $criteria = new Criteria($filters, $order, $offset, $limit);
 
-        if (null === $user) {
+        $users = $this->repository->matching($criteria);
+
+        if (null === $users) {
             throw new UserNotFoundException();
         }
 
-        return new BasicUserInformationResponse(
-            $user->getId()->toString(),
+        var_dump($users);
+
+        return $users;
+
+        /*return new BasicUserInformationResponse(
+            $users->getId()->toString(),
             $user->getEmail()->toString(),
             $user->getFirstName(),
             $user->getLastName(),
@@ -36,6 +45,6 @@ final class SearchBasicUserInformation
             $user->getImage(),
             $user->getEducation(),
             $user->getExperience(),
-        );
+        );*/
     }
 }
