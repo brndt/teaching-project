@@ -48,7 +48,7 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
 
     private function createRandomExpiredRefreshToken()
     {
-        return new RefreshToken(Uuid::generate(), RefreshTokenString::generate(), Uuid::generate(), new \DateTime());
+        return new RefreshToken(RefreshTokenString::generate(), Uuid::generate(), new \DateTime());
     }
 
     private function createRandomValidRefreshTokenRequest()
