@@ -1,23 +1,25 @@
 ###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
+/src/.env.local
+/src/.env.local.php
+/src/.env.*.local
+/src/config/secrets/prod/prod.decrypt.private.php
+/src/public/bundles/
+/src/var/
+/src/vendor/
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###
-/.web-server-pid
+/src/.web-server-pid
 ###< symfony/web-server-bundle ###
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+/src/config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
 ###> symfony/phpunit-bridge ###
-.phpunit
-.phpunit.result.cache
-/phpunit.xml.dist
+/src/.phpunit
+/src/.phpunit.result.cache
+/src/phpunit.xml.dist
 ###< symfony/phpunit-bridge ###
+
+.idea
