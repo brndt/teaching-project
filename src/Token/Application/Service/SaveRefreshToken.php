@@ -15,11 +15,11 @@ use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
 
 final class SaveRefreshToken
 {
-    private RefreshTokenRepository $repository;
+    private RefreshTokenRepository $refreshTokenRepository;
 
-    public function __construct(RefreshTokenRepository $repository)
+    public function __construct(RefreshTokenRepository $refreshTokenRepository)
     {
-        $this->repository = $repository;
+        $this->refreshTokenRepository = $refreshTokenRepository;
     }
 
     public function __invoke(SaveRefreshTokenRequest $request): RefreshTokenResponse
@@ -37,7 +37,7 @@ final class SaveRefreshToken
             $request->getExpirationDate()
         );
 
-        $this->repository->save($refreshToken);
+        $this->refreshTokenRepository->save($refreshToken);
 
         return new RefreshTokenResponse(
             $refreshToken->getId()->toString(),

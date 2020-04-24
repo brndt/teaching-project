@@ -23,12 +23,12 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 
 final class CreateUser
 {
-    private UserRepository $repository;
+    private UserRepository $userRepository;
     private DomainEventBus $eventBus;
 
-    public function __construct(UserRepository $repository, DomainEventBus $eventBus)
+    public function __construct(UserRepository $userRepository, DomainEventBus $eventBus)
     {
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
         $this->eventBus = $eventBus;
     }
 
@@ -40,7 +40,7 @@ final class CreateUser
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
 
-        $user = $this->repository->searchByEmail($email);
+        $user = $this->userRepository->ofEmail($email);
 
         if (null !== $user) {
             throw new UserAlreadyExistsException();
@@ -68,7 +68,7 @@ final class CreateUser
             new DateTimeImmutable()
         );
 
-        $this->repository->save($user);
+        $this->userRepository->save($user);
 
         foreach ($user->pullDomainEvents() as $domainEvent) {
             $this->eventBus->dispatch($domainEvent);

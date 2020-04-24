@@ -33,7 +33,7 @@ final class CreateToken
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
 
-        $user = $this->userRepository->searchById($userId);
+        $user = $this->userRepository->ofId($userId);
 
         if (null === $user) {
             throw new UserNotFoundException();

@@ -12,19 +12,19 @@ use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredExce
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Request\CreateTokenRequest;
-use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenValidationDateByTokenValueRequest;
+use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenValidationRequest;
 use LaSalle\StudentTeacher\Token\Application\Service\CreateToken;
-use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenValidationDateByTokenValue;
+use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenValidation;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class RefreshTokenController extends AbstractFOSRestController
 {
-    private UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken;
+    private UpdateRefreshTokenValidation $updateRefreshToken;
     private CreateToken $createToken;
 
     public function __construct(
-        UpdateRefreshTokenValidationDateByTokenValue $updateRefreshToken,
+        UpdateRefreshTokenValidation $updateRefreshToken,
         CreateToken $createToken
     ) {
         $this->updateRefreshToken = $updateRefreshToken;
@@ -32,7 +32,7 @@ final class RefreshTokenController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/refresh_token", name="token_refresh")
+     * @Rest\Post("/api/v1/users/token_refresh")
      * @RequestParam(name="refresh_token")
      */
     public function postAction(ParamFetcher $paramFetcher)
@@ -43,7 +43,7 @@ final class RefreshTokenController extends AbstractFOSRestController
 
         try {
             $refreshTokenResponse = ($this->updateRefreshToken)(
-                new UpdateRefreshTokenValidationDateByTokenValueRequest($dateTime, $refreshTokenValue)
+                new UpdateRefreshTokenValidationRequest($dateTime, $refreshTokenValue)
             );
         } catch (RefreshTokenNotFoundException $e) {
             $view = $this->view(['message' => 'Refresh token is not found'], Response::HTTP_NOT_FOUND);

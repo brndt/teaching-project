@@ -6,23 +6,23 @@ namespace LaSalle\StudentTeacher\Token\Application\Service;
 
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenValidationDateByTokenValueRequest;
+use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenValidationRequest;
 use LaSalle\StudentTeacher\Token\Application\Response\RefreshTokenResponse;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
 
-final class UpdateRefreshTokenValidationDateByTokenValue
+final class UpdateRefreshTokenValidation
 {
-    private RefreshTokenRepository $repository;
+    private RefreshTokenRepository $refreshTokenRepository;
 
-    public function __construct(RefreshTokenRepository $repository)
+    public function __construct(RefreshTokenRepository $refreshTokenRepository)
     {
-        $this->repository = $repository;
+        $this->refreshTokenRepository = $refreshTokenRepository;
     }
 
-    public function __invoke(UpdateRefreshTokenValidationDateByTokenValueRequest $request): RefreshTokenResponse
+    public function __invoke(UpdateRefreshTokenValidationRequest $request): RefreshTokenResponse
     {
-        $refreshToken = $this->repository->searchByTokenValue(
+        $refreshToken = $this->refreshTokenRepository->ofRefreshTokenString(
             RefreshTokenString::fromString($request->getRefreshToken())
         );
 
@@ -36,7 +36,7 @@ final class UpdateRefreshTokenValidationDateByTokenValue
 
         $refreshToken->setValid($request->getNewValidationDate());
 
-        $this->repository->save($refreshToken);
+        $this->refreshTokenRepository->save($refreshToken);
 
         return new RefreshTokenResponse(
             $refreshToken->getId()->toString(),

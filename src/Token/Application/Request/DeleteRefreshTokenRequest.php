@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\Request;
 
-final class DeleteRefreshTokenByTokenValueRequest
+final class DeleteRefreshTokenRequest
 {
     private string $refreshTokenValue;
 
@@ -17,6 +17,4 @@ final class DeleteRefreshTokenByTokenValueRequest
     {
         return $this->refreshTokenValue;
     }
-
-
 }

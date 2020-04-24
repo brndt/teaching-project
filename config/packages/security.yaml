@@ -10,36 +10,31 @@ security:
     firewalls:
 
         refresh:
-            pattern:  ^/api/refresh_token
+            pattern:  ^/api/v1/users/token_refresh
             stateless: true
             anonymous: true
 
-        logout:
-            pattern:  ^/api/log_out
+        sign_out:
+            pattern:  ^/api/v1/users/sign_out
             stateless: true
             anonymous: true
 
-        login:
-            pattern:  ^/api/sign_in
+        sign_in:
+            pattern:  ^/api/v1/users/sign_in
             stateless: true
             anonymous: true
             json_login:
                 provider: email_user_provider
-                check_path: /api/sign_in
+                check_path: /api/v1/users/sign_in
 
-        register:
-            pattern:  ^/api/sign_up
-            stateless: true
-            anonymous: true
-
-        get_account:
-            pattern:  ^/api/account
-            methods: [GET]
+        sign_up:
+            pattern:  ^/api/v1/users
+            methods: [GET, POST]
             stateless: true
             anonymous: true
 
         api:
-            pattern:   ^/api
+            pattern:   ^/api/v1
             anonymous: false
             stateless: true
             provider: fos_userbundle

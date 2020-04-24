@@ -9,7 +9,7 @@ use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
 
 interface RefreshTokenRepository
 {
-    public function searchByTokenValue(RefreshTokenString $tokenValue): ?RefreshToken;
+    public function ofRefreshTokenString(RefreshTokenString $tokenValue): ?RefreshToken;
 
     public function delete(RefreshToken $token): void;
 

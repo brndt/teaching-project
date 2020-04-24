@@ -15,7 +15,7 @@ use LaSalle\StudentTeacher\Token\Application\Service\SaveRefreshToken;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
-final class LoginController extends AbstractFOSRestController
+final class SignInController extends AbstractFOSRestController
 {
     private CreateToken $createToken;
     private SaveRefreshToken $saveRefreshToken;
@@ -29,7 +29,7 @@ final class LoginController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/sign_in", name="sign_in")
+     * @Rest\Post("/api/v1/users/sign_in")
      */
     public function postAction()
     {

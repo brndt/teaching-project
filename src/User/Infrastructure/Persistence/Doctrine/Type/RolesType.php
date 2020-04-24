@@ -14,12 +14,15 @@ final class RolesType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return Roles::fromArrayOfPrimitives(json_decode($value));
+        return Roles::fromArrayOfPrimitives(explode(",", $value));
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return json_encode($value->toArrayOfPrimitives());
+        if (false == is_string($value)) {
+            return implode(",", ($value->toArrayOfPrimitives()));
+        }
+        return $value;
     }
 
     public function getName()
@@ -29,6 +32,6 @@ final class RolesType extends Type
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return 'JSON';
+        return 'VARCHAR';
     }
 }

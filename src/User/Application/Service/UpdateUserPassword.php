@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -17,16 +18,22 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 
 final class UpdateUserPassword
 {
-    private UserRepository $repository;
+    private UserRepository $userRepository;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
     public function __invoke(UpdateUserPasswordRequest $request): void
     {
-        $userToUpdate = $this->repository->searchById(Uuid::fromString($request->getId()));
+        try {
+            $userId = Uuid::fromString($request->getId());
+        } catch (InvalidUuidException $error) {
+            throw new InvalidArgumentValidationException($error->getMessage());
+        }
+
+        $userToUpdate = $this->userRepository->ofId($userId);
 
         if (null === $userToUpdate) {
             throw new UserNotFoundException();
@@ -41,8 +48,9 @@ final class UpdateUserPassword
         } catch (InvalidPasswordLengthException | InvalidNumberContainingException | InvalidLetterContainingException $exception) {
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
+
         $userToUpdate->setPassword($password);
 
-        $this->repository->save($userToUpdate);
+        $this->userRepository->save($userToUpdate);
     }
 }

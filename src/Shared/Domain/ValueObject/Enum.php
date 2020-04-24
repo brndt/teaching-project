@@ -57,7 +57,7 @@ abstract class Enum
 
     public function equals(Enum $other): bool
     {
-        return $other === $this;
+        return $other == $this;
     }
 
     private function ensureIsBetweenAcceptedValues($value): void

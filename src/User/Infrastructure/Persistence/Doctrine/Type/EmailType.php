@@ -19,7 +19,10 @@ final class EmailType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value->toString();
+        if (false == is_string($value)) {
+            return $value->toString();
+        }
+        return $value;
     }
 
     public function getName()

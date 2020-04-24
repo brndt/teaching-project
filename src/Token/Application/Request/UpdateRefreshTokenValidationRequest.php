@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\Request;
 
-final class UpdateRefreshTokenValidationDateByTokenValueRequest
+final class UpdateRefreshTokenValidationRequest
 {
     private \DateTime $newValidationDate;
     private string $refreshToken;

@@ -30,23 +30,22 @@ final class UserDoctrineRepository implements UserRepository
     /**
      * @return object|User|null
      */
-    public function searchByEmail(Email $email): ?User
+    public function ofId(Uuid $id): ?User
     {
-        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        return $this->entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
     }
 
     /**
      * @return object|User|null
      */
-    public function searchById(Uuid $id): ?User
+    public function ofEmail(Email $email): ?User
     {
-        return $this->entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
     }
 
     public function matching(Criteria $criteria): array
     {
         $doctrineCriteria = DoctrineCriteriaConverter::convert($criteria);
-
         return $this->entityManager->getRepository(User::class)->matching($doctrineCriteria)->toArray();
     }
 }

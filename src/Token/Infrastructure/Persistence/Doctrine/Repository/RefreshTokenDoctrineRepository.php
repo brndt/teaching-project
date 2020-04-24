@@ -22,7 +22,7 @@ final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
     /**
      * @return object|User|null
      */
-    public function searchByTokenValue(RefreshTokenString $token): ?RefreshToken
+    public function ofRefreshTokenString(RefreshTokenString $token): ?RefreshToken
     {
         return $this->entityManager->getRepository(RefreshToken::class)->findOneBy(['refreshToken' => $token]);
     }

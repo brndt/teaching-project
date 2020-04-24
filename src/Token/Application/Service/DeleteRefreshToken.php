@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Token\Application\Service;
 
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\Request\DeleteRefreshTokenByTokenValueRequest;
+use LaSalle\StudentTeacher\Token\Application\Request\DeleteRefreshTokenRequest;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
 
-final class DeleteRefreshTokenByTokenValue
+final class DeleteRefreshToken
 {
-    private RefreshTokenRepository $repository;
+    private RefreshTokenRepository $refreshTokenRepository;
 
-    public function __construct(RefreshTokenRepository $repository)
+    public function __construct(RefreshTokenRepository $refreshTokenRepository)
     {
-        $this->repository = $repository;
+        $this->refreshTokenRepository = $refreshTokenRepository;
     }
 
-    public function __invoke(DeleteRefreshTokenByTokenValueRequest $request): void
+    public function __invoke(DeleteRefreshTokenRequest $request): void
     {
-        $refreshToken = $this->repository->searchByTokenValue(
+        $refreshToken = $this->refreshTokenRepository->ofRefreshTokenString(
             RefreshTokenString::fromString($request->getRefreshTokenValue())
         );
 
@@ -28,6 +28,6 @@ final class DeleteRefreshTokenByTokenValue
             throw new RefreshTokenNotFoundException();
         }
 
-        $this->repository->delete($refreshToken);
+        $this->refreshTokenRepository->delete($refreshToken);
     }
 }

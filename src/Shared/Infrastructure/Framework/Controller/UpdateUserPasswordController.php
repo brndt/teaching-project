@@ -9,38 +9,30 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Request\UpdateBasicUserInformationRequest;
-use LaSalle\StudentTeacher\User\Application\Service\UpdateBasicUserInformation;
+use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
+use LaSalle\StudentTeacher\User\Application\Service\UpdateUserPassword;
 use Symfony\Component\HttpFoundation\Response;
 
-final class UpdateBasicUserInformationController extends AbstractFOSRestController
+final class UpdateUserPasswordController extends AbstractFOSRestController
 {
-    private UpdateBasicUserInformation $updateUser;
+    private UpdateUserPassword $updatePassword;
 
-    public function __construct(UpdateBasicUserInformation $updateUser)
+    public function __construct(UpdateUserPassword $updatePassword)
     {
-        $this->updateUser = $updateUser;
+        $this->updatePassword = $updatePassword;
     }
 
     /**
-     * @Rest\Patch("/api/account/{id}")
-     * @RequestParam(name="username")
-     * @RequestParam(name="firstName")
-     * @RequestParam(name="lastName")
-     * @RequestParam(name="image")
-     * @RequestParam(name="education")
-     * @RequestParam(name="experience")
+     * @Rest\Patch("/api/v1/users/{id}/password")
+     * @RequestParam(name="oldPassword")
+     * @RequestParam(name="newPassword")
      */
     public function patchAction(ParamFetcher $paramFetcher, string $id)
     {
-        $email = $paramFetcher->get('username');
-        $firstName = $paramFetcher->get('firstName');
-        $lastName = $paramFetcher->get('lastName');
-        $image = $paramFetcher->get('image');
-        $education = $paramFetcher->get('education');
-        $experience = $paramFetcher->get('experience');
+        $oldPassword = $paramFetcher->get('oldPassword');
+        $newPassword = $paramFetcher->get('newPassword');
 
         if ($id !== $this->getUser()->getId()) {
             $view = $this->view(
@@ -51,16 +43,12 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
         }
 
         try {
-            ($this->updateUser)(
-                new UpdateBasicUserInformationRequest(
-                    $id, $email, $firstName, $lastName, $image, $experience, $education
-                )
-            );
+            ($this->updatePassword)(new UpdateUserPasswordRequest($id, $oldPassword, $newPassword));
         } catch (UserNotFoundException $e) {
             $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
-        } catch (UserAlreadyExistsException $e) {
-            $view = $this->view(['message' => 'Your new email is already registered'], Response::HTTP_BAD_REQUEST);
+        } catch (OldPasswordIncorrectException $e) {
+            $view = $this->view(['message' => 'Your old password was entered incorrectly'], Response::HTTP_BAD_REQUEST);
             return $this->handleView($view);
         } catch (InvalidArgumentValidationException $error) {
             $view = $this->view(
@@ -69,6 +57,7 @@ final class UpdateBasicUserInformationController extends AbstractFOSRestControll
             );
             return $this->handleView($view);
         }
+
         $view = $this->view(['message' => 'Your account has been successfully changed'], Response::HTTP_OK);
         return $this->handleView($view);
     }

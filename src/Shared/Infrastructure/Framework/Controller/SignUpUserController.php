@@ -14,7 +14,7 @@ use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Application\Service\CreateUser;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CreateUserController extends AbstractFOSRestController
+final class SignUpUserController extends AbstractFOSRestController
 {
     private CreateUser $createUser;
 
@@ -24,7 +24,7 @@ final class CreateUserController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/sign_up", name="sign_up")
+     * @Rest\Post("/api/v1/users")
      * @RequestParam(name="username")
      * @RequestParam(name="password")
      * @RequestParam(name="firstName")

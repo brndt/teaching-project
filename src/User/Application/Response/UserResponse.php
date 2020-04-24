@@ -7,8 +7,6 @@ namespace LaSalle\StudentTeacher\User\Application\Response;
 final class UserResponse
 {
     private string $id;
-    private string $email;
-    private string $password;
     private string $firstName;
     private string $lastName;
     private array $roles;
@@ -19,8 +17,6 @@ final class UserResponse
 
     public function __construct(
         string $id,
-        string $email,
-        string $password,
         string $firstName,
         string $lastName,
         array $roles,
@@ -30,8 +26,6 @@ final class UserResponse
         ?string $education
     ) {
         $this->id = $id;
-        $this->email = $email;
-        $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = $roles;
@@ -44,16 +38,6 @@ final class UserResponse
     public function getId(): string
     {
         return $this->id;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
     }
 
     public function getFirstName(): string
