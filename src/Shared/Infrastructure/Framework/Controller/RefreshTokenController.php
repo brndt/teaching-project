@@ -12,19 +12,19 @@ use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredExce
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Request\CreateTokenRequest;
-use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenValidationRequest;
+use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenExpirationRequest;
 use LaSalle\StudentTeacher\Token\Application\Service\CreateToken;
-use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenValidation;
+use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenExpiration;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class RefreshTokenController extends AbstractFOSRestController
 {
-    private UpdateRefreshTokenValidation $updateRefreshToken;
+    private UpdateRefreshTokenExpiration $updateRefreshToken;
     private CreateToken $createToken;
 
     public function __construct(
-        UpdateRefreshTokenValidation $updateRefreshToken,
+        UpdateRefreshTokenExpiration $updateRefreshToken,
         CreateToken $createToken
     ) {
         $this->updateRefreshToken = $updateRefreshToken;
@@ -43,7 +43,7 @@ final class RefreshTokenController extends AbstractFOSRestController
 
         try {
             $refreshTokenResponse = ($this->updateRefreshToken)(
-                new UpdateRefreshTokenValidationRequest($dateTime, $refreshTokenValue)
+                new UpdateRefreshTokenExpirationRequest($dateTime, $refreshTokenValue)
             );
         } catch (RefreshTokenNotFoundException $e) {
             $view = $this->view(['message' => 'Refresh token is not found'], Response::HTTP_NOT_FOUND);

@@ -7,23 +7,23 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenValidationRequest;
-use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenValidation;
+use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenExpirationRequest;
+use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenExpiration;
 use LaSalle\StudentTeacher\Token\Domain\Aggregate\RefreshToken;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-final class UpdateRefreshTokenValidationDateByTokenValueTest extends TestCase
+final class UpdateRefreshTokenExpirationTest extends TestCase
 {
     private MockObject $repository;
-    private UpdateRefreshTokenValidation $updateRefreshTokenValidation;
+    private UpdateRefreshTokenExpiration $updateRefreshTokenValidation;
 
     public function setUp(): void
     {
         $this->repository = $this->createMock(RefreshTokenRepository::class);
-        $this->updateRefreshTokenValidation = new UpdateRefreshTokenValidation($this->repository);
+        $this->updateRefreshTokenValidation = new UpdateRefreshTokenExpiration($this->repository);
     }
 
     /**
@@ -32,7 +32,7 @@ final class UpdateRefreshTokenValidationDateByTokenValueTest extends TestCase
     public function refreshTokenNotFoundShouldThrowAnException()
     {
         $this->expectException(RefreshTokenNotFoundException::class);
-        $this->repository->method('searchByTokenValue')->willReturn(null);
+        $this->repository->method('ofRefreshTokenString')->willReturn(null);
         ($this->updateRefreshTokenValidation)($this->createRandomValidRefreshTokenRequest());
     }
 
@@ -42,7 +42,7 @@ final class UpdateRefreshTokenValidationDateByTokenValueTest extends TestCase
     public function refreshTokenIsExpiredShouldThrowAnException()
     {
         $this->expectException(RefreshTokenIsExpiredException::class);
-        $this->repository->method('searchByTokenValue')->willReturn($this->createRandomExpiredRefreshToken());
+        $this->repository->method('ofRefreshTokenString')->willReturn($this->createRandomExpiredRefreshToken());
         ($this->updateRefreshTokenValidation)($this->createRandomValidRefreshTokenRequest());
     }
 
@@ -53,7 +53,7 @@ final class UpdateRefreshTokenValidationDateByTokenValueTest extends TestCase
 
     private function createRandomValidRefreshTokenRequest()
     {
-        return new UpdateRefreshTokenValidationRequest(
+        return new UpdateRefreshTokenExpirationRequest(
             new \DateTime('+1 day'),
             RefreshTokenString::generate()->toString()
         );

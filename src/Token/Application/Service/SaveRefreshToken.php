@@ -31,7 +31,6 @@ final class SaveRefreshToken
         }
 
         $refreshToken = new RefreshToken(
-            Uuid::generate(),
             RefreshTokenString::generate(),
             $userId,
             $request->getExpirationDate()
@@ -40,7 +39,6 @@ final class SaveRefreshToken
         $this->refreshTokenRepository->save($refreshToken);
 
         return new RefreshTokenResponse(
-            $refreshToken->getId()->toString(),
             $refreshToken->getRefreshToken()->toString(),
             $refreshToken->getUserId()->toString(),
             $refreshToken->getExpirationDate()

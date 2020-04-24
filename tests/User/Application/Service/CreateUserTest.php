@@ -36,7 +36,7 @@ final class CreateUserTest extends TestCase
      */
     public function userAlreadyExistsShouldThrowAnException()
     {
-        $this->repository->method('searchByEmail')->willReturn($this->createRandomUser());
+        $this->repository->method('ofEmail')->willReturn($this->createRandomUser());
         $this->expectException(UserAlreadyExistsException::class);
         ($this->createUser)($this->createRandomUserRequest());
     }
@@ -91,7 +91,7 @@ final class CreateUserTest extends TestCase
      */
     public function shouldSaveUserBecauseDoesntExist()
     {
-        $this->repository->method('searchByEmail')->willReturn(null);
+        $this->repository->method('ofEmail')->willReturn(null);
         $this->assertNull(($this->createUser)($this->createRandomUserRequest()));
     }
 
