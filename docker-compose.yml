@@ -19,7 +19,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ./:/usr/share/nginx/html
+      - ./src/:/usr/share/nginx/html
     networks:
       - backend
 
