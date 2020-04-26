@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "dd7f529d-1273-45a6-872c-a02b86e919a8",
+		"name": "TFM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"spursarmycom51@yandex.ru\",\n\t\"password\": \"qwertyuiop1\",\n\t\"lastName\": \"alex\",\n\t\"firstName\": \"ivanov\",\n\t\"roles\": [\"teacher\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"spursarmycom50@yandex.ru\",\n\t\"password\": \"qwertyuiop1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/sign_in",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"sign_in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"refresh_token\": \"b12a74f55eaab9e9cb59f3eb31abe0b82ccab0e5f6b1e19fda66e59281ed02dce19cb211ef5d44b4053b90bfa043a129fa890356c58162938cb1668241133491\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/token_refresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"token_refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign out",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"refresh_token\": \"b12a74f55eaab9e9cb59f3eb31abe0b82ccab0e5f6b1e19fda66e59281ed02dce19cb211ef5d44b4053b90bfa043a129fa890356c58162938cb1668241133491\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/sign_out",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"sign_out"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODc2NDIxMTUsImV4cCI6MTU4ODAwMjExNSwiaWQiOiJjMzRiZWYzMC1mZGQ2LTQyNjgtYWE5OS1iMzkzYjUwYTM2YzMifQ.zb3GKPes2BhMYS67If3aSccNinfLiYbCZajeXlvbZA8rPF-tIHUiIUa8CExO_XYwBEKq8zwV0VsxjYLaOr-mowRjqxO0AJearUVo_dVhJ1w-J-UnsDfB6NsxG9Mnr72-rSfYuu3-aV9utcXV6Pa8XZIoqUZfIy7jvRuPRyP_4VqSG7wHILoAXHY5lymHUhkDcWnQwTecbYDv0epRaddrfxVj4qFT9L9T8ZaHmVrgpGfCrfZuCAPxKFtwXMffmXGHUn3iHlrl17pEUR01ohe5J5GqxxCVZuXXnpMGH5pvZaxZai15EQX1LRl3JKiSk1V4kMqz9ulY37N_UTE6gaYI13c5IiSTprfrl9qDayt0YAaNKHLr-QaMFOeyjjgXny2W3koaY2pK9yXTGHRxfvEn0O0YyIkoDOx3DSbNuFBr4vd0ffLu6U8jVl4zx_f2cQ3FZdLRWR5ZOBLGbLS4SUOrMeRxfAbmMmtQXBJix_9WxmVEpPJOkqslCQGUns18suQni5JqtNMoWssUrKnZSAt9ziaF_PDXxJSJpy9njpHV6oS_reB7oNKncTsdn6kJeQn47pRzMxQjpo26Q8h4Ua2legVBXCMoMhNS_VZfF0l_Q66PywGhe6rfy44vFph5i1XVLw2jv7h8ZlGhGyyBloGK9TqkhTVP76RfzfPeDxzAzuw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"spursarmycom13@yandex.ru\",\n\t\"firstName\": \"ivan\",\n\t\"lastName\": \"egorov\",\n\t\"image\": \"avatar.jpeg\",\n\t\"education\": \"la salle\",\n\t\"experience\": \"20 years\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/{id}/info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{id}",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODc2NDIyNjYsImV4cCI6MTU4ODAwMjI2NiwiaWQiOiJjMzRiZWYzMC1mZGQ2LTQyNjgtYWE5OS1iMzkzYjUwYTM2YzMifQ.cXUZnTzpQ819YNPLZA4CXu_KGl3XsXpuJJNw-8nxPbnEHgFKKYsk8VZdr1_bh1tqydyqAYZV3UMx6QQn99TzkRvkjLyISJ6biPuQ68c5EEJJBjFfUi236Xgl_TQcoWBOHWWxPtRx-Dmh26dpGi3L3mng3w8c0XV_myE1O75bMUU7BRdUwgDj9fVTwI2W-tsem0rm8TXoxuJVDq6OOYWXYRXUP4tSWX8qqjh_GWVynOBP6zUras8-AjDGGKOJMfWR4YEpIuSsW0Dvx8xKcqELoiQWG-YyMbT-jGUOOzV3ve-mDjHbeW4rntwx9QoGzsTOwVLFSax-CFo8AyxBktYzHApiFxiLm8O5v9FpjScNSH_79B2i7K-Un5-Yl-ee2zmsSg7FTm66HnLdVwDRgrzNyx13PflzFe2U4HF1VSwGNoBnrY-JykLFLf-4J7vccdS6-iylGM6AOJylC87IVlKi7cr4jWZr5OeH6Iynk1lrGqpyTVUV3r0nsJbZBi6RZ_TBOqzzgXHgdUqNfrVuOmp_B7n_dzyIlJMW26OVkBtI-ZTtZaAxHJBB0-v3bgjOgvPHPAlhBALaV7MhtwdrO8RpDfTfmfuDlAZLt_P6JyXUyGHINubAC7yxa17IM5gOMn0EFxe2wvYVs-c00-vtH8kKtgTbH3DYF7aNehv1FwmGM4c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"oldPassword\": \"qwertyuiop12\",\n\t\"newPassword\": \"qwertyuiop1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/{id}/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{id}",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users?orderBy=created&order=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "orderBy",
+							"value": "created"
+						},
+						{
+							"key": "order",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
