@@ -58,14 +58,16 @@ final class CreateUser
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
 
+        $userId = $this->userRepository->nextIdentity();
+
         $user = User::create(
-            Uuid::generate(),
+            $userId,
             $email,
             $password,
             $request->getFirstName(),
             $request->getLastName(),
             $roles,
-            new DateTimeImmutable()
+            $request->getCreated()
         );
 
         $this->userRepository->save($user);

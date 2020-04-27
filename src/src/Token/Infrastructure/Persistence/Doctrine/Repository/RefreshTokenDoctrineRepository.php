@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Domain\Aggregate\RefreshToken;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
@@ -37,5 +38,10 @@ final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
     {
         $this->entityManager->persist($token);
         $this->entityManager->flush();
+    }
+
+    public function nextIdentity(): RefreshTokenString
+    {
+        return RefreshTokenString::generate();
     }
 }

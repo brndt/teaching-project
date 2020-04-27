@@ -48,4 +48,9 @@ final class UserDoctrineRepository implements UserRepository
         $doctrineCriteria = DoctrineCriteriaConverter::convert($criteria);
         return $this->entityManager->getRepository(User::class)->matching($doctrineCriteria)->toArray();
     }
+
+    public function nextIdentity(): Uuid
+    {
+        return Uuid::generate();
+    }
 }

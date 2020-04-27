@@ -41,7 +41,7 @@ final class SignUpUserController extends AbstractFOSRestController
 
         try {
             ($this->createUser)(
-                new CreateUserRequest($email, $password, $firstName, $lastName, $roles)
+                new CreateUserRequest($email, $password, $firstName, $lastName, $roles, new \DateTimeImmutable())
             );
         } catch (UserAlreadyExistsException $e) {
             $view = $this->view(

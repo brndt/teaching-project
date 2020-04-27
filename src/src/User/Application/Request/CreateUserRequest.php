@@ -11,14 +11,16 @@ final class CreateUserRequest
     private string $firstName;
     private string $lastName;
     private array $roles;
+    private \DateTimeImmutable $created;
 
-    public function __construct(string $email, string $password, string $firstName, string $lastName, array $roles)
+    public function __construct(string $email, string $password, string $firstName, string $lastName, array $roles, \DateTimeImmutable $created)
     {
         $this->email = $email;
         $this->password = $password;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = $roles;
+        $this->created = $created;
     }
 
     public function getEmail(): string
@@ -44,5 +46,10 @@ final class CreateUserRequest
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    public function getCreated(): \DateTimeImmutable
+    {
+        return $this->created;
     }
 }

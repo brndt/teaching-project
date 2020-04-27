@@ -91,7 +91,11 @@ final class CreateUserTest extends TestCase
      */
     public function shouldSaveUser()
     {
-        $this->assertNull(($this->createUser)($this->anyValidUserRequest()));
+        $this->repository->method('nextIdentity')->willReturn(Uuid::fromString('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'));
+
+        $this->repository->expects($this->once())->method('save')->with($this->anyValidUser());
+
+        ($this->createUser)($this->anyValidUserRequest());
     }
 
     /**
@@ -106,13 +110,13 @@ final class CreateUserTest extends TestCase
     private function anyValidUser(): User
     {
         return new User(
-            Uuid::generate(),
-            new Email('hola@mundo.com'),
+            Uuid::fromString('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
+            new Email('user@example.com'),
             Password::fromPlainPassword('123456aa'),
-            'alex',
-            'johnson',
+            'Alex',
+            'Johnson',
             Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable()
+            new \DateTimeImmutable('2020-04-27')
         );
     }
 
@@ -123,7 +127,8 @@ final class CreateUserTest extends TestCase
             '123456aa',
             'Alex',
             'Johnson',
-            ['teacher']
+            ['teacher'],
+            new \DateTimeImmutable('2020-04-27')
         );
     }
 
@@ -134,51 +139,56 @@ final class CreateUserTest extends TestCase
             '123456aa',
             'Alex',
             'Johnson',
-            ['teacher']
+            ['teacher'],
+            new \DateTimeImmutable('2020-04-27')
         );
     }
 
     private function anyUserRequestWithInvalidRole(): CreateUserRequest
     {
         return new CreateUserRequest(
-            'usere@xample.com',
+            'user@example.com',
             '123456aa',
             'Alex',
             'Johnson',
-            ['something_invalid']
+            ['something_invalid'],
+            new \DateTimeImmutable('2020-04-27')
         );
     }
 
     private function anyUserRequestWithInvalidPasswordLength(): CreateUserRequest
     {
         return new CreateUserRequest(
-            'usere@xample.com',
+            'user@example.com',
             '123456a',
             'Alex',
             'Johnson',
-            ['teacher']
+            ['teacher'],
+            new \DateTimeImmutable('2020-04-27')
         );
     }
 
     private function anyUserRequestWithInvalidNumberContaining(): CreateUserRequest
     {
         return new CreateUserRequest(
-            'usere@xample.com',
+            'user@example.com',
             'qwertyuiop',
             'Alex',
             'Johnson',
-            ['teacher']
+            ['teacher'],
+            new \DateTimeImmutable('2020-04-27')
         );
     }
 
     private function anyUserRequestWithInvalidLetterContaining(): CreateUserRequest
     {
         return new CreateUserRequest(
-            'usere@xample.com',
+            'user@example.com',
             '123456789',
             'Alex',
             'Johnson',
-            ['teacher']
+            ['teacher'],
+            new \DateTimeImmutable()
         );
     }
 }

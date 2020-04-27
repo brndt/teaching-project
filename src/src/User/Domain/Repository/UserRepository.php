@@ -15,6 +15,8 @@ interface UserRepository
 
     public function ofId(Uuid $id): ?User;
 
+    public function nextIdentity(): Uuid;
+
     public function ofEmail(Email $email): ?User;
 
     public function matching(Criteria $criteria): array;

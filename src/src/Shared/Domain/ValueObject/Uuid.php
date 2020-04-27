@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\Shared\Domain\ValueObject;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
-final class Uuid
+class Uuid
 {
     private string $id;
 
@@ -35,7 +35,7 @@ final class Uuid
         return $this->id;
     }
 
-    private function __construct(string $id)
+    public function __construct(string $id)
     {
         $this->setUuid($id);
     }

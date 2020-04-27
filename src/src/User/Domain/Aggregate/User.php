@@ -12,6 +12,7 @@ use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
+use Symfony\Component\Validator\Constraints\Date;
 
 final class User
 {

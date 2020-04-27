@@ -30,8 +30,10 @@ final class SaveRefreshToken
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
 
+        $refreshTokenString = $this->refreshTokenRepository->nextIdentity();
+
         $refreshToken = new RefreshToken(
-            RefreshTokenString::generate(),
+            $refreshTokenString,
             $userId,
             $request->getExpirationDate()
         );
