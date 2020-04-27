@@ -38,7 +38,7 @@ final class CreateUserTest extends TestCase
     {
         $this->repository->method('ofEmail')->willReturn($this->createRandomUser());
         $this->expectException(UserAlreadyExistsException::class);
-        ($this->createUser)($this->createRandomUserRequest());
+        ($this->createUser)($this->anyUserRequest());
     }
 
     /**
@@ -47,7 +47,7 @@ final class CreateUserTest extends TestCase
     public function shouldThrowInvalidArgumentValidationBecauseOfEmailException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
-        ($this->createUser)($this->createRandomUserWithInvalidEmailRequest());
+        ($this->createUser)($this->anyUserWithInvalidEmailRequest());
     }
 
     /**
@@ -56,7 +56,7 @@ final class CreateUserTest extends TestCase
     public function shouldThrowInvalidArgumentValidationBecauseOfRoleException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
-        ($this->createUser)($this->createRandomUserWithInvalidRoleRequest());
+        ($this->createUser)($this->anyUserWithInvalidRoleRequest());
     }
 
     /**
@@ -65,7 +65,7 @@ final class CreateUserTest extends TestCase
     public function shouldThrowInvalidArgumentValidationBecauseOfInvalidPasswordLengthException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
-        ($this->createUser)($this->createRandomUserWithInvalidPasswordLengthRequest());
+        ($this->createUser)($this->anyUserWithInvalidPasswordLengthRequest());
     }
 
     /**
@@ -74,7 +74,7 @@ final class CreateUserTest extends TestCase
     public function shouldThrowInvalidArgumentValidationBecauseOfInvalidNumberContainingException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
-        ($this->createUser)($this->createRandomUserWithInvalidNumberContainingRequest());
+        ($this->createUser)($this->anyUserWithInvalidNumberContainingRequest());
     }
 
     /**
@@ -83,7 +83,7 @@ final class CreateUserTest extends TestCase
     public function shouldThrowInvalidArgumentValidationBecauseOfInvalidLetterContainingException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
-        ($this->createUser)($this->createRandomUserWithInvalidLetterContainingRequest());
+        ($this->createUser)($this->anyUserWithInvalidLetterContainingRequest());
     }
 
     /**
@@ -91,8 +91,7 @@ final class CreateUserTest extends TestCase
      */
     public function shouldSaveUserBecauseDoesntExist()
     {
-        $this->repository->method('ofEmail')->willReturn(null);
-        $this->assertNull(($this->createUser)($this->createRandomUserRequest()));
+        $this->assertNull(($this->createUser)($this->anyUserRequest()));
     }
 
     private function createRandomUser(): User
@@ -108,7 +107,7 @@ final class CreateUserTest extends TestCase
         );
     }
 
-    private function createRandomUserRequest(): CreateUserRequest
+    private function anyUserRequest(): CreateUserRequest
     {
         return new CreateUserRequest(
             'user@example.com',
@@ -119,7 +118,7 @@ final class CreateUserTest extends TestCase
         );
     }
 
-    private function createRandomUserWithInvalidEmailRequest(): CreateUserRequest
+    private function anyUserWithInvalidEmailRequest(): CreateUserRequest
     {
         return new CreateUserRequest(
             'userexample.com',
@@ -130,7 +129,7 @@ final class CreateUserTest extends TestCase
         );
     }
 
-    private function createRandomUserWithInvalidRoleRequest(): CreateUserRequest
+    private function anyUserWithInvalidRoleRequest(): CreateUserRequest
     {
         return new CreateUserRequest(
             'usere@xample.com',
@@ -141,7 +140,7 @@ final class CreateUserTest extends TestCase
         );
     }
 
-    private function createRandomUserWithInvalidPasswordLengthRequest(): CreateUserRequest
+    private function anyUserWithInvalidPasswordLengthRequest(): CreateUserRequest
     {
         return new CreateUserRequest(
             'usere@xample.com',
@@ -152,7 +151,7 @@ final class CreateUserTest extends TestCase
         );
     }
 
-    private function createRandomUserWithInvalidNumberContainingRequest(): CreateUserRequest
+    private function anyUserWithInvalidNumberContainingRequest(): CreateUserRequest
     {
         return new CreateUserRequest(
             'usere@xample.com',
@@ -163,7 +162,7 @@ final class CreateUserTest extends TestCase
         );
     }
 
-    private function createRandomUserWithInvalidLetterContainingRequest(): CreateUserRequest
+    private function anyUserWithInvalidLetterContainingRequest(): CreateUserRequest
     {
         return new CreateUserRequest(
             'usere@xample.com',
