@@ -28,7 +28,7 @@ final class CreateToken
     public function __invoke(CreateTokenRequest $request): CreateTokenResponse
     {
         try {
-            $userId = Uuid::fromString($request->getUserId());
+            $userId = new Uuid($request->getUserId());
         } catch (InvalidUuidException $exception) {
             throw new InvalidArgumentValidationException($exception->getMessage());
         }

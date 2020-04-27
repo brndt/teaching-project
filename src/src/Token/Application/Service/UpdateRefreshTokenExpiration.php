@@ -23,7 +23,7 @@ final class UpdateRefreshTokenExpiration
     public function __invoke(UpdateRefreshTokenExpirationRequest $request): RefreshTokenResponse
     {
         $refreshToken = $this->refreshTokenRepository->ofRefreshTokenString(
-            RefreshTokenString::fromString($request->getRefreshToken())
+            new RefreshTokenString($request->getRefreshToken())
         );
 
         if (null === $refreshToken) {

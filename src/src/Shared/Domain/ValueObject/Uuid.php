@@ -19,10 +19,10 @@ class Uuid
     /**
      * @throws InvalidUuidException
      */
-    public static function fromString(string $id): self
+    public function __construct(string $id)
     {
         self::assertUuidIsValid($id);
-        return new self($id);
+        $this->setUuid($id);
     }
 
     public function toString(): string
@@ -33,11 +33,6 @@ class Uuid
     public function __toString(): string
     {
         return $this->id;
-    }
-
-    public function __construct(string $id)
-    {
-        $this->setUuid($id);
     }
 
     private function setUuid(string $id): void

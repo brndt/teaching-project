@@ -14,7 +14,7 @@ final class RefreshTokenStringType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return RefreshTokenString::fromString($value);
+        return new RefreshTokenString($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)

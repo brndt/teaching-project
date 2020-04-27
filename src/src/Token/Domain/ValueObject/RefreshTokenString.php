@@ -13,9 +13,9 @@ final class RefreshTokenString
         return new self(bin2hex(openssl_random_pseudo_bytes(64)));
     }
 
-    public static function fromString(string $refreshTokenString): self
+    public function __construct(string $refreshTokenString)
     {
-        return new self($refreshTokenString);
+        $this->setValue($refreshTokenString);
     }
 
     public function toString(): string
@@ -26,11 +26,6 @@ final class RefreshTokenString
     public function __toString(): string
     {
         return $this->refreshTokenString;
-    }
-
-    private function __construct(string $refreshTokenString)
-    {
-        $this->setValue($refreshTokenString);
     }
 
     private function setValue(string $refreshTokenString): void

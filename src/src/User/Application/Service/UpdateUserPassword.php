@@ -28,7 +28,7 @@ final class UpdateUserPassword
     public function __invoke(UpdateUserPasswordRequest $request): void
     {
         try {
-            $userId = Uuid::fromString($request->getId());
+            $userId = new Uuid($request->getId());
         } catch (InvalidUuidException $error) {
             throw new InvalidArgumentValidationException($error->getMessage());
         }

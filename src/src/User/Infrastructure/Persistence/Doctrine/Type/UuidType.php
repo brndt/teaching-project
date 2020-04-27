@@ -14,7 +14,7 @@ final class UuidType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return Uuid::fromString($value);
+        return new Uuid($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)

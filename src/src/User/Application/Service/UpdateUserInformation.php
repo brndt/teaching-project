@@ -26,7 +26,7 @@ final class UpdateUserInformation
     public function __invoke(UpdateUserInformationRequest $request): void
     {
         try {
-            $userId = Uuid::fromString($request->getId());
+            $userId = new Uuid($request->getId());
         } catch (InvalidUuidException $error) {
             throw new InvalidArgumentValidationException($error->getMessage());
         }

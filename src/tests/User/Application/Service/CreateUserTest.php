@@ -91,10 +91,10 @@ final class CreateUserTest extends TestCase
      */
     public function shouldSaveUser()
     {
-        $this->repository->method('nextIdentity')->willReturn(Uuid::fromString('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'));
+        $this->repository->method('nextIdentity')->willReturn(new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'));
 
-        $this->repository->expects($this->once())->method('save')->with($this->anyValidUser());
-
+        $this->repository->expects($this->once())->method('save')->with($this->equalTo($this->anyValidUser()));
+        // fails because hashedPassword and DomainEvents are different
         ($this->createUser)($this->anyValidUserRequest());
     }
 
@@ -110,7 +110,7 @@ final class CreateUserTest extends TestCase
     private function anyValidUser(): User
     {
         return new User(
-            Uuid::fromString('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
+            new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
             new Email('user@example.com'),
             Password::fromPlainPassword('123456aa'),
             'Alex',

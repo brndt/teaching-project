@@ -21,7 +21,7 @@ final class DeleteRefreshToken
     public function __invoke(DeleteRefreshTokenRequest $request): void
     {
         $refreshToken = $this->refreshTokenRepository->ofRefreshTokenString(
-            RefreshTokenString::fromString($request->getRefreshTokenValue())
+            new RefreshTokenString($request->getRefreshTokenValue())
         );
 
         if (null === $refreshToken) {

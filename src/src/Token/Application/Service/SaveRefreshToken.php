@@ -25,7 +25,7 @@ final class SaveRefreshToken
     public function __invoke(SaveRefreshTokenRequest $request): RefreshTokenResponse
     {
         try {
-            $userId = Uuid::fromString($request->getUserId());
+            $userId = new Uuid($request->getUserId());
         } catch (InvalidUuidException $exception) {
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
