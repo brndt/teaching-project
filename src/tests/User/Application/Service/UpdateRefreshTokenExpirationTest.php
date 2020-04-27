@@ -29,29 +29,29 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
     /**
      * @test
      */
-    public function refreshTokenNotFoundShouldThrowAnException()
+    public function shouldThrowRefreshTokenNotFoundException()
     {
         $this->expectException(RefreshTokenNotFoundException::class);
         $this->repository->method('ofRefreshTokenString')->willReturn(null);
-        ($this->updateRefreshTokenValidation)($this->createRandomValidRefreshTokenRequest());
+        ($this->updateRefreshTokenValidation)($this->anyValidRefreshTokenRequest());
     }
 
     /**
      * @test
      */
-    public function refreshTokenIsExpiredShouldThrowAnException()
+    public function shouldThrowRefreshTokenIsExpiredException()
     {
         $this->expectException(RefreshTokenIsExpiredException::class);
-        $this->repository->method('ofRefreshTokenString')->willReturn($this->createRandomExpiredRefreshToken());
-        ($this->updateRefreshTokenValidation)($this->createRandomValidRefreshTokenRequest());
+        $this->repository->method('ofRefreshTokenString')->willReturn($this->anyExpiredRefreshToken());
+        ($this->updateRefreshTokenValidation)($this->anyValidRefreshTokenRequest());
     }
 
-    private function createRandomExpiredRefreshToken()
+    private function anyExpiredRefreshToken(): RefreshToken
     {
         return new RefreshToken(RefreshTokenString::generate(), Uuid::generate(), new \DateTime());
     }
 
-    private function createRandomValidRefreshTokenRequest()
+    private function anyValidRefreshTokenRequest(): UpdateRefreshTokenExpirationRequest
     {
         return new UpdateRefreshTokenExpirationRequest(
             new \DateTime('+1 day'),

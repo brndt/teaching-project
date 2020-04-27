@@ -34,7 +34,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function userAlreadyExistsShouldThrowAnException()
+    public function shouldThrowUserAlreadyExistsException()
     {
         $this->repository->method('ofEmail')->willReturn($this->anyValidUser());
         $this->expectException(UserAlreadyExistsException::class);
@@ -44,7 +44,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function shouldThrowInvalidArgumentValidationBecauseOfEmailException()
+    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfEmail()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidEmail());
@@ -53,7 +53,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function shouldThrowInvalidArgumentValidationBecauseOfRoleException()
+    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfRole()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidRole());
@@ -62,7 +62,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function shouldThrowInvalidArgumentValidationBecauseOfInvalidPasswordLengthException()
+    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfInvalidPasswordLength()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidPasswordLength());
@@ -71,7 +71,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function shouldThrowInvalidArgumentValidationBecauseOfInvalidNumberContainingException()
+    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfInvalidNumberContaining()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidNumberContaining());
@@ -80,7 +80,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function shouldThrowInvalidArgumentValidationBecauseOfInvalidLetterContainingException()
+    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfInvalidLetterContaining()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidLetterContaining());
@@ -89,7 +89,7 @@ final class CreateUserTest extends TestCase
     /**
      * @test
      */
-    public function shouldSaveUserBecauseDoesntExist()
+    public function shouldSaveUser()
     {
         $this->assertNull(($this->createUser)($this->anyValidUserRequest()));
     }
