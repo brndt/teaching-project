@@ -70,17 +70,7 @@ final class CreateUserTest extends TestCase
 
     public function testWhenRequestIsValidThenCreateUser()
     {
-        $this->repository->expects($this->once())->method('save')->with(
-            $this->callback(
-                function (User $user) {
-                    return $this->anyValidUser()->getEmail()->toString() === $user->getEmail()->toString()
-                        && $this->anyValidUser()->getFirstName() == $user->getFirstName()
-                        && $this->anyValidUser()->getLastName() == $user->getLastName()
-                        && $this->anyValidUser()->getRoles()->toArrayOfPrimitives() === $user->getRoles()->toArrayOfPrimitives()
-                        && $this->anyValidUser()->getCreated() == $user->getCreated();
-                }
-            )
-        );
+        $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($this->anyValidUser())));
         ($this->createUser)($this->anyValidUserRequest());
     }
 
@@ -173,5 +163,16 @@ final class CreateUserTest extends TestCase
             ['teacher'],
             new \DateTimeImmutable()
         );
+    }
+
+    private function userComparator(User $userExpected): callable
+    {
+        return function (User $userActual) use ($userExpected) {
+            return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
+                && $userExpected->getFirstName() == $userActual->getFirstName()
+                && $userExpected->getLastName() == $userActual->getLastName()
+                && $userExpected->getRoles()->toArrayOfPrimitives() === $userActual->getRoles()->toArrayOfPrimitives()
+                && $userExpected->getCreated() == $userActual->getCreated();
+        };
     }
 }
