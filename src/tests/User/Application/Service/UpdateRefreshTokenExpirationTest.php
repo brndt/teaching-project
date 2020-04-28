@@ -26,20 +26,14 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
         $this->updateRefreshTokenValidation = new UpdateRefreshTokenExpiration($this->repository);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowRefreshTokenNotFoundException()
+    public function testWhenRefreshTokenNotFoundThenThrowException()
     {
         $this->expectException(RefreshTokenNotFoundException::class);
         $this->repository->method('ofRefreshTokenString')->willReturn(null);
         ($this->updateRefreshTokenValidation)($this->anyValidRefreshTokenRequest());
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowRefreshTokenIsExpiredException()
+    public function testWhenRefreshTokenIsExpiredThenThrowException()
     {
         $this->expectException(RefreshTokenIsExpiredException::class);
         $this->repository->method('ofRefreshTokenString')->willReturn($this->anyExpiredRefreshToken());

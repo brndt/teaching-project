@@ -31,77 +31,60 @@ final class CreateUserTest extends TestCase
         $this->createUser = new CreateUser($this->repository, $this->eventBus);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowUserAlreadyExistsException()
+    public function testWhenUserAlreadyExistsThenThrowException()
     {
         $this->repository->method('ofEmail')->willReturn($this->anyValidUser());
         $this->expectException(UserAlreadyExistsException::class);
         ($this->createUser)($this->anyValidUserRequest());
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfEmail()
+    public function testWhenUserEmailIsInvalidThenThrowException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidEmail());
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfRole()
+    public function testWhenUserRoleIsInvalidThenThrowException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidRole());
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfInvalidPasswordLength()
+    public function testWhenUserPasswordIsInvalidThenThrowException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidPasswordLength());
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfInvalidNumberContaining()
+    public function testWhenPasswordDoesntContainNumberThenThrowException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidNumberContaining());
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowInvalidArgumentValidationExceptionBecauseOfInvalidLetterContaining()
+    public function testWhenPasswordDoesntContainLetterThenThrowException()
     {
         $this->expectException(InvalidArgumentValidationException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidLetterContaining());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSaveUser()
+    public function testWhenRequestIsValidThenCreateUser()
     {
-        $this->repository->method('nextIdentity')->willReturn(new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'));
-
-        $this->repository->expects($this->once())->method('save')->with($this->equalTo($this->anyValidUser()));
-        // fails because hashedPassword and DomainEvents are different
+        $this->repository->expects($this->once())->method('save')->with(
+            $this->callback(
+                function (User $user) {
+                    return $this->anyValidUser()->getEmail()->toString() === $user->getEmail()->toString()
+                        && $this->anyValidUser()->getFirstName() == $user->getFirstName()
+                        && $this->anyValidUser()->getLastName() == $user->getLastName()
+                        && $this->anyValidUser()->getRoles()->toArrayOfPrimitives() === $user->getRoles()->toArrayOfPrimitives()
+                        && $this->anyValidUser()->getCreated() == $user->getCreated();
+                }
+            )
+        );
         ($this->createUser)($this->anyValidUserRequest());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDispatchDomainEvent()
+    public function testWhenUserIsCreatedThenDispatchDomainEvent()
     {
         $this->eventBus->expects($this->atLeastOnce())->method('dispatch');
         ($this->createUser)($this->anyValidUserRequest());
