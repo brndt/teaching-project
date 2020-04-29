@@ -12,13 +12,15 @@ final class SymfonyUser implements UserInterface
     private string $username;
     private string $password;
     private array $roles;
+    private bool $enabled;
 
-    public function __construct(string $id, string $username, string $password, array $roles)
+    public function __construct(string $id, string $username, string $password, array $roles, bool $enabled)
     {
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
         $this->roles = $roles;
+        $this->enabled = $enabled;
     }
 
     public function getId()
@@ -39,6 +41,11 @@ final class SymfonyUser implements UserInterface
     public function getPassword()
     {
         return $this->password;
+    }
+
+    public function getEnabled(): bool
+    {
+        return $this->enabled;
     }
 
     public function getSalt()

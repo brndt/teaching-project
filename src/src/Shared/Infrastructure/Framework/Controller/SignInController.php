@@ -33,6 +33,11 @@ final class SignInController extends AbstractFOSRestController
      */
     public function postAction()
     {
+        if (false === $this->getUser()->getEnabled()) {
+            $view = $this->view(['message' => 'You need to verify your email'], Response::HTTP_BAD_REQUEST);
+            return $this->handleView($view);
+        }
+
         try {
             $tokenResponse = ($this->createToken)(new CreateTokenRequest($this->getUser()->getId()));
         } catch (TokenNotFoundException $e) {

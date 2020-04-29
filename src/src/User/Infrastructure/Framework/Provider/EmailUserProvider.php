@@ -42,7 +42,8 @@ final class EmailUserProvider implements UserProviderInterface
             $userResponse->getId(),
             $userResponse->getEmail(),
             $userResponse->getPassword(),
-            SymfonyUser::processValueToSymfonyRole($userResponse->getRoles())
+            SymfonyUser::processValueToSymfonyRole($userResponse->getRoles()),
+            $userResponse->getEnabled()
         );
     }
 

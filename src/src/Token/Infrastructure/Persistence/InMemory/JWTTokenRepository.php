@@ -25,7 +25,8 @@ final class JWTTokenRepository implements TokenRepository
             $user->getId()->toString(),
             $user->getEmail()->toString(),
             $user->getPassword()->toString(),
-            SymfonyUser::processValueToSymfonyRole($user->getRoles()->toArrayOfPrimitives())
+            SymfonyUser::processValueToSymfonyRole($user->getRoles()->toArrayOfPrimitives()),
+            $user->getEnabled()
         );
 
         $tokenValue = $this->tokenManager->create($symfonyUser);

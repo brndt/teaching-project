@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Event;
 
 use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmation;
+use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmationRequest;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 
 final class SendEmailConfirmationOnUserCreated
@@ -18,6 +19,6 @@ final class SendEmailConfirmationOnUserCreated
 
     public function __invoke(UserCreatedDomainEvent $createdDomainEvent): void
     {
-        ($this->sendEmailConfirmation)($createdDomainEvent->getAggregateUuid());
+        ($this->sendEmailConfirmation)(new SendEmailConfirmationRequest($createdDomainEvent->getEmail()->toString()));
     }
 }

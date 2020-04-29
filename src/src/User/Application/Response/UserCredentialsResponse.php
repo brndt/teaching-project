@@ -10,13 +10,15 @@ final class UserCredentialsResponse
     private string $email;
     private string $password;
     private array $roles;
+    private bool $enabled;
 
-    public function __construct(string $id, string $email, string $password, array $roles)
+    public function __construct(string $id, string $email, string $password, array $roles, bool $enabled)
     {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
         $this->roles = $roles;
+        $this->enabled = $enabled;
     }
 
     public function getId(): string
@@ -37,5 +39,10 @@ final class UserCredentialsResponse
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    public function getEnabled(): bool
+    {
+        return $this->enabled;
     }
 }

@@ -31,8 +31,8 @@ final class SymfonyEmailSender implements EmailSender
             ->htmlTemplate('email.html.twig')
             ->context(
                 [
-                    'name' => 'Username',
-                    'url_confirmation' => $_SERVER['APP_URL'],
+                    'name' => $firstName.' '.$lastName,
+                    'url_confirmation' => $_SERVER['APP_URL'].'?token='.$confirmationToken->toString(),
                 ]
             );
         $this->mailer->send($email);

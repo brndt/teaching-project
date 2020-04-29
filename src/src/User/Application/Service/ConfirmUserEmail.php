@@ -41,5 +41,7 @@ final class ConfirmUserEmail
 
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
+
+        $this->userRepository->save($user);
     }
 }

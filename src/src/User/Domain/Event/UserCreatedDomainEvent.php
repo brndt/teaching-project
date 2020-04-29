@@ -68,7 +68,7 @@ final class UserCreatedDomainEvent implements DomainEvent
         return $this->lastName;
     }
 
-    public function isEnabled(): bool
+    public function getEnabled(): bool
     {
         return $this->enabled;
     }
