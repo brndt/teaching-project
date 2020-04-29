@@ -7,6 +7,7 @@ namespace LaSalle\StudentTeacher\User\Domain\Event;
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\ConfirmationToken;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
 final class UserCreatedDomainEvent implements DomainEvent
@@ -17,6 +18,7 @@ final class UserCreatedDomainEvent implements DomainEvent
     private string $firstName;
     private string $lastName;
     private DateTimeImmutable $occurredOn;
+    private bool $enabled;
 
     public function __construct(
         Uuid $id,
@@ -24,7 +26,8 @@ final class UserCreatedDomainEvent implements DomainEvent
         Email $email,
         string $firstName,
         string $lastName,
-        DateTimeImmutable $occurredOn
+        DateTimeImmutable $occurredOn,
+        bool $enabled
     ) {
         $this->id = $id;
         $this->aggregateUuid = $aggregateUuid;
@@ -32,6 +35,7 @@ final class UserCreatedDomainEvent implements DomainEvent
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->occurredOn = $occurredOn;
+        $this->enabled = $enabled;
     }
 
     public function getId(): Uuid
@@ -62,5 +66,10 @@ final class UserCreatedDomainEvent implements DomainEvent
     public function getLastName(): string
     {
         return $this->lastName;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
     }
 }

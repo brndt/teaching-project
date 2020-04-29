@@ -9,6 +9,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\ConfirmationToken;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
@@ -23,10 +24,12 @@ final class User
     private string $lastName;
     private Roles $roles;
     private \DateTimeImmutable $created;
+    private bool $enabled;
     private ?string $image;
     private ?string $experience;
     private ?string $education;
     private array $eventStream;
+    private ?ConfirmationToken $confirmationToken;
 
     public function __construct(
         Uuid $id,
@@ -36,9 +39,11 @@ final class User
         string $lastName,
         Roles $roles,
         DateTimeImmutable $created,
+        bool $enabled,
         ?string $image = null,
         ?string $experience = null,
-        ?string $education = null
+        ?string $education = null,
+        ?ConfirmationToken $confirmationToken = null
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -50,6 +55,8 @@ final class User
         $this->image = $image;
         $this->experience = $experience;
         $this->education = $education;
+        $this->enabled = $enabled;
+        $this->confirmationToken = $confirmationToken;
     }
 
     public static function create(
@@ -60,9 +67,11 @@ final class User
         string $lastName,
         Roles $roles,
         DateTimeImmutable $created,
+        bool $enabled,
         ?string $image = null,
         ?string $experience = null,
-        ?string $education = null
+        ?string $education = null,
+        ?ConfirmationToken $confirmationToken = null
     ): self {
         $instance = new static(
             $id,
@@ -72,9 +81,11 @@ final class User
             $lastName,
             $roles,
             $created,
+            $enabled,
             $image,
             $experience,
-            $education
+            $education,
+            $confirmationToken
         );
 
         $domainEventId = Uuid::generate();
@@ -86,7 +97,8 @@ final class User
                 $instance->getEmail(),
                 $instance->getFirstName(),
                 $instance->getLastName(),
-                $instance->getCreated()
+                $instance->getCreated(),
+                $instance->getEnabled(),
             )
         );
 
@@ -199,5 +211,25 @@ final class User
     public function getEducation(): ?string
     {
         return $this->education;
+    }
+
+    public function getConfirmationToken(): ?ConfirmationToken
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?ConfirmationToken $confirmationToken): void
+    {
+        $this->confirmationToken = $confirmationToken;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(?bool $enabled): void
+    {
+        $this->enabled = $enabled;
     }
 }

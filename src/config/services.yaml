@@ -28,6 +28,6 @@ services:
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendEmailOnUserCreated:
+  LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
     tags:
       - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }

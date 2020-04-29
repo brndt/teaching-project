@@ -9,7 +9,7 @@ doctrine:
       password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
       email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
       refreshTokenString: LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\Type\RefreshTokenStringType
-
+      confirmationToken: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\ConfirmationTokenType
 
   orm:
     auto_generate_proxy_classes: true

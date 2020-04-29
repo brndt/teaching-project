@@ -67,7 +67,8 @@ final class CreateUser
             $request->getFirstName(),
             $request->getLastName(),
             $roles,
-            $request->getCreated()
+            $request->getCreated(),
+            false
         );
 
         $this->userRepository->save($user);
