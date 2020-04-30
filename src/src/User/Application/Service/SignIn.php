@@ -29,8 +29,8 @@ final class SignIn
     {
         $user = $this->userRepository->ofEmail($this->createEmailFromPrimitive($request->getEmail()));
 
-        $this->checkIfExists($user);
-        $this->checkIfEnabled($user);
+        $this->checkIfUserExists($user);
+        $this->checkIfUserEnabled($user);
         $this->verifyPassword($request->getPassword(), $user->getPassword());
 
         return $this->buildResponse($user);
@@ -45,14 +45,14 @@ final class SignIn
         }
     }
 
-    private function checkIfExists(?User $user): void
+    private function checkIfUserExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();
         }
     }
 
-    private function checkIfEnabled(User $user): void
+    private function checkIfUserEnabled(User $user): void
     {
         if (false === $user->getEnabled()) {
             throw new UserNotEnabledException();

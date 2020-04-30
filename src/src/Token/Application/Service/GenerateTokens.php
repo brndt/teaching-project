@@ -40,10 +40,7 @@ final class GenerateTokens
 
         $this->refreshTokenRepository->save($refreshToken);
 
-        $user = $this->userRepository->ofId($refreshToken->getUserId());
-        $token = $this->tokenManager->generate($user);
-
-        return new TokensResponse($token, $refreshToken->getRefreshToken()->toString());
+        return new TokensResponse($this->generateTokenFromUserId($refreshToken->getUserId()), $refreshToken->getRefreshToken()->toString());
     }
 
     private function createIdFromPrimitive(string $uuid): Uuid
@@ -53,5 +50,10 @@ final class GenerateTokens
         } catch (InvalidUuidException $error) {
             throw new InvalidArgumentValidationException($error->getMessage());
         }
+    }
+
+    private function generateTokenFromUserId(Uuid $id): string {
+        $user = $this->userRepository->ofId($id);
+        return $this->tokenManager->generate($user);
     }
 }

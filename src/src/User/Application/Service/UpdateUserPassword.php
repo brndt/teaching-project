@@ -31,7 +31,7 @@ final class UpdateUserPassword
     {
         $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
 
-        $this->checkIfExists($userToUpdate);
+        $this->checkIfUserExists($userToUpdate);
 
         $this->verifyOldPassword($request->getOldPassword(), $userToUpdate->getPassword());
 
@@ -49,7 +49,7 @@ final class UpdateUserPassword
         }
     }
 
-    private function checkIfExists(?User $user): void
+    private function checkIfUserExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();

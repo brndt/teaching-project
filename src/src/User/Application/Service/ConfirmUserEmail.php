@@ -25,8 +25,10 @@ final class ConfirmUserEmail
     public function __invoke(ConfirmUserEmailRequest $request)
     {
         $user = $this->userRepository->ofId($this->createIdFromPrimitive($request->getUserId()));
-        $this->checkIfExists($user);
-        $this->validateConfirmationToken($request->getConfirmationToken(), $user->getConfirmationToken()->toString());
+        $this->checkIfUserExists($user);
+
+        $this->validateConfirmationTokenFromUser($request->getConfirmationToken(), $user->getConfirmationToken()->toString());
+
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
 
@@ -42,14 +44,14 @@ final class ConfirmUserEmail
         }
     }
 
-    private function checkIfExists(?User $user): void
+    private function checkIfUserExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();
         }
     }
 
-    private function validateConfirmationToken(string $tokenFromRequest, string $tokenFromUser)
+    private function validateConfirmationTokenFromUser(string $tokenFromRequest, string $tokenFromUser)
     {
         if ($tokenFromRequest !== $tokenFromUser) {
             throw new IncorrectConfirmationTokenException();

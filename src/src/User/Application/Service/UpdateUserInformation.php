@@ -27,7 +27,7 @@ final class UpdateUserInformation
     public function __invoke(UpdateUserInformationRequest $request): void
     {
         $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
-        $this->checkIfExists($userToUpdate);
+        $this->checkIfUserExists($userToUpdate);
 
         $this->checkIfNewEmailIsAvailable($request->getEmail(), $userToUpdate->getEmail()->toString());
 
@@ -50,7 +50,7 @@ final class UpdateUserInformation
         }
     }
 
-    private function checkIfExists(?User $user): void
+    private function checkIfUserExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();
