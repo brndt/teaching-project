@@ -54,7 +54,7 @@ final class SendEmailConfirmation
         }
     }
 
-    private function checkIfExists(User $user): void
+    private function checkIfExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();

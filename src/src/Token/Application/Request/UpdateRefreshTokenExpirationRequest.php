@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\Request;
 
-final class RefreshTokensRequest
+final class UpdateRefreshTokenExpirationRequest
 {
     private string $refreshToken;
     private \DateTime $newExpirationDate;

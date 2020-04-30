@@ -42,7 +42,7 @@ final class ConfirmUserEmail
         }
     }
 
-    private function checkIfExists(User $user): void
+    private function checkIfExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();

@@ -89,7 +89,8 @@ final class CreateUserTest extends TestCase
             'Alex',
             'Johnson',
             Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27')
+            new \DateTimeImmutable('2020-04-27'),
+            false
         );
     }
 

@@ -27,7 +27,7 @@ final class SearchUsersByCriteria
         return new UserCollectionResponse(...$this->buildResponse(...$users));
     }
 
-    private function checkIfExist(array $users): void
+    private function checkIfExist(?array $users): void
     {
         if (true === empty($users)) {
             throw new UserNotFoundException();

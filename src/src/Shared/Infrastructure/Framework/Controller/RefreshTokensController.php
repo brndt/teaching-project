@@ -8,15 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Token\Application\Request\RefreshTokensRequest;
-use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokensExpiration;
+use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenExpirationRequest;
+use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenExpiration;
 use Symfony\Component\HttpFoundation\Response;
 
 final class RefreshTokensController extends AbstractFOSRestController
 {
-    private UpdateRefreshTokensExpiration $refreshTokens;
+    private UpdateRefreshTokenExpiration $refreshTokens;
 
-    public function __construct(UpdateRefreshTokensExpiration $refreshTokens)
+    public function __construct(UpdateRefreshTokenExpiration $refreshTokens)
     {
         $this->refreshTokens = $refreshTokens;
     }
@@ -30,7 +30,7 @@ final class RefreshTokensController extends AbstractFOSRestController
         $refreshTokenValue = $paramFetcher->get('refresh_token');
 
         $refreshTokensResponse = ($this->refreshTokens)(
-            new RefreshTokensRequest($refreshTokenValue, new \DateTime('+ 2592000 seconds'))
+            new UpdateRefreshTokenExpirationRequest($refreshTokenValue, new \DateTime('+ 2592000 seconds'))
         );
 
         return $this->handleView($this->view($refreshTokensResponse, Response::HTTP_OK));

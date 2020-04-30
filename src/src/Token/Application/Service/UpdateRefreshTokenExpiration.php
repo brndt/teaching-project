@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\Token\Application\Service;
 
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\Request\RefreshTokensRequest;
+use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenExpirationRequest;
 use LaSalle\StudentTeacher\Token\Application\Response\TokensResponse;
 use LaSalle\StudentTeacher\Token\Domain\Aggregate\RefreshToken;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
@@ -14,7 +14,7 @@ use LaSalle\StudentTeacher\Token\Domain\TokenManager;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 
-final class UpdateRefreshTokensExpiration
+final class UpdateRefreshTokenExpiration
 {
     private RefreshTokenRepository $refreshTokenRepository;
     private TokenManager $tokenManager;
@@ -30,7 +30,7 @@ final class UpdateRefreshTokensExpiration
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(RefreshTokensRequest $request): TokensResponse
+    public function __invoke(UpdateRefreshTokenExpirationRequest $request): TokensResponse
     {
         $refreshToken = $this->refreshTokenRepository->ofToken(
             new Token($request->getRefreshToken())
@@ -46,7 +46,7 @@ final class UpdateRefreshTokensExpiration
         return new TokensResponse($this->generateToken($refreshToken), $refreshToken->getRefreshToken()->toString());
     }
 
-    private function checkIfRefreshTokenExists(RefreshToken $refreshToken)
+    private function checkIfRefreshTokenExists(?RefreshToken $refreshToken)
     {
         if (null === $refreshToken) {
             throw new RefreshTokenNotFoundException();
