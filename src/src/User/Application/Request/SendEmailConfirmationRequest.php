@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\User\Application\Service;
+namespace LaSalle\StudentTeacher\User\Application\Request;
 
-final class SendEmailConfirmationRequest
+final class  SendEmailConfirmationRequest
 {
     private string $email;
 

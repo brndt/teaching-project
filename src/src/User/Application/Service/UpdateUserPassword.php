@@ -7,9 +7,11 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
@@ -27,30 +29,46 @@ final class UpdateUserPassword
 
     public function __invoke(UpdateUserPasswordRequest $request): void
     {
+        $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
+
+        $this->checkIfExists($userToUpdate);
+
+        $this->verifyOldPassword($request->getOldPassword(), $userToUpdate->getPassword());
+
+        $userToUpdate->setPassword($this->createPasswordFromPrimitive($request->getNewPassword()));
+
+        $this->userRepository->save($userToUpdate);
+    }
+
+    private function createIdFromPrimitive(string $uuid): Uuid
+    {
         try {
-            $userId = new Uuid($request->getId());
+            return new Uuid($uuid);
         } catch (InvalidUuidException $error) {
             throw new InvalidArgumentValidationException($error->getMessage());
         }
+    }
 
-        $userToUpdate = $this->userRepository->ofId($userId);
-
-        if (null === $userToUpdate) {
+    private function checkIfExists(User $user): void
+    {
+        if (null === $user) {
             throw new UserNotFoundException();
         }
+    }
 
-        if (false === Password::verify($request->getOldPassword(), $userToUpdate->getPassword())) {
-            throw new OldPasswordIncorrectException();
+    private function verifyOldPassword(string $oldPassword, Password $userPassword): void
+    {
+        if (false === Password::verify($oldPassword, $userPassword)) {
+            throw new IncorrectPasswordException();
         }
+    }
 
+    private function createPasswordFromPrimitive(string $password): Password
+    {
         try {
-            $password = Password::fromPlainPassword($request->getNewPassword());
+            return Password::fromPlainPassword($password);
         } catch (InvalidPasswordLengthException | InvalidNumberContainingException | InvalidLetterContainingException $exception) {
             throw new InvalidArgumentValidationException($exception->getMessage());
         }
-
-        $userToUpdate->setPassword($password);
-
-        $this->userRepository->save($userToUpdate);
     }
 }

@@ -6,13 +6,13 @@ namespace LaSalle\StudentTeacher\Token\Domain\Repository;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Domain\Aggregate\RefreshToken;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
+use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 
 interface RefreshTokenRepository
 {
-    public function ofRefreshTokenString(RefreshTokenString $tokenValue): ?RefreshToken;
+    public function ofToken(Token $tokenValue): ?RefreshToken;
 
-    public function nextIdentity(): RefreshTokenString;
+    public function nextIdentity(): Token;
 
     public function delete(RefreshToken $token): void;
 

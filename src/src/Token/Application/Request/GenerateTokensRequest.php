@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Application\Request;
 
-final class SaveRefreshTokenRequest
+final class GenerateTokensRequest
 {
     private string $userId;
     private \DateTime $expirationDate;
@@ -24,5 +24,4 @@ final class SaveRefreshTokenRequest
     {
         return $this->expirationDate;
     }
-
 }

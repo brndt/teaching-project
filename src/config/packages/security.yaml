@@ -23,9 +23,6 @@ security:
             pattern:  ^/api/v1/users/sign_in
             stateless: true
             anonymous: true
-            json_login:
-                provider: email_user_provider
-                check_path: /api/v1/users/sign_in
 
         sign_up:
             pattern:  ^/api/v1/users

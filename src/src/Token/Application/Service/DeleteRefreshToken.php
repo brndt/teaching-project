@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\Token\Application\Service;
 use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Request\DeleteRefreshTokenRequest;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
+use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 
 final class DeleteRefreshToken
 {
@@ -20,8 +20,8 @@ final class DeleteRefreshToken
 
     public function __invoke(DeleteRefreshTokenRequest $request): void
     {
-        $refreshToken = $this->refreshTokenRepository->ofRefreshTokenString(
-            new RefreshTokenString($request->getRefreshTokenValue())
+        $refreshToken = $this->refreshTokenRepository->ofToken(
+            new Token($request->getRefreshTokenValue())
         );
 
         if (null === $refreshToken) {

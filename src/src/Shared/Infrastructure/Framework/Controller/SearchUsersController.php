@@ -11,7 +11,6 @@ use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteria;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +31,7 @@ final class SearchUsersController extends AbstractFOSRestController
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function getAction(ParamFetcher $paramFetcher)
+    public function getAction(ParamFetcher $paramFetcher): Response
     {
         $roles = $paramFetcher->get('role');
 
@@ -48,14 +47,8 @@ final class SearchUsersController extends AbstractFOSRestController
 
         $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues($orderBy, $order), $offset, $limit);
 
-        try {
-            $userResponse = ($this->searchUser)($criteria);
-        } catch (UserNotFoundException $e) {
-            $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
-            return $this->handleView($view);
-        }
+        $userResponse = ($this->searchUser)($criteria);
 
-        $view = $this->view($userResponse, Response::HTTP_OK);
-        return $this->handleView($view);
+        return $this->handleView($this->view($userResponse, Response::HTTP_OK));
     }
 }

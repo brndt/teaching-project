@@ -23,12 +23,15 @@ final class SearchUsersByCriteria
     public function __invoke(Criteria $criteria): UserCollectionResponse
     {
         $users = $this->userRepository->matching($criteria);
+        $this->checkIfExist($users);
+        return new UserCollectionResponse(...$this->buildResponse(...$users));
+    }
 
+    private function checkIfExist(array $users): void
+    {
         if (true === empty($users)) {
             throw new UserNotFoundException();
         }
-
-        return new UserCollectionResponse(...$this->buildResponse(...$users));
     }
 
     private function buildResponse(User ...$users): array

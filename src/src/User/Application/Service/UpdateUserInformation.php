@@ -10,6 +10,7 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
@@ -25,36 +26,12 @@ final class UpdateUserInformation
 
     public function __invoke(UpdateUserInformationRequest $request): void
     {
-        try {
-            $userId = new Uuid($request->getId());
-        } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
-        }
+        $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
+        $this->checkIfExists($userToUpdate);
 
-        $userToUpdate = $this->userRepository->ofId($userId);
+        $this->checkIfNewEmailIsAvailable($request->getEmail(), $userToUpdate->getEmail()->toString());
 
-        if (null === $userToUpdate) {
-            throw new UserNotFoundException();
-        }
-
-        try {
-            $newEmail = new Email($request->getEmail());
-        } catch (InvalidEmailException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
-        }
-
-        $userWithNewEmail = $this->userRepository->ofEmail($newEmail);
-
-        if (null === $userWithNewEmail) {
-            $userWithNewEmail = null;
-        }
-
-        if (null !== $userWithNewEmail && $request->getEmail() !== $userToUpdate->getEmail()->toString()
-        ) {
-            throw new UserAlreadyExistsException();
-        }
-
-        $userToUpdate->setEmail($newEmail);
+        $userToUpdate->setEmail($this->createEmailFromPrimitive($request->getEmail()));
         $userToUpdate->setFirstName($request->getFirstName());
         $userToUpdate->setLastName($request->getLastName());
         $userToUpdate->setImage($request->getImage());
@@ -62,5 +39,38 @@ final class UpdateUserInformation
         $userToUpdate->setExperience($request->getExperience());
 
         $this->userRepository->save($userToUpdate);
+    }
+
+    private function createIdFromPrimitive(string $uuid): Uuid
+    {
+        try {
+            return new Uuid($uuid);
+        } catch (InvalidUuidException $error) {
+            throw new InvalidArgumentValidationException($error->getMessage());
+        }
+    }
+
+    private function checkIfExists(User $user): void
+    {
+        if (null === $user) {
+            throw new UserNotFoundException();
+        }
+    }
+
+    private function createEmailFromPrimitive(string $email): Email
+    {
+        try {
+            return new Email($email);
+        } catch (InvalidEmailException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+    }
+
+    private function checkIfNewEmailIsAvailable(string $newEmail, string $oldEmail): void
+    {
+        $userWithNewEmail = $this->userRepository->ofEmail($this->createEmailFromPrimitive($newEmail));
+        if (null !== $userWithNewEmail && $newEmail !== $oldEmail) {
+            throw new UserAlreadyExistsException();
+        }
     }
 }

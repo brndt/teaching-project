@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
-use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
@@ -34,39 +32,15 @@ final class CreateUser
 
     public function __invoke(CreateUserRequest $request): void
     {
-        try {
-            $email = new Email($request->getEmail());
-        } catch (InvalidEmailException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
-        }
-
-        $user = $this->userRepository->ofEmail($email);
-
-        if (null !== $user) {
-            throw new UserAlreadyExistsException();
-        }
-
-        try {
-            $password = Password::fromPlainPassword($request->getPassword());
-        } catch (InvalidPasswordLengthException | InvalidNumberContainingException | InvalidLetterContainingException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
-        }
-
-        try {
-            $roles = Roles::fromArrayOfPrimitives($request->getRoles());
-        } catch (InvalidRoleException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
-        }
-
-        $userId = $this->userRepository->nextIdentity();
+        $this->checkIfUserExistsByEmail($request->getEmail());
 
         $user = User::create(
-            $userId,
-            $email,
-            $password,
+            $this->userRepository->nextIdentity(),
+            $this->createEmailFromPrimitive($request->getEmail()),
+            $this->createPasswordFromPrimitive($request->getPassword()),
             $request->getFirstName(),
             $request->getLastName(),
-            $roles,
+            $this->createRolesFromPrimitive($request->getRoles()),
             $request->getCreated(),
             false
         );
@@ -78,4 +52,38 @@ final class CreateUser
         }
     }
 
+    private function checkIfUserExistsByEmail(string $email): void
+    {
+        $email = $this->createEmailFromPrimitive($email);
+        if (null !== $this->userRepository->ofEmail($email)) {
+            throw new UserAlreadyExistsException();
+        }
+    }
+
+    private function createEmailFromPrimitive(string $email): Email
+    {
+        try {
+            return new Email($email);
+        } catch (InvalidEmailException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+    }
+
+    private function createPasswordFromPrimitive(string $password): Password
+    {
+        try {
+            return Password::fromPlainPassword($password);
+        } catch (InvalidPasswordLengthException | InvalidNumberContainingException | InvalidLetterContainingException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+    }
+
+    private function createRolesFromPrimitive(array $roles): Roles
+    {
+        try {
+            return Roles::fromArrayOfPrimitives($roles);
+        } catch (InvalidRoleException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+    }
 }

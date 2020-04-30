@@ -7,10 +7,10 @@ namespace LaSalle\StudentTeacher\User\Application\Exception;
 use Exception;
 use Throwable;
 
-final class OldPasswordIncorrectException extends Exception
+final class UserNotEnabledException extends Exception
 {
     public function __construct($code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf('Old password is incorrect'), $code, $previous);
+        parent::__construct(sprintf('User is not enabled'), $code, $previous);
     }
 }

@@ -7,10 +7,10 @@ namespace LaSalle\StudentTeacher\User\Application\Exception;
 use Exception;
 use Throwable;
 
-final class InvalidConfirmationTokenException extends Exception
+final class IncorrectConfirmationTokenException extends Exception
 {
     public function __construct($code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf('Confirmation Token is invalid'), $code, $previous);
+        parent::__construct(sprintf('Confirmation Token is incorrect'), $code, $previous);
     }
 }

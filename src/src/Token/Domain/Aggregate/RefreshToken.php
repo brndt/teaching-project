@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Token\Domain\Aggregate;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
+use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 
 final class RefreshToken
 {
-    private RefreshTokenString $refreshToken;
+    private Token $refreshToken;
     private Uuid $userId;
     private \DateTime $expirationDate;
 
-    public function __construct(RefreshTokenString $refreshToken, Uuid $userId, \DateTime $expirationDate)
+    public function __construct(Token $refreshToken, Uuid $userId, \DateTime $expirationDate)
     {
         $this->refreshToken = $refreshToken;
         $this->userId = $userId;
         $this->expirationDate = $expirationDate;
     }
 
-    public function getRefreshToken(): RefreshTokenString
+    public function getRefreshToken(): Token
     {
         return $this->refreshToken;
     }
@@ -35,7 +35,7 @@ final class RefreshToken
         return $this->expirationDate;
     }
 
-    private function setRefreshToken(RefreshTokenString $refreshToken)
+    private function setRefreshToken(Token $refreshToken)
     {
         $this->refreshToken = $refreshToken;
     }

@@ -6,14 +6,12 @@ namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
-use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\ConfirmationToken;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
-use Symfony\Component\Validator\Constraints\Date;
 
 final class User
 {
@@ -29,7 +27,7 @@ final class User
     private ?string $experience;
     private ?string $education;
     private array $eventStream;
-    private ?ConfirmationToken $confirmationToken;
+    private ?Token $confirmationToken;
 
     public function __construct(
         Uuid $id,
@@ -43,7 +41,7 @@ final class User
         ?string $image = null,
         ?string $experience = null,
         ?string $education = null,
-        ?ConfirmationToken $confirmationToken = null
+        ?Token $confirmationToken = null
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -71,7 +69,7 @@ final class User
         ?string $image = null,
         ?string $experience = null,
         ?string $education = null,
-        ?ConfirmationToken $confirmationToken = null
+        ?Token $confirmationToken = null
     ): self {
         $instance = new static(
             $id,
@@ -213,12 +211,12 @@ final class User
         return $this->education;
     }
 
-    public function getConfirmationToken(): ?ConfirmationToken
+    public function getConfirmationToken(): ?Token
     {
         return $this->confirmationToken;
     }
 
-    public function setConfirmationToken(?ConfirmationToken $confirmationToken): void
+    public function setConfirmationToken(?Token $confirmationToken): void
     {
         $this->confirmationToken = $confirmationToken;
     }
@@ -228,7 +226,7 @@ final class User
         return $this->enabled;
     }
 
-    public function setEnabled(?bool $enabled): void
+    public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
     }

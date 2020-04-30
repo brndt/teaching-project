@@ -7,10 +7,10 @@ namespace LaSalle\StudentTeacher\User\Application\Exception;
 use Exception;
 use Throwable;
 
-final class UserAlreadyEnabledException extends Exception
+final class IncorrectPasswordException extends Exception
 {
     public function __construct($code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf('User already has been enabled'), $code, $previous);
+        parent::__construct(sprintf('Your password is incorrect'), $code, $previous);
     }
 }

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Token\Infrastructure\Persistence\InMemory;
 
-use LaSalle\StudentTeacher\Token\Domain\Aggregate\Token;
-use LaSalle\StudentTeacher\Token\Domain\Repository\TokenRepository;
+use LaSalle\StudentTeacher\Token\Domain\TokenManager;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
-final class JWTTokenRepository implements TokenRepository
+final class JWTTokenManager implements TokenManager
 {
     private JWTTokenManagerInterface $tokenManager;
 
@@ -19,7 +18,7 @@ final class JWTTokenRepository implements TokenRepository
         $this->tokenManager = $tokenManager;
     }
 
-    public function create(User $user): Token
+    public function generate(User $user): string
     {
         $symfonyUser = new SymfonyUser(
             $user->getId()->toString(),
@@ -29,7 +28,6 @@ final class JWTTokenRepository implements TokenRepository
             $user->getEnabled()
         );
 
-        $tokenValue = $this->tokenManager->create($symfonyUser);
-        return new Token($tokenValue);
+        return $this->tokenManager->create($symfonyUser);
     }
 }

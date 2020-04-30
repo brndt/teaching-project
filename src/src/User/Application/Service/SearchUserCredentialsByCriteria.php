@@ -23,12 +23,15 @@ final class SearchUserCredentialsByCriteria
     public function __invoke(Criteria $criteria): UserCredentialsCollectionResponse
     {
         $users = $this->userRepository->matching($criteria);
+        $this->checkIfExist($users);
+        return new UserCredentialsCollectionResponse(...$this->buildResponse(...$users));
+    }
 
+    private function checkIfExist(array $users): void
+    {
         if (true === empty($users)) {
             throw new UserNotFoundException();
         }
-
-        return new UserCredentialsCollectionResponse(...$this->buildResponse(...$users));
     }
 
     private function buildResponse(User ...$users): array

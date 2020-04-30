@@ -7,7 +7,6 @@ namespace LaSalle\StudentTeacher\User\Domain\Event;
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\ConfirmationToken;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
 final class UserCreatedDomainEvent implements DomainEvent

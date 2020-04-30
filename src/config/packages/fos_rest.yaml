@@ -16,5 +16,15 @@ fos_rest:
   routing_loader:
     default_format:  json
     include_format:  false
-  #exception:
-  #  enabled: true
+  exception:
+    enabled: true
+    codes:
+      LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException: 403
+      LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException: 403
+      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
+      LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403
+      LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException: 400
+      LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException: 404

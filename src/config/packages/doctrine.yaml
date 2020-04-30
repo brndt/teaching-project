@@ -8,8 +8,7 @@ doctrine:
       uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
       password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
       email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
-      refreshTokenString: LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\Type\RefreshTokenStringType
-      confirmationToken: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\ConfirmationTokenType
+      token: LaSalle\StudentTeacher\Token\Infrastructure\Persistence\Doctrine\Type\TokenType
 
   orm:
     auto_generate_proxy_classes: true

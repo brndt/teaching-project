@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\ConfirmationToken;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
 final class SendEmailConfirmation
@@ -27,26 +28,43 @@ final class SendEmailConfirmation
 
     public function __invoke(SendEmailConfirmationRequest $request): void
     {
-        try {
-            $email = new Email($request->getEmail());
-        } catch (InvalidEmailException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
-        }
+        $user = $this->userRepository->ofEmail($this->createEmailFromPrimitive($request->getEmail()));
 
-        $user = $this->userRepository->ofEmail($email);
+        $this->checkIfExists($user);
+        $this->checkIfEnabled($user);
 
-        if (null === $user) {
-            throw new UserNotFoundException();
-        }
-
-        if (true === $user->getEnabled()) {
-            throw new UserAlreadyEnabledException();
-        }
-
-        $user->setConfirmationToken(ConfirmationToken::generate());
+        $user->setConfirmationToken(Token::generate());
 
         $this->userRepository->save($user);
 
-        $this->emailSender->sendEmailConfirmation($user->getEmail(), $user->getFirstName(), $user->getLastName(), $user->getConfirmationToken());
+        $this->emailSender->sendEmailConfirmation(
+            $user->getEmail(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getConfirmationToken()
+        );
+    }
+
+    private function createEmailFromPrimitive(string $email): Email
+    {
+        try {
+            return new Email($email);
+        } catch (InvalidEmailException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+    }
+
+    private function checkIfExists(User $user): void
+    {
+        if (null === $user) {
+            throw new UserNotFoundException();
+        }
+    }
+
+    private function checkIfEnabled(User $user): void
+    {
+        if (true === $user->getEnabled()) {
+            throw new UserAlreadyEnabledException();
+        }
     }
 }

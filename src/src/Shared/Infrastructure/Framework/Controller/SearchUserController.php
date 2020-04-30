@@ -9,7 +9,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteria;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,20 +24,13 @@ final class SearchUserController extends AbstractFOSRestController
     /**
      * @Rest\Get("/api/v1/users/{id}")
      */
-    public function getAction(string $id)
+    public function getAction(string $id): Response
     {
         $filters = [['field' => 'id', 'operator' => '=', 'value' => $id]];
-
         $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null);
 
-        try {
-            $userResponse = ($this->searchUser)($criteria);
-        } catch (UserNotFoundException $e) {
-            $view = $this->view(['message' => 'There\'s no user with such id'], Response::HTTP_NOT_FOUND);
-            return $this->handleView($view);
-        }
+        $userResponse = ($this->searchUser)($criteria);
 
-        $view = $this->view($userResponse, Response::HTTP_OK);
-        return $this->handleView($view);
+        return $this->handleView($this->view($userResponse, Response::HTTP_OK));
     }
 }

@@ -8,7 +8,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\Token\Application\Request\DeleteRefreshTokenRequest;
 use LaSalle\StudentTeacher\Token\Application\Service\DeleteRefreshToken;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,25 +25,13 @@ final class SignOutController extends AbstractFOSRestController
      * @Rest\Delete("/api/v1/users/sign_out")
      * @RequestParam(name="refresh_token")
      */
-    public function deleteAction(ParamFetcher $paramFetcher)
+    public function deleteAction(ParamFetcher $paramFetcher): Response
     {
         $refreshTokenValue = $paramFetcher->get('refresh_token');
 
-        try {
-            ($this->deleteRefreshToken)(new DeleteRefreshTokenRequest($refreshTokenValue));
-        } catch (RefreshTokenNotFoundException $e) {
-            $view = $this->view(
-                ['code' => Response::HTTP_NOT_FOUND, 'message' => 'Refresh token is not found'],
-                Response::HTTP_NOT_FOUND
-            );
-            return $this->handleView($view);
-        }
+        ($this->deleteRefreshToken)(new DeleteRefreshTokenRequest($refreshTokenValue));
 
-        $view = $this->view(
-            ['code' => Response::HTTP_OK, 'message' => 'Refresh token has been deleted'],
-            Response::HTTP_OK
-        );
-        return $this->handleView($view);
+        return $this->handleView($this->view(['message' => 'Refresh token has been deleted'], Response::HTTP_OK));
     }
 
 }

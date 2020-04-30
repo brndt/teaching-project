@@ -6,72 +6,42 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
-use LaSalle\StudentTeacher\Token\Application\Exception\TokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\Request\CreateTokenRequest;
-use LaSalle\StudentTeacher\Token\Application\Request\SaveRefreshTokenRequest;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
+use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\Token\Application\Request\GenerateTokensRequest;
 use LaSalle\StudentTeacher\Token\Application\Service\CreateToken;
-use LaSalle\StudentTeacher\Token\Application\Service\SaveRefreshToken;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\Token\Application\Service\GenerateTokens;
+use LaSalle\StudentTeacher\User\Application\Request\SignInRequest;
+use LaSalle\StudentTeacher\User\Application\Service\SignIn;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SignInController extends AbstractFOSRestController
 {
-    private CreateToken $createToken;
-    private SaveRefreshToken $saveRefreshToken;
+    private SignIn $signIn;
+    private GenerateTokens $generateTokens;
 
-    public function __construct(
-        CreateToken $createToken,
-        SaveRefreshToken $saveRefreshToken
-    ) {
-        $this->createToken = $createToken;
-        $this->saveRefreshToken = $saveRefreshToken;
+    public function __construct(SignIn $signIn, GenerateTokens $generateTokens)
+    {
+        $this->signIn = $signIn;
+        $this->generateTokens = $generateTokens;
     }
 
     /**
      * @Rest\Post("/api/v1/users/sign_in")
+     * @RequestParam(name="email")
+     * @RequestParam(name="password")
      */
-    public function postAction()
+    public function postAction(ParamFetcher $paramFetcher): Response
     {
-        if (false === $this->getUser()->getEnabled()) {
-            $view = $this->view(['message' => 'You need to verify your email'], Response::HTTP_BAD_REQUEST);
-            return $this->handleView($view);
-        }
+        $email = $paramFetcher->get('email');
+        $password = $paramFetcher->get('password');
 
-        try {
-            $tokenResponse = ($this->createToken)(new CreateTokenRequest($this->getUser()->getId()));
-        } catch (TokenNotFoundException $e) {
-            $view = $this->view(['message' => 'Can\'t create token'], Response::HTTP_BAD_REQUEST);
-            return $this->handleView($view);
-        } catch (UserNotFoundException $e) {
-            $view = $this->view(['message' => 'There\'s no user with such data'], Response::HTTP_NOT_FOUND);
-            return $this->handleView($view);
-        } catch (InvalidArgumentValidationException $error) {
-            $view = $this->view(
-                ['message' => $error->getMessage()],
-                Response::HTTP_BAD_REQUEST
-            );
-            return $this->handleView($view);
-        }
+        $userResponse = ($this->signIn)(new SignInRequest($email, $password));
 
-        $dateTime = new \DateTime('+ 2592000 seconds');
-
-        try {
-            $refreshTokenResponse = ($this->saveRefreshToken)(
-                new SaveRefreshTokenRequest($this->getUser()->getId(), $dateTime)
-            );
-        } catch (InvalidArgumentValidationException $error) {
-            $view = $this->view(
-                ['message' => $error->getMessage()],
-                Response::HTTP_BAD_REQUEST
-            );
-            return $this->handleView($view);
-        }
-
-        $view = $this->view(
-            ['token' => $tokenResponse->getToken(), 'refresh_token' => $refreshTokenResponse->getRefreshToken()],
-            Response::HTTP_OK
+        $generateTokensResponse = ($this->generateTokens)(
+            new GenerateTokensRequest($userResponse->getId(), new \DateTime('+ 2592000 seconds'))
         );
-        return $this->handleView($view);
+
+        return $this->handleView($this->view($generateTokensResponse, Response::HTTP_OK));
     }
 }

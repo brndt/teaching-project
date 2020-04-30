@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Token\Domain\Aggregate\RefreshToken;
 use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\RefreshTokenString;
+use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 
 final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
@@ -23,7 +23,7 @@ final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
     /**
      * @return object|User|null
      */
-    public function ofRefreshTokenString(RefreshTokenString $token): ?RefreshToken
+    public function ofToken(Token $token): ?RefreshToken
     {
         return $this->entityManager->getRepository(RefreshToken::class)->findOneBy(['refreshToken' => $token]);
     }
@@ -40,8 +40,8 @@ final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
         $this->entityManager->flush();
     }
 
-    public function nextIdentity(): RefreshTokenString
+    public function nextIdentity(): Token
     {
-        return RefreshTokenString::generate();
+        return Token::generate();
     }
 }

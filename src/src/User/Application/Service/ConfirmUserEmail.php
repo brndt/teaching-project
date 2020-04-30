@@ -7,9 +7,10 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\InvalidConfirmationTokenException;
+use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserEmailRequest;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 
 final class ConfirmUserEmail
@@ -23,25 +24,35 @@ final class ConfirmUserEmail
 
     public function __invoke(ConfirmUserEmailRequest $request)
     {
-        try {
-            $userId = new Uuid($request->getUserId());
-        } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
-        }
-
-        $user = $this->userRepository->ofId($userId);
-
-        if (null === $user) {
-            throw new UserNotFoundException();
-        }
-
-        if ($request->getConfirmationToken() !== $user->getConfirmationToken()->toString()) {
-            throw new InvalidConfirmationTokenException();
-        }
-
+        $user = $this->userRepository->ofId($this->createIdFromPrimitive($request->getUserId()));
+        $this->checkIfExists($user);
+        $this->validateConfirmationToken($request->getConfirmationToken(), $user->getConfirmationToken()->toString());
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
 
         $this->userRepository->save($user);
+    }
+
+    private function createIdFromPrimitive(string $uuid): Uuid
+    {
+        try {
+            return new Uuid($uuid);
+        } catch (InvalidUuidException $error) {
+            throw new InvalidArgumentValidationException($error->getMessage());
+        }
+    }
+
+    private function checkIfExists(User $user): void
+    {
+        if (null === $user) {
+            throw new UserNotFoundException();
+        }
+    }
+
+    private function validateConfirmationToken(string $tokenFromRequest, string $tokenFromUser)
+    {
+        if ($tokenFromRequest !== $tokenFromUser) {
+            throw new IncorrectConfirmationTokenException();
+        }
     }
 }
