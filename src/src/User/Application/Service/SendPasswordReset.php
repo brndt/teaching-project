@@ -7,15 +7,16 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest;
+use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
-final class SendEmailConfirmation
+final class SendPasswordReset
 {
     private EmailSender $emailSender;
     private UserRepository $userRepository;
@@ -26,7 +27,7 @@ final class SendEmailConfirmation
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(SendEmailConfirmationRequest $request): void
+    public function __invoke(SendPasswordResetRequest $request): void
     {
         $user = $this->userRepository->ofEmail($this->createEmailFromPrimitive($request->getEmail()));
 
@@ -37,7 +38,7 @@ final class SendEmailConfirmation
 
         $this->userRepository->save($user);
 
-        $this->emailSender->sendEmailConfirmation(
+        $this->emailSender->sendPasswordReset(
             $user->getEmail(),
             $user->getId(),
             $user->getFirstName(),
@@ -64,8 +65,8 @@ final class SendEmailConfirmation
 
     private function checkIfEnabled(User $user): void
     {
-        if (true === $user->getEnabled()) {
-            throw new UserAlreadyEnabledException();
+        if (false === $user->getEnabled()) {
+            throw new UserNotEnabledException();
         }
     }
 }

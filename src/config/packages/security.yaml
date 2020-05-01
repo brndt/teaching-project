@@ -2,8 +2,6 @@ security:
     encoders:
         LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser: bcrypt
     providers:
-        email_user_provider:
-            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\EmailUserProvider
         fos_userbundle:
             id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\IdUserProvider
 

@@ -11,11 +11,15 @@ use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserEmailRequest;
+use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserPasswordResetRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 
-final class ConfirmUserEmail
+final class ConfirmUserPasswordReset
 {
     private UserRepository $userRepository;
 
@@ -24,16 +28,19 @@ final class ConfirmUserEmail
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(ConfirmUserEmailRequest $request)
+    public function __invoke(ConfirmUserPasswordResetRequest $request)
     {
         $user = $this->userRepository->ofId($this->createIdFromPrimitive($request->getUserId()));
         $this->checkIfUserExists($user);
         $this->checkIfConfirmationTokenExists($user->getConfirmationToken());
 
-        $this->validateConfirmationTokenFromUser($request->getConfirmationToken(), $user->getConfirmationToken()->toString());
+        $this->validateConfirmationTokenFromUser(
+            $request->getConfirmationToken(),
+            $user->getConfirmationToken()->toString()
+        );
 
         $user->setConfirmationToken(null);
-        $user->setEnabled(true);
+        $user->setPassword($this->createPasswordFromPrimitive($request->getNewPassword()));
 
         $this->userRepository->save($user);
     }
@@ -65,6 +72,15 @@ final class ConfirmUserEmail
     {
         if ($tokenFromRequest !== $tokenFromUser) {
             throw new IncorrectConfirmationTokenException();
+        }
+    }
+
+    private function createPasswordFromPrimitive(string $password): Password
+    {
+        try {
+            return Password::fromPlainPassword($password);
+        } catch (InvalidPasswordLengthException | InvalidNumberContainingException | InvalidLetterContainingException $exception) {
+            throw new InvalidArgumentValidationException($exception->getMessage());
         }
     }
 }
