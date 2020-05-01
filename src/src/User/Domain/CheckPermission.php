@@ -6,5 +6,5 @@ namespace LaSalle\StudentTeacher\User\Domain;
 
 interface CheckPermission
 {
-    public function isGranted($attributes, $subject);
+    public function isGranted($attributes, $subject): bool;
 }

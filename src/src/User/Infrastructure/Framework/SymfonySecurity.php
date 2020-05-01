@@ -16,8 +16,12 @@ final class SymfonySecurity implements CheckPermission
         $this->security = $security;
     }
 
-    public function isGranted($attributes, $subject)
+    public function isGranted($attributes, $subject): bool
     {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
         return $this->security->isGranted($attributes, $subject);
     }
 }

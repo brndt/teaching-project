@@ -39,10 +39,6 @@ final class UserPermissions extends Voter
 
     private function canEdit(User $userToUpdate, SymfonyUser $executingUser)
     {
-        if (in_array(Role::ADMIN,$executingUser->getRoles())) {
-            return true;
-        }
-
         return $executingUser->getId() === $userToUpdate->getId()->toString();
     }
 }
