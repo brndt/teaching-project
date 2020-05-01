@@ -39,15 +39,6 @@ final class UpdateUserController extends AbstractFOSRestController
         $education = $paramFetcher->get('education');
         $experience = $paramFetcher->get('experience');
 
-        if ($id !== $this->getUser()->getId()) {
-            return $this->handleView(
-                $this->view(
-                    ['message' => 'You don\'t have permission to update this profile'],
-                    Response::HTTP_FORBIDDEN
-                )
-            );
-        }
-
         ($this->updateUser)(
             new UpdateUserInformationRequest($id, $email, $firstName, $lastName, $image, $experience, $education)
         );

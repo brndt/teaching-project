@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\CheckPermission;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
@@ -18,16 +20,22 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 final class UpdateUserInformation
 {
     private UserRepository $userRepository;
+    private CheckPermission $security;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, CheckPermission $security)
     {
         $this->userRepository = $userRepository;
+        $this->security = $security;
     }
 
     public function __invoke(UpdateUserInformationRequest $request): void
     {
         $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
         $this->checkIfUserExists($userToUpdate);
+
+        if (false === $this->security->isGranted('edit', $userToUpdate)) {
+            throw new PermissionDeniedException();
+        }
 
         $this->checkIfNewEmailIsAvailable($request->getEmail(), $userToUpdate->getEmail()->toString());
 

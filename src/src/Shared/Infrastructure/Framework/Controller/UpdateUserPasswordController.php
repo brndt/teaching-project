@@ -32,15 +32,6 @@ final class UpdateUserPasswordController extends AbstractFOSRestController
         $oldPassword = $paramFetcher->get('oldPassword');
         $newPassword = $paramFetcher->get('newPassword');
 
-        if ($id !== $this->getUser()->getId()) {
-            return $this->handleView(
-                $this->view(
-                    ['message' => 'You don\'t have permission to update this profile'],
-                    Response::HTTP_FORBIDDEN
-                )
-            );
-        }
-
         ($this->updatePassword)(new UpdateUserPasswordRequest($id, $oldPassword, $newPassword));
 
         return $this->handleView(

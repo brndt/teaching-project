@@ -20,6 +20,7 @@ fos_rest:
     enabled: true
     codes:
       LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException: 400
+      LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException: 403
       LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException: 403
       LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException: 404
       LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException: 403
