@@ -7,27 +7,27 @@ namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\RequestStatus;
 
-final class StudentTeacherConnection
+final class UserConnection
 {
-    private Uuid $studentId;
-    private Uuid $teacherId;
+    private Uuid $userId;
+    private Uuid $friendId;
     private RequestStatus $status;
 
-    public function __construct(Uuid $studentId, Uuid $teacherId, RequestStatus $status)
+    public function __construct(Uuid $userId, Uuid $friendId, RequestStatus $status)
     {
-        $this->studentId = $studentId;
-        $this->teacherId = $teacherId;
+        $this->userId = $userId;
+        $this->friendId = $friendId;
         $this->status = $status;
     }
 
-    public function getStudentId(): Uuid
+    public function getUserId(): Uuid
     {
-        return $this->studentId;
+        return $this->userId;
     }
 
-    public function getTeacherId(): Uuid
+    public function getFriendId(): Uuid
     {
-        return $this->teacherId;
+        return $this->friendId;
     }
 
     public function getStatus(): RequestStatus

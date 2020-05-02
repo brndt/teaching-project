@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteria;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,7 @@ final class SearchUsersController extends AbstractFOSRestController
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues($orderBy, $order), $offset, $limit);
+        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues($orderBy, $order), null, $offset, $limit);
 
         $userResponse = ($this->searchUser)($criteria);
 

@@ -8,15 +8,17 @@ final class Criteria
 {
     private Filters $filters;
     private Order   $order;
+    private Operator $operator;
     private ?int    $offset;
     private ?int    $limit;
 
-    public function __construct(Filters $filters, Order $order, ?int $offset, ?int $limit)
+    public function __construct(Filters $filters, Order $order, ?Operator $operator, ?int $offset, ?int $limit)
     {
         $this->filters = $filters;
         $this->order   = $order;
         $this->offset  = $offset;
         $this->limit   = $limit;
+        $this->operator = $operator ?? Operator::fromValue(Operator::AND);
     }
 
     public function hasFilters(): bool
@@ -42,6 +44,11 @@ final class Criteria
     public function order(): Order
     {
         return $this->order;
+    }
+
+    public function operator(): Operator
+    {
+        return $this->operator;
     }
 
     public function offset(): ?int

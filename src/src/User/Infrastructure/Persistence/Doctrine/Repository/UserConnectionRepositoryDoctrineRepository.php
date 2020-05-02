@@ -8,10 +8,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Shared\Infrastructure\Persistence\Doctrine\DoctrineCriteriaConverter;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\StudentTeacherConnection;
-use LaSalle\StudentTeacher\User\Domain\Repository\StudentTeacherConnectionRepository;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 
-final class StudentTeacherConnectionRepositoryDoctrineRepository implements StudentTeacherConnectionRepository
+final class UserConnectionRepositoryDoctrineRepository implements UserConnectionRepository
 {
     private EntityManagerInterface $entityManager;
 
@@ -20,19 +20,19 @@ final class StudentTeacherConnectionRepositoryDoctrineRepository implements Stud
         $this->entityManager = $entityManager;
     }
 
-    public function save(StudentTeacherConnection $studentTeacherConnection): void
+    public function save(UserConnection $userConnection): void
     {
-        $this->entityManager->persist($studentTeacherConnection);
+        $this->entityManager->persist($userConnection);
         $this->entityManager->flush();
     }
 
     /**
-     * @return object|StudentTeacherConnection|null
+     * @return object|UserConnection|null
      */
-    public function ofId(Uuid $studentId, Uuid $teacherId): ?StudentTeacherConnection
+    public function ofId(Uuid $userId, Uuid $friendId): ?UserConnection
     {
-        return $this->entityManager->getRepository(StudentTeacherConnection::class)->findOneBy(
-            ['studentId' => $studentId, 'teacherId' => $teacherId]
+        return $this->entityManager->getRepository(UserConnection::class)->findOneBy(
+            ['userId' => $userId, 'friendId' => $friendId]
         );
     }
 
@@ -44,7 +44,7 @@ final class StudentTeacherConnectionRepositoryDoctrineRepository implements Stud
     public function matching(Criteria $criteria): array
     {
         $doctrineCriteria = DoctrineCriteriaConverter::convert($criteria);
-        return $this->entityManager->getRepository(StudentTeacherConnection::class)->matching(
+        return $this->entityManager->getRepository(UserConnection::class)->matching(
             $doctrineCriteria
         )->toArray();
     }

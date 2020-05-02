@@ -12,43 +12,42 @@ use LaSalle\StudentTeacher\User\Application\Exception\RoleIsNotStudentOrTeacherE
 use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAreEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Request\CreateStudentTeacherConnectionRequest;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\StudentTeacherConnection;
+use LaSalle\StudentTeacher\User\Application\Request\CreateUserConnectionRequest;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\Repository\StudentTeacherConnectionRepository;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\RequestStatus;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
-final class CreateStudentTeacherConnection
+final class CreateUserConnection
 {
     private UserRepository $userRepository;
-    private StudentTeacherConnectionRepository $studentTeacherConnectionRepository;
+    private UserConnectionRepository $userConnectionRepository;
 
     public function __construct(
         UserRepository $userRepository,
-        StudentTeacherConnectionRepository $studentTeacherConnectionRepository
+        UserConnectionRepository $userConnectionRepository
     ) {
         $this->userRepository = $userRepository;
-        $this->studentTeacherConnectionRepository = $studentTeacherConnectionRepository;
+        $this->userConnectionRepository = $userConnectionRepository;
     }
 
-    public function __invoke(CreateStudentTeacherConnectionRequest $request)
+    public function __invoke(CreateUserConnectionRequest $request): void
     {
-        $requestingUser = $this->identifyUserById($request->getRequestingId());
-        $pendingUser = $this->identifyUserById($request->getPendingId());
+        $user = $this->identifyUserById($request->getUserId());
+        $friend = $this->identifyUserById($request->getFriendId());
 
-        [$student, $teacher] = $this->identifyRoles($requestingUser, $pendingUser);
+        $this->ensureRolesAndUsersAreNotEqual($user, $friend);
+        $this->ensureConnectionIsNotAlreadyExists($user, $friend);
 
-        $this->ensureConnectionIsNotAlreadyExists($student, $teacher);
-
-        $studentTeacherConnection = new StudentTeacherConnection(
-            $student->getId(),
-            $teacher->getId(),
+        $userConnection = new UserConnection(
+            $user->getId(),
+            $friend->getId(),
             new RequestStatus(RequestStatus::STATUS_PENDING)
         );
 
-        $this->studentTeacherConnectionRepository->save($studentTeacherConnection);
+        $this->userConnectionRepository->save($userConnection);
     }
 
     private function identifyUserById(string $id): User
@@ -69,15 +68,14 @@ final class CreateStudentTeacherConnection
         }
     }
 
-    private function identifyRoles(User $requestingUser, User $pendingUser): array
+    private function ensureRolesAndUsersAreNotEqual(User $requestingUser, User $pendingUser): void
     {
-        if ($this->verifyRole($requestingUser) === $this->verifyRole($pendingUser)) {
-            throw new RolesOfUsersEqualException();
-        }
         if ($requestingUser->getId()->toString() === $pendingUser->getId()->toString()) {
             throw new UserAreEqualException();
         }
-        return $this->verifyRole($requestingUser) === Role::STUDENT ? [$requestingUser, $pendingUser] : [$pendingUser, $requestingUser];
+        if ($this->verifyRole($requestingUser) === $this->verifyRole($pendingUser)) {
+            throw new RolesOfUsersEqualException();
+        }
     }
 
     private function verifyRole($user): string
@@ -93,7 +91,7 @@ final class CreateStudentTeacherConnection
 
     private function ensureConnectionIsNotAlreadyExists(User $student, User $teacher)
     {
-        if (null !== $this->studentTeacherConnectionRepository->ofId($student->getId(), $teacher->getId())) {
+        if (null !== $this->userConnectionRepository->ofId($student->getId(), $teacher->getId())) {
             throw new ConnectionAlreadyExistsException();
         }
     }

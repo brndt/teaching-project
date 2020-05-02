@@ -64,7 +64,7 @@ final class DoctrineCriteriaConverter
     {
         if ($criteria->hasFilters()) {
             return new CompositeExpression(
-                CompositeExpression::TYPE_AND,
+                (string) $criteria->operator(),
                 array_map($this->buildComparison(), $criteria->plainFilters())
             );
         }

@@ -27,7 +27,7 @@ final class SearchUserController extends AbstractFOSRestController
     public function getAction(string $id): Response
     {
         $filters = [['field' => 'id', 'operator' => '=', 'value' => $id]];
-        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null);
+        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null, null);
 
         $userResponse = ($this->searchUser)($criteria);
 
