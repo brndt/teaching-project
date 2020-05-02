@@ -1,0 +1,7 @@
+<doctrine-mapping>
+    <entity name="LaSalle\StudentTeacher\User\Domain\Aggregate\StudentTeacherConnection" table="student_teacher_connection">
+        <id name="studentId" type="uuid" nullable="false"/>
+        <id name="teacherId" type="uuid" nullable="false"/>
+        <field name="status" type="requestStatus" nullable="false"/>
+    </entity>
+</doctrine-mapping>

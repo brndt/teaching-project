@@ -17,7 +17,7 @@ fos_rest:
     default_format:  json
     include_format:  false
   exception:
-    enabled: true
+    enabled: false
     codes:
       LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException: 400
       LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException: 403
