@@ -13,6 +13,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByCriteria;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,16 +35,15 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
      */
     public function getAction(ParamFetcher $paramFetcher, string $id): Response
     {
-        $filters = [['field' => 'friendId', 'operator' => '=', 'value' => $id]];
-
+        $requestAuthorId = $this->getUser()->getId();
+        $userId = $id;
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $offset = (int) $paramFetcher->get('offset');
         $limit = (int) $paramFetcher->get('limit');
+        $operator = 'OR';
 
-        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues($orderBy, $order), Operator::fromValue(Operator::OR), $offset, $limit);
-
-        $connections = ($this->searchConnections)($criteria);
+        $connections = ($this->searchConnections)(new SearchUserConnectionsByCriteriaRequest($requestAuthorId, $userId, $orderBy, $order, $operator, $offset, $limit));
 
         return $this->handleView(
             $this->view($connections, Response::HTTP_OK)

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException;
@@ -35,6 +36,8 @@ final class CreateUserConnection
 
     public function __invoke(CreateUserConnectionRequest $request): void
     {
+        $this->ensureRequestAuthorCanExecute($request->getRequestAuthorId(), $request->getUserId());
+
         $user = $this->identifyUserById($request->getUserId());
         $friend = $this->identifyUserById($request->getFriendId());
 
@@ -48,6 +51,12 @@ final class CreateUserConnection
         );
 
         $this->userConnectionRepository->save($userConnection);
+    }
+
+    private function ensureRequestAuthorCanExecute(string $requestAuthorId, string $userId): void {
+        if ($requestAuthorId !== $userId) {
+            throw new PermissionDeniedException();
+        }
     }
 
     private function identifyUserById(string $id): User

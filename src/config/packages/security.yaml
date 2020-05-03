@@ -24,7 +24,7 @@ security:
 
         sign_up:
             pattern:  ^/api/v1/users
-            methods: [GET, POST]
+            methods: [POST]
             stateless: true
             anonymous: true
 

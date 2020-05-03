@@ -29,8 +29,9 @@ final class CreateUserConnectionController extends AbstractFOSRestController
     {
         $userId = $id;
         $friendId = $paramFetcher->get('friendId');
+        $requestAuthorId = $this->getUser()->getId();
 
-        ($this->userConnection)(new CreateUserConnectionRequest($userId, $friendId));
+        ($this->userConnection)(new CreateUserConnectionRequest($requestAuthorId, $userId, $friendId));
 
         return $this->handleView(
             $this->view(['message' => 'Request has been successfully sent to this user'], Response::HTTP_OK)

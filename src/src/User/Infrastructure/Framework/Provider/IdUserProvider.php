@@ -27,7 +27,7 @@ final class IdUserProvider implements UserProviderInterface
     public function loadUserByUsername($id)
     {
         $filters = [['field' => 'id', 'operator' => '=', 'value' => $id]];
-        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null);
+        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null, null);
 
         try {
             $UserCollectionResponse = ($this->searchUser)($criteria);
