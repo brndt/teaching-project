@@ -27,16 +27,15 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/api/v1/users/{id}/connections")
+     * @Rest\Get("/api/v1/users/{userId}/connections")
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function getAction(ParamFetcher $paramFetcher, string $id): Response
+    public function getAction(ParamFetcher $paramFetcher, string $userId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $userId = $id;
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $offset = (int) $paramFetcher->get('offset');

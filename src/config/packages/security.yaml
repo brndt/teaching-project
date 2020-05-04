@@ -22,11 +22,10 @@ security:
             stateless: true
             anonymous: true
 
-        sign_up:
-            pattern:  ^/api/v1/users
-            methods: [POST]
-            stateless: true
-            anonymous: true
+#        sign_up:
+ #           pattern:  ^/api/v1/users
+  ##         stateless: true
+    #        anonymous: true
 
         api:
             pattern:   ^/api/v1

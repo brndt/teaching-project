@@ -8,53 +8,84 @@ use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidatio
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFound;
 use LaSalle\StudentTeacher\User\Application\Exception\RoleIsNotStudentOrTeacherException;
 use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAreEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Request\CreateUserConnectionRequest;
+use LaSalle\StudentTeacher\User\Application\Request\UpdateUserConnectionRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pending;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 
-final class CreateUserConnection
+final class UpdateUserConnection
 {
     private UserRepository $userRepository;
     private UserConnectionRepository $userConnectionRepository;
+    private StateFactory $stateFactory;
 
     public function __construct(
         UserRepository $userRepository,
-        UserConnectionRepository $userConnectionRepository
+        UserConnectionRepository $userConnectionRepository,
+        StateFactory $stateFactory
     ) {
         $this->userRepository = $userRepository;
         $this->userConnectionRepository = $userConnectionRepository;
+        $this->stateFactory = $stateFactory;
     }
 
-    public function __invoke(CreateUserConnectionRequest $request): void
+    public function __invoke(UpdateUserConnectionRequest $request)
     {
-        $this->ensureRequestAuthorCanExecute($request->getRequestAuthorId(), $request->getFirstUser());
+        $this->ensureRequestAuthorCanExecute($request->getRequestAuthorId(), $request->getFirstUserId());
 
-        $authorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $firstUser = $this->identifyUserById($request->getFirstUser());
-        $secondUser = $this->identifyUserById($request->getSecondUser());
+        $author = $this->verifyWhoReacts(
+            $request->getRequestAuthorId(),
+            $request->getFirstUserId(),
+            $request->getSecondUserId()
+        );
+
+        $firstUser = $this->identifyUserById($request->getFirstUserId());
+        $secondUser = $this->identifyUserById($request->getSecondUserId());
 
         [$student, $teacher] = $this->verifyStudentAndTeacher($firstUser, $secondUser);
-        $this->ensureConnectionIsNotAlreadyExists($student, $teacher);
 
-        $userConnection = new UserConnection($student->getId(), $teacher->getId(), new Pending(), $authorId);
+        $userConnection = $this->userConnectionRepository->ofId($student->getId(), $teacher->getId());
+
+        if (null === $userConnection) {
+            throw new ConnectionNotFound();
+        }
+
+        $newState = $this->stateFactory->create($request->getStatus());
+        $isSpecifierChanged = $this->verifySpecifierChanged($author, $userConnection->getSpecifierId());
+
+        $userConnection->setState($newState, $isSpecifierChanged);
+        $userConnection->setSpecifierId($author);
 
         $this->userConnectionRepository->save($userConnection);
     }
 
-    private function ensureRequestAuthorCanExecute(string $requestAuthorId, string $firstUser): void
+    private function ensureRequestAuthorCanExecute(string $requestAuthorId, string $userId): void
     {
-        if ($requestAuthorId !== $firstUser) {
+        if ($requestAuthorId !== $userId) {
             throw new PermissionDeniedException();
         }
+    }
+
+    private function verifySpecifierChanged(Uuid $newSpecifier, Uuid $oldSpecifier) {
+        return $oldSpecifier->toString() !== $newSpecifier->toString();
+    }
+
+    private function verifyWhoReacts($authorId, $firstUserId, $secondUserId): Uuid
+    {
+        if ($authorId === $firstUserId) {
+            return $this->createIdFromPrimitive($firstUserId);
+        }
+        if ($authorId === $secondUserId) {
+            return $this->createIdFromPrimitive($secondUserId);
+        }
+        throw new PermissionDeniedException();
     }
 
     private function identifyUserById(string $id): User
@@ -64,15 +95,6 @@ final class CreateUserConnection
             throw new UserNotFoundException();
         }
         return $user;
-    }
-
-    private function createIdFromPrimitive(string $uuid): Uuid
-    {
-        try {
-            return new Uuid($uuid);
-        } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
-        }
     }
 
     private function verifyStudentAndTeacher(User $firstUser, User $secondUser)
@@ -110,10 +132,12 @@ final class CreateUserConnection
         throw new RoleIsNotStudentOrTeacherException();
     }
 
-    private function ensureConnectionIsNotAlreadyExists(User $student, User $teacher)
+    private function createIdFromPrimitive(string $uuid): Uuid
     {
-        if (null !== $this->userConnectionRepository->ofId($student->getId(), $teacher->getId())) {
-            throw new ConnectionAlreadyExistsException();
+        try {
+            return new Uuid($uuid);
+        } catch (InvalidUuidException $error) {
+            throw new InvalidArgumentValidationException($error->getMessage());
         }
     }
 }

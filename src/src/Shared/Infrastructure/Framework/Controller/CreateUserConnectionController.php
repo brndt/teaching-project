@@ -30,7 +30,6 @@ final class CreateUserConnectionController extends AbstractFOSRestController
         $userId = $id;
         $friendId = $paramFetcher->get('friendId');
         $requestAuthorId = $this->getUser()->getId();
-
         ($this->userConnection)(new CreateUserConnectionRequest($requestAuthorId, $userId, $friendId));
 
         return $this->handleView(

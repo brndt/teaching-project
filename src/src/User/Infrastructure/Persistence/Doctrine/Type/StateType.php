@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\RequestStatus;
+use Doctrine\DBAL\Types\Type;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 
-class RequestStatusType extends Type
+class StateType extends Type
 {
-    const NAME = 'requestStatus';
+    const STATE = 'state';
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return new RequestStatus($value);
+        return StateFactory::fromStateName($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value;
+        return (string) $value;
     }
 
     public function getName()
     {
-        return self::NAME;
+        return self::STATE;
     }
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)

@@ -29,10 +29,10 @@ final class UserConnectionRepositoryDoctrineRepository implements UserConnection
     /**
      * @return object|UserConnection|null
      */
-    public function ofId(Uuid $userId, Uuid $friendId): ?UserConnection
+    public function ofId(Uuid $studentId, Uuid $teacherId): ?UserConnection
     {
         return $this->entityManager->getRepository(UserConnection::class)->findOneBy(
-            ['userId' => $userId, 'friendId' => $friendId]
+            ['studentId' => $studentId, 'teacherId' => $teacherId]
         );
     }
 
