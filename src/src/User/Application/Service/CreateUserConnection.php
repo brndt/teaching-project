@@ -19,7 +19,7 @@ use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pending;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
 
 final class CreateUserConnection
 {
@@ -45,7 +45,7 @@ final class CreateUserConnection
         [$student, $teacher] = $this->verifyStudentAndTeacher($firstUser, $secondUser);
         $this->ensureConnectionIsNotAlreadyExists($student, $teacher);
 
-        $userConnection = new UserConnection($student->getId(), $teacher->getId(), new Pending(), $authorId);
+        $userConnection = new UserConnection($student->getId(), $teacher->getId(), new Pended(), $authorId);
 
         $this->userConnectionRepository->save($userConnection);
     }

@@ -11,7 +11,7 @@ final class Approved implements State
 {
     public const NAME = 'approved';
 
-    public function tryTransition(State $newState, bool $isSpecifierChanged): void
+    public function ensureCanBeChanged(State $newState, bool $isSpecifierChanged): void
     {
         if (true !== $newState instanceof Withdrawn) {
             throw new InvalidStateException("Can only withdraw");

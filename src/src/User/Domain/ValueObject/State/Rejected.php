@@ -11,9 +11,9 @@ final class Rejected implements State
 {
     public const NAME = 'rejected';
 
-    public function tryTransition(State $newState, bool $isSpecifierChanged): void
+    public function ensureCanBeChanged(State $newState, bool $isSpecifierChanged): void
     {
-        if (true !== ($newState instanceof Pending && false === $isSpecifierChanged)) {
+        if (true !== ($newState instanceof Pended && false === $isSpecifierChanged)) {
             throw new InvalidStateException("Can only pending");
         }
     }

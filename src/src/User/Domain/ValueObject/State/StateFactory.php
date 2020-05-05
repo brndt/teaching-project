@@ -13,7 +13,7 @@ final class StateFactory
 
     public static function fromStateName(string $state): State
     {
-        $newClass = __NAMESPACE__ . '\\' . ucfirst($state);
+        $newClass = 'LaSalle\StudentTeacher\User\Domain\ValueObject\State\\' . ucfirst($state);
 
         if (false === class_exists($newClass)) {
             throw new \InvalidArgumentException();

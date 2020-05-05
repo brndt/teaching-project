@@ -54,7 +54,7 @@ final class UserConnection
 
     public function setState(State $newStatus, bool $ifSpecifierChanged): void
     {
-        $this->state->tryTransition($newStatus, $ifSpecifierChanged);
+        $this->state->ensureCanBeChanged($newStatus, $ifSpecifierChanged);
         $this->state = $newStatus;
     }
 

@@ -26,3 +26,8 @@ doctrine:
         type: xml
         dir: '%kernel.project_dir%/src/Token/Infrastructure/Persistence/Doctrine/Mapping'
         prefix: LaSalle\StudentTeacher\Token\Domain\Aggregate
+      Resource:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Resource/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\Domain\Aggregate

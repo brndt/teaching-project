@@ -6,6 +6,6 @@ namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 
 interface State
 {
-    public function tryTransition(State $newState, bool $isSpecifierChanged): void;
+    public function ensureCanBeChanged(State $newState, bool $isSpecifierChanged): void;
     public function __toString();
 }
