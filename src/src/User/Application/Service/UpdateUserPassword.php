@@ -34,7 +34,7 @@ final class UpdateUserPassword
     {
         $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
 
-        if (false === $this->security->isGranted('edit', $userToUpdate)) {
+        if (false === $this->security->isGranted('edit', $userToUpdate, $userToUpdate)) {
             throw new PermissionDeniedException();
         }
 

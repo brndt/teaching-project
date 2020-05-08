@@ -87,10 +87,10 @@ final class SearchUserConnectionsByCriteria
 
     private function verifyRole(User $user): string
     {
-        if (in_array(Role::STUDENT, $user->getRoles()->toArrayOfPrimitives())) {
+        if (in_array(Role::STUDENT, $user->getRoles()->getArrayOfPrimitives())) {
             return Role::STUDENT;
         }
-        if (in_array(Role::TEACHER, $user->getRoles()->toArrayOfPrimitives())) {
+        if (in_array(Role::TEACHER, $user->getRoles()->getArrayOfPrimitives())) {
             return Role::TEACHER;
         }
         throw new RoleIsNotStudentOrTeacherException();

@@ -13,8 +13,10 @@ final class UpdateUserInformationRequest
     private string $image;
     private string $experience;
     private string $education;
+    private string $requestAuthorId;
 
     public function __construct(
+        string $requestAuthorId,
         string $id,
         string $email,
         string $firstName,
@@ -23,6 +25,7 @@ final class UpdateUserInformationRequest
         string $experience,
         string $education
     ) {
+        $this->requestAuthorId = $requestAuthorId;
         $this->id = $id;
         $this->email = $email;
         $this->firstName = $firstName;
@@ -65,6 +68,11 @@ final class UpdateUserInformationRequest
     public function getEducation(): ?string
     {
         return $this->education;
+    }
+
+    public function getRequestAuthorId(): string
+    {
+        return $this->requestAuthorId;
     }
 
 }

@@ -24,7 +24,7 @@ final class JWTTokenManager implements TokenManager
             $user->getId()->toString(),
             $user->getEmail()->toString(),
             $user->getPassword()->toString(),
-            SymfonyUser::processValueToSymfonyRole($user->getRoles()->toArrayOfPrimitives()),
+            SymfonyUser::processValueToSymfonyRole($user->getRoles()->getArrayOfPrimitives()),
             $user->getEnabled()
         );
 

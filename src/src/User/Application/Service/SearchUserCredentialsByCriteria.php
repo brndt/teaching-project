@@ -42,7 +42,7 @@ final class SearchUserCredentialsByCriteria
                     $user->getId()->toString(),
                     $user->getEmail()->toString(),
                     $user->getPassword()->toString(),
-                    $user->getRoles()->toArrayOfPrimitives(),
+                    $user->getRoles()->getArrayOfPrimitives(),
                     $user->getEnabled()
                 );
             },

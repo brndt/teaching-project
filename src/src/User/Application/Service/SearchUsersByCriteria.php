@@ -42,7 +42,7 @@ final class SearchUsersByCriteria
                     $user->getId()->toString(),
                     $user->getFirstName(),
                     $user->getLastName(),
-                    $user->getRoles()->toArrayOfPrimitives(),
+                    $user->getRoles()->getArrayOfPrimitives(),
                     $user->getCreated()->format('Y-m-d H:i:s'),
                     $user->getImage(),
                     $user->getExperience(),

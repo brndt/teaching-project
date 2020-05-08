@@ -1,0 +1,33 @@
+attributes:
+  user:
+    class: LaSalle\StudentTeacher\User\Domain\Aggregate\User
+    type: user
+    fields:
+      id:
+        name: User
+      roles.arrayOfPrimitives:
+        name: User roles
+
+  user_to_edit:
+    class: LaSalle\StudentTeacher\User\Domain\Aggregate\User
+    type: resource
+    fields:
+      id:
+        name: User to edit
+      roles:
+        roles: User to edit roles
+
+rules:
+  edit-user:
+    -
+      attributes:
+        user.id:
+          comparison: isFieldEqual
+          comparison_type: object
+          value: user_to_edit.id
+    -
+      attributes:
+        user.roles.arrayOfPrimitives:
+          comparison_type: array
+          comparison: intersect
+          value: ["admin"]

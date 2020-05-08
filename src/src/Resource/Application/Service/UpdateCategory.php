@@ -67,7 +67,7 @@ final class UpdateCategory
     private function ensureRequestAuthorCanExecute(string $requestAuthorId): void
     {
         $author = $this->userRepository->ofId($this->createIdFromPrimitive($requestAuthorId));
-        if (false === in_array('admin', $author->getRoles()->toArrayOfPrimitives())) {
+        if (false === in_array('admin', $author->getRoles()->getArrayOfPrimitives())) {
             throw new PermissionDeniedException();
         }
     }

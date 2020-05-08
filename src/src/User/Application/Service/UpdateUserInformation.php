@@ -30,10 +30,11 @@ final class UpdateUserInformation
 
     public function __invoke(UpdateUserInformationRequest $request): void
     {
+        $author = $this->userRepository->ofId($this->createIdFromPrimitive($request->getRequestAuthorId()));
         $userToUpdate = $this->userRepository->ofId($this->createIdFromPrimitive($request->getId()));
         $this->checkIfUserExists($userToUpdate);
 
-        if (false === $this->security->isGranted('edit', $userToUpdate)) {
+        if (false === $this->security->isGranted('edit-user', $author, $userToUpdate)) {
             throw new PermissionDeniedException();
         }
 

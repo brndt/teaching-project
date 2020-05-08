@@ -32,6 +32,7 @@ final class UpdateUserController extends AbstractFOSRestController
      */
     public function patchAction(ParamFetcher $paramFetcher, string $id): Response
     {
+        $requestAuthorId = $this->getUser()->getId();
         $email = $paramFetcher->get('username');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
@@ -40,7 +41,7 @@ final class UpdateUserController extends AbstractFOSRestController
         $experience = $paramFetcher->get('experience');
 
         ($this->updateUser)(
-            new UpdateUserInformationRequest($id, $email, $firstName, $lastName, $image, $experience, $education)
+            new UpdateUserInformationRequest($requestAuthorId, $id, $email, $firstName, $lastName, $image, $experience, $education)
         );
 
         return $this->handleView(

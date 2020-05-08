@@ -31,7 +31,7 @@ final class Roles
         return new self($roles);
     }
 
-    public function toArrayOfPrimitives(): array
+    public function getArrayOfPrimitives(): array
     {
         return array_map($this->roleToPrimitive(), $this->roles);
     }
@@ -43,7 +43,7 @@ final class Roles
 
     public function __toString(): string
     {
-        return json_encode($this->toArrayOfPrimitives());
+        return json_encode($this->getArrayOfPrimitives());
     }
 
     private function __construct(Role ...$roles)

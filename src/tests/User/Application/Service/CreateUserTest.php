@@ -172,7 +172,7 @@ final class CreateUserTest extends TestCase
             return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
                 && $userExpected->getFirstName() == $userActual->getFirstName()
                 && $userExpected->getLastName() == $userActual->getLastName()
-                && $userExpected->getRoles()->toArrayOfPrimitives() === $userActual->getRoles()->toArrayOfPrimitives()
+                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
                 && $userExpected->getCreated() == $userActual->getCreated();
         };
     }
