@@ -20,7 +20,7 @@ final class RolesType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (false == is_string($value)) {
-            return implode(",", ($value->toArrayOfPrimitives()));
+            return implode(",", ($value->getArrayOfPrimitives()));
         }
         return $value;
     }

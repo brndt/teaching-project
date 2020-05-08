@@ -9,27 +9,27 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteria;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUserController extends AbstractFOSRestController
 {
-    private SearchUsersByCriteria $searchUser;
+    private SearchUsersByCriteria $searchUsersByCriteria;
 
-    public function __construct(SearchUsersByCriteria $searchUser)
+    public function __construct(SearchUsersByCriteria $searchUsersByCriteria)
     {
-        $this->searchUser = $searchUser;
+        $this->searchUsersByCriteria = $searchUsersByCriteria;
     }
 
     /**
-     * @Rest\Get("/api/v1/users/{id}")
+     * @Rest\Get("/api/v1/users/{userId}")
      */
-    public function getAction(string $id): Response
+    public function getAction(string $userId): Response
     {
-        $filters = [['field' => 'id', 'operator' => '=', 'value' => $id]];
-        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null, null);
+        $filters = [['field' => 'id', 'operator' => '=', 'value' => $userId]];
 
-        $userResponse = ($this->searchUser)($criteria);
+        $userResponse = ($this->searchUsersByCriteria)(new SearchUsersByCriteriaRequest($filters, null, null, null, null, null));
 
         return $this->handleView($this->view($userResponse, Response::HTTP_OK));
     }

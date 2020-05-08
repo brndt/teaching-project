@@ -9,7 +9,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
-use LaSalle\StudentTeacher\User\Application\Service\CreateUser;
+use LaSalle\StudentTeacher\User\Application\Service\CreateUserService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 final class CreateUserTest extends TestCase
 {
-    private CreateUser $createUser;
+    private CreateUserService $createUser;
     private MockObject $repository;
     private MockObject $eventBus;
 
@@ -28,7 +28,7 @@ final class CreateUserTest extends TestCase
     {
         $this->repository = $this->createMock(UserRepository::class);
         $this->eventBus = $this->createMock(DomainEventBus::class);
-        $this->createUser = new CreateUser($this->repository, $this->eventBus);
+        $this->createUser = new CreateUserService($this->repository, $this->eventBus);
     }
 
     public function testWhenUserAlreadyExistsThenThrowException()

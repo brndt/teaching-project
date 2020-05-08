@@ -7,14 +7,14 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 final class CreateUserConnectionRequest
 {
     private string $requestAuthorId;
-    private string $firstUser;
-    private string $secondUser;
+    private string $userId;
+    private string $friendId;
 
-    public function __construct(string $requestAuthorId, string $firstUser, string $secondUser)
+    public function __construct(string $requestAuthorId, string $userId, string $friendId)
     {
         $this->requestAuthorId = $requestAuthorId;
-        $this->firstUser = $firstUser;
-        $this->secondUser = $secondUser;
+        $this->userId = $userId;
+        $this->friendId = $friendId;
     }
 
     public function getRequestAuthorId(): string
@@ -22,13 +22,13 @@ final class CreateUserConnectionRequest
         return $this->requestAuthorId;
     }
 
-    public function getFirstUser(): string
+    public function getUserId(): string
     {
-        return $this->firstUser;
+        return $this->userId;
     }
 
-    public function getSecondUser(): string
+    public function getFriendId(): string
     {
-        return $this->secondUser;
+        return $this->friendId;
     }
 }

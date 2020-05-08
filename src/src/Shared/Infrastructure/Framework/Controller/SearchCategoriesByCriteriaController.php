@@ -21,11 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    private SearchCategoriesByCriteria $searchCategories;
+    private SearchCategoriesByCriteria $searchCategoriesByCriteria;
 
     public function __construct(SearchCategoriesByCriteria $searchCategoriesByCriteria)
     {
-        $this->searchCategories = $searchCategoriesByCriteria;
+        $this->searchCategoriesByCriteria = $searchCategoriesByCriteria;
     }
 
     /**
@@ -39,19 +39,14 @@ final class SearchCategoriesByCriteriaController extends AbstractFOSRestControll
     public function getAction(ParamFetcher $paramFetcher): Response
     {
         $name = $paramFetcher->get('name');
-
-        $filters = [];
-        if (false === empty($name)) {
-            $filters = [['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name]];
-        }
-
+        $filters = empty($name) ? [] : [['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name]];
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
+        $operator = 'AND';
         $offset = (int) $paramFetcher->get('offset');
         $limit = (int) $paramFetcher->get('limit');
-        $operator = 'AND';
 
-        $categories = ($this->searchCategories)(new SearchCategoriesByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit));
+        $categories = ($this->searchCategoriesByCriteria)(new SearchCategoriesByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit));
 
         return $this->handleView(
             $this->view($categories, Response::HTTP_OK)

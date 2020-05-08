@@ -23,17 +23,17 @@ final class CreateCategoryController extends AbstractFOSRestController
 
     /**
      * @Rest\Post("/api/v1/categories")
-     * @RequestParam(name="name")
+     * @RequestParam(name="category_name")
      */
     public function postAction(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $name = $paramFetcher->get('name');
+        $categoryName = $paramFetcher->get('category_name');
 
-        ($this->createCategory)(new CreateCategoryRequest($requestAuthorId, $name));
+        ($this->createCategory)(new CreateCategoryRequest($requestAuthorId, $categoryName));
 
         return $this->handleView(
-            $this->view(['message' => 'Category has been successfully created'], Response::HTTP_OK)
+            $this->view(['message' => 'Category has been successfully created'], Response::HTTP_CREATED)
         );
     }
 }

@@ -14,15 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserController extends AbstractFOSRestController
 {
-    private UpdateUserInformation $updateUser;
+    private UpdateUserInformation $updateUserInformation;
 
     public function __construct(UpdateUserInformation $updateUser)
     {
-        $this->updateUser = $updateUser;
+        $this->updateUserInformation = $updateUser;
     }
 
     /**
-     * @Rest\Patch("/api/v1/users/{id}/info")
+     * @Rest\Patch("/api/v1/users/{userId}/info")
      * @RequestParam(name="username")
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
@@ -30,7 +30,7 @@ final class UpdateUserController extends AbstractFOSRestController
      * @RequestParam(name="education")
      * @RequestParam(name="experience")
      */
-    public function patchAction(ParamFetcher $paramFetcher, string $id): Response
+    public function patchAction(ParamFetcher $paramFetcher, string $userId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $email = $paramFetcher->get('username');
@@ -40,8 +40,8 @@ final class UpdateUserController extends AbstractFOSRestController
         $education = $paramFetcher->get('education');
         $experience = $paramFetcher->get('experience');
 
-        ($this->updateUser)(
-            new UpdateUserInformationRequest($requestAuthorId, $id, $email, $firstName, $lastName, $image, $experience, $education)
+        ($this->updateUserInformation)(
+            new UpdateUserInformationRequest($requestAuthorId, $userId, $email, $firstName, $lastName, $image, $experience, $education)
         );
 
         return $this->handleView(

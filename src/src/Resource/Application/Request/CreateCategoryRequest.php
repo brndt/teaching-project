@@ -7,17 +7,17 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 final class CreateCategoryRequest
 {
     private string $requestAuthorId;
-    private string $name;
+    private string $categoryName;
 
-    public function __construct(string $requestAuthorId, string $name)
+    public function __construct(string $requestAuthorId, string $categoryName)
     {
         $this->requestAuthorId = $requestAuthorId;
-        $this->name = $name;
+        $this->categoryName = $categoryName;
     }
 
-    public function getName(): string
+    public function getCategoryName(): string
     {
-        return $this->name;
+        return $this->categoryName;
     }
 
     public function getRequestAuthorId(): string

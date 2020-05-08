@@ -4,35 +4,27 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
-use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
-final class SendPasswordReset
+final class SendPasswordReset extends UserService
 {
     private EmailSender $emailSender;
-    private UserRepository $userRepository;
 
     public function __construct(EmailSender $emailSender, UserRepository $userRepository)
     {
+        parent::__construct($userRepository);
         $this->emailSender = $emailSender;
-        $this->userRepository = $userRepository;
     }
 
     public function __invoke(SendPasswordResetRequest $request): void
     {
         $user = $this->userRepository->ofEmail($this->createEmailFromPrimitive($request->getEmail()));
 
-        $this->checkIfExists($user);
-        $this->checkIfEnabled($user);
+        $this->ensureUserExists($user);
+        $this->ensureUserEnabled($user);
 
         $user->setConfirmationToken(Token::generate());
 
@@ -45,28 +37,5 @@ final class SendPasswordReset
             $user->getLastName(),
             $user->getConfirmationToken()
         );
-    }
-
-    private function createEmailFromPrimitive(string $email): Email
-    {
-        try {
-            return new Email($email);
-        } catch (InvalidEmailException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
-        }
-    }
-
-    private function checkIfExists(?User $user): void
-    {
-        if (null === $user) {
-            throw new UserNotFoundException();
-        }
-    }
-
-    private function checkIfEnabled(User $user): void
-    {
-        if (false === $user->getEnabled()) {
-            throw new UserNotEnabledException();
-        }
     }
 }

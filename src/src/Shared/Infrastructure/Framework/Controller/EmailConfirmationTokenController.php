@@ -22,14 +22,14 @@ final class EmailConfirmationTokenController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/v1/users/{id}/email_confirmation")
+     * @Rest\Post("/api/v1/users/{userId}/email_confirmation")
      * @RequestParam(name="token")
      */
-    public function postAction(ParamFetcher $paramFetcher, string $id): Response
+    public function postAction(ParamFetcher $paramFetcher, string $userId): Response
     {
         $confirmationToken = $paramFetcher->get('token');
 
-        ($this->confirmUserEmail)(new ConfirmUserEmailRequest($id, $confirmationToken));
+        ($this->confirmUserEmail)(new ConfirmUserEmailRequest($userId, $confirmationToken));
 
         return $this->handleView(
             $this->view(['message' => 'Your account has been successfully enabled'], Response::HTTP_OK)

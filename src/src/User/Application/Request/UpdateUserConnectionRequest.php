@@ -7,15 +7,15 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 final class UpdateUserConnectionRequest
 {
     private string $requestAuthorId;
-    private string $id;
-    private string $secondUserId;
+    private string $userId;
+    private string $friendId;
     private string $status;
 
-    public function __construct(string $requestAuthorId, string $firstUserId, string $secondUserId, string $status)
+    public function __construct(string $requestAuthorId, string $userId, string $friendId, string $status)
     {
         $this->requestAuthorId = $requestAuthorId;
-        $this->firstUserId = $firstUserId;
-        $this->secondUserId = $secondUserId;
+        $this->userId = $userId;
+        $this->friendId = $friendId;
         $this->status = $status;
     }
 
@@ -24,14 +24,14 @@ final class UpdateUserConnectionRequest
         return $this->requestAuthorId;
     }
 
-    public function getFirstUserId(): string
+    public function getUserId(): string
     {
-        return $this->firstUserId;
+        return $this->userId;
     }
 
-    public function getSecondUserId(): string
+    public function getFriendId(): string
     {
-        return $this->secondUserId;
+        return $this->friendId;
     }
 
     public function getStatus(): string

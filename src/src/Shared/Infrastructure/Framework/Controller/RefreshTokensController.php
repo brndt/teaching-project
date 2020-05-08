@@ -14,11 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class RefreshTokensController extends AbstractFOSRestController
 {
-    private UpdateRefreshTokenExpiration $refreshTokens;
+    private UpdateRefreshTokenExpiration $updateRefreshTokenExpiration;
 
-    public function __construct(UpdateRefreshTokenExpiration $refreshTokens)
+    public function __construct(UpdateRefreshTokenExpiration $updateRefreshTokenExpiration)
     {
-        $this->refreshTokens = $refreshTokens;
+        $this->updateRefreshTokenExpiration = $updateRefreshTokenExpiration;
     }
 
     /**
@@ -27,10 +27,10 @@ final class RefreshTokensController extends AbstractFOSRestController
      */
     public function postAction(ParamFetcher $paramFetcher): Response
     {
-        $refreshTokenValue = $paramFetcher->get('refresh_token');
+        $refreshToken = $paramFetcher->get('refresh_token');
 
-        $refreshTokensResponse = ($this->refreshTokens)(
-            new UpdateRefreshTokenExpirationRequest($refreshTokenValue, new \DateTime('+ 2592000 seconds'))
+        $refreshTokensResponse = ($this->updateRefreshTokenExpiration)(
+            new UpdateRefreshTokenExpirationRequest($refreshToken, new \DateTime('+ 2592000 seconds'))
         );
 
         return $this->handleView($this->view($refreshTokensResponse, Response::HTTP_OK));

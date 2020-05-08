@@ -15,24 +15,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserPasswordController extends AbstractFOSRestController
 {
-    private UpdateUserPassword $updatePassword;
+    private UpdateUserPassword $updateUserPassword;
 
     public function __construct(UpdateUserPassword $updatePassword)
     {
-        $this->updatePassword = $updatePassword;
+        $this->updateUserPassword = $updatePassword;
     }
 
     /**
-     * @Rest\Patch("/api/v1/users/{id}/password")
-     * @RequestParam(name="oldPassword")
-     * @RequestParam(name="newPassword")
+     * @Rest\Patch("/api/v1/users/{userId}/password")
+     * @RequestParam(name="old_password")
+     * @RequestParam(name="new_password")
      */
-    public function patchAction(ParamFetcher $paramFetcher, string $id): Response
+    public function patchAction(ParamFetcher $paramFetcher, string $userId): Response
     {
-        $oldPassword = $paramFetcher->get('oldPassword');
-        $newPassword = $paramFetcher->get('newPassword');
+        $oldPassword = $paramFetcher->get('old_password');
+        $newPassword = $paramFetcher->get('new_password');
 
-        ($this->updatePassword)(new UpdateUserPasswordRequest($id, $oldPassword, $newPassword));
+        ($this->updateUserPassword)(new UpdateUserPasswordRequest($userId, $oldPassword, $newPassword));
 
         return $this->handleView(
             $this->view(['message' => 'Your account has been successfully changed'], Response::HTTP_OK)

@@ -29,9 +29,9 @@ final class CreateCategory
     {
         $this->ensureRequestAuthorCanExecute($request->getRequestAuthorId());
 
-        $this->ensureCategoryNotExistsWithThisName($request->getName());
+        $this->ensureCategoryNotExistsWithThisName($request->getCategoryName());
 
-        $category = new Category($this->categoryRepository->nextIdentity(), $request->getName());
+        $category = new Category($this->categoryRepository->nextIdentity(), $request->getCategoryName());
 
         $this->categoryRepository->save($category);
     }

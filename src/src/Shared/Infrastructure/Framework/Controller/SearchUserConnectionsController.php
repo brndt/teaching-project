@@ -28,7 +28,7 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/api/v1/users/{userId}/connections")
-     * @QueryParam(name="orderBy", strict=true, nullable=true)
+     * @QueryParam(name="order_by", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
@@ -38,9 +38,9 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
         $requestAuthorId = $this->getUser()->getId();
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
+        $operator = 'OR';
         $offset = (int) $paramFetcher->get('offset');
         $limit = (int) $paramFetcher->get('limit');
-        $operator = 'OR';
 
         $connections = ($this->searchConnections)(new SearchUserConnectionsByCriteriaRequest($requestAuthorId, $userId, $orderBy, $order, $operator, $offset, $limit));
 

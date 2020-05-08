@@ -27,9 +27,9 @@ final class SignOutController extends AbstractFOSRestController
      */
     public function deleteAction(ParamFetcher $paramFetcher): Response
     {
-        $refreshTokenValue = $paramFetcher->get('refresh_token');
+        $refreshToken = $paramFetcher->get('refresh_token');
 
-        ($this->deleteRefreshToken)(new DeleteRefreshTokenRequest($refreshTokenValue));
+        ($this->deleteRefreshToken)(new DeleteRefreshTokenRequest($refreshToken));
 
         return $this->handleView($this->view(['message' => 'Refresh token has been deleted'], Response::HTTP_OK));
     }

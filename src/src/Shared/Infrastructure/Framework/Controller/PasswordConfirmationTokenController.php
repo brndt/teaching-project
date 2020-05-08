@@ -25,16 +25,16 @@ final class PasswordConfirmationTokenController extends AbstractFOSRestControlle
     }
 
     /**
-     * @Rest\Post("/api/v1/users/{id}/password_resetting")
-     * @RequestParam(name="newPassword")
-     * @RequestParam(name="token")
+     * @Rest\Post("/api/v1/users/{userId}/password_resetting")
+     * @RequestParam(name="new_password")
+     * @RequestParam(name="confirmation_token")
      */
-    public function postAction(ParamFetcher $paramFetcher, string $id): Response
+    public function postAction(ParamFetcher $paramFetcher, string $userId): Response
     {
-        $newPassword = $paramFetcher->get('newPassword');
-        $confirmationToken = $paramFetcher->get('token');
+        $newPassword = $paramFetcher->get('new_password');
+        $confirmationToken = $paramFetcher->get('confirmation_token');
 
-        ($this->confirmUserPasswordReset)(new ConfirmUserPasswordResetRequest($id, $newPassword, $confirmationToken));
+        ($this->confirmUserPasswordReset)(new ConfirmUserPasswordResetRequest($userId, $newPassword, $confirmationToken));
 
         return $this->handleView(
             $this->view(['message' => 'Your password has been successfully changed'], Response::HTTP_OK)

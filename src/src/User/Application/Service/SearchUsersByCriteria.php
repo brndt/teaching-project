@@ -5,33 +5,29 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 
-final class SearchUsersByCriteria
+final class SearchUsersByCriteria extends UserService
 {
-    private UserRepository $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __invoke(SearchUsersByCriteriaRequest $request): UserCollectionResponse
     {
-        $this->userRepository = $userRepository;
-    }
+        $criteria = new Criteria(
+            Filters::fromValues($request->getFilters()),
+            Order::fromValues($request->getOrderBy(), $request->getOrder()),
+            Operator::fromValue($request->getOperator()),
+            $request->getOffset(),
+            $request->getLimit()
+        );
 
-    public function __invoke(Criteria $criteria): UserCollectionResponse
-    {
         $users = $this->userRepository->matching($criteria);
-        $this->checkIfExist($users);
+        $this->ensureUserExists($users);
         return new UserCollectionResponse(...$this->buildResponse(...$users));
-    }
-
-    private function checkIfExist(?array $users): void
-    {
-        if (true === empty($users)) {
-            throw new UserNotFoundException();
-        }
     }
 
     private function buildResponse(User ...$users): array

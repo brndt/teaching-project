@@ -5,33 +5,17 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Response\UserCredentialsCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserCredentialsResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 
-final class SearchUserCredentialsByCriteria
+final class SearchUserCredentialsByCriteria extends UserService
 {
-    private UserRepository $userRepository;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
     public function __invoke(Criteria $criteria): UserCredentialsCollectionResponse
     {
         $users = $this->userRepository->matching($criteria);
-        $this->checkIfExist($users);
+        $this->ensureUsersExist($users);
         return new UserCredentialsCollectionResponse(...$this->buildResponse(...$users));
-    }
-
-    private function checkIfExist(?array $users): void
-    {
-        if (true === empty($users)) {
-            throw new UserNotFoundException();
-        }
     }
 
     private function buildResponse(User ...$users): array

@@ -12,15 +12,15 @@ use LaSalle\StudentTeacher\Token\Application\Request\GenerateTokensRequest;
 use LaSalle\StudentTeacher\Token\Application\Service\CreateToken;
 use LaSalle\StudentTeacher\Token\Application\Service\GenerateTokens;
 use LaSalle\StudentTeacher\User\Application\Request\SignInRequest;
-use LaSalle\StudentTeacher\User\Application\Service\SignIn;
+use LaSalle\StudentTeacher\User\Application\Service\SignInService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SignInController extends AbstractFOSRestController
 {
-    private SignIn $signIn;
+    private SignInService $signIn;
     private GenerateTokens $generateTokens;
 
-    public function __construct(SignIn $signIn, GenerateTokens $generateTokens)
+    public function __construct(SignInService $signIn, GenerateTokens $generateTokens)
     {
         $this->signIn = $signIn;
         $this->generateTokens = $generateTokens;
@@ -42,6 +42,6 @@ final class SignInController extends AbstractFOSRestController
             new GenerateTokensRequest($userResponse->getId(), new \DateTime('+ 2592000 seconds'))
         );
 
-        return $this->handleView($this->view($generateTokensResponse, Response::HTTP_OK));
+        return $this->handleView($this->view($generateTokensResponse, Response::HTTP_CREATED));
     }
 }

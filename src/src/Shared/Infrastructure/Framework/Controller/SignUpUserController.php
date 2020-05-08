@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
-use LaSalle\StudentTeacher\User\Application\Service\CreateUser;
+use LaSalle\StudentTeacher\User\Application\Service\CreateUserService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SignUpUserController extends AbstractFOSRestController
 {
-    private CreateUser $createUser;
+    private CreateUserService $createUser;
 
-    public function __construct(CreateUser $createUser)
+    public function __construct(CreateUserService $createUser)
     {
         $this->createUser = $createUser;
     }
@@ -25,23 +25,23 @@ final class SignUpUserController extends AbstractFOSRestController
      * @Rest\Post("/api/v1/users")
      * @RequestParam(name="username")
      * @RequestParam(name="password")
-     * @RequestParam(name="firstName")
-     * @RequestParam(name="lastName")
+     * @RequestParam(name="first_name")
+     * @RequestParam(name="last_name")
      * @RequestParam(name="roles")
      */
     public function postAction(ParamFetcher $paramFetcher): Response
     {
         $email = $paramFetcher->get('username');
         $password = $paramFetcher->get('password');
-        $firstName = $paramFetcher->get('firstName');
-        $lastName = $paramFetcher->get('lastName');
+        $firstName = $paramFetcher->get('first_name');
+        $lastName = $paramFetcher->get('last_name');
         $roles = $paramFetcher->get('roles');
 
         ($this->createUser)(
             new CreateUserRequest($email, $password, $firstName, $lastName, $roles, new \DateTimeImmutable())
         );
 
-        return $this->handleView($this->view(['message' => 'User has been created'], Response::HTTP_OK));
+        return $this->handleView($this->view(['message' => 'User has been created'], Response::HTTP_CREATED));
     }
 
 }
