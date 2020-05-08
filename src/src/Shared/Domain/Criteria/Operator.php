@@ -12,9 +12,9 @@ final class Operator extends Enum
     public const AND  = 'AND';
     public const OR = 'OR';
 
-    public static function fromValue(string $operator): Operator
+    public static function fromValue(?string $operator): Operator
     {
-        return new self($operator);
+        return (null === $operator) ? new self(Operator::AND): new self($operator);
     }
 
     public function __toString(): string

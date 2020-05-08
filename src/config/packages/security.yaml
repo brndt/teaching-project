@@ -8,19 +8,20 @@ security:
     firewalls:
 
         refresh:
-            pattern:  ^/api/v1/users/token_refresh$
+            pattern:  ^/api/v1/users/token_refresh
             anonymous: true
 
         sign_out:
-            pattern:  ^/api/v1/users/sign_out$
+            pattern:  ^/api/v1/users/sign_out
             anonymous: true
 
         sign_in:
-            pattern:  ^/api/v1/users/sign_in$
+            pattern:  ^/api/v1/users/sign_in
             anonymous: true
 
-        sign_up:
-            pattern:  ^/api/v1/users$
+        users:
+            pattern:  ^/api/v1/users
+            methods: [GET, POST]
             anonymous: true
 
         api:

@@ -26,7 +26,7 @@ final class SearchUsersByCriteria extends UserService
         );
 
         $users = $this->userRepository->matching($criteria);
-        $this->ensureUserExists($users);
+        $this->ensureUsersExist($users);
         return new UserCollectionResponse(...$this->buildResponse(...$users));
     }
 
