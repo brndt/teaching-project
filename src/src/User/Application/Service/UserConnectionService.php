@@ -111,9 +111,9 @@ abstract class UserConnectionService
         }
     }
 
-    protected function verifySpecifierChanged(Uuid $newSpecifier, Uuid $oldSpecifier)
+    protected function verifySpecifierChanged(User $newSpecifier, User $oldSpecifier)
     {
-        return $oldSpecifier->toString() !== $newSpecifier->toString();
+        return $newSpecifier->idEqualsTo($oldSpecifier->getId());
     }
 
     protected function recognizeSpecifier(Uuid $authorId, User $firstUser, User $secondUser): User

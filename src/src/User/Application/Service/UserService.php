@@ -116,13 +116,6 @@ abstract class UserService
         }
     }
 
-    protected function ensureConfirmationTokenExists(?Token $tokenFromUser)
-    {
-        if (null == $tokenFromUser) {
-            throw new ConfirmationTokenNotFoundException();
-        }
-    }
-
     protected function validateConfirmationTokenFromRequest(User $user, Token $tokenFromRequest): void
     {
         if (null === $user->getConfirmationToken()) {

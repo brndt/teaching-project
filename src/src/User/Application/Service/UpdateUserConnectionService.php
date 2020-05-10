@@ -28,7 +28,7 @@ final class UpdateUserConnectionService extends UserConnectionService
         $this->ensureConnectionExists($userConnection);
 
         $newState = $this->stateFactory->create($request->getStatus());
-        $isSpecifierChanged = $this->verifySpecifierChanged($specifier->getId(), $userConnection->getSpecifierId());
+        $isSpecifierChanged = $this->verifySpecifierChanged($specifier, $userConnection);
 
         $userConnection->setState($newState, $isSpecifierChanged);
         $userConnection->setSpecifierId($specifier->getId());
