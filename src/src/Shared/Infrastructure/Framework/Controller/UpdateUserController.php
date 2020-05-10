@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
-use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformation;
+use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserController extends AbstractFOSRestController
 {
-    private UpdateUserInformation $updateUserInformation;
+    private UpdateUserInformationService $updateUserInformation;
 
-    public function __construct(UpdateUserInformation $updateUser)
+    public function __construct(UpdateUserInformationService $updateUser)
     {
         $this->updateUserInformation = $updateUser;
     }

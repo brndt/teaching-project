@@ -8,16 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\User\Application\Exception\OldPasswordIncorrectException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
-use LaSalle\StudentTeacher\User\Application\Service\UpdateUserPassword;
+use LaSalle\StudentTeacher\User\Application\Service\UpdateUserPasswordService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserPasswordController extends AbstractFOSRestController
 {
-    private UpdateUserPassword $updateUserPassword;
+    private UpdateUserPasswordService $updateUserPassword;
 
-    public function __construct(UpdateUserPassword $updatePassword)
+    public function __construct(UpdateUserPasswordService $updatePassword)
     {
         $this->updateUserPassword = $updatePassword;
     }

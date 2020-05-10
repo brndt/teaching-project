@@ -6,29 +6,36 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserPasswordRequest
 {
-    private string $id;
+    private string $requestAuthorId;
+    private string $userId;
     private string $oldPassword;
     private string $newPassword;
 
-    public function __construct(string $id, string $oldPassword, string $newPassword)
+    public function __construct(string $requestAuthorId, string $userId, string $oldPassword, string $newPassword)
     {
-        $this->id = $id;
+        $this->requestAuthorId = $requestAuthorId;
+        $this->userId = $userId;
         $this->oldPassword = $oldPassword;
         $this->newPassword = $newPassword;
     }
 
-    public function getId(): string
+    public function getRequestAuthorId(): string
     {
-        return $this->id;
+        return $this->requestAuthorId;
     }
 
-    public function getNewPassword(): string
+    public function getUserId(): string
     {
-        return $this->newPassword;
+        return $this->userId;
     }
 
     public function getOldPassword(): string
     {
         return $this->oldPassword;
+    }
+
+    public function getNewPassword(): string
+    {
+        return $this->newPassword;
     }
 }

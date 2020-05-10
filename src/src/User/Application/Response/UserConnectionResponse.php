@@ -8,10 +8,10 @@ final class UserConnectionResponse
 {
     private string $userId;
     private string $friendId;
-    private string $status;
-    private string $specifierId;
+    private ?string $status;
+    private ?string $specifierId;
 
-    public function __construct(string $userId, string $friendId, string $status, string $specifierId)
+    public function __construct(string $userId, string $friendId, string $status = null, string $specifierId = null)
     {
         $this->userId = $userId;
         $this->friendId = $friendId;
@@ -24,13 +24,18 @@ final class UserConnectionResponse
         return $this->userId;
     }
 
-    public function getFriendId(): string
+    public function getFriendId(): ?string
     {
         return $this->friendId;
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
+    }
+
+    public function getSpecifierId(): ?string
+    {
+        return $this->specifierId;
     }
 }

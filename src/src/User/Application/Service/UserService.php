@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
+use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException;
+use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -20,6 +25,7 @@ use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 abstract class UserService
 {
@@ -35,7 +41,7 @@ abstract class UserService
         try {
             return new Uuid($uuid);
         } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
+            throw new InvalidArgumentException($error->getMessage());
         }
     }
 
@@ -48,12 +54,27 @@ abstract class UserService
         }
     }
 
+    protected function verifyPassword(string $oldPassword, Password $userPassword): void
+    {
+        if (false === Password::verify($oldPassword, $userPassword)) {
+            throw new IncorrectPasswordException();
+        }
+    }
+
     protected function createEmailFromPrimitive(string $email): Email
     {
         try {
             return new Email($email);
         } catch (InvalidEmailException $exception) {
             throw new InvalidArgumentValidationException($exception->getMessage());
+        }
+    }
+
+    protected function ensureNewEmailIsAvailable(string $newEmail, string $oldEmail): void
+    {
+        $userWithNewEmail = $this->userRepository->ofEmail($this->createEmailFromPrimitive($newEmail));
+        if (null !== $userWithNewEmail && $newEmail !== $oldEmail) {
+            throw new UserAlreadyExistsException();
         }
     }
 
@@ -74,7 +95,7 @@ abstract class UserService
         }
     }
 
-    protected function ensureUserExists(?User $user): void
+    protected function ensureUserExists(User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();
@@ -93,5 +114,26 @@ abstract class UserService
         if (true === $user->getEnabled()) {
             throw new UserAlreadyEnabledException();
         }
+    }
+
+    protected function ensureConfirmationTokenExists(?Token $tokenFromUser)
+    {
+        if (null == $tokenFromUser) {
+            throw new ConfirmationTokenNotFoundException();
+        }
+    }
+
+    protected function validateConfirmationTokenFromRequest(User $user, Token $tokenFromRequest): void
+    {
+        if (null === $user->getConfirmationToken()) {
+            throw new ConfirmationTokenNotFoundException();
+        }
+        if (false === $user->confirmationTokenEqualsTo($tokenFromRequest)) {
+            throw new IncorrectConfirmationTokenException();
+        }
+    }
+
+    protected function ensureRequestAuthorHasPermissions(User $requestAuthor, User $user) {
+        return $requestAuthor->idEqualsTo($user->getId());
     }
 }

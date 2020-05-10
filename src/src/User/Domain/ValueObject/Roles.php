@@ -63,4 +63,9 @@ final class Roles
         };
     }
 
+    public function contains(Role $role): bool
+    {
+        return in_array($role->toString(), $this->getArrayOfPrimitives());
+    }
+
 }

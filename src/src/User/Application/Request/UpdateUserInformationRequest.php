@@ -6,18 +6,18 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserInformationRequest
 {
-    private string $id;
+    private string $requestAuthorId;
+    private string $userId;
     private string $email;
     private string $firstName;
     private string $lastName;
     private string $image;
     private string $experience;
     private string $education;
-    private string $requestAuthorId;
 
     public function __construct(
         string $requestAuthorId,
-        string $id,
+        string $userId,
         string $email,
         string $firstName,
         string $lastName,
@@ -26,7 +26,7 @@ final class UpdateUserInformationRequest
         string $education
     ) {
         $this->requestAuthorId = $requestAuthorId;
-        $this->id = $id;
+        $this->userId = $userId;
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -35,9 +35,9 @@ final class UpdateUserInformationRequest
         $this->education = $education;
     }
 
-    public function getId(): string
+    public function getUserId(): string
     {
-        return $this->id;
+        return $this->userId;
     }
 
     public function getEmail(): string

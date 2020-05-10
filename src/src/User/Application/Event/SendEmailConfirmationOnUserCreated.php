@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Event;
 
 use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest;
-use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmation;
+use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmationService;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 
 final class SendEmailConfirmationOnUserCreated
 {
-    private SendEmailConfirmation $sendEmailConfirmation;
+    private SendEmailConfirmationService $sendEmailConfirmation;
 
-    public function __construct(SendEmailConfirmation $sendEmailConfirmation)
+    public function __construct(SendEmailConfirmationService $sendEmailConfirmation)
     {
         $this->sendEmailConfirmation = $sendEmailConfirmation;
     }

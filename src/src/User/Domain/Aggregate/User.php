@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 
+use CodelyTv\Backoffice\Auth\Domain\AuthPassword;
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class User
 {
@@ -229,5 +231,20 @@ final class User
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
+    }
+
+    public function confirmationTokenEqualsTo(Token $confirmationToken): bool
+    {
+        return $this->confirmationToken->equalsTo($confirmationToken);
+    }
+
+    public function idEqualsTo(Uuid $id): bool
+    {
+        return $this->id->equalsTo($id);
+    }
+
+    public function isInRole(Role $role): bool
+    {
+        return $this->roles->contains($role);
     }
 }

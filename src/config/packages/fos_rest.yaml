@@ -28,5 +28,5 @@ fos_rest:
       LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException: 400
       LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
       LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403
-      LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException: 400
-      LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException: 404
+      LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException: 404

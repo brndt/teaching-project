@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Twig\Environment;

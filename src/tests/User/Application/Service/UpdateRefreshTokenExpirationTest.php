@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenIsExpiredException;
-use LaSalle\StudentTeacher\Token\Application\Exception\RefreshTokenNotFoundException;
-use LaSalle\StudentTeacher\Token\Application\Request\UpdateRefreshTokenExpirationRequest;
-use LaSalle\StudentTeacher\Token\Application\Service\UpdateRefreshTokenExpiration;
-use LaSalle\StudentTeacher\Token\Domain\Aggregate\RefreshToken;
-use LaSalle\StudentTeacher\Token\Domain\Repository\RefreshTokenRepository;
-use LaSalle\StudentTeacher\Token\Domain\TokenManager;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
+use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException;
+use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException;
+use LaSalle\StudentTeacher\User\Application\Request\UpdateRefreshTokenExpirationRequest;
+use LaSalle\StudentTeacher\User\Application\Service\UpdateRefreshTokenExpirationService;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\RefreshToken;
+use LaSalle\StudentTeacher\User\Domain\Repository\RefreshTokenRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\TokenManager;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,14 +22,14 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
     private MockObject $repository;
     private MockObject $tokenManager;
     private MockObject $userRepository;
-    private UpdateRefreshTokenExpiration $updateRefreshTokenValidation;
+    private UpdateRefreshTokenExpirationService $updateRefreshTokenValidation;
 
     public function setUp(): void
     {
         $this->repository = $this->createMock(RefreshTokenRepository::class);
         $this->tokenManager = $this->createMock(TokenManager::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->updateRefreshTokenValidation = new UpdateRefreshTokenExpiration($this->repository, $this->tokenManager, $this->userRepository);
+        $this->updateRefreshTokenValidation = new UpdateRefreshTokenExpirationService($this->repository, $this->tokenManager, $this->userRepository);
     }
 
     public function testWhenRefreshTokenNotFoundThenThrowException()

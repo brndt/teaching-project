@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider;
 
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Service\SearchUserCredentialsByCriteria;
+use LaSalle\StudentTeacher\User\Application\Request\SearchUserCredentialsByIdRequest;
+use LaSalle\StudentTeacher\User\Application\Service\SearchUserCredentialsByIdService;
 use LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -17,25 +15,20 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class IdUserProvider implements UserProviderInterface
 {
-    private SearchUserCredentialsByCriteria $searchUser;
+    private SearchUserCredentialsByIdService $searchUser;
 
-    public function __construct(SearchUserCredentialsByCriteria $searchUser)
+    public function __construct(SearchUserCredentialsByIdService $searchUser)
     {
         $this->searchUser = $searchUser;
     }
 
     public function loadUserByUsername($id)
     {
-        $filters = [['field' => 'id', 'operator' => '=', 'value' => $id]];
-        $criteria = new Criteria(Filters::fromValues($filters), Order::fromValues(null, null), null, null, null);
-
         try {
-            $UserCollectionResponse = ($this->searchUser)($criteria);
+            $userResponse = ($this->searchUser)(new SearchUserCredentialsByIdRequest($id));
         } catch (UserNotFoundException $exception) {
             throw new UsernameNotFoundException(sprintf('No user found for id ' . $id));
         }
-
-        $userResponse = $UserCollectionResponse->getIterator()->current();
 
         return new SymfonyUser(
             $userResponse->getId(),
@@ -53,7 +46,6 @@ final class IdUserProvider implements UserProviderInterface
         }
         return $this->loadUserByUsername($user->getId());
     }
-
 
     public function supportsClass($class)
     {

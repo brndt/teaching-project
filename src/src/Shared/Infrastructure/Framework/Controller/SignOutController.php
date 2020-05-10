@@ -8,15 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Token\Application\Request\DeleteRefreshTokenRequest;
-use LaSalle\StudentTeacher\Token\Application\Service\DeleteRefreshToken;
+use LaSalle\StudentTeacher\User\Application\Request\DeleteRefreshTokenRequest;
+use LaSalle\StudentTeacher\User\Application\Service\DeleteRefreshTokenService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SignOutController extends AbstractFOSRestController
 {
-    private DeleteRefreshToken $deleteRefreshToken;
+    private DeleteRefreshTokenService $deleteRefreshToken;
 
-    public function __construct(DeleteRefreshToken $deleteRefreshToken)
+    public function __construct(DeleteRefreshTokenService $deleteRefreshToken)
     {
         $this->deleteRefreshToken = $deleteRefreshToken;
     }

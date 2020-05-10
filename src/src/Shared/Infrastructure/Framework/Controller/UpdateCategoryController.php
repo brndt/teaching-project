@@ -8,9 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategory;
 use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCategory;
 use Symfony\Component\HttpFoundation\Response;
 

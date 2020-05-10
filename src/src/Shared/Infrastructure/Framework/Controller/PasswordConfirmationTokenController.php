@@ -8,18 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserEmailRequest;
 use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserPasswordResetRequest;
-use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
-use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserEmail;
-use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserPasswordReset;
+use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserPasswordResetService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PasswordConfirmationTokenController extends AbstractFOSRestController
 {
-    private ConfirmUserPasswordReset $confirmUserPasswordReset;
+    private ConfirmUserPasswordResetService $confirmUserPasswordReset;
 
-    public function __construct(ConfirmUserPasswordReset $confirmUserPasswordReset)
+    public function __construct(ConfirmUserPasswordResetService $confirmUserPasswordReset)
     {
         $this->confirmUserPasswordReset = $confirmUserPasswordReset;
     }
@@ -34,7 +31,9 @@ final class PasswordConfirmationTokenController extends AbstractFOSRestControlle
         $newPassword = $paramFetcher->get('new_password');
         $confirmationToken = $paramFetcher->get('confirmation_token');
 
-        ($this->confirmUserPasswordReset)(new ConfirmUserPasswordResetRequest($userId, $newPassword, $confirmationToken));
+        ($this->confirmUserPasswordReset)(
+            new ConfirmUserPasswordResetRequest($userId, $newPassword, $confirmationToken)
+        );
 
         return $this->handleView(
             $this->view(['message' => 'Your password has been successfully changed'], Response::HTTP_OK)

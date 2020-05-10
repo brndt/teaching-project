@@ -46,4 +46,9 @@ class Uuid
             throw new InvalidUuidException();
         }
     }
+
+    public function equalsTo(self $uuid): bool
+    {
+        return $uuid->toString() === $this->toString();
+    }
 }

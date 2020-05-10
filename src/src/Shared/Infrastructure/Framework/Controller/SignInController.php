@@ -8,19 +8,18 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Token\Application\Request\GenerateTokensRequest;
-use LaSalle\StudentTeacher\Token\Application\Service\CreateToken;
-use LaSalle\StudentTeacher\Token\Application\Service\GenerateTokens;
+use LaSalle\StudentTeacher\User\Application\Request\GenerateTokensRequest;
 use LaSalle\StudentTeacher\User\Application\Request\SignInRequest;
+use LaSalle\StudentTeacher\User\Application\Service\GenerateTokensService;
 use LaSalle\StudentTeacher\User\Application\Service\SignInService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SignInController extends AbstractFOSRestController
 {
     private SignInService $signIn;
-    private GenerateTokens $generateTokens;
+    private GenerateTokensService $generateTokens;
 
-    public function __construct(SignInService $signIn, GenerateTokens $generateTokens)
+    public function __construct(SignInService $signIn, GenerateTokensService $generateTokens)
     {
         $this->signIn = $signIn;
         $this->generateTokens = $generateTokens;

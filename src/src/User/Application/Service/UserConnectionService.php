@@ -15,6 +15,7 @@ use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException
 use LaSalle\StudentTeacher\User\Application\Exception\UserAreEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
@@ -26,8 +27,11 @@ abstract class UserConnectionService
     protected UserConnectionRepository $userConnectionRepository;
     protected StateFactory $stateFactory;
 
-    public function __construct(UserConnectionRepository $userConnectionRepository, UserRepository $userRepository, StateFactory $stateFactory)
-    {
+    public function __construct(
+        UserConnectionRepository $userConnectionRepository,
+        UserRepository $userRepository,
+        StateFactory $stateFactory
+    ) {
         $this->userRepository = $userRepository;
         $this->userConnectionRepository = $userConnectionRepository;
         $this->stateFactory = $stateFactory;
@@ -49,12 +53,12 @@ abstract class UserConnectionService
         }
     }
 
-    protected function verifyRole($user): string
+    protected function verifyRole(User $user): string
     {
-        if (in_array(Role::STUDENT, $user->getRoles()->getArrayOfPrimitives())) {
+        if ($user->isInRole(new Role(Role::STUDENT))) {
             return Role::STUDENT;
         }
-        if (in_array(Role::TEACHER, $user->getRoles()->getArrayOfPrimitives())) {
+        if ($user->isInRole(new Role(Role::TEACHER))) {
             return Role::TEACHER;
         }
         throw new RoleIsNotStudentOrTeacherException();
@@ -67,10 +71,9 @@ abstract class UserConnectionService
         }
     }
 
-    protected function identifyUserById(string $id): User
+    protected function searchUserById(Uuid $id): User
     {
-        $user = $this->userRepository->ofId($this->createIdFromPrimitive($id));
-        if (null === $user) {
+        if (null === $user = $this->userRepository->ofId($id)) {
             throw new UserNotFoundException();
         }
         return $user;
@@ -80,6 +83,7 @@ abstract class UserConnectionService
     {
         $this->ensureUsersAreNotEqual($firstUser, $secondUser);
         $this->ensureRolesAreNotEqual($firstUser, $secondUser);
+
         return [Role::STUDENT, Role::TEACHER] === [
             $this->verifyRole($firstUser),
             $this->verifyRole($secondUser)
@@ -90,6 +94,13 @@ abstract class UserConnectionService
     {
         if (null !== $this->userConnectionRepository->ofId($student->getId(), $teacher->getId())) {
             throw new ConnectionAlreadyExistsException();
+        }
+    }
+
+    protected function ensureConnectionExists(?UserConnection $userConnection): void
+    {
+        if (null === $userConnection) {
+            throw new ConnectionNotFound();
         }
     }
 
@@ -105,22 +116,36 @@ abstract class UserConnectionService
         return $oldSpecifier->toString() !== $newSpecifier->toString();
     }
 
-    protected function recognizeSpecifier($authorId, $firstUserId, $secondUserId): Uuid
+    protected function recognizeSpecifier(Uuid $authorId, User $firstUser, User $secondUser): User
     {
-        if ($authorId === $firstUserId) {
-            return $this->createIdFromPrimitive($firstUserId);
+        if ($firstUser->idEqualsTo($authorId)) {
+            return $firstUser;
         }
-        if ($authorId === $secondUserId) {
-            return $this->createIdFromPrimitive($secondUserId);
+        if ($secondUser->idEqualsTo($authorId)) {
+            return $secondUser;
         }
         throw new PermissionDeniedException();
     }
 
     protected function createFiltersByUserId(User $user): array
     {
-        if (Role::STUDENT === $this->verifyRole($user)) {
+        if (true === $user->isInRole(new Role(Role::STUDENT))) {
             return [['field' => 'studentId', 'operator' => '=', 'value' => $user->getId()->toString()]];
         }
         return [['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]];
+    }
+
+    protected function ensureRequestAuthorIsTeacherOrStudent(User $author, User $user, User $friend)
+    {
+        if (false === $author->idEqualsTo($user->getId()) && false === $author->idEqualsTo($friend->getId())) {
+            throw new PermissionDeniedException();
+        }
+    }
+
+    protected function ensureRequestAuthorHasPermissions(User $author, User $user): void
+    {
+        if (false === $author->isInRole(new Role('admin')) && false === $author->idEqualsTo($user->getId())) {
+            throw new PermissionDeniedException();
+        }
     }
 }

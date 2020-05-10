@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserConnectionRequest;
-use LaSalle\StudentTeacher\User\Application\Service\CreateUserConnection;
+use LaSalle\StudentTeacher\User\Application\Service\CreateUserConnectionService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateUserConnectionController extends AbstractFOSRestController
 {
-    private CreateUserConnection $userConnection;
+    private CreateUserConnectionService $userConnection;
 
-    public function __construct(CreateUserConnection $userConnection)
+    public function __construct(CreateUserConnectionService $userConnection)
     {
         $this->userConnection = $userConnection;
     }

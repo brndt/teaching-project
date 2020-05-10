@@ -8,19 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest;
-use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteria;
+use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUsersController extends AbstractFOSRestController
 {
-    private SearchUsersByCriteria $searchUsersByCriteria;
+    private SearchUsersByCriteriaService $searchUsersByCriteria;
 
-    public function __construct(SearchUsersByCriteria $searchUsersByCriteria)
+    public function __construct(SearchUsersByCriteriaService $searchUsersByCriteria)
     {
         $this->searchUsersByCriteria = $searchUsersByCriteria;
     }
@@ -41,10 +37,12 @@ final class SearchUsersController extends AbstractFOSRestController
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = null;
-        $offset = (int) $paramFetcher->get('offset');
-        $limit = (int) $paramFetcher->get('limit');
+        $offset = (int)$paramFetcher->get('offset');
+        $limit = (int)$paramFetcher->get('limit');
 
-        $usersResponse = ($this->searchUsersByCriteria)(new SearchUsersByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit));
+        $usersResponse = ($this->searchUsersByCriteria)(
+            new SearchUsersByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit)
+        );
 
         return $this->handleView($this->view($usersResponse, Response::HTTP_OK));
     }

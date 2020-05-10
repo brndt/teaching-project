@@ -5,23 +5,18 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RequestParam;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
-use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByCriteria;
+use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUserConnectionsController extends AbstractFOSRestController
 {
-    private SearchUserConnectionsByCriteria $searchConnections;
+    private SearchUserConnectionsByCriteriaService $searchConnections;
 
-    public function __construct(SearchUserConnectionsByCriteria $searchConnections)
+    public function __construct(SearchUserConnectionsByCriteriaService $searchConnections)
     {
         $this->searchConnections = $searchConnections;
     }
@@ -39,10 +34,20 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = 'OR';
-        $offset = (int) $paramFetcher->get('offset');
-        $limit = (int) $paramFetcher->get('limit');
+        $offset = (int)$paramFetcher->get('offset');
+        $limit = (int)$paramFetcher->get('limit');
 
-        $connections = ($this->searchConnections)(new SearchUserConnectionsByCriteriaRequest($requestAuthorId, $userId, $orderBy, $order, $operator, $offset, $limit));
+        $connections = ($this->searchConnections)(
+            new SearchUserConnectionsByCriteriaRequest(
+                $requestAuthorId,
+                $userId,
+                $orderBy,
+                $order,
+                $operator,
+                $offset,
+                $limit
+            )
+        );
 
         return $this->handleView(
             $this->view($connections, Response::HTTP_OK)

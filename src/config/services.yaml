@@ -24,7 +24,7 @@ services:
     tags: ['controller.service_arguments']
 
   acme_api.event.jwt_created_listener:
-    class: LaSalle\StudentTeacher\Token\Infrastructure\Framework\Event\JWTCreatedListener
+    class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Event\JWTCreatedListener
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 

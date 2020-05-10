@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserEmailRequest;
-use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserEmail;
+use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserEmailService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EmailConfirmationTokenController extends AbstractFOSRestController
 {
-    private ConfirmUserEmail $confirmUserEmail;
+    private ConfirmUserEmailService $confirmUserEmail;
 
-    public function __construct(ConfirmUserEmail $confirmUserEmail)
+    public function __construct(ConfirmUserEmailService $confirmUserEmail)
     {
         $this->confirmUserEmail = $confirmUserEmail;
     }

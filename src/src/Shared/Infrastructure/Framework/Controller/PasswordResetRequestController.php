@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
-use LaSalle\StudentTeacher\User\Application\Service\SendPasswordReset;
+use LaSalle\StudentTeacher\User\Application\Service\SendPasswordResetService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PasswordResetRequestController extends AbstractFOSRestController
 {
-    private SendPasswordReset $sendPasswordReset;
+    private SendPasswordResetService $sendPasswordReset;
 
-    public function __construct(SendPasswordReset $sendPasswordReset)
+    public function __construct(SendPasswordResetService $sendPasswordReset)
     {
         $this->sendPasswordReset = $sendPasswordReset;
     }
@@ -32,7 +32,10 @@ final class PasswordResetRequestController extends AbstractFOSRestController
         ($this->sendPasswordReset)(new SendPasswordResetRequest($email));
 
         return $this->handleView(
-            $this->view(['message' => 'An email has been sent. It contains a link you must click to reset your password.'], Response::HTTP_OK)
+            $this->view(
+                ['message' => 'An email has been sent. It contains a link you must click to reset your password.'],
+                Response::HTTP_OK
+            )
         );
     }
 }

@@ -36,8 +36,8 @@ final class CreateUserService extends UserService
 
         $this->userRepository->save($user);
 
-        #foreach ($user->pullDomainEvents() as $domainEvent) {
-        #    $this->eventBus->dispatch($domainEvent);
-        #}
+        foreach ($user->pullDomainEvents() as $domainEvent) {
+            $this->eventBus->dispatch($domainEvent);
+        }
     }
 }

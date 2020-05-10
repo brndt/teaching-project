@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\User\Application\Request\CreateUserConnectionRequest;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserConnectionRequest;
-use LaSalle\StudentTeacher\User\Application\Service\CreateUserConnection;
-use LaSalle\StudentTeacher\User\Application\Service\UpdateUserConnection;
+use LaSalle\StudentTeacher\User\Application\Service\UpdateUserConnectionService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserConnectionController extends AbstractFOSRestController
 {
-    private UpdateUserConnection $updateUserConnection;
+    private UpdateUserConnectionService $updateUserConnection;
 
-    public function __construct(UpdateUserConnection $updateUserConnection)
+    public function __construct(UpdateUserConnectionService $updateUserConnection)
     {
         $this->updateUserConnection = $updateUserConnection;
     }

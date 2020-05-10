@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\Token\Domain\ValueObject\Token;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 interface EmailSender
 {
