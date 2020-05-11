@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
+use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
@@ -24,6 +24,7 @@ use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
@@ -126,7 +127,11 @@ abstract class UserService
         }
     }
 
-    protected function ensureRequestAuthorHasPermissions(User $requestAuthor, User $user) {
-        return $requestAuthor->idEqualsTo($user->getId());
+    protected function ensureRequestAuthorHasPermissions(User $requestAuthor, User $user): void
+    {
+        if (false === $requestAuthor->isInRole(new Role('admin')) &&
+            false === $requestAuthor->idEqualsTo($user->getId())) {
+            throw new PermissionDeniedException();
+        }
     }
 }

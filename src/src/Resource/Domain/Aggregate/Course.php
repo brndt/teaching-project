@@ -13,10 +13,10 @@ final class Course
     private Uuid $teacherId;
     private Uuid $categoryId;
     private string $name;
-    private string $description;
+    private ?string $description;
     private string $level;
     private \DateTimeImmutable $created;
-    private \DateTimeImmutable $modified;
+    private ?\DateTimeImmutable $modified;
     private Status $status;
 
     public function __construct(
@@ -24,10 +24,10 @@ final class Course
         Uuid $teacherId,
         Uuid $categoryId,
         string $name,
-        string $description,
+        ?string $description,
         string $level,
         \DateTimeImmutable $created,
-        \DateTimeImmutable $modified,
+        ?\DateTimeImmutable $modified,
         Status $status
     ) {
         $this->id = $id;
@@ -81,7 +81,7 @@ final class Course
         $this->name = $name;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -111,7 +111,7 @@ final class Course
         $this->created = $created;
     }
 
-    public function getModified(): \DateTimeImmutable
+    public function getModified(): ?\DateTimeImmutable
     {
         return $this->modified;
     }

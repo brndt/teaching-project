@@ -15,6 +15,6 @@ final class Status extends Enum
 
     protected function throwExceptionForInvalidValue($value)
     {
-        throw new InvalidArgumentException($value);
+        throw new InvalidArgumentException('Invalid status name');
     }
 }
