@@ -22,7 +22,7 @@ final class SearchCategoriesByCriteriaController extends AbstractFOSRestControll
     }
 
     /**
-     * @Rest\Get("/api/v1/categories/")
+     * @Rest\Get("/api/v1/panel/categories/")
      * @QueryParam(name="name", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
@@ -31,6 +31,7 @@ final class SearchCategoriesByCriteriaController extends AbstractFOSRestControll
      */
     public function getAction(ParamFetcher $paramFetcher): Response
     {
+        $requestAuthorId = $this->getUser()->getId();
         $name = $paramFetcher->get('name');
         $filters = empty($name) ? [] : [['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name]];
         $orderBy = $paramFetcher->get('orderBy');
@@ -40,7 +41,7 @@ final class SearchCategoriesByCriteriaController extends AbstractFOSRestControll
         $limit = (int)$paramFetcher->get('limit');
 
         $categories = ($this->searchCategoriesByCriteria)(
-            new SearchCategoriesByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit)
+            new SearchCategoriesByCriteriaRequest($requestAuthorId, $filters, $orderBy, $order, $operator, $offset, $limit)
         );
 
         return $this->handleView(

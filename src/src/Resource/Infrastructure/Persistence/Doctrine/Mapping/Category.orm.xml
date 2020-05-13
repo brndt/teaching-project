@@ -2,5 +2,6 @@
     <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category" table="category">
         <id name="id" type="uuid" />
         <field name="name" type="string" unique="true" nullable="false"/>
+        <field name="status" type="status" nullable="false"/>
     </entity>
 </doctrine-mapping>

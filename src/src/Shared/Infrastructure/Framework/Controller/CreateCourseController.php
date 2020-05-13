@@ -24,7 +24,7 @@ final class CreateCourseController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/v1/courses")
+     * @Rest\Post("/api/v1/panel/courses")
      * @RequestParam(name="teacher_id")
      * @RequestParam(name="category_id")
      * @RequestParam(name="name")

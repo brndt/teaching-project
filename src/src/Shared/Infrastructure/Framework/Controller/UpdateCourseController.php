@@ -24,7 +24,7 @@ final class UpdateCourseController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Patch("/api/v1/courses/{courseId}")
+     * @Rest\Patch("/api/v1/panel/courses/{courseId}")
      * @RequestParam(name="teacher_id")
      * @RequestParam(name="category_id")
      * @RequestParam(name="name")

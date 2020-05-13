@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class SearchCategoriesByCriteriaRequest
 {
+    private string $requestAuthorId;
     private array $filters;
     private ?string $orderBy;
     private ?string $order;
@@ -14,6 +15,7 @@ final class SearchCategoriesByCriteriaRequest
     private ?int $limit;
 
     public function __construct(
+        string $requestAuthorId,
         array $filters,
         ?string $orderBy,
         ?string $order,
@@ -21,6 +23,7 @@ final class SearchCategoriesByCriteriaRequest
         ?int $offset,
         ?int $limit
     ) {
+        $this->requestAuthorId = $requestAuthorId;
         $this->filters = $filters;
         $this->orderBy = $orderBy;
         $this->order = $order;
@@ -57,5 +60,10 @@ final class SearchCategoriesByCriteriaRequest
     public function getLimit(): ?int
     {
         return $this->limit;
+    }
+
+    public function getRequestAuthorId(): string
+    {
+        return $this->requestAuthorId;
     }
 }

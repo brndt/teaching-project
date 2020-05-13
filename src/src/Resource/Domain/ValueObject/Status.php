@@ -11,7 +11,7 @@ final class Status extends Enum
 {
     public const PUBLISHED = 'published';
     public const UNPUBLISHED = 'unpublished';
-    public const DRAFT = 'draft';
+    public const ARCHIVE = 'archive';
 
     protected function throwExceptionForInvalidValue($value)
     {

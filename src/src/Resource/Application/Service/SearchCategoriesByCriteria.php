@@ -17,6 +17,11 @@ final class SearchCategoriesByCriteria extends CategoryService
 {
     public function __invoke(SearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
     {
+        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
+        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
+        $this->ensureUserExists($requestAuthor);
+        $this->ensureRequestAuthorIsAdmin($requestAuthor);
+
         $criteria = new Criteria(
             Filters::fromValues($request->getFilters()),
             Order::fromValues($request->getOrderBy(), $request->getOrder()),
@@ -39,6 +44,7 @@ final class SearchCategoriesByCriteria extends CategoryService
                 return new CategoryResponse(
                     $category->getId()->toString(),
                     $category->getName(),
+                    $category->getStatus()->value(),
                 );
             },
             $categories

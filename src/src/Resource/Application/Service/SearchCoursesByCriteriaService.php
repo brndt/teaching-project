@@ -17,8 +17,18 @@ final class SearchCoursesByCriteriaService extends CourseService
 {
     public function __invoke(SearchCoursesByCriteriaRequest $request): CourseCollectionResponse
     {
+        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
+        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
+        $this->ensureUserExists($requestAuthor);
+
+        $filters = $this->createFiltersDependingByRoles($requestAuthor);
+
+        if (null !== $request->getUserId()) {
+            $filters = $filters->add($this->createFilterByTeacherId($request->getUserId()));
+        }
+
         $criteria = new Criteria(
-            Filters::fromValues($request->getFilters()),
+            $filters,
             Order::fromValues($request->getOrderBy(), $request->getOrder()),
             Operator::fromValue($request->getOperator()),
             $request->getOffset(),

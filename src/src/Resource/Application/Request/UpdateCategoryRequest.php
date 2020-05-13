@@ -9,12 +9,14 @@ final class UpdateCategoryRequest
     private string $requestAuthorId;
     private string $categoryId;
     private string $newName;
+    private string $newStatus;
 
-    public function __construct(string $requestAuthorId, string $categoryId, string $newName)
+    public function __construct(string $requestAuthorId, string $categoryId, string $newName, string $newStatus)
     {
         $this->requestAuthorId = $requestAuthorId;
         $this->categoryId = $categoryId;
         $this->newName = $newName;
+        $this->newStatus = $newStatus;
     }
 
     public function getRequestAuthorId(): string
@@ -30,5 +32,10 @@ final class UpdateCategoryRequest
     public function getNewName(): string
     {
         return $this->newName;
+    }
+
+    public function getNewStatus(): string
+    {
+        return $this->newStatus;
     }
 }

@@ -8,6 +8,7 @@ use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
@@ -37,7 +38,7 @@ abstract class CategoryService
         }
     }
 
-    protected function ensureRequestAuthorCanExecute(User $requestAuthor): void
+    protected function ensureRequestAuthorIsAdmin(User $requestAuthor): void
     {
         if (false === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
             throw new PermissionDeniedException();
@@ -45,6 +46,14 @@ abstract class CategoryService
     }
 
     protected function ensureCategoryNotExistsWithThisName(string $categoryName): void
+    {
+        $category = $this->categoryRepository->ofName($categoryName);
+        if (null !== $category) {
+            throw new CategoryAlreadyExists();
+        };
+    }
+
+    protected function ensureCategoryNameIsAvailable(string $categoryName): void
     {
         $category = $this->categoryRepository->ofName($categoryName);
         if (null !== $category && $categoryName !== $category->getName()) {
@@ -69,6 +78,15 @@ abstract class CategoryService
     protected function ensureCategoryExists(?Category $category) {
         if (null === $category) {
             throw new CategoryNotFound();
+        }
+    }
+
+    protected function createStatusFromPrimitive(string $status)
+    {
+        try {
+            return new Status($status);
+        } catch (InvalidArgumentException $error) {
+            throw new InvalidArgumentException($error->getMessage());
         }
     }
 }

@@ -6,7 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class SearchCoursesByCriteriaRequest
 {
-    private array $filters;
+    private string $requestAuthorId;
+    private ?string $userId;
     private ?string $orderBy;
     private ?string $order;
     private ?string $operator;
@@ -14,14 +15,16 @@ final class SearchCoursesByCriteriaRequest
     private ?int $limit;
 
     public function __construct(
-        array $filters,
+        string $requestAuthorId,
+        ?string $userId,
         ?string $orderBy,
         ?string $order,
         ?string $operator,
         ?int $offset,
         ?int $limit
     ) {
-        $this->filters = $filters;
+        $this->requestAuthorId = $requestAuthorId;
+        $this->userId = $userId;
         $this->orderBy = $orderBy;
         $this->order = $order;
         $this->operator = $operator;
@@ -29,9 +32,9 @@ final class SearchCoursesByCriteriaRequest
         $this->limit = $limit;
     }
 
-    public function getFilters(): array
+    public function getRequestAuthorId(): string
     {
-        return $this->filters;
+        return $this->requestAuthorId;
     }
 
     public function getOrderBy(): ?string
@@ -57,5 +60,10 @@ final class SearchCoursesByCriteriaRequest
     public function getLimit(): ?int
     {
         return $this->limit;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->userId;
     }
 }

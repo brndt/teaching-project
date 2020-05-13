@@ -14,7 +14,7 @@ final class UpdateCategory extends CategoryService
 
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);
 
-        $this->ensureRequestAuthorCanExecute($requestAuthor);
+        $this->ensureRequestAuthorIsAdmin($requestAuthor);
 
         $categoryId = $this->createIdFromPrimitive($request->getCategoryId());
 
@@ -24,7 +24,10 @@ final class UpdateCategory extends CategoryService
 
         $this->ensureCategoryNotExistsWithThisName($request->getNewName());
 
+        $newStatus = $this->createStatusFromPrimitive($request->getNewStatus());
+
         $category->setName($request->getNewName());
+        $category->setStatus($newStatus);
 
         $this->categoryRepository->save($category);
     }

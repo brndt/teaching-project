@@ -12,16 +12,15 @@ final class CreateCategory extends CategoryService
     public function __invoke(CreateCategoryRequest $request)
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-
         $this->ensureUserExists($requestAuthor);
-
-        $this->ensureRequestAuthorCanExecute($requestAuthor);
+        $this->ensureRequestAuthorIsAdmin($requestAuthor);
 
         $this->ensureCategoryNotExistsWithThisName($request->getCategoryName());
 
-        $category = new Category($this->categoryRepository->nextIdentity(), $request->getCategoryName());
+        $status = $this->createStatusFromPrimitive($request->getCategoryStatus());
+
+        $category = new Category($this->categoryRepository->nextIdentity(), $request->getCategoryName(), $status);
 
         $this->categoryRepository->save($category);
     }

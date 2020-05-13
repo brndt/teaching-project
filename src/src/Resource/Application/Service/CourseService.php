@@ -13,6 +13,8 @@ use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filter;
+use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -56,19 +58,39 @@ abstract class CourseService
 
     protected function ensureRequestAuthorHasPermissions(User $requestAuthor, User $user): void
     {
-        if (false === $requestAuthor->isInRole(new Role('admin')) &&
-            false === $requestAuthor->idEqualsTo($user->getId()) &&
-            false === $user->isInRole(new Role('teacher'))) {
+        if (false === $this->validateAuthorPermission($requestAuthor, $user)) {
             throw new PermissionDeniedException();
         }
     }
 
+    private function validateAuthorPermission(User $requestAuthor, User $user): bool {
+        if (true === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
+            return true;
+        }
+        if (false === $user->isInRole(new Role(Role::TEACHER))) {
+            return false;
+        }
+        if (true === $requestAuthor->idEqualsTo($user->getId())) {
+            return true;
+        }
+        return false;
+    }
+
     protected function ensureTeacherHasPermissions(User $user, Course $course): void
     {
-        if (false === $user->isInRole(new Role('admin')) &&
-            false === $user->idEqualsTo($course->getTeacherId())) {
+        if (false === $this->validateUserCoursePermission($user, $course)) {
             throw new PermissionDeniedException();
         }
+    }
+
+    private function validateUserCoursePermission(User $user, Course $course): bool {
+        if (true === $user->isInRole(new Role(Role::ADMIN))) {
+            return true;
+        }
+        if (false === $user->idEqualsTo($course->getTeacherId())) {
+            return false;
+        }
+        return false;
     }
 
     protected function ensureUserExists(?User $user): void
@@ -97,5 +119,21 @@ abstract class CourseService
         if (null === $course) {
             throw new CourseNotFoundException();
         }
+    }
+
+    protected function createFiltersDependingByRoles(User $user) {
+        {
+            if (true === $user->isInRole(new Role(Role::ADMIN))) {
+                return Filters::fromValues([]);
+            }
+            if (true === $user->isInRole(new Role(Role::TEACHER))) {
+                return Filters::fromValues([['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]]);
+            }
+            throw new PermissionDeniedException();
+        }
+    }
+
+    protected function createFilterByTeacherId(string $userId) {
+        return Filter::fromValues(['field' => 'teacherId', 'operator' => '=', 'value' => $userId]);
     }
 }
