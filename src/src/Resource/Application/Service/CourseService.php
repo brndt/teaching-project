@@ -11,7 +11,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filter;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
@@ -43,7 +42,7 @@ abstract class CourseService
         try {
             return new Uuid($uuid);
         } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
+            throw new InvalidArgumentException($error->getMessage());
         }
     }
 

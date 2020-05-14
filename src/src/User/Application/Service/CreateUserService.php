@@ -21,14 +21,21 @@ final class CreateUserService extends UserService
 
     public function __invoke(CreateUserRequest $request): void
     {
-        $this->ensureUserDoesntExistByEmail($request->getEmail());
+        $email = $this->createEmailFromPrimitive($request->getEmail());
+        $this->ensureUserDoesntExistByEmail($email);
+
+        $firstName = $this->createNameFromPrimitive($request->getFirstName());
+        $lastName = $this->createNameFromPrimitive($request->getLastName());
+
+        $roles = $this->createRolesFromPrimitive($request->getRoles());
+        $this->ensureRolesAreValid($roles);
 
         $user = User::create(
             $this->userRepository->nextIdentity(),
-            $this->createEmailFromPrimitive($request->getEmail()),
+            $email,
             $this->createPasswordFromPrimitive($request->getPassword()),
-            $request->getFirstName(),
-            $request->getLastName(),
+            $firstName,
+            $lastName,
             $this->createRolesFromPrimitive($request->getRoles()),
             $request->getCreated(),
             false

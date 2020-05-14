@@ -11,21 +11,22 @@ final class UpdateUserInformationService extends UserService
     public function __invoke(UpdateUserInformationRequest $request): void
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $userId = $this->createIdFromPrimitive($request->getUserId());
-
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);
         $this->ensureUserExists($requestAuthor);
 
+        $userId = $this->createIdFromPrimitive($request->getUserId());
         $userToUpdate = $this->userRepository->ofId($userId);
         $this->ensureUserExists($userToUpdate);
 
-        $this->ensureRequestAuthorHasPermissions($requestAuthor, $userToUpdate);
+        $this->ensureRequestAuthorIsUser($requestAuthor, $userToUpdate);
 
         $this->ensureNewEmailIsAvailable($request->getEmail(), $userToUpdate->getEmail()->toString());
-
+        $firstName = $this->createNameFromPrimitive($request->getFirstName());
+        $lastName = $this->createNameFromPrimitive($request->getLastName());
+        
         $userToUpdate->setEmail($this->createEmailFromPrimitive($request->getEmail()));
-        $userToUpdate->setFirstName($request->getFirstName());
-        $userToUpdate->setLastName($request->getLastName());
+        $userToUpdate->setFirstName($firstName);
+        $userToUpdate->setLastName($lastName);
         $userToUpdate->setImage($request->getImage());
         $userToUpdate->setEducation($request->getEducation());
         $userToUpdate->setExperience($request->getExperience());

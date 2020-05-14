@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -14,15 +13,18 @@ use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationToken
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNameException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
@@ -51,7 +53,7 @@ abstract class UserService
         try {
             return Password::fromPlainPassword($password);
         } catch (InvalidPasswordLengthException | InvalidNumberContainingException | InvalidLetterContainingException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
+            throw new InvalidArgumentException($exception->getMessage());
         }
     }
 
@@ -67,7 +69,7 @@ abstract class UserService
         try {
             return new Email($email);
         } catch (InvalidEmailException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
+            throw new InvalidArgumentException($exception->getMessage());
         }
     }
 
@@ -84,19 +86,18 @@ abstract class UserService
         try {
             return Roles::fromArrayOfPrimitives($roles);
         } catch (InvalidRoleException $exception) {
-            throw new InvalidArgumentValidationException($exception->getMessage());
+            throw new InvalidArgumentException($exception->getMessage());
         }
     }
 
-    protected function ensureUserDoesntExistByEmail(string $email): void
+    protected function ensureUserDoesntExistByEmail(Email $email): void
     {
-        $email = $this->createEmailFromPrimitive($email);
         if (null !== $this->userRepository->ofEmail($email)) {
             throw new UserAlreadyExistsException();
         }
     }
 
-    protected function ensureUserExists(User $user): void
+    protected function ensureUserExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();
@@ -112,8 +113,8 @@ abstract class UserService
 
     protected function ensureUserEnabled(User $user): void
     {
-        if (true === $user->getEnabled()) {
-            throw new UserAlreadyEnabledException();
+        if (false === $user->getEnabled()) {
+            throw new UserNotEnabledException();
         }
     }
 
@@ -127,11 +128,25 @@ abstract class UserService
         }
     }
 
-    protected function ensureRequestAuthorHasPermissions(User $requestAuthor, User $user): void
+    protected function ensureRequestAuthorIsUser(User $requestAuthor, User $user): void
     {
-        if (false === $requestAuthor->isInRole(new Role('admin')) &&
-            false === $requestAuthor->idEqualsTo($user->getId())) {
+        if (false === $requestAuthor->idEqualsTo($user->getId())) {
             throw new PermissionDeniedException();
         }
     }
+
+    protected function ensureRolesAreValid(Roles $roles): void {
+        if ($roles->contains(new Role(Role::ADMIN))) {
+            throw new PermissionDeniedException();
+        }
+    }
+
+    protected function createNameFromPrimitive(string $name): Name {
+        try {
+            return new Name($name);
+        } catch (InvalidNameException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+
 }

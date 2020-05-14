@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
+use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -13,6 +14,7 @@ use LaSalle\StudentTeacher\User\Application\Service\CreateUserService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,31 +42,31 @@ final class CreateUserTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidEmail());
     }
 
     public function testWhenUserRoleIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidRole());
     }
 
     public function testWhenUserPasswordIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidPasswordLength());
     }
 
     public function testWhenPasswordDoesntContainNumberThenThrowException()
     {
-        $this->expectException(InvalidArgumentValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidNumberContaining());
     }
 
     public function testWhenPasswordDoesntContainLetterThenThrowException()
     {
-        $this->expectException(InvalidArgumentValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidLetterContaining());
     }
 
@@ -86,8 +88,8 @@ final class CreateUserTest extends TestCase
             new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
             new Email('user@example.com'),
             Password::fromPlainPassword('123456aa'),
-            'Alex',
-            'Johnson',
+            new Name('Alex'),
+            new Name('Johnson'),
             Roles::fromArrayOfPrimitives(['teacher']),
             new \DateTimeImmutable('2020-04-27'),
             false
@@ -170,8 +172,8 @@ final class CreateUserTest extends TestCase
     {
         return function (User $userActual) use ($userExpected) {
             return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
-                && $userExpected->getFirstName() == $userActual->getFirstName()
-                && $userExpected->getLastName() == $userActual->getLastName()
+                && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
+                && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
                 && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
                 && $userExpected->getCreated() == $userActual->getCreated();
         };

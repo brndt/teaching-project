@@ -37,8 +37,8 @@ final class SearchUsersByCriteriaService extends UserService
             static function (User $user) {
                 return new UserResponse(
                     $user->getId()->toString(),
-                    $user->getFirstName(),
-                    $user->getLastName(),
+                    $user->getFirstName()->toString(),
+                    $user->getLastName()->toString(),
                     $user->getRoles()->getArrayOfPrimitives(),
                     $user->getCreated()->format('Y-m-d H:i:s'),
                     $user->getImage(),

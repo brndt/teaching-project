@@ -9,7 +9,6 @@ use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -34,7 +33,7 @@ abstract class CategoryService
         try {
             return new Uuid($uuid);
         } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
+            throw new InvalidArgumentException($error->getMessage());
         }
     }
 
@@ -53,10 +52,10 @@ abstract class CategoryService
         };
     }
 
-    protected function ensureCategoryNameIsAvailable(string $categoryName): void
+    protected function ensureCategoryNameIsAvailable(string $oldCategoryName, string $newCategoryName): void
     {
-        $category = $this->categoryRepository->ofName($categoryName);
-        if (null !== $category && $categoryName !== $category->getName()) {
+        $category = $this->categoryRepository->ofName($newCategoryName);
+        if (null !== $category && $oldCategoryName !== $category->getName()) {
             throw new CategoryAlreadyExists();
         };
     }

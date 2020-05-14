@@ -7,6 +7,7 @@ namespace LaSalle\StudentTeacher\User\Infrastructure\Framework;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -23,7 +24,7 @@ final class SymfonyEmailSender implements EmailSender
         $this->twig = $twig;
     }
 
-    public function sendEmailConfirmation(Email $email, Uuid $userId, string $firstName, string $lastName, Token $confirmationToken): void
+    public function sendEmailConfirmation(Email $email, Uuid $userId, Name $firstName, Name $lastName, Token $confirmationToken): void
     {
         $email = (new TemplatedEmail())
             ->from('log.visualization@gmail.com')
@@ -32,14 +33,14 @@ final class SymfonyEmailSender implements EmailSender
             ->htmlTemplate('email_confirmation.html.twig')
             ->context(
                 [
-                    'name' => $firstName.' '.$lastName,
+                    'name' => $firstName->toString().' '.$lastName->toString(),
                     'url_confirmation' => $_SERVER['APP_URL'].'/users/'.$userId->toString().'/email_confirmation/?token='.$confirmationToken->toString(),
                 ]
             );
         $this->mailer->send($email);
     }
 
-    public function sendPasswordReset(Email $email, Uuid $userId, string $firstName, string $lastName, Token $confirmationToken): void
+    public function sendPasswordReset(Email $email, Uuid $userId, Name $firstName, Name $lastName, Token $confirmationToken): void
     {
         $email = (new TemplatedEmail())
             ->from('log.visualization@gmail.com')
@@ -48,7 +49,7 @@ final class SymfonyEmailSender implements EmailSender
             ->htmlTemplate('password_reset.html.twig')
             ->context(
                 [
-                    'name' => $firstName.' '.$lastName,
+                    'name' => $firstName->toString().' '.$lastName->toString(),
                     'url_confirmation' => $_SERVER['APP_URL'].'/users/'.$userId->toString().'/password_reset/?token='.$confirmationToken->toString(),
                 ]
             );

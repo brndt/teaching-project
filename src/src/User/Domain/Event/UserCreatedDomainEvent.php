@@ -8,14 +8,15 @@ use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 
 final class UserCreatedDomainEvent implements DomainEvent
 {
     private Uuid $id;
     private Uuid $aggregateUuid;
     private Email $email;
-    private string $firstName;
-    private string $lastName;
+    private Name $firstName;
+    private Name $lastName;
     private DateTimeImmutable $occurredOn;
     private bool $enabled;
 
@@ -23,8 +24,8 @@ final class UserCreatedDomainEvent implements DomainEvent
         Uuid $id,
         Uuid $aggregateUuid,
         Email $email,
-        string $firstName,
-        string $lastName,
+        Name $firstName,
+        Name $lastName,
         DateTimeImmutable $occurredOn,
         bool $enabled
     ) {
@@ -57,12 +58,12 @@ final class UserCreatedDomainEvent implements DomainEvent
         return $this->email;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): Name
     {
         return $this->firstName;
     }
 
-    public function getLastName(): string
+    public function getLastName(): Name
     {
         return $this->lastName;
     }

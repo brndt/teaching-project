@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 
-use CodelyTv\Backoffice\Auth\Domain\AuthPassword;
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
@@ -20,8 +20,8 @@ final class User
     private Uuid $id;
     private Email $email;
     private Password $password;
-    private string $firstName;
-    private string $lastName;
+    private Name $firstName;
+    private Name $lastName;
     private Roles $roles;
     private \DateTimeImmutable $created;
     private bool $enabled;
@@ -35,8 +35,8 @@ final class User
         Uuid $id,
         Email $email,
         Password $password,
-        string $firstName,
-        string $lastName,
+        Name $firstName,
+        Name $lastName,
         Roles $roles,
         DateTimeImmutable $created,
         bool $enabled,
@@ -63,8 +63,8 @@ final class User
         Uuid $id,
         Email $email,
         Password $password,
-        string $firstName,
-        string $lastName,
+        Name $firstName,
+        Name $lastName,
         Roles $roles,
         DateTimeImmutable $created,
         bool $enabled,
@@ -128,12 +128,12 @@ final class User
         $this->password = $password;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(Name $firstName): void
     {
         $this->firstName = $firstName;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(Name $lastName): void
     {
         $this->lastName = $lastName;
     }
@@ -178,12 +178,12 @@ final class User
         return $this->password;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): Name
     {
         return $this->firstName;
     }
 
-    public function getLastName(): string
+    public function getLastName(): Name
     {
         return $this->lastName;
     }

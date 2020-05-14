@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException;
-use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFound;
-use LaSalle\StudentTeacher\User\Application\Exception\RoleIsNotStudentOrTeacherException;
+use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAreEqualException;
+use LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
@@ -42,14 +41,14 @@ abstract class UserConnectionService
         try {
             return new Uuid($uuid);
         } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
+            throw new InvalidArgumentException($error->getMessage());
         }
     }
 
     protected function ensureUsersAreNotEqual(User $firstUser, User $secondUser): void
     {
         if ($firstUser->getId()->toString() === $secondUser->getId()->toString()) {
-            throw new UserAreEqualException();
+            throw new UsersAreEqualException();
         }
     }
 
@@ -61,7 +60,7 @@ abstract class UserConnectionService
         if ($user->isInRole(new Role(Role::TEACHER))) {
             return Role::TEACHER;
         }
-        throw new RoleIsNotStudentOrTeacherException();
+        throw new PermissionDeniedException();
     }
 
     protected function ensureRolesAreNotEqual(User $firstUser, User $secondUser): void
@@ -100,14 +99,14 @@ abstract class UserConnectionService
     protected function ensureConnectionExists(?UserConnection $userConnection): void
     {
         if (null === $userConnection) {
-            throw new ConnectionNotFound();
+            throw new ConnectionNotFoundException();
         }
     }
 
     protected function ensureConnectionsExist(?array $connections): void
     {
         if (true === empty($connections)) {
-            throw new ConnectionNotFound();
+            throw new ConnectionNotFoundException();
         }
     }
 

@@ -8,6 +8,7 @@ doctrine:
       uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
       password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
       email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
+      name: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\NameType
       token: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\TokenType
       state: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\StateType
       status: LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Type\StatusType

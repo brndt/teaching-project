@@ -7,16 +7,9 @@ security:
 
     firewalls:
 
-        refresh:
-            pattern:  ^/api/v1/users/token_refresh
-            anonymous: true
-
-        sign_out:
-            pattern:  ^/api/v1/users/sign_out
-            anonymous: true
-
-        sign_in:
-            pattern:  ^/api/v1/users/sign_in
+        users:
+            pattern:  ^/api/v1/users
+            methods: ['GET', 'POST']
             anonymous: true
 
         api:
@@ -27,6 +20,3 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-
-    access_control:
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

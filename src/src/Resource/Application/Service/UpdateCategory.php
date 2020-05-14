@@ -11,18 +11,15 @@ final class UpdateCategory extends CategoryService
     public function __invoke(UpdateCategoryRequest $request)
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-
+        $this->ensureUserExists($requestAuthor);
         $this->ensureRequestAuthorIsAdmin($requestAuthor);
 
         $categoryId = $this->createIdFromPrimitive($request->getCategoryId());
-
         $category = $this->categoryRepository->ofId($categoryId);
-
         $this->ensureCategoryExists($category);
 
-        $this->ensureCategoryNotExistsWithThisName($request->getNewName());
+        $this->ensureCategoryNameIsAvailable($category->getName(), $request->getNewName());
 
         $newStatus = $this->createStatusFromPrimitive($request->getNewStatus());
 

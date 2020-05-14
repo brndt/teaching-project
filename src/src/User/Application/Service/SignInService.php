@@ -15,8 +15,8 @@ final class SignInService extends UserService
         $email = $this->createEmailFromPrimitive($request->getEmail());
 
         $user = $this->userRepository->ofEmail($email);
-
         $this->ensureUserExists($user);
+
         $this->ensureUserEnabled($user);
         $this->verifyPassword($request->getPassword(), $user->getPassword());
 
@@ -27,8 +27,8 @@ final class SignInService extends UserService
     {
         return new UserResponse(
             $user->getId()->toString(),
-            $user->getFirstName(),
-            $user->getLastName(),
+            $user->getFirstName()->toString(),
+            $user->getLastName()->toString(),
             $user->getRoles()->getArrayOfPrimitives(),
             $user->getCreated()->format('Y-m-d H:i:s'),
             $user->getImage(),

@@ -19,14 +19,21 @@ fos_rest:
   exception:
     enabled: true
     codes:
-      LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException: 400
+      InvalidArgumentException: 400
+      LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists: 400
+      LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound: 404
+      LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException: 404
       LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException: 403
-      LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException: 403
       LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException: 404
+      LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException: 404
+      LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException: 403
       LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException: 403
-      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
-      LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403
       LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException: 400
       LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException: 404
+      LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
+      LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException;
@@ -36,7 +35,7 @@ abstract class RefreshTokenService
         try {
             return new Uuid($uuid);
         } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentValidationException($error->getMessage());
+            throw new InvalidArgumentException($error->getMessage());
         }
     }
 

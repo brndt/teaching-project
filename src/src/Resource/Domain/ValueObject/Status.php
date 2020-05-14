@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Domain\ValueObject;
 
-use InvalidArgumentException;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Enum;
 
 final class Status extends Enum
@@ -15,6 +15,6 @@ final class Status extends Enum
 
     protected function throwExceptionForInvalidValue($value)
     {
-        throw new InvalidArgumentException('Invalid status name');
+        throw new InvalidStatusException('Invalid status name');
     }
 }
