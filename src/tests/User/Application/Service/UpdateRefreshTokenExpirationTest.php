@@ -56,12 +56,17 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
     public function testWhenRequestIsValidThenUpdateRefreshTokenExpiration()
     {
         $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($this->anyValidRefreshToken());
-        $this->refreshTokenRepository->expects($this->once())->method('save')->with($this->equalTo($this->anyValidRefreshToken()));
+        $this->refreshTokenRepository->expects($this->once())->method('save')->with($this->callback($this->refreshTokenComparator($this->anyValidRefreshToken())));
         $this->userRepository->expects($this->once())->method('ofId')->with($this->equalTo($this->anyValidRefreshToken()->getUserId()))->willReturn($this->anyValidUser());
         $this->tokenManager->expects($this->once())->method('generate')->with($this->callback($this->userComparator($this->anyValidUser())))->willReturn('token_string');
 
         $tokensResponse = ($this->updateRefreshTokenExpirationService)($this->anyValidRefreshTokenRequest());
-        $this->assertEquals($this->anyValidTokensResponse(), $tokensResponse);
+        $this->assertTokensResponsesAreEqual($this->anyValidTokensResponse(), $tokensResponse);
+    }
+
+    private function assertTokensResponsesAreEqual(TokensResponse $firstTokenResponse, TokensResponse $secondTokenResponse) {
+        $this->assertEquals($firstTokenResponse->getRefreshToken(), $secondTokenResponse->getRefreshToken());
+        $this->assertEqualsWithDelta($firstTokenResponse->getRefreshToken(), $secondTokenResponse->getRefreshToken(), 60);
     }
 
     private function anyValidRefreshToken(): RefreshToken
@@ -78,8 +83,16 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
     {
         return new UpdateRefreshTokenExpirationRequest(
             'token_string',
-            (new DateTimeImmutable(date('Y-m-d H:m:s')))->modify('+ 1 day')
+            new DateTimeImmutable('+ 1 day')
         );
+    }
+
+    private function refreshTokenComparator(RefreshToken $refreshTokenExpected): callable
+    {
+        return function (RefreshToken $refreshTokenActual) use ($refreshTokenExpected) {
+            return $refreshTokenExpected->getRefreshToken()->toString() === $refreshTokenActual->getRefreshToken()->toString()
+                && $refreshTokenExpected->getExpirationDate()->diff($refreshTokenActual->getExpirationDate())->m < 1;
+        };
     }
 
     private function userComparator(User $userExpected): callable
