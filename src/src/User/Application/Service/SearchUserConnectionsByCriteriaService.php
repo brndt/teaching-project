@@ -19,10 +19,12 @@ final class SearchUserConnectionsByCriteriaService extends UserConnectionService
     public function __invoke(SearchUserConnectionsByCriteriaRequest $request)
     {
         $authorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $userId = $this->createIdFromPrimitive($request->getUserId());
+        $author = $this->userRepository->ofId($authorId);
+        $this->ensureUserExists($author);
 
-        $author = $this->searchUserById($authorId);
-        $user = $this->searchUserById($userId);
+        $userId = $this->createIdFromPrimitive($request->getUserId());
+        $user = $this->userRepository->ofId($userId);
+        $this->ensureUserExists($user);
 
         $this->ensureRequestAuthorHasPermissions($author, $user);
 

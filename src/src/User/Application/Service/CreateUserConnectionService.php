@@ -13,16 +13,20 @@ final class CreateUserConnectionService extends UserConnectionService
     public function __invoke(CreateUserConnectionRequest $request): void
     {
         $authorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $userId = $this->createIdFromPrimitive($request->getUserId());
-        $friendId = $this->createIdFromPrimitive($request->getFriendId());
+        $requestAuthor = $this->userRepository->ofId($authorId);
+        $this->ensureUserExists($requestAuthor);
 
-        $author = $this->searchUserById($authorId);
-        $firstUser = $this->searchUserById($userId);
-        $secondUser = $this->searchUserById($friendId);
+        $firstUserId = $this->createIdFromPrimitive($request->getFirstUser());
+        $firstUser = $this->userRepository->ofId($firstUserId);
+        $this->ensureUserExists($firstUser);
 
-        $this->ensureRequestAuthorIsTeacherOrStudent($author, $firstUser, $secondUser);
+        $secondUserId = $this->createIdFromPrimitive($request->getSecondUser());
+        $secondUser = $this->userRepository->ofId($secondUserId);
+        $this->ensureUserExists($secondUser);
 
-        [$student, $teacher] = $this->verifyStudentAndTeacher($firstUser, $secondUser);
+        $this->ensureRequestAuthorIsOneOfUsers($requestAuthor, $firstUser, $secondUser);
+
+        [$student, $teacher] = $this->identifyStudentAndTeacher($firstUser, $secondUser);
         $this->ensureConnectionDoesntExists($student, $teacher);
 
         $userConnection = new UserConnection($student->getId(), $teacher->getId(), new Pended(), $authorId);

@@ -47,12 +47,12 @@ abstract class UserConnectionService
 
     protected function ensureUsersAreNotEqual(User $firstUser, User $secondUser): void
     {
-        if ($firstUser->getId()->toString() === $secondUser->getId()->toString()) {
+        if (true === $firstUser->idEqualsTo($secondUser->getId())) {
             throw new UsersAreEqualException();
         }
     }
 
-    protected function verifyRole(User $user): string
+    protected function identifyIfTeacherOfStudent(User $user): string
     {
         if ($user->isInRole(new Role(Role::STUDENT))) {
             return Role::STUDENT;
@@ -65,31 +65,30 @@ abstract class UserConnectionService
 
     protected function ensureRolesAreNotEqual(User $firstUser, User $secondUser): void
     {
-        if ($this->verifyRole($firstUser) === $this->verifyRole($secondUser)) {
+        if ($this->identifyIfTeacherOfStudent($firstUser) === $this->identifyIfTeacherOfStudent($secondUser)) {
             throw new RolesOfUsersEqualException();
         }
     }
 
-    protected function searchUserById(Uuid $id): User
+    protected function ensureUserExists(?User $user): void
     {
-        if (null === $user = $this->userRepository->ofId($id)) {
+        if (null === $user) {
             throw new UserNotFoundException();
         }
-        return $user;
     }
 
-    protected function verifyStudentAndTeacher(User $firstUser, User $secondUser)
+    protected function identifyStudentAndTeacher(User $firstUser, User $secondUser): array
     {
         $this->ensureUsersAreNotEqual($firstUser, $secondUser);
         $this->ensureRolesAreNotEqual($firstUser, $secondUser);
 
         return [Role::STUDENT, Role::TEACHER] === [
-            $this->verifyRole($firstUser),
-            $this->verifyRole($secondUser)
+            $this->identifyIfTeacherOfStudent($firstUser),
+            $this->identifyIfTeacherOfStudent($secondUser)
         ] ? [$firstUser, $secondUser] : [$secondUser, $firstUser];
     }
 
-    protected function ensureConnectionDoesntExists(User $student, User $teacher)
+    protected function ensureConnectionDoesntExists(User $student, User $teacher): void
     {
         if (null !== $this->userConnectionRepository->ofId($student->getId(), $teacher->getId())) {
             throw new ConnectionAlreadyExistsException();
@@ -110,12 +109,12 @@ abstract class UserConnectionService
         }
     }
 
-    protected function verifySpecifierChanged(User $newSpecifier, User $oldSpecifier)
+    protected function verifySpecifierChanged(Uuid $newSpecifierId, Uuid $oldSpecifierId): bool
     {
-        return $newSpecifier->idEqualsTo($oldSpecifier->getId());
+        return $newSpecifierId->equalsTo($oldSpecifierId);
     }
 
-    protected function recognizeSpecifier(Uuid $authorId, User $firstUser, User $secondUser): User
+    protected function identifySpecifier(Uuid $authorId, User $firstUser, User $secondUser): User
     {
         if ($firstUser->idEqualsTo($authorId)) {
             return $firstUser;
@@ -134,9 +133,9 @@ abstract class UserConnectionService
         return [['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]];
     }
 
-    protected function ensureRequestAuthorIsTeacherOrStudent(User $author, User $user, User $friend)
+    protected function ensureRequestAuthorIsOneOfUsers(User $author, User $firstUser, User $secondUser): void
     {
-        if (false === $author->idEqualsTo($user->getId()) && false === $author->idEqualsTo($friend->getId())) {
+        if (false === $author->idEqualsTo($firstUser->getId()) && false === $author->idEqualsTo($secondUser->getId())) {
             throw new PermissionDeniedException();
         }
     }

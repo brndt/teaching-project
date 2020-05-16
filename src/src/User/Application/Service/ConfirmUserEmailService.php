@@ -9,17 +9,17 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class ConfirmUserEmailService extends UserService
 {
-    public function __invoke(ConfirmUserEmailRequest $request)
+    public function __invoke(ConfirmUserEmailRequest $request): void
     {
         $userId = $this->createIdFromPrimitive($request->getUserId());
-        $confirmationToken = new Token($request->getConfirmationToken());
-
         $user = $this->userRepository->ofId($userId);
         $this->ensureUserExists($user);
 
-        $this->validateConfirmationTokenFromRequest($user, $confirmationToken);
+        $confirmationToken = new Token($request->getConfirmationToken());
+        $this->validateConfirmationToken($user, $confirmationToken);
 
         $user->setConfirmationToken(null);
+        $user->setExpirationDate(null);
         $user->setEnabled(true);
 
         $this->userRepository->save($user);

@@ -9,18 +9,19 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class ConfirmUserPasswordResetService extends UserService
 {
-    public function __invoke(ConfirmUserPasswordResetRequest $request)
+    public function __invoke(ConfirmUserPasswordResetRequest $request): void
     {
         $userId = $this->createIdFromPrimitive($request->getUserId());
-        $confirmationToken = new Token($request->getConfirmationToken());
-        $newPassword = $this->createPasswordFromPrimitive($request->getNewPassword());
-
         $user = $this->userRepository->ofId($userId);
         $this->ensureUserExists($user);
 
-        $this->validateConfirmationTokenFromRequest($user, $confirmationToken);
+        $confirmationToken = new Token($request->getConfirmationToken());
+        $this->validateConfirmationToken($user, $confirmationToken);
+
+        $newPassword = $this->createPasswordFromPrimitive($request->getNewPassword());
 
         $user->setConfirmationToken(null);
+        $user->setExpirationDate(null);
         $user->setPassword($newPassword);
 
         $this->userRepository->save($user);

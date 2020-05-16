@@ -9,7 +9,7 @@ use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 
 final class CreateCategory extends CategoryService
 {
-    public function __invoke(CreateCategoryRequest $request)
+    public function __invoke(CreateCategoryRequest $request): void
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);

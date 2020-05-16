@@ -7,9 +7,49 @@ security:
 
     firewalls:
 
-        users:
-            pattern:  ^/api/v1/users
+        search_user:
+            pattern:  ^/api/v1/users/[a-zA-Z0-9-]+$
+            methods: ['GET']
+            anonymous: true
+
+        search_users:
+            pattern:  ^/api/v1/users$
             methods: ['GET', 'POST']
+            anonymous: true
+
+        sign_in:
+            pattern:  ^/api/v1/users/sign_in$
+            methods: ['POST']
+            anonymous: true
+
+        token_refresh:
+            pattern:  ^/api/v1/users/token_refresh$
+            methods: ['POST']
+            anonymous: true
+
+        sign_out:
+            pattern:  ^/api/v1/users/sign_out$
+            methods: ['DELETE']
+            anonymous: true
+
+        email_confirmation:
+            pattern:  ^/api/v1/users/[a-zA-Z0-9-]+/email_confirmation
+            methods: ['POST']
+            anonymous: true
+
+        email_confirmation_request:
+            pattern:  ^/api/v1/users/email_confirmation
+            methods: ['POST']
+            anonymous: true
+
+        password_resetting_request:
+            pattern:  ^/api/v1/users/password_resetting
+            methods: ['POST']
+            anonymous: true
+
+        password_resetting:
+            pattern:  ^/api/v1/users/[a-zA-Z0-9-]+/password_resetting
+            methods: ['POST']
             anonymous: true
 
         api:

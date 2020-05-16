@@ -24,7 +24,8 @@ final class SearchCoursesByCriteriaService extends CourseService
         $filters = $this->createFiltersDependingByRoles($requestAuthor);
 
         if (null !== $request->getUserId()) {
-            $filters = $filters->add($this->createFilterByTeacherId($request->getUserId()));
+            $userId = $this->createIdFromPrimitive($request->getUserId());
+            $filters = $filters->add($this->createFilterByTeacherId($userId));
         }
 
         $criteria = new Criteria(
@@ -36,7 +37,6 @@ final class SearchCoursesByCriteriaService extends CourseService
         );
 
         $courses = $this->courseRepository->matching($criteria);
-
         $this->ensureCoursesExist($courses);
 
         return new CourseCollectionResponse(...$this->buildResponse(...$courses));

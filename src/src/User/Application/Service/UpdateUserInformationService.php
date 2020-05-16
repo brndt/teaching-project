@@ -20,11 +20,13 @@ final class UpdateUserInformationService extends UserService
 
         $this->ensureRequestAuthorIsUser($requestAuthor, $userToUpdate);
 
-        $this->ensureNewEmailIsAvailable($request->getEmail(), $userToUpdate->getEmail()->toString());
+        $email = $this->createEmailFromPrimitive($request->getEmail());
+        $this->ensureNewEmailIsAvailable($email, $userToUpdate->getEmail());
+
         $firstName = $this->createNameFromPrimitive($request->getFirstName());
         $lastName = $this->createNameFromPrimitive($request->getLastName());
         
-        $userToUpdate->setEmail($this->createEmailFromPrimitive($request->getEmail()));
+        $userToUpdate->setEmail($email);
         $userToUpdate->setFirstName($firstName);
         $userToUpdate->setLastName($lastName);
         $userToUpdate->setImage($request->getImage());

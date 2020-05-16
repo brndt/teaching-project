@@ -22,12 +22,11 @@ final class SendEmailConfirmationService extends UserService
     public function __invoke(SendEmailConfirmationRequest $request): void
     {
         $email = $this->createEmailFromPrimitive($request->getEmail());
-
         $user = $this->userRepository->ofEmail($email);
-
         $this->ensureUserExists($user);
 
         $user->setConfirmationToken(Token::generate());
+        $user->setExpirationDate(new \DateTimeImmutable('+1 day'));
 
         $this->userRepository->save($user);
 

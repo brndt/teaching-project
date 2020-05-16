@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
@@ -37,6 +38,15 @@ abstract class CategoryService
         }
     }
 
+    protected function createStatusFromPrimitive(string $status): Status
+    {
+        try {
+            return new Status($status);
+        } catch (InvalidArgumentException $error) {
+            throw new InvalidArgumentException($error->getMessage());
+        }
+    }
+
     protected function ensureRequestAuthorIsAdmin(User $requestAuthor): void
     {
         if (false === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
@@ -49,7 +59,7 @@ abstract class CategoryService
         $category = $this->categoryRepository->ofName($categoryName);
         if (null !== $category) {
             throw new CategoryAlreadyExists();
-        };
+        }
     }
 
     protected function ensureCategoryNameIsAvailable(string $oldCategoryName, string $newCategoryName): void
@@ -60,32 +70,24 @@ abstract class CategoryService
         };
     }
 
-    protected function ensureUserExists(User $user): void
+    protected function ensureUserExists(?User $user): void
     {
         if (null === $user) {
             throw new UserNotFoundException();
         }
     }
 
-    protected function ensureCategoriesExist(?array $categories): void
+    protected function ensureCategoriesExist(?Category...$categories): void
     {
         if (true === empty($categories)) {
             throw new CategoryNotFound();
         }
     }
 
-    protected function ensureCategoryExists(?Category $category) {
+    protected function ensureCategoryExists(?Category $category): void
+    {
         if (null === $category) {
             throw new CategoryNotFound();
-        }
-    }
-
-    protected function createStatusFromPrimitive(string $status)
-    {
-        try {
-            return new Status($status);
-        } catch (InvalidArgumentException $error) {
-            throw new InvalidArgumentException($error->getMessage());
         }
     }
 }

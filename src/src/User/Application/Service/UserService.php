@@ -8,10 +8,10 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -73,20 +73,29 @@ abstract class UserService
         }
     }
 
-    protected function ensureNewEmailIsAvailable(string $newEmail, string $oldEmail): void
-    {
-        $userWithNewEmail = $this->userRepository->ofEmail($this->createEmailFromPrimitive($newEmail));
-        if (null !== $userWithNewEmail && $newEmail !== $oldEmail) {
-            throw new UserAlreadyExistsException();
-        }
-    }
-
     protected function createRolesFromPrimitive(array $roles): Roles
     {
         try {
             return Roles::fromArrayOfPrimitives($roles);
         } catch (InvalidRoleException $exception) {
             throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+
+    protected function createNameFromPrimitive(string $name): Name
+    {
+        try {
+            return new Name($name);
+        } catch (InvalidNameException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+
+    protected function ensureNewEmailIsAvailable(Email $newEmail, Email $oldEmail): void
+    {
+        $userWithNewEmail = $this->userRepository->ofEmail($oldEmail);
+        if (null !== $userWithNewEmail && false === $newEmail->equalsTo($oldEmail)) {
+            throw new UserAlreadyExistsException();
         }
     }
 
@@ -118,10 +127,13 @@ abstract class UserService
         }
     }
 
-    protected function validateConfirmationTokenFromRequest(User $user, Token $tokenFromRequest): void
+    protected function validateConfirmationToken(User $user, Token $tokenFromRequest): void
     {
         if (null === $user->getConfirmationToken()) {
             throw new ConfirmationTokenNotFoundException();
+        }
+        if (true === $user->isConfirmationTokenExpired()) {
+            throw new ConfirmationTokenIsExpiredException();
         }
         if (false === $user->confirmationTokenEqualsTo($tokenFromRequest)) {
             throw new IncorrectConfirmationTokenException();
@@ -135,18 +147,10 @@ abstract class UserService
         }
     }
 
-    protected function ensureRolesAreValid(Roles $roles): void {
+    protected function ensureRolesDontContainsAdmin(Roles $roles): void
+    {
         if ($roles->contains(new Role(Role::ADMIN))) {
             throw new PermissionDeniedException();
         }
     }
-
-    protected function createNameFromPrimitive(string $name): Name {
-        try {
-            return new Name($name);
-        } catch (InvalidNameException $exception) {
-            throw new InvalidArgumentException($exception->getMessage());
-        }
-    }
-
 }

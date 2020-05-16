@@ -11,27 +11,29 @@ final class UpdateUserConnectionService extends UserConnectionService
     public function __invoke(UpdateUserConnectionRequest $request)
     {
         $authorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $userId = $this->createIdFromPrimitive($request->getUserId());
-        $friendId = $this->createIdFromPrimitive($request->getFriendId());
+        $requestAuthor = $this->userRepository->ofId($authorId);
+        $this->ensureUserExists($requestAuthor);
 
-        $firstUser = $this->searchUserById($userId);
-        $secondUser = $this->searchUserById($friendId);
+        $firstUserId = $this->createIdFromPrimitive($request->getFirstUser());
+        $firstUser = $this->userRepository->ofId($firstUserId);
+        $this->ensureUserExists($firstUser);
 
-        $specifier = $this->recognizeSpecifier($authorId, $firstUser, $secondUser);
+        $secondUserId = $this->createIdFromPrimitive($request->getSecondUser());
+        $secondUser = $this->userRepository->ofId($secondUserId);
+        $this->ensureUserExists($secondUser);
 
-        $this->ensureRequestAuthorIsTeacherOrStudent($specifier, $firstUser, $secondUser);
+        $newSpecifier = $this->identifySpecifier($authorId, $firstUser, $secondUser);
 
-        [$student, $teacher] = $this->verifyStudentAndTeacher($firstUser, $secondUser);
+        [$student, $teacher] = $this->identifyStudentAndTeacher($firstUser, $secondUser);
 
         $userConnection = $this->userConnectionRepository->ofId($student->getId(), $teacher->getId());
-
         $this->ensureConnectionExists($userConnection);
 
         $newState = $this->stateFactory->create($request->getStatus());
-        $isSpecifierChanged = $this->verifySpecifierChanged($specifier, $userConnection);
+        $isSpecifierChanged = $this->verifySpecifierChanged($newSpecifier->getId(), $userConnection->getSpecifierId());
 
         $userConnection->setState($newState, $isSpecifierChanged);
-        $userConnection->setSpecifierId($specifier->getId());
+        $userConnection->setSpecifierId($newSpecifier->getId());
 
         $this->userConnectionRepository->save($userConnection);
     }

@@ -22,13 +22,12 @@ final class SendPasswordResetService extends UserService
     public function __invoke(SendPasswordResetRequest $request): void
     {
         $email = $this->createEmailFromPrimitive($request->getEmail());
-
         $user = $this->userRepository->ofEmail($email);
-
         $this->ensureUserExists($user);
         $this->ensureUserEnabled($user);
 
         $user->setConfirmationToken(Token::generate());
+        $user->setExpirationDate(new \DateTimeImmutable('+1 day'));
 
         $this->userRepository->save($user);
 

@@ -30,6 +30,7 @@ final class User
     private ?string $education;
     private array $eventStream;
     private ?Token $confirmationToken;
+    private ?DateTimeImmutable $expirationDate;
 
     public function __construct(
         Uuid $id,
@@ -43,7 +44,8 @@ final class User
         ?string $image = null,
         ?string $experience = null,
         ?string $education = null,
-        ?Token $confirmationToken = null
+        ?Token $confirmationToken = null,
+        ?DateTimeImmutable $expirationDate = null
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -57,6 +59,7 @@ final class User
         $this->education = $education;
         $this->enabled = $enabled;
         $this->confirmationToken = $confirmationToken;
+        $this->expirationDate = $expirationDate;
     }
 
     public static function create(
@@ -246,5 +249,20 @@ final class User
     public function isInRole(Role $role): bool
     {
         return $this->roles->contains($role);
+    }
+
+    public function getExpirationDate(): ?DateTimeImmutable
+    {
+        return $this->expirationDate;
+    }
+
+    public function setExpirationDate(?DateTimeImmutable $expirationDate): void
+    {
+        $this->expirationDate = $expirationDate;
+    }
+
+    public function isConfirmationTokenExpired()
+    {
+        return $this->expirationDate <= new \DateTime();
     }
 }

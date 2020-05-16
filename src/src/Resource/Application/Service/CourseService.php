@@ -46,7 +46,7 @@ abstract class CourseService
         }
     }
 
-    protected function createStatusFromPrimitive(string $status)
+    protected function createStatusFromPrimitive(string $status): Status
     {
         try {
             return new Status($status);
@@ -62,7 +62,8 @@ abstract class CourseService
         }
     }
 
-    private function validateAuthorPermission(User $requestAuthor, User $user): bool {
+    private function validateAuthorPermission(User $requestAuthor, User $user): bool
+    {
         if (true === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
             return true;
         }
@@ -75,19 +76,20 @@ abstract class CourseService
         return false;
     }
 
-    protected function ensureTeacherHasPermissions(User $user, Course $course): void
+    protected function ensureRequestAuthorHasPermissionsToCourse(User $user, Course $course): void
     {
         if (false === $this->validateUserCoursePermission($user, $course)) {
             throw new PermissionDeniedException();
         }
     }
 
-    private function validateUserCoursePermission(User $user, Course $course): bool {
+    private function validateUserCoursePermission(User $user, Course $course): bool
+    {
         if (true === $user->isInRole(new Role(Role::ADMIN))) {
             return true;
         }
-        if (false === $user->idEqualsTo($course->getTeacherId())) {
-            return false;
+        if (true === $user->idEqualsTo($course->getTeacherId())) {
+            return true;
         }
         return false;
     }
@@ -99,40 +101,44 @@ abstract class CourseService
         }
     }
 
-    protected function ensureCategoryExists(?Uuid $categoryId)
+    protected function ensureCategoryExists(?Uuid $categoryId): void
     {
         if (null === $this->categoryRepository->ofId($categoryId)) {
             throw new CategoryNotFound();
         }
     }
 
-    protected function ensureCoursesExist(?array $courses)
+    protected function ensureCoursesExist(?Course... $courses): void
     {
         if (true === empty($courses)) {
             throw new CourseNotFoundException();
         }
     }
 
-    protected function ensureCourseExists(?Course $course)
+    protected function ensureCourseExists(?Course $course): void
     {
         if (null === $course) {
             throw new CourseNotFoundException();
         }
     }
 
-    protected function createFiltersDependingByRoles(User $user) {
+    protected function createFiltersDependingByRoles(User $user): Filters
+    {
         {
             if (true === $user->isInRole(new Role(Role::ADMIN))) {
                 return Filters::fromValues([]);
             }
             if (true === $user->isInRole(new Role(Role::TEACHER))) {
-                return Filters::fromValues([['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]]);
+                return Filters::fromValues(
+                    [['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]]
+                );
             }
             throw new PermissionDeniedException();
         }
     }
 
-    protected function createFilterByTeacherId(string $userId) {
-        return Filter::fromValues(['field' => 'teacherId', 'operator' => '=', 'value' => $userId]);
+    protected function createFilterByTeacherId(Uuid $userId): Filter
+    {
+        return Filter::fromValues(['field' => 'teacherId', 'operator' => '=', 'value' => $userId->toString()]);
     }
 }

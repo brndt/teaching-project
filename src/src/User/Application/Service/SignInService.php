@@ -13,10 +13,8 @@ final class SignInService extends UserService
     public function __invoke(SignInRequest $request): UserResponse
     {
         $email = $this->createEmailFromPrimitive($request->getEmail());
-
         $user = $this->userRepository->ofEmail($email);
         $this->ensureUserExists($user);
-
         $this->ensureUserEnabled($user);
         $this->verifyPassword($request->getPassword(), $user->getPassword());
 

@@ -8,28 +8,24 @@ use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
 
 final class UpdateCourseService extends CourseService
 {
-    public function __invoke(UpdateCourseRequest $request)
+    public function __invoke(UpdateCourseRequest $request): void
     {
-        $courseId = $this->createIdFromPrimitive($request->getId());
-
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $teacherId = $this->createIdFromPrimitive($request->getTeacherId());
-
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);
         $this->ensureUserExists($requestAuthor);
 
+        $teacherId = $this->createIdFromPrimitive($request->getTeacherId());
         $teacher = $this->userRepository->ofId($teacherId);
         $this->ensureUserExists($teacher);
-
-        $this->ensureRequestAuthorHasPermissions($requestAuthor, $teacher);
 
         $categoryId = $this->createIdFromPrimitive($request->getCategoryId());
         $this->ensureCategoryExists($categoryId);
 
+        $courseId = $this->createIdFromPrimitive($request->getId());
         $course = $this->courseRepository->ofId($courseId);
         $this->ensureCourseExists($course);
 
-        $this->ensureTeacherHasPermissions($teacher, $course);
+        $this->ensureRequestAuthorHasPermissionsToCourse($requestAuthor, $course);
 
         $course->setDescription($request->getDescription());
         $course->setLevel($request->getLevel());

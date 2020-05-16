@@ -8,7 +8,7 @@ use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
 
 final class UpdateCategory extends CategoryService
 {
-    public function __invoke(UpdateCategoryRequest $request)
+    public function __invoke(UpdateCategoryRequest $request): void
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);

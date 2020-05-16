@@ -9,7 +9,7 @@ use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 
 final class SearchCourseService extends CourseService
 {
-    public function __invoke(SearchCourseRequest $request)
+    public function __invoke(SearchCourseRequest $request): CourseResponse
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);
@@ -19,7 +19,7 @@ final class SearchCourseService extends CourseService
         $course = $this->courseRepository->ofId($courseId);
         $this->ensureCourseExists($course);
 
-        $this->ensureTeacherHasPermissions($requestAuthor, $course);
+        $this->ensureRequestAuthorHasPermissionsToCourse($requestAuthor, $course);
 
         return new CourseResponse(
             $course->getId()->toString(),

@@ -40,4 +40,9 @@ final class Email
             throw new InvalidEmailException();
         }
     }
+
+    public function equalsTo(self $email): bool
+    {
+        return $email->toString() === $this->toString();
+    }
 }

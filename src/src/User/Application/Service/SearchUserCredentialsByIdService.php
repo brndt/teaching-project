@@ -13,7 +13,6 @@ final class SearchUserCredentialsByIdService extends UserService
     public function __invoke(SearchUserCredentialsByIdRequest $request): UserCredentialsResponse
     {
         $userId = $this->createIdFromPrimitive($request->getUserId());
-
         $user = $this->userRepository->ofId($userId);
         $this->ensureUserExists($user);
 

@@ -28,7 +28,7 @@ final class CreateUserService extends UserService
         $lastName = $this->createNameFromPrimitive($request->getLastName());
 
         $roles = $this->createRolesFromPrimitive($request->getRoles());
-        $this->ensureRolesAreValid($roles);
+        $this->ensureRolesDontContainsAdmin($roles);
 
         $user = User::create(
             $this->userRepository->nextIdentity(),

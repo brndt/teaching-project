@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException;
@@ -39,14 +40,14 @@ abstract class RefreshTokenService
         }
     }
 
-    protected function ensureRefreshTokenExists(?RefreshToken $refreshToken)
+    protected function ensureRefreshTokenExists(?RefreshToken $refreshToken): void
     {
         if (null === $refreshToken) {
             throw new RefreshTokenNotFoundException();
         }
     }
 
-    protected function ensureRefreshTokenIsNotExpired(RefreshToken $refreshToken)
+    protected function ensureRefreshTokenIsNotExpired(RefreshToken $refreshToken): void
     {
         if (true === $refreshToken->isExpired()) {
             throw new RefreshTokenIsExpiredException();
@@ -59,10 +60,12 @@ abstract class RefreshTokenService
         return $this->tokenManager->generate($user);
     }
 
-    protected function searchRefreshToken(Token $token) {
-        if (null === $user = $this->refreshTokenRepository->ofToken($token)) {
+    protected function searchRefreshToken(Token $token): RefreshToken
+    {
+        $refreshToken = $this->refreshTokenRepository->ofToken($token);
+        if (null === $refreshToken) {
             throw new RefreshTokenNotFoundException();
         }
-        return $user;
+        return $refreshToken;
     }
 }
