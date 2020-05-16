@@ -30,7 +30,7 @@ final class UpdateTokensController extends AbstractFOSRestController
         $refreshToken = $paramFetcher->get('refresh_token');
 
         $refreshTokensResponse = ($this->updateRefreshTokenExpiration)(
-            new UpdateRefreshTokenExpirationRequest($refreshToken, new \DateTime('+ 2592000 seconds'))
+            new UpdateRefreshTokenExpirationRequest($refreshToken, new \DateTimeImmutable('+ 2592000 seconds'))
         );
 
         return $this->handleView($this->view($refreshTokensResponse, Response::HTTP_OK));

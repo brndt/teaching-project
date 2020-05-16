@@ -11,9 +11,9 @@ final class RefreshToken
 {
     private Token $refreshToken;
     private Uuid $userId;
-    private \DateTime $expirationDate;
+    private \DateTimeImmutable $expirationDate;
 
-    public function __construct(Token $refreshToken, Uuid $userId, \DateTime $expirationDate)
+    public function __construct(Token $refreshToken, Uuid $userId, \DateTimeImmutable $expirationDate)
     {
         $this->refreshToken = $refreshToken;
         $this->userId = $userId;
@@ -30,7 +30,7 @@ final class RefreshToken
         return $this->userId;
     }
 
-    public function getExpirationDate(): \DateTime
+    public function getExpirationDate(): \DateTimeImmutable
     {
         return $this->expirationDate;
     }
@@ -47,16 +47,14 @@ final class RefreshToken
         return $this;
     }
 
-    public function setValid(\DateTime $expirationDate): self
+    public function setValid(\DateTimeImmutable $expirationDate): void
     {
         $this->expirationDate = $expirationDate;
-
-        return $this;
     }
 
     public function isExpired()
     {
-        return $this->expirationDate <= new \DateTime();
+        return $this->expirationDate <= new \DateTimeImmutable();
     }
 
 }

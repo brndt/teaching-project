@@ -2,6 +2,6 @@
     <entity name="LaSalle\StudentTeacher\User\Domain\Aggregate\RefreshToken" table="refresh_tokens">
         <id name="refreshToken" type="token"/>
         <field name="userId" type="uuid" nullable="false"/>
-        <field name="expirationDate" type="datetime" nullable="false"/>
+        <field name="expirationDate" type="datetime_immutable" nullable="false"/>
     </entity>
 </doctrine-mapping>

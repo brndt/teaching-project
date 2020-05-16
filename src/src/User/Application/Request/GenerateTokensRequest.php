@@ -7,9 +7,9 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 final class GenerateTokensRequest
 {
     private string $userId;
-    private \DateTime $expirationDate;
+    private \DateTimeImmutable $expirationDate;
 
-    public function __construct(string $userId, \DateTime $expirationDate)
+    public function __construct(string $userId, \DateTimeImmutable $expirationDate)
     {
         $this->userId = $userId;
         $this->expirationDate = $expirationDate;
@@ -20,7 +20,7 @@ final class GenerateTokensRequest
         return $this->userId;
     }
 
-    public function getExpirationDate(): \DateTime
+    public function getExpirationDate(): \DateTimeImmutable
     {
         return $this->expirationDate;
     }

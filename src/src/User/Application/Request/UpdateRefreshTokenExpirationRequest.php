@@ -7,9 +7,9 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 final class UpdateRefreshTokenExpirationRequest
 {
     private string $refreshToken;
-    private \DateTime $newExpirationDate;
+    private \DateTimeImmutable $newExpirationDate;
 
-    public function __construct(string $refreshToken, \DateTime $newExpirationDate)
+    public function __construct(string $refreshToken, \DateTimeImmutable $newExpirationDate)
     {
         $this->refreshToken = $refreshToken;
         $this->newExpirationDate = $newExpirationDate;
@@ -20,7 +20,7 @@ final class UpdateRefreshTokenExpirationRequest
         return $this->refreshToken;
     }
 
-    public function getNewExpirationDate(): \DateTime
+    public function getNewExpirationDate(): \DateTimeImmutable
     {
         return $this->newExpirationDate;
     }

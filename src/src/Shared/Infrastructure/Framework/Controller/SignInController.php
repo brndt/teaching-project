@@ -38,7 +38,7 @@ final class SignInController extends AbstractFOSRestController
         $userResponse = ($this->signIn)(new SignInRequest($email, $password));
 
         $generateTokensResponse = ($this->generateTokens)(
-            new GenerateTokensRequest($userResponse->getId(), new \DateTime('+ 2592000 seconds'))
+            new GenerateTokensRequest($userResponse->getId(), new \DateTimeImmutable('+ 2592000 seconds'))
         );
 
         return $this->handleView($this->view($generateTokensResponse, Response::HTTP_CREATED));
