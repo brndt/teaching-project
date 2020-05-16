@@ -28,7 +28,7 @@ final class SignInService extends UserService
             $user->getFirstName()->toString(),
             $user->getLastName()->toString(),
             $user->getRoles()->getArrayOfPrimitives(),
-            $user->getCreated()->format('Y-m-d H:i:s'),
+            $user->getCreated(),
             $user->getImage(),
             $user->getExperience(),
             $user->getEducation(),

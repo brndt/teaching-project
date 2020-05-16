@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Response;
 
+use DateTimeImmutable;
+
 final class UserResponse
 {
     private string $id;
     private string $firstName;
     private string $lastName;
     private array $roles;
-    private string $created;
+    private \DateTimeImmutable $created;
     private ?string $image;
     private ?string $education;
     private ?string $experience;
@@ -20,7 +22,7 @@ final class UserResponse
         string $firstName,
         string $lastName,
         array $roles,
-        string $created,
+        DateTimeImmutable $created,
         ?string $image,
         ?string $experience,
         ?string $education
@@ -55,7 +57,7 @@ final class UserResponse
         return $this->roles;
     }
 
-    public function getCreated(): string
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }

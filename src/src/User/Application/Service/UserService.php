@@ -57,9 +57,9 @@ abstract class UserService
         }
     }
 
-    protected function verifyPassword(string $oldPassword, Password $userPassword): void
+    protected function verifyPassword(string $plainPassword, Password $userPassword): void
     {
-        if (false === Password::verify($oldPassword, $userPassword)) {
+        if (false === Password::verify($plainPassword, $userPassword)) {
             throw new IncorrectPasswordException();
         }
     }

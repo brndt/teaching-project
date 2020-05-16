@@ -24,6 +24,8 @@ final class CreateUserService extends UserService
         $email = $this->createEmailFromPrimitive($request->getEmail());
         $this->ensureUserDoesntExistByEmail($email);
 
+        $password = $this->createPasswordFromPrimitive($request->getPassword());
+
         $firstName = $this->createNameFromPrimitive($request->getFirstName());
         $lastName = $this->createNameFromPrimitive($request->getLastName());
 
@@ -33,10 +35,10 @@ final class CreateUserService extends UserService
         $user = User::create(
             $this->userRepository->nextIdentity(),
             $email,
-            $this->createPasswordFromPrimitive($request->getPassword()),
+            $password,
             $firstName,
             $lastName,
-            $this->createRolesFromPrimitive($request->getRoles()),
+            $roles,
             $request->getCreated(),
             false
         );

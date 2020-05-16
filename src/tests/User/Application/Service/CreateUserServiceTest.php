@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
-use LaSalle\StudentTeacher\Shared\Application\Exception\InvalidArgumentValidationException;
+use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
@@ -20,7 +20,7 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-final class CreateUserTest extends TestCase
+final class CreateUserServiceTest extends TestCase
 {
     private CreateUserService $createUser;
     private MockObject $repository;
@@ -33,23 +33,17 @@ final class CreateUserTest extends TestCase
         $this->createUser = new CreateUserService($this->repository, $this->eventBus);
     }
 
-    public function testWhenUserAlreadyExistsThenThrowException()
-    {
-        $this->repository->method('ofEmail')->willReturn($this->anyValidUser());
-        $this->expectException(UserAlreadyExistsException::class);
-        ($this->createUser)($this->anyValidUserRequest());
-    }
-
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
         $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($this->anyUserRequestWithInvalidEmail());
     }
 
-    public function testWhenUserRoleIsInvalidThenThrowException()
+    public function testWhenUserAlreadyExistsThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
-        ($this->createUser)($this->anyUserRequestWithInvalidRole());
+        $this->repository->method('ofEmail')->willReturn($this->anyValidUser());
+        $this->expectException(UserAlreadyExistsException::class);
+        ($this->createUser)($this->anyValidUserRequest());
     }
 
     public function testWhenUserPasswordIsInvalidThenThrowException()
@@ -70,14 +64,34 @@ final class CreateUserTest extends TestCase
         ($this->createUser)($this->anyUserRequestWithInvalidLetterContaining());
     }
 
-    public function testWhenRequestIsValidThenCreateUser()
+    public function testWhenFirstNameIsInvalidThenThrowException()
     {
-        $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($this->anyValidUser())));
-        ($this->createUser)($this->anyValidUserRequest());
+        $this->expectException(InvalidArgumentException::class);
+        ($this->createUser)($this->anyUserRequestWithInvalidFirstName());
     }
 
-    public function testWhenUserIsCreatedThenDispatchDomainEvent()
+    public function testWhenLastNameIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        ($this->createUser)($this->anyUserRequestWithInvalidLastName());
+    }
+
+    public function testWhenUserRoleIsInvalidThenThrowException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        ($this->createUser)($this->anyUserRequestWithInvalidRole());
+    }
+
+    public function testWhenUserRoleIsAdminThenThrowException()
+    {
+        $this->expectException(PermissionDeniedException::class);
+        ($this->createUser)($this->anyUserRequestWithAdminRole());
+    }
+
+    public function testWhenRequestIsValidThenCreateUser()
+    {
+        $this->repository->expects($this->once())->method('ofEmail')->willReturn(null);
+        $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($this->anyValidUser())));
         $this->eventBus->expects($this->atLeastOnce())->method('dispatch');
         ($this->createUser)($this->anyValidUserRequest());
     }
@@ -132,6 +146,18 @@ final class CreateUserTest extends TestCase
         );
     }
 
+    private function anyUserRequestWithAdminRole(): CreateUserRequest
+    {
+        return new CreateUserRequest(
+            'user@example.com',
+            '123456aa',
+            'Alex',
+            'Johnson',
+            ['admin'],
+            new \DateTimeImmutable('2020-04-27')
+        );
+    }
+
     private function anyUserRequestWithInvalidPasswordLength(): CreateUserRequest
     {
         return new CreateUserRequest(
@@ -163,6 +189,30 @@ final class CreateUserTest extends TestCase
             '123456789',
             'Alex',
             'Johnson',
+            ['teacher'],
+            new \DateTimeImmutable()
+        );
+    }
+
+    private function anyUserRequestWithInvalidFirstName(): CreateUserRequest
+    {
+        return new CreateUserRequest(
+            'user@example.com',
+            '123456aa',
+            'Alex.',
+            'Johnson',
+            ['teacher'],
+            new \DateTimeImmutable()
+        );
+    }
+
+    private function anyUserRequestWithInvalidLastName(): CreateUserRequest
+    {
+        return new CreateUserRequest(
+            'user@example.com',
+            '123456aa',
+            'Alex',
+            'Johnson ',
             ['teacher'],
             new \DateTimeImmutable()
         );
