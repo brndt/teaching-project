@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\GenerateTokensRequest;
 use LaSalle\StudentTeacher\User\Application\Response\TokensResponse;
@@ -28,16 +29,19 @@ final class GenerateTokensServiceTest extends TestCase
     private MockObject $refreshTokenRepository;
     private MockObject $tokenManager;
     private MockObject $userRepository;
+    private MockObject $randomStringGenerator;
 
     public function setUp(): void
     {
         $this->refreshTokenRepository = $this->createMock(RefreshTokenRepository::class);
         $this->tokenManager = $this->createMock(TokenManager::class);
         $this->userRepository = $this->createMock(UserRepository::class);
+        $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
         $this->generateTokensService = new GenerateTokensService(
             $this->refreshTokenRepository,
             $this->tokenManager,
-            $this->userRepository
+            $this->userRepository,
+            $this->randomStringGenerator
         );
     }
 
@@ -49,7 +53,7 @@ final class GenerateTokensServiceTest extends TestCase
 
     public function testWhenRequestIsValidThenGenerateTokens()
     {
-        $this->refreshTokenRepository->expects($this->once())->method('nextIdentity')->willReturn(new Token('0b85915412eb5308cc49f7568b1fd48881ba4a5dd8eda4aa13b3bb4d8c7cac37a6195cf53306a9ccf20c12f1ed256b392bcbc8b1e6515753e04b7e4cc7b45a7b'));
+        $this->randomStringGenerator->method('generate')->willReturn('random_token');
         $this->refreshTokenRepository->expects($this->once())->method('save')->with(
             $this->equalTo($this->anyValidRefreshToken())
         );
@@ -79,7 +83,7 @@ final class GenerateTokensServiceTest extends TestCase
     private function anyValidRefreshToken(): RefreshToken
     {
         return new RefreshToken(
-            new Token('0b85915412eb5308cc49f7568b1fd48881ba4a5dd8eda4aa13b3bb4d8c7cac37a6195cf53306a9ccf20c12f1ed256b392bcbc8b1e6515753e04b7e4cc7b45a7b'),
+            new Token('random_token'),
             new Uuid('cfe849f3-7832-435a-b484-83fabf530794'),
             new \DateTimeImmutable('2020-04-28 15:00:00')
         );

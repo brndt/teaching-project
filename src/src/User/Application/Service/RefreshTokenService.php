@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
+use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException;
@@ -20,15 +21,18 @@ abstract class RefreshTokenService
     protected RefreshTokenRepository $refreshTokenRepository;
     protected TokenManager $tokenManager;
     protected UserRepository $userRepository;
+    protected RandomStringGenerator $randomStringGenerator;
 
     public function __construct(
         RefreshTokenRepository $refreshTokenRepository,
         TokenManager $tokenManager,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        RandomStringGenerator $randomStringGenerator
     ) {
         $this->refreshTokenRepository = $refreshTokenRepository;
         $this->tokenManager = $tokenManager;
         $this->userRepository = $userRepository;
+        $this->randomStringGenerator = $randomStringGenerator;
     }
 
     protected function createIdFromPrimitive(string $uuid): Uuid

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\DeleteRefreshTokenRequest;
@@ -21,6 +22,7 @@ final class DeleteRefreshTokenServiceTest extends TestCase
     private MockObject $refreshTokenRepository;
     private MockObject $tokenManager;
     private MockObject $userRepository;
+    private MockObject $randomStringGenerator;
     private DeleteRefreshTokenService $deleteRefreshTokenService;
 
     public function setUp(): void
@@ -28,10 +30,12 @@ final class DeleteRefreshTokenServiceTest extends TestCase
         $this->refreshTokenRepository = $this->createMock(RefreshTokenRepository::class);
         $this->tokenManager = $this->createMock(TokenManager::class);
         $this->userRepository = $this->createMock(UserRepository::class);
+        $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
         $this->deleteRefreshTokenService = new DeleteRefreshTokenService(
             $this->refreshTokenRepository,
             $this->tokenManager,
-            $this->userRepository
+            $this->userRepository,
+            $this->randomStringGenerator
         );
     }
 

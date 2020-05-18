@@ -42,9 +42,9 @@ final class UpdateUserPasswordServiceTest extends TestCase
     {
         $this->expectException(UserNotFoundException::class);
         $this->repository->expects($this->once())->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getRequestAuthorId()
+            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
         )->willReturn(null);
-        ($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequest());
+        ($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest());
     }
 
     public function testWhenUserIdIsInvalidThenThrowException()
@@ -60,12 +60,12 @@ final class UpdateUserPasswordServiceTest extends TestCase
     {
         $this->expectException(UserNotFoundException::class);
         $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getRequestAuthorId()
+            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
         )->willReturn($this->anyValidAuthor());
         $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getUserId()
+            $this->anyValidUpdateUserPasswordRequest()->getUserId()
         )->willReturn(null);
-        ($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequest());
+        ($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest());
     }
 
     public function testWhenOldPasswordIsNotCorrectThanThrowException()
@@ -84,29 +84,29 @@ final class UpdateUserPasswordServiceTest extends TestCase
     {
         $this->expectException(PermissionDeniedException::class);
         $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getRequestAuthorId()
+            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
         )->willReturn($this->anyValidAuthor());
         $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getUserId()
+            $this->anyValidUpdateUserPasswordRequest()->getUserId()
         )->willReturn($this->anyValidUser());
-        ($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequest());
+        ($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest());
     }
 
     public function testWhenRequestIsValidThenUpdatePassword()
     {
         $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getRequestAuthorId()
+            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
         )->willReturn($this->anyValidUser());
         $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequest()->getUserId()
+            $this->anyValidUpdateUserPasswordRequest()->getUserId()
         )->willReturn($this->anyValidUser());
         $expectedUserToUpdate = $this->anyValidUser();
-        $expectedUserToUpdate->setPassword(Password::fromPlainPassword($this->anyUpdateUserPasswordRequest()->getNewPassword()));
+        $expectedUserToUpdate->setPassword(Password::fromPlainPassword($this->anyValidUpdateUserPasswordRequest()->getNewPassword()));
         $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($expectedUserToUpdate)));
-        $this->assertNull(($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequest()));
+        $this->assertNull(($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest()));
     }
 
-    private function anyUpdateUserPasswordRequest(): UpdateUserPasswordRequest
+    private function anyValidUpdateUserPasswordRequest(): UpdateUserPasswordRequest
     {
         return new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',

@@ -7,6 +7,7 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 use LaSalle\StudentTeacher\User\Application\Request\GenerateTokensRequest;
 use LaSalle\StudentTeacher\User\Application\Response\TokensResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\RefreshToken;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class GenerateTokensService extends RefreshTokenService
 {
@@ -15,7 +16,9 @@ final class GenerateTokensService extends RefreshTokenService
         $userId = $this->createIdFromPrimitive($request->getUserId());
         $expirationDate = $request->getExpirationDate();
 
-        $refreshToken = new RefreshToken($this->refreshTokenRepository->nextIdentity(), $userId, $expirationDate);
+        $token = new Token($this->randomStringGenerator->generate());
+
+        $refreshToken = new RefreshToken($token, $userId, $expirationDate);
 
         $this->refreshTokenRepository->save($refreshToken);
 

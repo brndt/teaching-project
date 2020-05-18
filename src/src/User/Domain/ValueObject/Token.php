@@ -8,11 +8,6 @@ final class Token
 {
     private string $token;
 
-    public static function generate(): self
-    {
-        return new self(bin2hex(openssl_random_pseudo_bytes(64)));
-    }
-
     public function __construct(string $token)
     {
         $this->setValue($token);

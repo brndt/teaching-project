@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
+use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException;
 use LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException;
@@ -29,6 +30,7 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
     private MockObject $refreshTokenRepository;
     private MockObject $tokenManager;
     private MockObject $userRepository;
+    private MockObject $randomStringGenerator;
     private UpdateRefreshTokenExpirationService $updateRefreshTokenExpirationService;
 
     public function setUp(): void
@@ -36,7 +38,8 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
         $this->refreshTokenRepository = $this->createMock(RefreshTokenRepository::class);
         $this->tokenManager = $this->createMock(TokenManager::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->updateRefreshTokenExpirationService = new UpdateRefreshTokenExpirationService($this->refreshTokenRepository, $this->tokenManager, $this->userRepository);
+        $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
+        $this->updateRefreshTokenExpirationService = new UpdateRefreshTokenExpirationService($this->refreshTokenRepository, $this->tokenManager, $this->userRepository, $this->randomStringGenerator);
     }
 
     public function testWhenRefreshTokenNotFoundThenThrowException()

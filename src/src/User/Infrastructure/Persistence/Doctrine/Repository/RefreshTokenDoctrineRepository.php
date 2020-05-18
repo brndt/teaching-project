@@ -38,9 +38,4 @@ final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
         $this->entityManager->persist($token);
         $this->entityManager->flush();
     }
-
-    public function nextIdentity(): Token
-    {
-        return Token::generate();
-    }
 }
