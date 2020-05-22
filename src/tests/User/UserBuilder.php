@@ -55,6 +55,41 @@ final class UserBuilder
         return $this;
     }
 
+    public function withEmail(Email $email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function withPassword(Password $password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function withFirstName(Name $name)
+    {
+        $this->firstName = $name;
+
+        return $this;
+    }
+
+    public function withLastName(Name $name)
+    {
+        $this->lastName = $name;
+
+        return $this;
+    }
+
+    public function withCreated(DateTimeImmutable $created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
     public function withRoles(Roles $roles)
     {
         $this->roles = $roles;

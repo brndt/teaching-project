@@ -77,7 +77,9 @@ final class CreateUserConnectionServiceTest extends TestCase
             'cfe849f3-7832-435a-b484-83fabf530794-invalid',
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
 
         $this->expectException(InvalidArgumentException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -93,7 +95,9 @@ final class CreateUserConnectionServiceTest extends TestCase
             'cfe849f3-7832-435a-b484-83fabf530794',
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -113,8 +117,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138-invalid'
         );
 
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->build();
 
         $this->expectException(InvalidArgumentException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -133,8 +141,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             'cfe849f3-7832-435a-b484-83fabf530794',
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'
         );
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->build();
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -156,9 +168,15 @@ final class CreateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->build();
-        $secondUser = (new UserBuilder())->withId(new Uuid($request->getSecondUser()))->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->build();
+        $secondUser = (new UserBuilder())
+            ->withId(new Uuid($request->getSecondUser()))
+            ->build();
 
         $this->expectException(UsersAreEqualException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -181,13 +199,17 @@ final class CreateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
 
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::TEACHER])
-        )->build();
-        $secondUser = (new UserBuilder())->withId(new Uuid($request->getSecondUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::TEACHER])
-        )->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
+        $secondUser = (new UserBuilder())
+            ->withId(new Uuid($request->getSecondUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
 
         $this->expectException(RolesOfUsersEqualException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -210,13 +232,17 @@ final class CreateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
 
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::ADMIN])
-        )->build();
-        $secondUser = (new UserBuilder())->withId(new Uuid($request->getSecondUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::TEACHER])
-        )->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
+            ->build();
+        $secondUser = (new UserBuilder())
+            ->withId(new Uuid($request->getSecondUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
 
         $this->expectException(PermissionDeniedException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
@@ -239,13 +265,17 @@ final class CreateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
 
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::STUDENT])
-        )->build();
-        $secondUser = (new UserBuilder())->withId(new Uuid($request->getSecondUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::TEACHER])
-        )->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::STUDENT]))
+            ->build();
+        $secondUser = (new UserBuilder())
+            ->withId(new Uuid($request->getSecondUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
 
         $userConnection = new UserConnection($firstUser->getId(), $secondUser->getId(), new Pended(), $author->getId());
 
@@ -272,13 +302,17 @@ final class CreateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138'
         );
 
-        $author = (new UserBuilder())->withId(new Uuid($request->getRequestAuthorId()))->build();
-        $firstUser = (new UserBuilder())->withId(new Uuid($request->getFirstUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::STUDENT])
-        )->build();
-        $secondUser = (new UserBuilder())->withId(new Uuid($request->getSecondUser()))->withRoles(
-            Roles::fromArrayOfPrimitives([Role::TEACHER])
-        )->build();
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::STUDENT]))
+            ->build();
+        $secondUser = (new UserBuilder())
+            ->withId(new Uuid($request->getSecondUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
 
         $userConnection = new UserConnection($firstUser->getId(), $secondUser->getId(), new Pended(), $author->getId());
 
