@@ -26,9 +26,9 @@ final class Roles
         );
     }
 
-    public static function fromArrayOfRole(Role...$roles)
+    public static function fromArrayOfRole(Role ...$roles)
     {
-        return new self($roles);
+        return new self(...$roles);
     }
 
     public function getArrayOfPrimitives(): array

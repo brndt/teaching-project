@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Enum;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 
-final class Role
+final class Role extends Enum
 {
     private string $role;
 
@@ -14,40 +15,12 @@ final class Role
     public const TEACHER = 'teacher';
     public const ADMIN = 'admin';
 
-    public function __construct(string $role)
+    protected function throwExceptionForInvalidValue($value)
     {
-        $this->setValue($role);
+        throw new InvalidRoleException();
     }
 
-    public function toString(): string
-    {
-        return $this->role;
-    }
-
-    public function __toString()
-    {
-        return $this->role;
-    }
-
-    public static function ArrayOfRole(): array
-    {
-        return [
-            self::STUDENT,
-            self::TEACHER,
-            self::ADMIN
-        ];
-    }
-
-    private function setValue(string $role)
-    {
-        $this->assertValueInArray($role);
-        $this->role = $role;
-    }
-
-    private function assertValueInArray(string $role): void
-    {
-        if (false === in_array($role, $this->ArrayOfRole())) {
-            throw new InvalidRoleException();
-        }
+    public function toString(): string {
+        return $this->value;
     }
 }

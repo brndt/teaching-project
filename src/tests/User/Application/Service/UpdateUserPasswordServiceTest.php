@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserPasswordService;
@@ -101,8 +100,12 @@ final class UpdateUserPasswordServiceTest extends TestCase
             $this->anyValidUpdateUserPasswordRequest()->getUserId()
         )->willReturn($this->anyValidUser());
         $expectedUserToUpdate = $this->anyValidUser();
-        $expectedUserToUpdate->setPassword(Password::fromPlainPassword($this->anyValidUpdateUserPasswordRequest()->getNewPassword()));
-        $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($expectedUserToUpdate)));
+        $expectedUserToUpdate->setPassword(
+            Password::fromPlainPassword($this->anyValidUpdateUserPasswordRequest()->getNewPassword())
+        );
+        $this->repository->expects($this->once())->method('save')->with(
+            $this->callback($this->userComparator($expectedUserToUpdate))
+        );
         $this->assertNull(($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest()));
     }
 

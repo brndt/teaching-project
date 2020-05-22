@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 
-final class StateFactory
+class StateFactory
 {
     public function create(string $state): State
     {
