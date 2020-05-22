@@ -22,7 +22,7 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Test\LaSalle\StudentTeacher\User\UserBuilder;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class CreateUserConnectionServiceTest extends TestCase
 {

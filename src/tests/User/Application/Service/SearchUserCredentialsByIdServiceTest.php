@@ -18,6 +18,7 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class SearchUserCredentialsByIdServiceTest extends TestCase
 {
@@ -32,67 +33,40 @@ final class SearchUserCredentialsByIdServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $request = new SearchUserCredentialsByIdRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid');
+
         $this->expectException(InvalidArgumentException::class);
-        ($this->searchUserCredentialsByIdService)($this->anyRequestWithInvalidUserId());
+        ($this->searchUserCredentialsByIdService)($request);
     }
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
+        $request = new SearchUserCredentialsByIdRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753');
+
         $this->expectException(UserNotFoundException::class);
         $this->repository->expects($this->once())->method('ofId')->with(
-            $this->anyValidRequest()->getUserId()
+            $request->getUserId()
         )->willReturn(null);
-        ($this->searchUserCredentialsByIdService)($this->anyValidRequest());
+        ($this->searchUserCredentialsByIdService)($request);
     }
 
     public function testWhenRequestIsValidThenReturnUserCreadentials()
     {
-        $user = $this->anyValidUser();
-
-        $this->repository->expects($this->once())->method('ofId')->with(
-            $this->anyValidUser()->getId()
-        )->willReturn($user);
-
-        $userCredentialsResponse = ($this->searchUserCredentialsByIdService)($this->anyValidRequest());
-        $this->assertEquals($this->anyValidUserCredentialsResponse(), $userCredentialsResponse);
-    }
-
-    private function anyValidUser(): User
-    {
-        return new User(
-            new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
-            new Email('user@example.com'),
-            Password::fromHashedPassword('$2y$10$p7s2XiFvYtXIJIfkZxyyMuMUn7/7TDnDBmCXRXOWienN45/oph1we'),
-            new Name('Alex'),
-            new Name('Johnson'),
-            Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27'),
-            false
+        $request = new SearchUserCredentialsByIdRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753');
+        $user = (new UserBuilder())
+            ->withId(new Uuid($request->getUserId()))
+            ->build();
+        $expectedUserCredentialsResponse = new UserCredentialsResponse(
+            $user->getId()->toString(),
+            $user->getEmail()->toString(),
+            $user->getPassword()->toString(),
+            $user->getRoles()->getArrayOfPrimitives(),
+            $user->getEnabled(),
         );
-    }
 
-    private function anyValidUserCredentialsResponse(): UserCredentialsResponse
-    {
-        return new UserCredentialsResponse(
-            $this->anyValidUser()->getId()->toString(),
-            $this->anyValidUser()->getEmail()->toString(),
-            $this->anyValidUser()->getPassword()->toString(),
-            $this->anyValidUser()->getRoles()->getArrayOfPrimitives(),
-            $this->anyValidUser()->getEnabled(),
-        );
-    }
+        $this->repository->expects($this->once())->method('ofId')->with($user->getId())->willReturn($user);
+        $userCredentialsResponse = ($this->searchUserCredentialsByIdService)($request);
 
-    private function anyRequestWithInvalidUserId(): SearchUserCredentialsByIdRequest
-    {
-        return new SearchUserCredentialsByIdRequest(
-            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
-        );
-    }
-
-    private function anyValidRequest(): SearchUserCredentialsByIdRequest
-    {
-        return new SearchUserCredentialsByIdRequest(
-            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
-        );
+        $this->assertEquals($expectedUserCredentialsResponse, $userCredentialsResponse);
     }
 }

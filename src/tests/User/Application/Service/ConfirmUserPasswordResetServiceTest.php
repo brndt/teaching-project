@@ -19,7 +19,7 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Test\LaSalle\StudentTeacher\User\UserBuilder;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class ConfirmUserPasswordResetServiceTest extends TestCase
 {

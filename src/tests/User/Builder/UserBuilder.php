@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\LaSalle\StudentTeacher\User;
+namespace Test\LaSalle\StudentTeacher\User\Builder;
 
 use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -48,73 +48,81 @@ final class UserBuilder
         $this->expirationDate = new DateTimeImmutable('+1 day');
     }
 
-    public function withId(Uuid $id)
+    public function withId(Uuid $id): UserBuilder
     {
         $this->id = $id;
-
         return $this;
     }
 
-    public function withEmail(Email $email)
+    public function withEmail(Email $email): UserBuilder
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function withPassword(Password $password)
+    public function withPassword(Password $password): UserBuilder
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function withFirstName(Name $name)
+    public function withFirstName(Name $firstName): UserBuilder
     {
-        $this->firstName = $name;
-
+        $this->firstName = $firstName;
         return $this;
     }
 
-    public function withLastName(Name $name)
+    public function withLastName(Name $lastName): UserBuilder
     {
-        $this->lastName = $name;
-
+        $this->lastName = $lastName;
         return $this;
     }
 
-    public function withCreated(DateTimeImmutable $created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    public function withRoles(Roles $roles)
+    public function withRoles(Roles $roles): UserBuilder
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    public function withConfirmationToken(?Token $confirmationToken)
+    public function withCreated(DateTimeImmutable $created): UserBuilder
     {
-        $this->confirmationToken = $confirmationToken;
-
+        $this->created = $created;
         return $this;
     }
 
-    public function withExpirationDate(?DateTimeImmutable $expirationDate)
-    {
-        $this->expirationDate = $expirationDate;
-
-        return $this;
-    }
-
-    public function withEnabled(bool $enabled)
+    public function withEnabled(bool $enabled): UserBuilder
     {
         $this->enabled = $enabled;
+        return $this;
+    }
 
+    public function withImage(?string $image): UserBuilder
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function withExperience(?string $experience): UserBuilder
+    {
+        $this->experience = $experience;
+        return $this;
+    }
+
+    public function withEducation(?string $education): UserBuilder
+    {
+        $this->education = $education;
+        return $this;
+    }
+
+    public function withConfirmationToken(?Token $confirmationToken): UserBuilder
+    {
+        $this->confirmationToken = $confirmationToken;
+        return $this;
+    }
+
+    public function withExpirationDate(?DateTimeImmutable $expirationDate): UserBuilder
+    {
+        $this->expirationDate = $expirationDate;
         return $this;
     }
 
