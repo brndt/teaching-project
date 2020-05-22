@@ -40,10 +40,10 @@ final class SearchUserConnectionsByCriteriaService extends UserConnectionService
         $this->ensureConnectionsExist($connections);
 
         if (true === $user->isInRole(new Role(Role::STUDENT))) {
-            return new UserConnectionCollectionResponse(...$this->buildStudentResponse());
+            return new UserConnectionCollectionResponse(...$this->buildStudentResponse(...$connections));
         }
 
-        return new UserConnectionCollectionResponse(...$this->buildTeacherResponse());
+        return new UserConnectionCollectionResponse(...$this->buildTeacherResponse(...$connections));
     }
 
     private function buildStudentResponse(UserConnection ...$connections): array
