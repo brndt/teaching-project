@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
 
 final class Pended implements State
@@ -13,13 +12,23 @@ final class Pended implements State
 
     public function ensureCanBeChanged(State $newState, bool $isSpecifierChanged): void
     {
-        if (
-            true !== ($newState instanceof Withdrawn && false === $isSpecifierChanged) ||
-            true !== $newState instanceof Approved && true === $isSpecifierChanged ||
-            true !== ($newState instanceof Rejected) && true === $isSpecifierChanged
-        ) {
+        if (false === $this->verifyIfCanBeChanged($newState, $isSpecifierChanged)) {
             throw new InvalidStateException("Can only approve or reject if you react or withdraw if not");
         }
+    }
+
+    private function verifyIfCanBeChanged(State $newState, bool $isSpecifierChanged): bool
+    {
+        if ($newState instanceof Withdrawn && false === $isSpecifierChanged) {
+            return true;
+        }
+        if ($newState instanceof Approved && true === $isSpecifierChanged) {
+            return true;
+        }
+        if ($newState instanceof Rejected && true === $isSpecifierChanged) {
+            return true;
+        }
+        return false;
     }
 
     public function __toString()
