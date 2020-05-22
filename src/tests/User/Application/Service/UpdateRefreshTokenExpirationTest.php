@@ -24,6 +24,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Test\LaSalle\StudentTeacher\User\Builder\RefreshTokenBuilder;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class UpdateRefreshTokenExpirationTest extends TestCase
 {
@@ -44,50 +46,50 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
 
     public function testWhenRefreshTokenNotFoundThenThrowException()
     {
+        $request = new UpdateRefreshTokenExpirationRequest('token_string', new DateTimeImmutable('+ 1 day'));
+
         $this->expectException(RefreshTokenNotFoundException::class);
         $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn(null);
-        ($this->updateRefreshTokenExpirationService)($this->anyValidRefreshTokenRequest());
+        ($this->updateRefreshTokenExpirationService)($request);
     }
 
     public function testWhenRefreshTokenIsExpiredThenThrowException()
     {
+        $request = new UpdateRefreshTokenExpirationRequest('token_string', new DateTimeImmutable('+ 1 day'));
+        $refreshToken = (new RefreshTokenBuilder())
+            ->withExpirationDate(new DateTimeImmutable())
+            ->build();
+
         $this->expectException(RefreshTokenIsExpiredException::class);
-        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($this->anyExpiredRefreshToken());
-        ($this->updateRefreshTokenExpirationService)($this->anyValidRefreshTokenRequest());
+        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($refreshToken);
+        ($this->updateRefreshTokenExpirationService)($request);
     }
 
     public function testWhenRequestIsValidThenUpdateRefreshTokenExpiration()
     {
-        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($this->anyValidRefreshToken());
-        $this->refreshTokenRepository->expects($this->once())->method('save')->with($this->callback($this->refreshTokenComparator($this->anyValidRefreshToken())));
-        $this->userRepository->expects($this->once())->method('ofId')->with($this->equalTo($this->anyValidRefreshToken()->getUserId()))->willReturn($this->anyValidUser());
-        $this->tokenManager->expects($this->once())->method('generate')->with($this->callback($this->userComparator($this->anyValidUser())))->willReturn('token_string');
+        $request = new UpdateRefreshTokenExpirationRequest('token_string', new DateTimeImmutable('+ 1 day'));
+        $refreshToken = (new RefreshTokenBuilder())
+            ->withRefreshToken(new Token($request->getRefreshToken()))
+            ->withUserId(Uuid::generate())
+            ->withExpirationDate(new DateTimeImmutable('+ 1 day'))
+            ->build();
+        $user = (new UserBuilder())
+            ->withId($refreshToken->getUserId())
+            ->build();
+        $expectedTokensResponse =  new TokensResponse('token_string', $refreshToken->getRefreshToken()->toString());
 
-        $tokensResponse = ($this->updateRefreshTokenExpirationService)($this->anyValidRefreshTokenRequest());
-        $this->assertTokensResponsesAreEqual($this->anyValidTokensResponse(), $tokensResponse);
+        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($refreshToken);
+        $this->refreshTokenRepository->expects($this->once())->method('save')->with($this->callback($this->refreshTokenComparator($refreshToken)));
+        $this->userRepository->expects($this->once())->method('ofId')->with($this->equalTo($refreshToken->getUserId()))->willReturn($user);
+        $this->tokenManager->expects($this->once())->method('generate')->with($this->callback($this->userComparator($user)))->willReturn('token_string');
+
+        $tokensResponse = ($this->updateRefreshTokenExpirationService)($request);
+        $this->assertTokensResponsesAreEqual($expectedTokensResponse, $tokensResponse);
     }
 
     private function assertTokensResponsesAreEqual(TokensResponse $firstTokenResponse, TokensResponse $secondTokenResponse) {
         $this->assertEquals($firstTokenResponse->getRefreshToken(), $secondTokenResponse->getRefreshToken());
         $this->assertEqualsWithDelta($firstTokenResponse->getRefreshToken(), $secondTokenResponse->getRefreshToken(), 60);
-    }
-
-    private function anyValidRefreshToken(): RefreshToken
-    {
-        return new RefreshToken(new Token($this->anyValidRefreshTokenRequest()->getRefreshToken()), new Uuid('48d34c63-6bba-4c72-a461-8aac1fd7d138'), $this->anyValidRefreshTokenRequest()->getNewExpirationDate());
-    }
-
-    private function anyExpiredRefreshToken(): RefreshToken
-    {
-        return new RefreshToken(new Token($this->anyValidRefreshTokenRequest()->getRefreshToken()), new Uuid('48d34c63-6bba-4c72-a461-8aac1fd7d138'), new \DateTimeImmutable());
-    }
-
-    private function anyValidRefreshTokenRequest(): UpdateRefreshTokenExpirationRequest
-    {
-        return new UpdateRefreshTokenExpirationRequest(
-            'token_string',
-            new DateTimeImmutable('+ 1 day')
-        );
     }
 
     private function refreshTokenComparator(RefreshToken $refreshTokenExpected): callable
@@ -101,33 +103,7 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
     private function userComparator(User $userExpected): callable
     {
         return function (User $userActual) use ($userExpected) {
-            return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
-                && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
-                && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
-                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
-                && $userExpected->getCreated() == $userActual->getCreated();
+            return $userExpected->getExpirationDate()->diff($userActual->getExpirationDate())->m < 1;
         };
-    }
-
-    private function anyValidUser(): User
-    {
-        return new User(
-            new Uuid('cfe849f3-7832-435a-b484-83fabf530794'),
-            new Email('user@example.com'),
-            Password::fromPlainPassword('123456aa'),
-            new Name('Alex'),
-            new Name('Johnson'),
-            Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27'),
-            false
-        );
-    }
-
-    private function anyValidTokensResponse(): TokensResponse
-    {
-        return new TokensResponse(
-            'token_string',
-            $this->anyValidRefreshToken()->getRefreshToken()->toString()
-        );
     }
 }

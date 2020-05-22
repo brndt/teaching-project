@@ -10,12 +10,7 @@ use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserCredentialsByIdRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserCredentialsResponse;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserCredentialsByIdService;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
@@ -33,7 +28,7 @@ final class SearchUserCredentialsByIdServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
-        $request = new SearchUserCredentialsByIdRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid');
+        $request = new SearchUserCredentialsByIdRequest(Uuid::generate()->toString() . 'invalidCharacters');
 
         $this->expectException(InvalidArgumentException::class);
         ($this->searchUserCredentialsByIdService)($request);
@@ -41,18 +36,16 @@ final class SearchUserCredentialsByIdServiceTest extends TestCase
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
-        $request = new SearchUserCredentialsByIdRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753');
+        $request = new SearchUserCredentialsByIdRequest(Uuid::generate()->toString());
 
         $this->expectException(UserNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with(
-            $request->getUserId()
-        )->willReturn(null);
+        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn(null);
         ($this->searchUserCredentialsByIdService)($request);
     }
 
     public function testWhenRequestIsValidThenReturnUserCreadentials()
     {
-        $request = new SearchUserCredentialsByIdRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753');
+        $request = new SearchUserCredentialsByIdRequest(Uuid::generate()->toString());
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();

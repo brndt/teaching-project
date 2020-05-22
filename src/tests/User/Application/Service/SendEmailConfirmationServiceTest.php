@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -22,6 +23,7 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class SendEmailConfirmationServiceTest extends TestCase
 {
@@ -40,29 +42,29 @@ final class SendEmailConfirmationServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
+        $request = new SendEmailConfirmationRequest('userexample.com');
         $this->expectException(InvalidArgumentException::class);
-        ($this->sendEmailConfirmationService)($this->anySendEmailConfirmationRequestWithInvalidEmail());
+        ($this->sendEmailConfirmationService)($request);
     }
 
     public function testWhenUserNotFoundThenThrowException()
     {
+        $request = new SendEmailConfirmationRequest('user@example.com');
         $this->repository->method('ofEmail')->willReturn(null);
         $this->expectException(UserNotFoundException::class);
-        ($this->sendEmailConfirmationService)($this->anyValidSendEmailConfirmationRequest());
+        ($this->sendEmailConfirmationService)($request);
     }
 
     public function testWhenValidRequestThenSendEmailConfirmation()
     {
-        $userToSendEmail = $this->anyValidUser();
+        $request = new SendEmailConfirmationRequest('user@example.com');
+        $userToSendEmail = (new UserBuilder())
+            ->withConfirmationToken(new Token('random_token'))
+            ->withExpirationDate(new DateTimeImmutable('+ 1 day'))
+            ->build();
         $this->repository->method('ofEmail')->willReturn($userToSendEmail);
-
         $this->randomStringGenerator->method('generate')->willReturn('random_token');
-
-        $userToSendEmail->setConfirmationToken(new Token('random_token'));
-        $userToSendEmail->setExpirationDate(new \DateTimeImmutable('+1 day'));
-
         $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($userToSendEmail)));
-
         $this->emailSender->expects($this->once())->method('sendEmailConfirmation')->with(
             $userToSendEmail->getEmail(),
             $userToSendEmail->getId(),
@@ -71,47 +73,14 @@ final class SendEmailConfirmationServiceTest extends TestCase
             $userToSendEmail->getConfirmationToken()
         );
 
-        ($this->sendEmailConfirmationService)($this->anyValidSendEmailConfirmationRequest());
-    }
-
-    private function anyValidUser(): User
-    {
-        return new User(
-            new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
-            new Email('user@example.com'),
-            Password::fromPlainPassword('123456aa'),
-            new Name('Alex'),
-            new Name('Johnson'),
-            Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27'),
-            false
-        );
-    }
-
-    private function anySendEmailConfirmationRequestWithInvalidEmail() {
-        return new SendEmailConfirmationRequest(
-            'userexample.com'
-        );
-    }
-
-    private function anyValidSendEmailConfirmationRequest(): SendEmailConfirmationRequest
-    {
-        return new SendEmailConfirmationRequest(
-            'user@example.com'
-        );
+        ($this->sendEmailConfirmationService)($request);
     }
 
     private function userComparator(User $userExpected): callable
     {
         return function (User $userActual) use ($userExpected) {
-            return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
-                && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
-                && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
-                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
-                && $userExpected->getExpirationDate() === $userActual->getExpirationDate()
-                && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken()
-                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
-                && $userExpected->getCreated() == $userActual->getCreated();
+            return $userExpected->getExpirationDate() === $userActual->getExpirationDate()
+                && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken();
         };
     }
 }

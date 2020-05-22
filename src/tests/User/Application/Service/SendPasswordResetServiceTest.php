@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
@@ -14,13 +14,10 @@ use LaSalle\StudentTeacher\User\Application\Service\SendPasswordResetService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class SendPasswordResetServiceTest extends TestCase
 {
@@ -43,39 +40,45 @@ final class SendPasswordResetServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
+        $request = new SendPasswordResetRequest('userexample.com');
         $this->expectException(InvalidArgumentException::class);
-        ($this->sendPasswordResetService)($this->anySendPasswordResetRequestWithInvalidEmail());
+        ($this->sendPasswordResetService)($request);
     }
 
     public function testWhenUserNotFoundThenThrowException()
     {
+        $request = new SendPasswordResetRequest('user@example.com');
         $this->repository->method('ofEmail')->willReturn(null);
         $this->expectException(UserNotFoundException::class);
-        ($this->sendPasswordResetService)($this->anyValidSendPasswordResetRequest());
+        ($this->sendPasswordResetService)($request);
     }
 
     public function testWhenUserIsNotEnabledThenThrowException()
     {
-        $this->repository->method('ofEmail')->willReturn($this->anyValidUser());
+        $request = new SendPasswordResetRequest('user@example.com');
+        $userToSendEmail = (new UserBuilder())
+            ->withEnabled(false)
+            ->build();
+
         $this->expectException(UserNotEnabledException::class);
-        ($this->sendPasswordResetService)($this->anyValidSendPasswordResetRequest());
+        $this->repository->method('ofEmail')->willReturn($userToSendEmail);
+        ($this->sendPasswordResetService)($request);
     }
 
     public function testWhenValidRequestThenSendPasswordReset()
     {
-        $userToSendEmail = $this->anyValidUser();
-        $userToSendEmail->setEnabled(true);
+        $request = new SendPasswordResetRequest('user@example.com');
+        $userToSendEmail = (new UserBuilder())
+            ->withConfirmationToken(new Token('random_token'))
+            ->withExpirationDate(new DateTimeImmutable('+ 1 day'))
+            ->withEnabled(true)
+            ->build();
+
         $this->repository->method('ofEmail')->willReturn($userToSendEmail);
-
         $this->randomStringGenerator->method('generate')->willReturn('random_token');
-
-        $userToSendEmail->setConfirmationToken(new Token('random_token'));
-        $userToSendEmail->setExpirationDate(new \DateTimeImmutable('+1 day'));
-
         $this->repository->expects($this->once())->method('save')->with(
             $this->callback($this->userComparator($userToSendEmail))
         );
-
         $this->emailSender->expects($this->once())->method('sendPasswordReset')->with(
             $userToSendEmail->getEmail(),
             $userToSendEmail->getId(),
@@ -84,48 +87,15 @@ final class SendPasswordResetServiceTest extends TestCase
             $userToSendEmail->getConfirmationToken()
         );
 
-        ($this->sendPasswordResetService)($this->anyValidSendPasswordResetRequest());
-    }
-
-    private function anyValidUser(): User
-    {
-        return new User(
-            new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
-            new Email('user@example.com'),
-            Password::fromPlainPassword('123456aa'),
-            new Name('Alex'),
-            new Name('Johnson'),
-            Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27'),
-            false
-        );
-    }
-
-    private function anySendPasswordResetRequestWithInvalidEmail()
-    {
-        return new SendPasswordResetRequest(
-            'userexample.com'
-        );
-    }
-
-    private function anyValidSendPasswordResetRequest(): SendPasswordResetRequest
-    {
-        return new SendPasswordResetRequest(
-            'user@example.com'
-        );
+        ($this->sendPasswordResetService)($request);
     }
 
     private function userComparator(User $userExpected): callable
     {
         return function (User $userActual) use ($userExpected) {
-            return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
-                && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
-                && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
-                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
+            return $userExpected->getEnabled() === $userActual->getEnabled()
                 && $userExpected->getExpirationDate() === $userActual->getExpirationDate()
-                && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken()
-                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
-                && $userExpected->getCreated() == $userActual->getCreated();
+                && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken();
         };
     }
 }

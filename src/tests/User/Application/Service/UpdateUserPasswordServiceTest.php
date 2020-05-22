@@ -13,12 +13,10 @@ use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserPasswordService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class UpdateUserPasswordServiceTest extends TestCase
 {
@@ -33,158 +31,182 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
-        ($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequestWithInvalidRequestAuthorId());
-    }
-
-    public function testWhenRequestAuthorIsNotFoundThenThrowException()
-    {
-        $this->expectException(UserNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
-        )->willReturn(null);
-        ($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest());
-    }
-
-    public function testWhenUserIdIsInvalidThenThrowException()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->repository->expects($this->once())->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequestWithInvalidRequestUserId()->getRequestAuthorId()
-        )->willReturn($this->anyValidAuthor());
-        ($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequestWithInvalidRequestUserId());
-    }
-
-    public function testWhenUserIdIsNotFoundThenThrowException()
-    {
-        $this->expectException(UserNotFoundException::class);
-        $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
-        )->willReturn($this->anyValidAuthor());
-        $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getUserId()
-        )->willReturn(null);
-        ($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest());
-    }
-
-    public function testWhenOldPasswordIsNotCorrectThanThrowException()
-    {
-        $this->expectException(IncorrectPasswordException::class);
-        $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequestWithIncorrectPassword()->getRequestAuthorId()
-        )->willReturn($this->anyValidUser());
-        $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyUpdateUserPasswordRequestWithIncorrectPassword()->getUserId()
-        )->willReturn($this->anyValidUser());
-        ($this->updateUserPasswordService)($this->anyUpdateUserPasswordRequestWithIncorrectPassword());
-    }
-
-    public function testWhenRequestAuthorIsNotUserThanThrowException()
-    {
-        $this->expectException(PermissionDeniedException::class);
-        $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
-        )->willReturn($this->anyValidAuthor());
-        $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getUserId()
-        )->willReturn($this->anyValidUser());
-        ($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest());
-    }
-
-    public function testWhenRequestIsValidThenUpdatePassword()
-    {
-        $this->repository->expects($this->at(0))->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getRequestAuthorId()
-        )->willReturn($this->anyValidUser());
-        $this->repository->expects($this->at(1))->method('ofId')->with(
-            $this->anyValidUpdateUserPasswordRequest()->getUserId()
-        )->willReturn($this->anyValidUser());
-        $expectedUserToUpdate = $this->anyValidUser();
-        $expectedUserToUpdate->setPassword(
-            Password::fromPlainPassword($this->anyValidUpdateUserPasswordRequest()->getNewPassword())
-        );
-        $this->repository->expects($this->once())->method('save')->with(
-            $this->callback($this->userComparator($expectedUserToUpdate))
-        );
-        $this->assertNull(($this->updateUserPasswordService)($this->anyValidUpdateUserPasswordRequest()));
-    }
-
-    private function anyValidUpdateUserPasswordRequest(): UpdateUserPasswordRequest
-    {
-        return new UpdateUserPasswordRequest(
-            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
-            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
-            '123456aa',
-            'qwerty123'
-        );
-    }
-
-    private function anyUpdateUserPasswordRequestWithIncorrectPassword(): UpdateUserPasswordRequest
-    {
-        return new UpdateUserPasswordRequest(
-            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
-            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
-            'incorrectpassword123',
-            'qwerty123'
-        );
-    }
-
-    private function anyUpdateUserPasswordRequestWithInvalidRequestAuthorId(): UpdateUserPasswordRequest
-    {
-        return new UpdateUserPasswordRequest(
+        $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
             'cfe849f3-7832-435a-b484-83fabf530794',
             '123456aa',
             'qwerty123'
         );
+
+        $this->expectException(InvalidArgumentException::class);
+        ($this->updateUserPasswordService)($request);
     }
 
-    private function anyValidUser(): User
+    public function testWhenRequestAuthorIsNotFoundThenThrowException()
     {
-        return new User(
-            new Uuid('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753'),
-            new Email('user@example.com'),
-            Password::fromPlainPassword('123456aa'),
-            new Name('Alex'),
-            new Name('Johnson'),
-            Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27'),
-            false
+        $request = new UpdateUserPasswordRequest(
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '123456aa',
+            'qwerty123'
         );
+
+        $this->expectException(UserNotFoundException::class);
+        $this->repository
+            ->expects($this->once())
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn(null);
+        ($this->updateUserPasswordService)($request);
     }
 
-    private function anyValidAuthor(): User
+    public function testWhenUserIdIsInvalidThenThrowException()
     {
-        return new User(
-            new Uuid('cfe849f3-7832-435a-b484-83fabf530794'),
-            new Email('user@example.com'),
-            Password::fromPlainPassword('123456aa'),
-            new Name('Alex'),
-            new Name('Johnson'),
-            Roles::fromArrayOfPrimitives(['teacher']),
-            new \DateTimeImmutable('2020-04-27'),
-            false
-        );
-    }
-
-    private function anyUpdateUserPasswordRequestWithInvalidRequestUserId(): UpdateUserPasswordRequest
-    {
-        return new UpdateUserPasswordRequest(
+        $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             'cfe849f3-7832-435a-b484-83fabf530794-invalid',
             'qwerty12',
             'qwerty123'
         );
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->repository
+            ->expects($this->once())
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        ($this->updateUserPasswordService)($request);
     }
 
-    private function userComparator(User $userExpected): callable
+    public function testWhenUserIdIsNotFoundThenThrowException()
     {
-        return function (User $userActual) use ($userExpected) {
-            return $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
-                && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
-                && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
-                && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
-                && $userExpected->getCreated() == $userActual->getCreated();
+        $request = new UpdateUserPasswordRequest(
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '123456aa',
+            'qwerty123'
+        );
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+
+        $this->expectException(UserNotFoundException::class);
+        $this->repository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->repository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getUserId())
+            ->willReturn(null);
+        ($this->updateUserPasswordService)($request);
+    }
+
+    public function testWhenOldPasswordIsNotCorrectThanThrowException()
+    {
+        $request = new UpdateUserPasswordRequest(
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            'incorrectpassword123',
+            'qwerty123'
+        );
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $user = (new UserBuilder())
+            ->withId(new Uuid($request->getUserId()))
+            ->build();
+
+        $this->expectException(IncorrectPasswordException::class);
+        $this->repository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->repository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getUserId())
+            ->willReturn($user);
+        ($this->updateUserPasswordService)($request);
+    }
+
+    public function testWhenRequestAuthorIsNotUserThanThrowException()
+    {
+        $request = new UpdateUserPasswordRequest(
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            'cfe849f3-7832-435a-b484-83fabf530794',
+            '123456aa',
+            'qwerty123'
+        );
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $user = (new UserBuilder())
+            ->withId(new Uuid($request->getUserId()))
+            ->build();
+
+        $this->expectException(PermissionDeniedException::class);
+        $this->repository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->repository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getUserId())
+            ->willReturn($user);
+        ($this->updateUserPasswordService)($request);
+    }
+
+    public function testWhenRequestIsValidThenUpdatePassword()
+    {
+        $request = new UpdateUserPasswordRequest(
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
+            '123456aa',
+            'qwerty123'
+        );
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $user = (new UserBuilder())
+            ->withId(new Uuid($request->getUserId()))
+            ->build();
+
+        $expectedUserToUpdate = (new UserBuilder())
+            ->withId(new Uuid($request->getUserId()))
+            ->withPassword(Password::fromPlainPassword($request->getNewPassword()))
+            ->build();
+
+        $this->repository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->repository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getUserId())
+            ->willReturn($user);
+        $this->repository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback($this->userComparator($expectedUserToUpdate, $request->getNewPassword())));
+        $this->assertNull(($this->updateUserPasswordService)($request));
+    }
+
+    private function userComparator(User $userExpected, string $plainPassword): callable
+    {
+        return function (User $userActual) use ($userExpected, $plainPassword) {
+            return $userExpected->getId()->toString() === $userActual->getId()->toString()
+                && password_verify($plainPassword, $userActual->getPassword()->toString());
         };
     }
 }
