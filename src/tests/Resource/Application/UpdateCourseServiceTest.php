@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use DateTimeImmutable;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateCourseRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateCourseService;
+use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
+use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
+use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -23,9 +23,9 @@ use Test\LaSalle\StudentTeacher\Resource\Builder\CategoryBuilder;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CourseBuilder;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
-final class CreateCourseServiceTest extends TestCase
+final class UpdateCourseServiceTest extends TestCase
 {
-    private CreateCourseService $createCourseService;
+    private UpdateCourseService $updateCourseService;
     private MockObject $courseRepository;
     private MockObject $categoryRepository;
     private MockObject $userRepository;
@@ -35,7 +35,7 @@ final class CreateCourseServiceTest extends TestCase
         $this->courseRepository = $this->createMock(CourseRepository::class);
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->createCourseService = new CreateCourseService(
+        $this->updateCourseService = new UpdateCourseService(
             $this->courseRepository,
             $this->categoryRepository,
             $this->userRepository
@@ -44,32 +44,32 @@ final class CreateCourseServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
             Uuid::generate()->toString() . '-invalid',
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
             'published',
         );
 
         $this->expectException(InvalidArgumentException::class);
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
     public function testWhenRequestAuthorIsNotFoundThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
             'published',
         );
@@ -80,19 +80,19 @@ final class CreateCourseServiceTest extends TestCase
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn(null);
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
     public function testWhenTeacherIdIsInvalidThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString() . '-invalid',
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
             'published',
         );
@@ -107,19 +107,19 @@ final class CreateCourseServiceTest extends TestCase
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
     public function testWhenTeacherIsNotFoundThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
             'published',
         );
@@ -139,67 +139,29 @@ final class CreateCourseServiceTest extends TestCase
             ->method('ofId')
             ->with($request->getTeacherId())
             ->willReturn(null);
-        ($this->createCourseService)($request);
-    }
-
-    public function testWhenRequestAuthorHasntPermissionsThenThrowException()
-    {
-        $request = new CreateCourseRequest(
-            Uuid::generate()->toString(),
-            Uuid::generate()->toString(),
-            Uuid::generate()->toString(),
-            'course_name',
-            'some_description',
-            'beginner',
-            new DateTimeImmutable(),
-            null,
-            'published',
-        );
-
-        $author = (new UserBuilder())
-            ->withId(new Uuid($request->getRequestAuthorId()))
-            ->withRoles(Roles::fromArrayOfPrimitives([Role::STUDENT]))
-            ->build();
-
-        $teacher = (new UserBuilder())
-            ->withId(new Uuid($request->getRequestAuthorId()))
-            ->build();
-
-        $this->expectException(PermissionDeniedException::class);
-        $this->userRepository
-            ->expects($this->at(0))
-            ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
     public function testWhenCategoryIdIsInvalidThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString() . '-invalid',
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
             'published',
         );
 
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
-            ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
 
         $teacher = (new UserBuilder())
-            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->withId(new Uuid($request->getTeacherId()))
             ->build();
 
         $this->expectException(InvalidArgumentException::class);
@@ -213,30 +175,29 @@ final class CreateCourseServiceTest extends TestCase
             ->method('ofId')
             ->with($request->getTeacherId())
             ->willReturn($teacher);
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
     public function testWhenCategoryNotFoundThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
             'published',
         );
 
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
-            ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
 
         $teacher = (new UserBuilder())
-            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->withId(new Uuid($request->getTeacherId()))
             ->build();
 
         $category = (new CategoryBuilder())
@@ -259,30 +220,29 @@ final class CreateCourseServiceTest extends TestCase
             ->method('ofId')
             ->with($category->getId())
             ->willReturn(null);
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
-    public function testWhenCategoryStatusIsInvalidThenThrowException()
+    public function testWhenCourseIdIsInvalidThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
             Uuid::generate()->toString(),
+            Uuid::generate()->toString() . '-invalid',
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
             null,
-            'invalid-published',
+            'published',
         );
 
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
-            ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
 
         $teacher = (new UserBuilder())
-            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->withId(new Uuid($request->getTeacherId()))
             ->build();
 
         $category = (new CategoryBuilder())
@@ -305,23 +265,128 @@ final class CreateCourseServiceTest extends TestCase
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
-        $this->courseRepository
-            ->expects($this->once())
-            ->method('nextIdentity')
-            ->willReturn(Uuid::generate());
-        ($this->createCourseService)($request);
+        ($this->updateCourseService)($request);
     }
 
-    public function testWhenRequestIsValidThenCreateCourse()
+    public function testWhenCourseNotFoundThenThrowException()
     {
-        $request = new CreateCourseRequest(
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             'course_name',
             'some_description',
             'beginner',
-            new DateTimeImmutable(),
+            null,
+            'published',
+        );
+
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+
+        $teacher = (new UserBuilder())
+            ->withId(new Uuid($request->getTeacherId()))
+            ->build();
+
+        $category = (new CategoryBuilder())
+            ->withId(new Uuid($request->getCategoryId()))
+            ->build();
+
+        $course = (new CourseBuilder())
+            ->withId(new Uuid($request->getId()))
+            ->build();
+
+        $this->expectException(CourseNotFoundException::class);
+        $this->userRepository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->userRepository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getTeacherId())
+            ->willReturn($teacher);
+        $this->categoryRepository
+            ->expects($this->once())
+            ->method('ofId')
+            ->with($category->getId())
+            ->willReturn($category);
+        $this->courseRepository
+            ->expects($this->once())
+            ->method('ofId')
+            ->with($course->getId())
+            ->willReturn(null);
+        ($this->updateCourseService)($request);
+    }
+
+    public function testWhenRequestAuthorHasntPermissionsToCourseThenThrowException()
+    {
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
+            'course_name',
+            'some_description',
+            'beginner',
+            null,
+            'published',
+        );
+
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
+
+        $teacher = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+
+        $category = (new CategoryBuilder())
+            ->withId(new Uuid($request->getCategoryId()))
+            ->build();
+
+        $course = (new CourseBuilder())
+            ->withId(new Uuid($request->getId()))
+            ->build();
+
+        $this->expectException(PermissionDeniedException::class);
+        $this->userRepository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->userRepository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getTeacherId())
+            ->willReturn($teacher);
+        $this->categoryRepository
+            ->expects($this->once())
+            ->method('ofId')
+            ->with($category->getId())
+            ->willReturn($category);
+        $this->courseRepository
+            ->expects($this->once())
+            ->method('ofId')
+            ->with($course->getId())
+            ->willReturn($course);
+        ($this->updateCourseService)($request);
+    }
+
+    public function testWhenRequestIsValidThenUpdateCourse()
+    {
+        $request = new UpdateCourseRequest(
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
+            'course_name',
+            'some_description',
+            'beginner',
             null,
             'published',
         );
@@ -339,14 +404,8 @@ final class CreateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getCategoryId()))
             ->build();
 
-        $course = (new CourseBuilder())
-            ->withCategoryId(new Uuid($request->getCategoryId()))
-            ->withTeacherId(new Uuid($request->getTeacherId()))
-            ->withName($request->getName())
-            ->withDescription($request->getDescription())
-            ->withLevel($request->getLevel())
-            ->withCreated($request->getCreated())
-            ->withModified($request->getModified())
+        $expectedCourse = (new CourseBuilder())
+            ->withId(new Uuid($request->getId()))
             ->build();
 
         $this->userRepository
@@ -366,12 +425,13 @@ final class CreateCourseServiceTest extends TestCase
             ->willReturn($category);
         $this->courseRepository
             ->expects($this->once())
-            ->method('nextIdentity')
-            ->willReturn($course->getId());
+            ->method('ofId')
+            ->with($expectedCourse->getId())
+            ->willReturn($expectedCourse);
         $this->courseRepository
             ->expects($this->once())
             ->method('save')
-            ->with($course);
-        ($this->createCourseService)($request);
+            ->with($expectedCourse);
+        ($this->updateCourseService)($request);
     }
 }

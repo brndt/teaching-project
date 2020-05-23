@@ -116,7 +116,7 @@ final class Course
         return $this->modified;
     }
 
-    public function setModified(\DateTimeImmutable $modified): void
+    public function setModified(?\DateTimeImmutable $modified): void
     {
         $this->modified = $modified;
     }
