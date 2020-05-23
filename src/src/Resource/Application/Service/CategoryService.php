@@ -68,7 +68,7 @@ abstract class CategoryService
         $category = $this->categoryRepository->ofName($newCategoryName);
         if (null !== $category && $oldCategoryName !== $category->getName()) {
             throw new CategoryAlreadyExists();
-        };
+        }
     }
 
     protected function ensureUserExists(?User $user): void
