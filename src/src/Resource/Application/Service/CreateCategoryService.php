@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\Resource\Application\Service;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 
-final class CreateCategory extends CategoryService
+final class CreateCategoryService extends CategoryService
 {
     public function __invoke(CreateCategoryRequest $request): void
     {

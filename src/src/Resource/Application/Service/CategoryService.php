@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -42,7 +43,7 @@ abstract class CategoryService
     {
         try {
             return new Status($status);
-        } catch (InvalidArgumentException $error) {
+        } catch (InvalidStatusException $error) {
             throw new InvalidArgumentException($error->getMessage());
         }
     }

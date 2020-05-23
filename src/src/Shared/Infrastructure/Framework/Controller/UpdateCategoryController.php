@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCategory;
+use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCategoryService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateCategoryController extends AbstractFOSRestController
 {
-    private UpdateCategory $updateCategory;
+    private UpdateCategoryService $updateCategory;
 
-    public function __construct(UpdateCategory $updateCategory)
+    public function __construct(UpdateCategoryService $updateCategory)
     {
         $this->updateCategory = $updateCategory;
     }

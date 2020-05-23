@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
 
-final class UpdateCategory extends CategoryService
+final class UpdateCategoryService extends CategoryService
 {
     public function __invoke(UpdateCategoryRequest $request): void
     {

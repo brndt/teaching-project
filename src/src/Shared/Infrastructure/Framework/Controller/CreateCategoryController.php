@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategory;
+use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateCategoryController extends AbstractFOSRestController
 {
-    private CreateCategory $createCategory;
+    private CreateCategoryService $createCategory;
 
-    public function __construct(CreateCategory $createCategory)
+    public function __construct(CreateCategoryService $createCategory)
     {
         $this->createCategory = $createCategory;
     }
