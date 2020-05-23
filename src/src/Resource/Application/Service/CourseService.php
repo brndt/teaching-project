@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
@@ -50,7 +51,7 @@ abstract class CourseService
     {
         try {
             return new Status($status);
-        } catch (InvalidArgumentException $error) {
+        } catch (InvalidStatusException $error) {
             throw new InvalidArgumentException($error->getMessage());
         }
     }
@@ -108,7 +109,7 @@ abstract class CourseService
         }
     }
 
-    protected function ensureCoursesExist(?Course... $courses): void
+    protected function ensureCoursesExist(?Course...$courses): void
     {
         if (true === empty($courses)) {
             throw new CourseNotFoundException();

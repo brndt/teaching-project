@@ -78,7 +78,7 @@ abstract class CategoryService
         }
     }
 
-    protected function ensureCategoriesExist(?Category...$categories): void
+    protected function ensureCategoriesExist(?array $categories): void
     {
         if (true === empty($categories)) {
             throw new CategoryNotFound();

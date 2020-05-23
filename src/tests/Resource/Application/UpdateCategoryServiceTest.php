@@ -23,6 +23,7 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Test\LaSalle\StudentTeacher\Resource\Builder\CategoryBuilder;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class UpdateCategoryServiceTest extends TestCase
@@ -145,8 +146,12 @@ final class UpdateCategoryServiceTest extends TestCase
             'some-new-category-name',
             'published'
         );
-        $category = new Category(new Uuid($request->getCategoryId()), 'some-category-name', new Status('published'));
-        $categoryOfName = new Category(new Uuid($request->getCategoryId()), $request->getNewName(), new Status('published'));
+        $category = (new CategoryBuilder())
+            ->withId(new Uuid($request->getCategoryId()))
+            ->build();
+        $categoryOfName = (new CategoryBuilder())
+            ->withName($request->getNewName())
+            ->build();
 
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
@@ -178,7 +183,9 @@ final class UpdateCategoryServiceTest extends TestCase
             'some-new-category-name',
             'invalid-status'
         );
-        $category = new Category(new Uuid($request->getCategoryId()), 'some-category-name', new Status('published'));
+        $category = (new CategoryBuilder())
+            ->withId(new Uuid($request->getCategoryId()))
+            ->build();
 
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
@@ -202,7 +209,7 @@ final class UpdateCategoryServiceTest extends TestCase
         ($this->updateCategoryService)($request);
     }
 
-    public function testWhenRequestIsValidThenThrowException()
+    public function testWhenRequestIsValidThenUpdateCategory()
     {
         $request = new UpdateCategoryRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
@@ -210,7 +217,9 @@ final class UpdateCategoryServiceTest extends TestCase
             'some-new-category-name',
             'published'
         );
-        $category = new Category(new Uuid($request->getCategoryId()), 'some-category-name', new Status('published'));
+        $category = (new CategoryBuilder())
+            ->withId(new Uuid($request->getCategoryId()))
+            ->build();
 
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))

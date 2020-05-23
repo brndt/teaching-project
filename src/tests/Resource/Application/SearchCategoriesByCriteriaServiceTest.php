@@ -6,8 +6,13 @@ namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
+use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\SearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
+use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
+use LaSalle\StudentTeacher\Resource\Application\Service\SearchCategoriesByCriteria;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
@@ -22,9 +27,9 @@ use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CategoryBuilder;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
-final class CreateCategoryServiceTest extends TestCase
+final class SearchCategoriesByCriteriaServiceTest extends TestCase
 {
-    private CreateCategoryService $createCategoryService;
+    private SearchCategoriesByCriteria $searchCategoriesByCriteria;
     private MockObject $categoryRepository;
     private MockObject $userRepository;
 
@@ -32,27 +37,35 @@ final class CreateCategoryServiceTest extends TestCase
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->createCategoryService = new CreateCategoryService($this->categoryRepository, $this->userRepository);
+        $this->searchCategoriesByCriteria = new SearchCategoriesByCriteria($this->categoryRepository, $this->userRepository);
     }
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $request = new CreateCategoryRequest(
+        $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138-invalid',
-            'some-category-name',
-            'published'
+            [],
+            null,
+            null,
+            null,
+            null,
+            null
         );
 
         $this->expectException(InvalidArgumentException::class);
-        ($this->createCategoryService)($request);
+        ($this->searchCategoriesByCriteria)($request);
     }
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
-        $request = new CreateCategoryRequest(
+        $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            'some-category-name',
-            'published'
+            [],
+            null,
+            null,
+            null,
+            null,
+            null
         );
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
@@ -60,15 +73,19 @@ final class CreateCategoryServiceTest extends TestCase
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
-        ($this->createCategoryService)($request);
+        ($this->searchCategoriesByCriteria)($request);
     }
 
     public function testWhenRequestAuthorIsNotAdminThenThrowException()
     {
-        $request = new CreateCategoryRequest(
+        $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            'some-category-name',
-            'published'
+            [],
+            null,
+            null,
+            null,
+            null,
+            null
         );
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::STUDENT]))
@@ -79,24 +96,24 @@ final class CreateCategoryServiceTest extends TestCase
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
-        ($this->createCategoryService)($request);
+        ($this->searchCategoriesByCriteria)($request);
     }
 
-    public function testWhenCategoryAlreadyExistsWithThisNameThenThrowException()
+    public function testWhenCategoriesDontExistThenThrowException()
     {
-        $request = new CreateCategoryRequest(
+        $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            'some-category-name',
-            'published'
+            [],
+            null,
+            null,
+            null,
+            null,
+            null
         );
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $category = (new CategoryBuilder())
-            ->withName($request->getCategoryName())
-            ->withStatus(new Status($request->getCategoryStatus()))
-            ->build();
-        $this->expectException(CategoryAlreadyExists::class);
+        $this->expectException(CategoryNotFound::class);
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -104,23 +121,28 @@ final class CreateCategoryServiceTest extends TestCase
             ->willReturn($user);
         $this->categoryRepository
             ->expects($this->once())
-            ->method('ofName')
-            ->with($request->getCategoryName())
-            ->willReturn($category);
-        ($this->createCategoryService)($request);
+            ->method('matching')
+            ->willReturn([]);
+        ($this->searchCategoriesByCriteria)($request);
     }
 
-    public function testWhenCategoryStatusIsInvalidThenThrowException()
+    public function testWhenRequestIsValidThenSearchCategories()
     {
-        $request = new CreateCategoryRequest(
+        $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            'some-category-name',
-            'invalid-status'
+            [],
+            null,
+            null,
+            null,
+            null,
+            null
         );
+        $category = (new CategoryBuilder())->build();
+        $anotherCategory = (new CategoryBuilder())->build();
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $this->expectException(InvalidArgumentException::class);
+        $expectedCategoryCollectionResponse = new CategoryCollectionResponse(...$this->buildResponse(...[$category, $anotherCategory]));
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -128,46 +150,25 @@ final class CreateCategoryServiceTest extends TestCase
             ->willReturn($user);
         $this->categoryRepository
             ->expects($this->once())
-            ->method('ofName')
-            ->with($request->getCategoryName())
-            ->willReturn(null);
-        ($this->createCategoryService)($request);
+            ->method('matching')
+            ->willReturn([$category, $anotherCategory]);
+
+        $actualCategoryCollectionResponse = ($this->searchCategoriesByCriteria)($request);
+        $this->assertEquals($expectedCategoryCollectionResponse, $actualCategoryCollectionResponse);
     }
 
-    public function testWhenRequestIsValidThenThrowException()
+    private function buildResponse(Category ...$categories): array
     {
-        $request = new CreateCategoryRequest(
-            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            'some-category-name',
-            'published'
+        return array_map(
+            static function (Category $category) {
+                return new CategoryResponse(
+                    $category->getId()->toString(),
+                    $category->getName(),
+                    $category->getStatus()->value(),
+                );
+            },
+            $categories
         );
-        $user = (new UserBuilder())
-            ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
-            ->build();
-        $category = (new CategoryBuilder())
-            ->withName($request->getCategoryName())
-            ->withStatus(new Status($request->getCategoryStatus()))
-            ->build();
-        $this->userRepository
-            ->expects($this->once())
-            ->method('ofId')
-            ->with(new Uuid($request->getRequestAuthorId()))
-            ->willReturn($user);
-        $this->categoryRepository
-            ->expects($this->once())
-            ->method('ofName')
-            ->with($request->getCategoryName())
-            ->willReturn(null);
-        $this->categoryRepository
-            ->expects($this->once())
-            ->method('nextIdentity')
-            ->willReturn($category->getId());
-        $this->categoryRepository
-            ->expects($this->once())
-            ->method('save')
-            ->with($this->equalTo($category));
-        ($this->createCategoryService)($request);
     }
-
 
 }
