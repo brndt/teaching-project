@@ -167,7 +167,7 @@ final class CreateUserServiceTest extends TestCase
                 && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
                 && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
                 && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
-                && $userExpected->getCreated()->diff($userActual->getCreated()) -> s < 10;
+                && $userExpected->getCreated()->diff($userActual->getCreated())->s < 10;
         };
     }
 }

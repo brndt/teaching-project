@@ -62,16 +62,16 @@ final class GenerateTokensServiceTest extends TestCase
         $expectedTokensResponse = new TokensResponse('token_string', $refreshToken->getRefreshToken()->toString());
 
         $this->randomStringGenerator->method('generate')->willReturn($refreshToken->getRefreshToken()->toString());
-        $this->refreshTokenRepository->expects($this->once())->method('save')->with($this->equalTo($refreshToken));
+        $this->refreshTokenRepository->expects($this->once())->method('save')->with($refreshToken);
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
-            ->with($this->equalTo($refreshToken->getUserId()))
+            ->with($refreshToken->getUserId())
             ->willReturn($user);
         $this->tokenManager
             ->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo($user))
+            ->with($user)
             ->willReturn($expectedTokensResponse->getToken());
 
         $tokensResponse = ($this->generateTokensService)($request);

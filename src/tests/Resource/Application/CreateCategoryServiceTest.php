@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -165,7 +164,7 @@ final class CreateCategoryServiceTest extends TestCase
         $this->categoryRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->equalTo($category));
+            ->with($category);
         ($this->createCategoryService)($request);
     }
 

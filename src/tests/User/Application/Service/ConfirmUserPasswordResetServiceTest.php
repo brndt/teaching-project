@@ -167,7 +167,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
                 && $userExpected->getRoles()->getArrayOfPrimitives() === $userActual->getRoles()->getArrayOfPrimitives()
                 && $userExpected->getExpirationDate() === $userActual->getExpirationDate()
                 && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken()
-                && $userExpected->getCreated()->diff($userActual->getCreated()) -> s < 10;
+                && $userExpected->getCreated()->diff($userActual->getCreated())->s < 10;
         };
     }
 }

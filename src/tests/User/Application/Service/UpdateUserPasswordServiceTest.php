@@ -31,27 +31,27 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
             'cfe849f3-7832-435a-b484-83fabf530794',
             '123456aa',
             'qwerty123'
         );
-
-        $this->expectException(InvalidArgumentException::class);
         ($this->updateUserPasswordService)($request);
     }
 
     public function testWhenRequestAuthorIsNotFoundThenThrowException()
     {
+        $this->expectException(UserNotFoundException::class);
+
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             '123456aa',
             'qwerty123'
         );
-
-        $this->expectException(UserNotFoundException::class);
         $this->repository
             ->expects($this->once())
             ->method('ofId')
@@ -62,6 +62,8 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             'cfe849f3-7832-435a-b484-83fabf530794-invalid',
@@ -71,8 +73,6 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
-
-        $this->expectException(InvalidArgumentException::class);
         $this->repository
             ->expects($this->once())
             ->method('ofId')
@@ -83,6 +83,8 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
+        $this->expectException(UserNotFoundException::class);
+
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
@@ -92,8 +94,6 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
-
-        $this->expectException(UserNotFoundException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -109,6 +109,8 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenOldPasswordIsNotCorrectThanThrowException()
     {
+        $this->expectException(IncorrectPasswordException::class);
+
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
@@ -121,8 +123,6 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-
-        $this->expectException(IncorrectPasswordException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -138,6 +138,8 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsNotUserThanThrowException()
     {
+        $this->expectException(PermissionDeniedException::class);
+
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -150,8 +152,6 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-
-        $this->expectException(PermissionDeniedException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -179,12 +179,6 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-
-        $expectedUserToUpdate = (new UserBuilder())
-            ->withId(new Uuid($request->getUserId()))
-            ->withPassword(Password::fromPlainPassword($request->getNewPassword()))
-            ->build();
-
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -198,8 +192,8 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $this->repository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback($this->userComparator($expectedUserToUpdate, $request->getNewPassword())));
-        $this->assertNull(($this->updateUserPasswordService)($request));
+            ->with($this->callback($this->userComparator($user, $request->getNewPassword())));
+        ($this->updateUserPasswordService)($request);
     }
 
     private function userComparator(User $userExpected, string $plainPassword): callable

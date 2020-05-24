@@ -7,14 +7,11 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException;
-use LaSalle\StudentTeacher\User\Application\Request\CreateUserConnectionRequest;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserConnectionRequest;
-use LaSalle\StudentTeacher\User\Application\Service\CreateUserConnectionService;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserConnectionService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
@@ -22,9 +19,7 @@ use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Approved;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Rejected;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Withdrawn;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -313,13 +308,14 @@ final class UpdateUserConnectionServiceTest extends TestCase
 
     public function testWhenNewStateIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidStateException::class);
+
         $request = new UpdateUserConnectionRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'cfe849f3-7832-435a-b484-83fabf530794',
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'pended'
         );
-
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
@@ -331,11 +327,12 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->withId(new Uuid($request->getSecondUser()))
             ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
             ->build();
-
-        $userConnection = new UserConnection($firstUser->getId(), $secondUser->getId(), new Pended(), $firstUser->getId());
-
-
-        $this->expectException(InvalidStateException::class);
+        $userConnection = new UserConnection(
+            $firstUser->getId(),
+            $secondUser->getId(),
+            new Pended(),
+            $firstUser->getId()
+        );
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
             $request->getRequestAuthorId()
         )->willReturn($author);
@@ -359,7 +356,6 @@ final class UpdateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'withdrawn'
         );
-
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
@@ -371,22 +367,39 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->withId(new Uuid($request->getSecondUser()))
             ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
             ->build();
-
-        $userConnection = new UserConnection($firstUser->getId(), $secondUser->getId(), new Pended(), $firstUser->getId());
-
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
-        $this->stateFactory->expects($this->once())->method('create')->willReturn(new Withdrawn());
-        $this->userConnectionRepository->expects($this->once())->method('ofId')->willReturn($userConnection);
-        $this->userConnectionRepository->expects($this->once())->method('save')->with($this->equalTo($userConnection));
-
+        $userConnection = new UserConnection(
+            $firstUser->getId(),
+            $secondUser->getId(),
+            new Pended(),
+            $firstUser->getId()
+        );
+        $this->userRepository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+        $this->userRepository
+            ->expects($this->at(1))
+            ->method('ofId')
+            ->with($request->getFirstUser())
+            ->willReturn($firstUser);
+        $this->userRepository
+            ->expects($this->at(2))
+            ->method('ofId')
+            ->with($request->getSecondUser())
+            ->willReturn($secondUser);
+        $this->stateFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn(new Withdrawn());
+        $this->userConnectionRepository
+            ->expects($this->once())
+            ->method('ofId')
+            ->willReturn($userConnection);
+        $this->userConnectionRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($userConnection);
         ($this->updateUserConnectionService)($request);
     }
 }

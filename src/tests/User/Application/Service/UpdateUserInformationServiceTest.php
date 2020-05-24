@@ -14,7 +14,6 @@ use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
@@ -32,6 +31,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserInformationRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -42,13 +43,13 @@ final class UpdateUserInformationServiceTest extends TestCase
             '10 years',
             'la salle'
         );
-
-        $this->expectException(InvalidArgumentException::class);
         ($this->updateUserInformationService)($request);
     }
 
     public function testWhenRequestAuthorIsNotFoundThenThrowException()
     {
+        $this->expectException(UserNotFoundException::class);
+
         $request = new UpdateUserInformationRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -59,8 +60,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             '10 years',
             'la salle'
         );
-
-        $this->expectException(UserNotFoundException::class);
         $this->repository
             ->expects($this->once())
             ->method('ofId')
@@ -71,6 +70,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserInformationRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
             'cfe849f3-7832-435a-b484-83fabf530794-invalid',
@@ -84,8 +85,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
-
-        $this->expectException(InvalidArgumentException::class);
         $this->repository
             ->expects($this->once())
             ->method('ofId')
@@ -96,6 +95,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
+        $this->expectException(UserNotFoundException::class);
+
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -109,8 +110,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
-
-        $this->expectException(UserNotFoundException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -126,6 +125,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsNotUserThanThrowException()
     {
+        $this->expectException(PermissionDeniedException::class);
+
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
@@ -138,8 +139,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         );
         $author = (new UserBuilder())->build();
         $user = (new UserBuilder())->build();
-
-        $this->expectException(PermissionDeniedException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -155,6 +154,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -171,8 +172,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-
-        $this->expectException(InvalidArgumentException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -188,6 +187,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserEmailIsNotAvailableThenThrowException()
     {
+        $this->expectException(UserAlreadyExistsException::class);
+
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -207,8 +208,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $userToSearchEmail = (new UserBuilder())
             ->withEmail(new Email($request->getEmail()))
             ->build();
-
-        $this->expectException(UserAlreadyExistsException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -229,6 +228,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserFirstNameIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -245,8 +246,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-
-        $this->expectException(InvalidArgumentException::class);
         $this->repository->expects($this->at(0))->method('ofId')->with(
             $request->getRequestAuthorId()
         )->willReturn($author);
@@ -258,6 +257,8 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserLastNameIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -274,8 +275,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-
-        $this->expectException(InvalidArgumentException::class);
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -307,16 +306,6 @@ final class UpdateUserInformationServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-        $userToUpdate = (new UserBuilder())
-            ->withId(new Uuid($request->getUserId()))
-            ->withEmail(new Email($request->getEmail()))
-            ->withFirstName(new Name($request->getFirstName()))
-            ->withLastName(new Name($request->getLastName()))
-            ->withImage($request->getImage())
-            ->withEducation($request->getEducation())
-            ->withExperience($request->getExperience())
-            ->build();
-
         $this->repository
             ->expects($this->at(0))
             ->method('ofId')
@@ -327,9 +316,8 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->method('ofId')
             ->with($request->getUserId())
             ->willReturn($user);
-
         $this->repository->expects($this->once())->method('save')->with(
-            $this->callback($this->userComparator($userToUpdate))
+            $this->callback($this->userComparator($user))
         );
         ($this->updateUserInformationService)($request);
     }

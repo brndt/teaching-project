@@ -6,17 +6,9 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException;
-use LaSalle\StudentTeacher\User\Application\Request\CreateUserConnectionRequest;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionResponse;
@@ -220,7 +212,10 @@ final class SearchUserConnectionServiceTest extends TestCase
             ->build();
         $otherUser = (new UserBuilder())->build();
         $userConnection = new UserConnection($user->getId(), $otherUser->getId(), new Pended(), $user->getId());
-        $expectedUserConnectionCollectionResponse = new UserConnectionCollectionResponse(...$this->buildStudentResponse($userConnection));
+        $expectedUserConnectionCollectionResponse = new UserConnectionCollectionResponse(
+            ...
+            $this->buildStudentResponse($userConnection)
+        );
 
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
             $request->getRequestAuthorId()
@@ -248,6 +243,7 @@ final class SearchUserConnectionServiceTest extends TestCase
             $connections
         );
     }
+
     public function testWhenRequestIsValidAndAuthorIsTeacherThenSearchUserConnection()
     {
         $request = new SearchUserConnectionsByCriteriaRequest(
@@ -268,7 +264,10 @@ final class SearchUserConnectionServiceTest extends TestCase
             ->build();
         $otherUser = (new UserBuilder())->build();
         $userConnection = new UserConnection($user->getId(), $otherUser->getId(), new Pended(), $user->getId());
-        $expectedUserConnectionCollectionResponse = new UserConnectionCollectionResponse(...$this->buildTeacherResponse($userConnection));
+        $expectedUserConnectionCollectionResponse = new UserConnectionCollectionResponse(
+            ...
+            $this->buildTeacherResponse($userConnection)
+        );
 
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
             $request->getRequestAuthorId()

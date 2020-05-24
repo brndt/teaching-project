@@ -5,17 +5,13 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCategoriesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
 use LaSalle\StudentTeacher\Resource\Application\Service\SearchCategoriesByCriteria;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
-use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -37,7 +33,10 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->searchCategoriesByCriteria = new SearchCategoriesByCriteria($this->categoryRepository, $this->userRepository);
+        $this->searchCategoriesByCriteria = new SearchCategoriesByCriteria(
+            $this->categoryRepository,
+            $this->userRepository
+        );
     }
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
@@ -142,7 +141,10 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $expectedCategoryCollectionResponse = new CategoryCollectionResponse(...$this->buildResponse(...[$category, $anotherCategory]));
+        $expectedCategoryCollectionResponse = new CategoryCollectionResponse(
+            ...
+            $this->buildResponse(...[$category, $anotherCategory])
+        );
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')

@@ -7,9 +7,7 @@ namespace Test\LaSalle\StudentTeacher\Resource\Application;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCourseRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\SearchCoursesByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Application\Service\SearchCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
@@ -143,7 +141,8 @@ final class SearchCourseServiceTest extends TestCase
         $this->assertEquals($expectedCourseResponse, $actualCourseResponse);
     }
 
-    private function buildResponse(Course $course) {
+    private function buildResponse(Course $course)
+    {
         return new CourseResponse(
             $course->getId()->toString(),
             $course->getTeacherId()->toString(),

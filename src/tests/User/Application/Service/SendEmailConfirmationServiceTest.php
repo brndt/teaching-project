@@ -7,19 +7,12 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest;
-use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserEmailService;
 use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmationService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +30,11 @@ final class SendEmailConfirmationServiceTest extends TestCase
         $this->repository = $this->createMock(UserRepository::class);
         $this->emailSender = $this->createMock(EmailSender::class);
         $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
-        $this->sendEmailConfirmationService = new SendEmailConfirmationService($this->emailSender, $this->randomStringGenerator, $this->repository);
+        $this->sendEmailConfirmationService = new SendEmailConfirmationService(
+            $this->emailSender,
+            $this->randomStringGenerator,
+            $this->repository
+        );
     }
 
     public function testWhenUserEmailIsInvalidThenThrowException()
@@ -64,7 +61,9 @@ final class SendEmailConfirmationServiceTest extends TestCase
             ->build();
         $this->repository->method('ofEmail')->willReturn($userToSendEmail);
         $this->randomStringGenerator->method('generate')->willReturn('random_token');
-        $this->repository->expects($this->once())->method('save')->with($this->callback($this->userComparator($userToSendEmail)));
+        $this->repository->expects($this->once())->method('save')->with(
+            $this->callback($this->userComparator($userToSendEmail))
+        );
         $this->emailSender->expects($this->once())->method('sendEmailConfirmation')->with(
             $userToSendEmail->getEmail(),
             $userToSendEmail->getId(),
