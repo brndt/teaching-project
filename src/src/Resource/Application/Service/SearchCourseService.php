@@ -6,6 +6,7 @@ namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 
 final class SearchCourseService extends CourseService
 {
@@ -21,6 +22,10 @@ final class SearchCourseService extends CourseService
 
         $this->ensureRequestAuthorHasPermissionsToCourse($requestAuthor, $course);
 
+        return $this->buildResponse($course);
+    }
+
+    private function buildResponse(Course $course) {
         return new CourseResponse(
             $course->getId()->toString(),
             $course->getTeacherId()->toString(),

@@ -109,7 +109,7 @@ abstract class CourseService
         }
     }
 
-    protected function ensureCoursesExist(?Course...$courses): void
+    protected function ensureCoursesExist(?array $courses): void
     {
         if (true === empty($courses)) {
             throw new CourseNotFoundException();
