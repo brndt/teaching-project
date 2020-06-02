@@ -34,7 +34,7 @@ final class SymfonyEmailSender implements EmailSender
             ->context(
                 [
                     'name' => $firstName->toString().' '.$lastName->toString(),
-                    'url_confirmation' => $_SERVER['APP_URL'].'/users/'.$userId->toString().'/email_confirmation/?token='.$confirmationToken->toString(),
+                    'url_confirmation' => $_SERVER['APP_FRONTEND'].'users/'.$userId->toString().'/confirm-email/?token='.$confirmationToken->toString(),
                 ]
             );
         $this->mailer->send($email);
@@ -50,7 +50,7 @@ final class SymfonyEmailSender implements EmailSender
             ->context(
                 [
                     'name' => $firstName->toString().' '.$lastName->toString(),
-                    'url_confirmation' => $_SERVER['APP_URL'].'/users/'.$userId->toString().'/password_reset/?token='.$confirmationToken->toString(),
+                    'url_confirmation' => $_SERVER['APP_FRONTEND'].'users/'.$userId->toString().'/reset-password/?token='.$confirmationToken->toString(),
                 ]
             );
         $this->mailer->send($email);
