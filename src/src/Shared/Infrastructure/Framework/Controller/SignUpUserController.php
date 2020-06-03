@@ -23,7 +23,7 @@ final class SignUpUserController extends AbstractFOSRestController
 
     /**
      * @Rest\Post("/api/v1/users")
-     * @RequestParam(name="username")
+     * @RequestParam(name="email")
      * @RequestParam(name="password")
      * @RequestParam(name="first_name")
      * @RequestParam(name="last_name")
@@ -31,7 +31,7 @@ final class SignUpUserController extends AbstractFOSRestController
      */
     public function postAction(ParamFetcher $paramFetcher): Response
     {
-        $email = $paramFetcher->get('username');
+        $email = $paramFetcher->get('email');
         $password = $paramFetcher->get('password');
         $firstName = $paramFetcher->get('first_name');
         $lastName = $paramFetcher->get('last_name');
@@ -43,5 +43,4 @@ final class SignUpUserController extends AbstractFOSRestController
 
         return $this->handleView($this->view(['message' => 'User has been created'], Response::HTTP_CREATED));
     }
-
 }
