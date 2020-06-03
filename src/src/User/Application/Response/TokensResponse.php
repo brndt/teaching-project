@@ -8,11 +8,13 @@ final class TokensResponse
 {
     private string $token;
     private string $refreshToken;
+    private string $userId;
 
-    public function __construct(string $token, string $refreshToken)
+    public function __construct(string $token, string $refreshToken, string $userId)
     {
         $this->token = $token;
         $this->refreshToken = $refreshToken;
+        $this->userId = $userId;
     }
 
     public function getToken(): string
@@ -23,5 +25,10 @@ final class TokensResponse
     public function getRefreshToken(): string
     {
         return $this->refreshToken;
+    }
+
+    public function getUserId(): string
+    {
+        return $this->userId;
     }
 }

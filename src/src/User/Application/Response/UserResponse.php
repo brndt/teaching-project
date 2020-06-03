@@ -77,4 +77,17 @@ final class UserResponse
         return $this->experience;
     }
 
+    public function toPrimitives(): array {
+        return [
+            'id' => $this->id,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'roles' => $this->roles,
+            'created' => $this->created,
+            'image' => $this->image,
+            'education' => $this->education,
+            'experience' => $this->experience
+        ];
+    }
+
 }

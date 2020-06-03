@@ -9,20 +9,26 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\GenerateTokensRequest;
+use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Request\SignInRequest;
 use LaSalle\StudentTeacher\User\Application\Service\GenerateTokensService;
+use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteriaService;
 use LaSalle\StudentTeacher\User\Application\Service\SignInService;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class SignInController extends AbstractFOSRestController
 {
     private SignInService $signIn;
     private GenerateTokensService $generateTokens;
+    private SearchUsersByCriteriaService $searchUsersByCriteriaService;
 
-    public function __construct(SignInService $signIn, GenerateTokensService $generateTokens)
+    public function __construct(SignInService $signIn, GenerateTokensService $generateTokens, SearchUsersByCriteriaService $searchUsersByCriteriaService)
     {
         $this->signIn = $signIn;
         $this->generateTokens = $generateTokens;
+        $this->searchUsersByCriteriaService = $searchUsersByCriteriaService;
     }
 
     /**
@@ -41,6 +47,8 @@ final class SignInController extends AbstractFOSRestController
             new GenerateTokensRequest($userResponse->getId(), new \DateTimeImmutable('+ 2592000 seconds'))
         );
 
-        return $this->handleView($this->view($generateTokensResponse, Response::HTTP_CREATED));
+        $response = array_merge($userResponse->toPrimitives(), ['token' => $generateTokensResponse->getToken(), 'refreshToken' => $generateTokensResponse->getRefreshToken()]);
+
+        return $this->handleView($this->view($response, Response::HTTP_CREATED));
     }
 }

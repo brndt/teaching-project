@@ -22,6 +22,6 @@ final class GenerateTokensService extends RefreshTokenService
 
         $this->refreshTokenRepository->save($refreshToken);
 
-        return new TokensResponse($this->generateToken($refreshToken), $refreshToken->getRefreshToken()->toString());
+        return new TokensResponse($this->generateToken($refreshToken), $refreshToken->getRefreshToken()->toString(), $refreshToken->getUserId()->toString());
     }
 }

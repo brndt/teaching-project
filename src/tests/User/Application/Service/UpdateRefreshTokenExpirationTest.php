@@ -74,7 +74,11 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
         $user = (new UserBuilder())
             ->withId($refreshToken->getUserId())
             ->build();
-        $expectedTokensResponse = new TokensResponse('token_string', $refreshToken->getRefreshToken()->toString());
+        $expectedTokensResponse = new TokensResponse(
+            'token_string',
+            $refreshToken->getRefreshToken()->toString(),
+            $refreshToken->getUserId()->toString()
+        );
 
         $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($refreshToken);
         $this->refreshTokenRepository->expects($this->once())->method('save')->with(
