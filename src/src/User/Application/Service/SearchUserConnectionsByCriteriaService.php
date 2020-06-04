@@ -37,7 +37,7 @@ final class SearchUserConnectionsByCriteriaService extends UserConnectionService
         );
 
         $connections = $this->userConnectionRepository->matching($criteria);
-        $this->ensureConnectionsExist($connections);
+        //$this->ensureConnectionsExist($connections);
 
         if (true === $user->isInRole(new Role(Role::STUDENT))) {
             return new UserConnectionCollectionResponse(...$this->buildStudentResponse(...$connections));

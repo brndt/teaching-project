@@ -132,7 +132,7 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
         ($this->searchCoursesByCriteriaService)($request);
     }
 
-    public function testWhenCoursesNotFoundThenThrowException()
+    public function testWhenCoursesNotFoundThenReturnEmptyResult()
     {
         $request = new SearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
@@ -148,8 +148,8 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
+        $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...[]));
 
-        $this->expectException(CourseNotFoundException::class);
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -159,10 +159,11 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
             ->expects($this->once())
             ->method('matching')
             ->willReturn([]);
-        ($this->searchCoursesByCriteriaService)($request);
+        $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);
+        $this->assertEquals($expectedCourseCollectionResponse, $actualCourseCollectionResponse);
     }
 
-    public function testWhenRequestIsValidThenSearchCourses()
+    public function testWhenRequestIsValidThenReturnCourses()
     {
         $request = new SearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),

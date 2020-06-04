@@ -98,7 +98,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
         ($this->searchCategoriesByCriteria)($request);
     }
 
-    public function testWhenCategoriesDontExistThenThrowException()
+    public function testWhenCategoriesDontExistThenReturnEmptyResult()
     {
         $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
@@ -112,7 +112,10 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $this->expectException(CategoryNotFound::class);
+        $expectedCategoryCollectionResponse = new CategoryCollectionResponse(
+            ...
+            $this->buildResponse(...[])
+        );
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -122,10 +125,11 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
             ->expects($this->once())
             ->method('matching')
             ->willReturn([]);
-        ($this->searchCategoriesByCriteria)($request);
+        $actualCategoryCollectionResponse = ($this->searchCategoriesByCriteria)($request);
+        $this->assertEquals($expectedCategoryCollectionResponse, $actualCategoryCollectionResponse);
     }
 
-    public function testWhenRequestIsValidThenSearchCategories()
+    public function testWhenRequestIsValidThenReturnCategories()
     {
         $request = new SearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',

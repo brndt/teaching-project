@@ -23,7 +23,7 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/api/v1/users/{userId}/connections")
-     * @QueryParam(name="order_by", strict=true, nullable=true)
+     * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)

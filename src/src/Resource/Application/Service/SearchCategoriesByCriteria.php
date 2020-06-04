@@ -32,7 +32,7 @@ final class SearchCategoriesByCriteria extends CategoryService
 
         $categories = $this->categoryRepository->matching($criteria);
 
-        $this->ensureCategoriesExist($categories);
+        //$this->ensureCategoriesExist($categories);
 
         return new CategoryCollectionResponse(...$this->buildResponse(...$categories));
     }
