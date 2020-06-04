@@ -29,7 +29,7 @@ fos_rest:
       LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException: 400
       LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException: 404
       LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException: 403
-      LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException: 403
+      LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException: 400
       LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException: 400
       LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException: 404
       LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException: 400

@@ -11,9 +11,9 @@ final class UpdateUserInformationRequest
     private string $email;
     private string $firstName;
     private string $lastName;
-    private string $image;
-    private string $experience;
-    private string $education;
+    private ?string $image;
+    private ?string $experience;
+    private ?string $education;
 
     public function __construct(
         string $requestAuthorId,
@@ -21,9 +21,9 @@ final class UpdateUserInformationRequest
         string $email,
         string $firstName,
         string $lastName,
-        string $image,
-        string $experience,
-        string $education
+        ?string $image,
+        ?string $experience,
+        ?string $education
     ) {
         $this->requestAuthorId = $requestAuthorId;
         $this->userId = $userId;

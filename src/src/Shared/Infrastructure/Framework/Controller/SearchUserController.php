@@ -30,6 +30,6 @@ final class SearchUserController extends AbstractFOSRestController
             new SearchUsersByCriteriaRequest($filters, null, null, null, null, null)
         );
 
-        return $this->handleView($this->view($userResponse, Response::HTTP_OK));
+        return $this->handleView($this->view($userResponse->getIterator()->current(), Response::HTTP_OK));
     }
 }

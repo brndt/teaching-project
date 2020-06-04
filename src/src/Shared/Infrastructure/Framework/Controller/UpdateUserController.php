@@ -23,17 +23,17 @@ final class UpdateUserController extends AbstractFOSRestController
 
     /**
      * @Rest\Patch("/api/v1/users/{userId}/info")
-     * @RequestParam(name="username")
+     * @RequestParam(name="email")
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
-     * @RequestParam(name="image")
-     * @RequestParam(name="education")
-     * @RequestParam(name="experience")
+     * @RequestParam(name="image", nullable=true)
+     * @RequestParam(name="education", nullable=true)
+     * @RequestParam(name="experience", nullable=true)
      */
     public function patchAction(ParamFetcher $paramFetcher, string $userId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $email = $paramFetcher->get('username');
+        $email = $paramFetcher->get('email');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
         $image = $paramFetcher->get('image');
