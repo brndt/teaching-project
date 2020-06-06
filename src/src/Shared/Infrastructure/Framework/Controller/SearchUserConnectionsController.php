@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByCriteriaService;
+use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUserConnectionsController extends AbstractFOSRestController

@@ -24,7 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
-final class SearchUserConnectionServiceTest extends TestCase
+final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
 {
     private SearchUserConnectionsByCriteriaService $searchUserConnectionService;
     protected MockObject $userConnectionRepository;

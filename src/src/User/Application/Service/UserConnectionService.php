@@ -111,7 +111,7 @@ abstract class UserConnectionService
 
     protected function verifySpecifierChanged(Uuid $newSpecifierId, Uuid $oldSpecifierId): bool
     {
-        return $newSpecifierId->equalsTo($oldSpecifierId);
+        return (false === $newSpecifierId->equalsTo($oldSpecifierId));
     }
 
     protected function identifySpecifier(Uuid $authorId, User $firstUser, User $secondUser): User
