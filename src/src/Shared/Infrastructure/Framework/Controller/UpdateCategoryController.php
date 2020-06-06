@@ -23,13 +23,13 @@ final class UpdateCategoryController extends AbstractFOSRestController
 
     /**
      * @Rest\Patch("/api/v1/panel/categories/{userId}")
-     * @RequestParam(name="name")
+     * @RequestParam(name="categoryName")
      * @RequestParam(name="status")
      */
     public function postAction(ParamFetcher $paramFetcher, string $userId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $name = $paramFetcher->get('name');
+        $name = $paramFetcher->get('categoryName');
         $status = $paramFetcher->get('status');
 
         ($this->updateCategory)(new UpdateCategoryRequest($requestAuthorId, $userId, $name, $status));

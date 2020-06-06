@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\SearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoriesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
@@ -13,9 +13,9 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
-final class SearchCategoriesByCriteria extends CategoryService
+final class AuthorizatedSearchCategoriesByCriteria extends CategoryService
 {
-    public function __invoke(SearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
+    public function __invoke(AuthorizatedSearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);

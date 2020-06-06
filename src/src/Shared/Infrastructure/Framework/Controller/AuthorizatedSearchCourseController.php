@@ -12,7 +12,7 @@ use LaSalle\StudentTeacher\Resource\Application\Service\SearchCoursesByCriteriaS
 use LaSalle\StudentTeacher\Resource\Application\Service\SearchCourseService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class SearchCourseController extends AbstractFOSRestController
+final class AuthorizatedSearchCourseController extends AbstractFOSRestController
 {
     private SearchCourseService $searchCourse;
 
