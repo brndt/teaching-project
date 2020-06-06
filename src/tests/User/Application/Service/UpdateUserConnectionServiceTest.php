@@ -19,6 +19,7 @@ use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Approved;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Withdrawn;
@@ -354,7 +355,7 @@ final class UpdateUserConnectionServiceTest extends TestCase
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'cfe849f3-7832-435a-b484-83fabf530794',
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            'withdrawn'
+            'approved'
         );
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
@@ -391,7 +392,7 @@ final class UpdateUserConnectionServiceTest extends TestCase
         $this->stateFactory
             ->expects($this->once())
             ->method('create')
-            ->willReturn(new Withdrawn());
+            ->willReturn(new Approved());
         $this->userConnectionRepository
             ->expects($this->once())
             ->method('ofId')
