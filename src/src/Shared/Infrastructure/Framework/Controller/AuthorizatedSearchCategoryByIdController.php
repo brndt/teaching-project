@@ -6,15 +6,15 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoryByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizatedSearchCategoryByIdService;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoryByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizatedSearchCategoryByIdController extends AbstractFOSRestController
 {
-    private AuthorizatedSearchCategoryByIdService $searchCategoryByIdService;
+    private AuthorizedSearchCategoryByIdService $searchCategoryByIdService;
 
-    public function __construct(AuthorizatedSearchCategoryByIdService $searchCategoryByIdService)
+    public function __construct(AuthorizedSearchCategoryByIdService $searchCategoryByIdService)
     {
         $this->searchCategoryByIdService = $searchCategoryByIdService;
     }
@@ -27,7 +27,7 @@ final class AuthorizatedSearchCategoryByIdController extends AbstractFOSRestCont
         $requestAuthorId = $this->getUser()->getId();
 
         $category = ($this->searchCategoryByIdService)(
-            new AuthorizatedSearchCategoryByIdRequest($requestAuthorId, $categoryId)
+            new AuthorizedSearchCategoryByIdRequest($requestAuthorId, $categoryId)
         );
 
         return $this->handleView(

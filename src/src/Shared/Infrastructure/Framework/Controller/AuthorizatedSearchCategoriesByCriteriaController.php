@@ -8,15 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizatedSearchCategoriesByCriteria;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoriesByCriteria;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizatedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    private AuthorizatedSearchCategoriesByCriteria $searchCategoriesByCriteria;
+    private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria;
 
-    public function __construct(AuthorizatedSearchCategoriesByCriteria $searchCategoriesByCriteria)
+    public function __construct(AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria)
     {
         $this->searchCategoriesByCriteria = $searchCategoriesByCriteria;
     }
@@ -41,7 +41,7 @@ final class AuthorizatedSearchCategoriesByCriteriaController extends AbstractFOS
         $limit = (int)$paramFetcher->get('limit');
 
         $categories = ($this->searchCategoriesByCriteria)(
-            new AuthorizatedSearchCategoriesByCriteriaRequest($requestAuthorId, $filters, $orderBy, $order, $operator, $offset, $limit)
+            new AuthorizedSearchCategoriesByCriteriaRequest($requestAuthorId, $filters, $orderBy, $order, $operator, $offset, $limit)
         );
 
         return $this->handleView(

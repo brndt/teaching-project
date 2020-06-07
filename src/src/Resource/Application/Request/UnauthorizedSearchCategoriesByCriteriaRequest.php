@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-final class SearchCategoriesByCriteriaRequest
+final class UnauthorizedSearchCategoriesByCriteriaRequest
 {
     private array $filters;
     private ?string $orderBy;

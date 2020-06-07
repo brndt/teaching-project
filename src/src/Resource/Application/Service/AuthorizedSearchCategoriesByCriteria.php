@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\SearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
@@ -14,10 +13,15 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
-final class SearchCategoryByCriteriaService extends CategoryService
+final class AuthorizedSearchCategoriesByCriteria extends CategoryService
 {
-    public function __invoke(SearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
+    public function __invoke(AuthorizedSearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
     {
+        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
+        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
+        $this->ensureUserExists($requestAuthor);
+        $this->ensureRequestAuthorIsAdmin($requestAuthor);
+
         $criteria = new Criteria(
             Filters::fromValues($request->getFilters()),
             Order::fromValues($request->getOrderBy(), $request->getOrder()),
@@ -27,6 +31,8 @@ final class SearchCategoryByCriteriaService extends CategoryService
         );
 
         $categories = $this->categoryRepository->matching($criteria);
+
+        //$this->ensureCategoriesExist($categories);
 
         return new CategoryCollectionResponse(...$this->buildResponse(...$categories));
     }

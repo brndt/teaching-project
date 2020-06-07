@@ -6,10 +6,10 @@ namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizatedSearchCategoriesByCriteria;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoriesByCriteria;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -25,7 +25,7 @@ use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class SearchCategoriesByCriteriaServiceTest extends TestCase
 {
-    private AuthorizatedSearchCategoriesByCriteria $searchCategoriesByCriteria;
+    private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria;
     private MockObject $categoryRepository;
     private MockObject $userRepository;
 
@@ -33,7 +33,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->searchCategoriesByCriteria = new AuthorizatedSearchCategoriesByCriteria(
+        $this->searchCategoriesByCriteria = new AuthorizedSearchCategoriesByCriteria(
             $this->categoryRepository,
             $this->userRepository
         );
@@ -41,7 +41,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $request = new AuthorizatedSearchCategoriesByCriteriaRequest(
+        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138-invalid',
             [],
             null,
@@ -57,7 +57,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
-        $request = new AuthorizatedSearchCategoriesByCriteriaRequest(
+        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             [],
             null,
@@ -77,7 +77,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsNotAdminThenThrowException()
     {
-        $request = new AuthorizatedSearchCategoriesByCriteriaRequest(
+        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             [],
             null,
@@ -100,7 +100,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
 
     public function testWhenCategoriesDontExistThenReturnEmptyResult()
     {
-        $request = new AuthorizatedSearchCategoriesByCriteriaRequest(
+        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             [],
             null,
@@ -131,7 +131,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestIsValidThenReturnCategories()
     {
-        $request = new AuthorizatedSearchCategoriesByCriteriaRequest(
+        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             [],
             null,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-final class AuthorizatedSearchCategoriesByCriteriaRequest
+final class AuthorizedSearchCategoriesByCriteriaRequest
 {
     private string $requestAuthorId;
     private array $filters;

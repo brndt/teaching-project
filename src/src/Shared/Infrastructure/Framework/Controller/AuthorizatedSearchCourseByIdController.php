@@ -8,10 +8,10 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCourseByIdRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCoursesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizatedSearchCourseByIdService;
-use LaSalle\StudentTeacher\Resource\Application\Service\SearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCourseByIdService;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -20,9 +20,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AuthorizatedSearchCourseByIdController extends AbstractFOSRestController
 {
-    private AuthorizatedSearchCourseByIdService $searchCourse;
+    private AuthorizedSearchCourseByIdService $searchCourse;
 
-    public function __construct(AuthorizatedSearchCourseByIdService $searchCourse)
+    public function __construct(AuthorizedSearchCourseByIdService $searchCourse)
     {
         $this->searchCourse = $searchCourse;
     }
@@ -35,7 +35,7 @@ final class AuthorizatedSearchCourseByIdController extends AbstractFOSRestContro
         $requestAuthorId = $this->getUser()->getId();
 
         $courses = ($this->searchCourse)(
-            new AuthorizatedSearchCourseByIdRequest($requestAuthorId, $courseId)
+            new AuthorizedSearchCourseByIdRequest($requestAuthorId, $courseId)
         );
 
         return $this->handleView(

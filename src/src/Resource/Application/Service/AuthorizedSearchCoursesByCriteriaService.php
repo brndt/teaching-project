@@ -13,7 +13,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
-final class SearchCoursesByCriteriaService extends CourseService
+final class AuthorizedSearchCoursesByCriteriaService extends CourseService
 {
     public function __invoke(SearchCoursesByCriteriaRequest $request): CourseCollectionResponse
     {

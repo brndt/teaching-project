@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoryByIdRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 
-final class AuthorizatedSearchCategoryByIdService extends CategoryService
+final class AuthorizedSearchCategoryByIdService extends CategoryService
 {
-    public function __invoke(AuthorizatedSearchCategoryByIdRequest $request): CategoryResponse
+    public function __invoke(AuthorizedSearchCategoryByIdRequest $request): CategoryResponse
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);

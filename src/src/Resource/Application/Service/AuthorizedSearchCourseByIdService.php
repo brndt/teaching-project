@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCategoryByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizatedSearchCourseByIdRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 
-final class AuthorizatedSearchCourseByIdService extends CourseService
+final class AuthorizedSearchCourseByIdService extends CourseService
 {
-    public function __invoke(AuthorizatedSearchCourseByIdRequest $request): CourseResponse
+    public function __invoke(AuthorizedSearchCourseByIdRequest $request): CourseResponse
     {
         $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
         $requestAuthor = $this->userRepository->ofId($requestAuthorId);

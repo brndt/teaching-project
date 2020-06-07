@@ -8,15 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\SearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\SearchCategoryByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCategoryByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class SearchCategoriesByCriteriaController extends AbstractFOSRestController
+final class UnauthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    private SearchCategoryByCriteriaService $searchCategoriesByCriteria;
+    private UnauthorizedSearchCategoryByCriteriaService $searchCategoriesByCriteria;
 
-    public function __construct(SearchCategoryByCriteriaService $searchCategoriesByCriteria)
+    public function __construct(UnauthorizedSearchCategoryByCriteriaService $searchCategoriesByCriteria)
     {
         $this->searchCategoriesByCriteria = $searchCategoriesByCriteria;
     }
@@ -43,7 +43,7 @@ final class SearchCategoriesByCriteriaController extends AbstractFOSRestControll
         $limit = (int)$paramFetcher->get('limit');
 
         $categories = ($this->searchCategoriesByCriteria)(
-            new SearchCategoriesByCriteriaRequest(
+            new UnauthorizedSearchCategoriesByCriteriaRequest(
                 $filters,
                 $orderBy,
                 $order,

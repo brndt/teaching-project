@@ -9,7 +9,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCoursesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\SearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -18,9 +18,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
-    private SearchCoursesByCriteriaService $searchCourses;
+    private AuthorizedSearchCoursesByCriteriaService $searchCourses;
 
-    public function __construct(SearchCoursesByCriteriaService $searchCourses)
+    public function __construct(AuthorizedSearchCoursesByCriteriaService $searchCourses)
     {
         $this->searchCourses = $searchCourses;
     }

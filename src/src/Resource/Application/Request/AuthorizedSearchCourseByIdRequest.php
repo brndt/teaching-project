@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-final class AuthorizatedSearchCategoryByIdRequest
+final class AuthorizedSearchCourseByIdRequest
 {
     private string $requestAuthorId;
-    private string $categoryId;
+    private string $courseId;
 
-    public function __construct(string $requestAuthorId, string $categoryName)
+    public function __construct(string $requestAuthorId, string $courseId)
     {
         $this->requestAuthorId = $requestAuthorId;
-        $this->categoryId = $categoryName;
+        $this->courseId = $courseId;
     }
 
-    public function getCategoryId(): string
+    public function getCourseId(): string
     {
-        return $this->categoryId;
+        return $this->courseId;
     }
 
     public function getRequestAuthorId(): string

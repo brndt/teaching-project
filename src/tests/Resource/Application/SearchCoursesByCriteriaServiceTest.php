@@ -9,7 +9,7 @@ use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundExceptio
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\SearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
@@ -26,7 +26,7 @@ use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
 final class SearchCoursesByCriteriaServiceTest extends TestCase
 {
-    private SearchCoursesByCriteriaService $searchCoursesByCriteriaService;
+    private AuthorizedSearchCoursesByCriteriaService $searchCoursesByCriteriaService;
     private MockObject $courseRepository;
     private MockObject $categoryRepository;
     private MockObject $userRepository;
@@ -36,7 +36,7 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
         $this->courseRepository = $this->createMock(CourseRepository::class);
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->searchCoursesByCriteriaService = new SearchCoursesByCriteriaService(
+        $this->searchCoursesByCriteriaService = new AuthorizedSearchCoursesByCriteriaService(
             $this->courseRepository,
             $this->categoryRepository,
             $this->userRepository
