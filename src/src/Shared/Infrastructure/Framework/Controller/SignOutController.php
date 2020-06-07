@@ -31,7 +31,7 @@ final class SignOutController extends AbstractFOSRestController
 
         ($this->deleteRefreshToken)(new DeleteRefreshTokenRequest($refreshToken));
 
-        return $this->handleView($this->view(['message' => 'Refresh token has been deleted'], Response::HTTP_OK));
+        return $this->handleView($this->view(['message' => 'You have successfully signed out'], Response::HTTP_OK));
     }
 
 }

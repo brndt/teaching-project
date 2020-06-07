@@ -23,14 +23,14 @@ final class UpdateUserPasswordController extends AbstractFOSRestController
 
     /**
      * @Rest\Patch("/api/v1/users/{userId}/password")
-     * @RequestParam(name="old_password")
-     * @RequestParam(name="new_password")
+     * @RequestParam(name="oldPassword")
+     * @RequestParam(name="newPassword")
      */
     public function patchAction(ParamFetcher $paramFetcher, string $userId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $oldPassword = $paramFetcher->get('old_password');
-        $newPassword = $paramFetcher->get('new_password');
+        $oldPassword = $paramFetcher->get('oldPassword');
+        $newPassword = $paramFetcher->get('newPassword');
 
         ($this->updateUserPassword)(new UpdateUserPasswordRequest($requestAuthorId, $userId, $oldPassword, $newPassword));
 

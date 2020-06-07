@@ -25,16 +25,16 @@ final class SignUpUserController extends AbstractFOSRestController
      * @Rest\Post("/api/v1/users")
      * @RequestParam(name="email")
      * @RequestParam(name="password")
-     * @RequestParam(name="first_name")
-     * @RequestParam(name="last_name")
+     * @RequestParam(name="firstName")
+     * @RequestParam(name="lastName")
      * @RequestParam(name="roles")
      */
     public function postAction(ParamFetcher $paramFetcher): Response
     {
         $email = $paramFetcher->get('email');
         $password = $paramFetcher->get('password');
-        $firstName = $paramFetcher->get('first_name');
-        $lastName = $paramFetcher->get('last_name');
+        $firstName = $paramFetcher->get('firstName');
+        $lastName = $paramFetcher->get('lastName');
         $roles = $paramFetcher->get('roles');
 
         ($this->createUser)(
