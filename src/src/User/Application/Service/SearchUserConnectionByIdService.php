@@ -30,10 +30,12 @@ final class SearchUserConnectionByIdService extends UserConnectionService
         [$student, $teacher] = $this->identifyStudentAndTeacher($user, $friend);
 
         $connection = $this->userConnectionRepository->ofId($student->getId(), $teacher->getId());
+        $this->ensureConnectionExists($connection);
 
         if (true === $user->isInRole(new Role(Role::STUDENT))) {
             return $this->buildStudentResponse($connection);
         }
+
 
         return $this->buildTeacherResponse($connection);
     }
