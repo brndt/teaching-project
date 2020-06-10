@@ -32,10 +32,13 @@ final class UnauthorizedSearchCategoriesByCriteriaController extends AbstractFOS
     public function getAction(ParamFetcher $paramFetcher): Response
     {
         $name = $paramFetcher->get('name');
-        $filters = empty($name) ? [['field' => 'status', 'operator' => '=', 'value' => 'published']] : [
-            ['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name],
-            ['field' => 'status', 'operator' => '=', 'value' => 'published']
-        ];
+
+        $filters = [['field' => 'status', 'operator' => '=', 'value' => 'published']];
+
+        if (true !== empty($name)) {
+            $filters[] = ['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name];
+        }
+
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = 'AND';

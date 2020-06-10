@@ -9,15 +9,9 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCoursesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCoursesByCriteriaService;
-use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
-use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
@@ -30,7 +24,8 @@ final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRes
 
     /**
      * @Rest\Get("/api/v1/courses")
-     * @QueryParam(name="teacherId", strict=true, nullable=true)
+     * @QueryParam(name="teacherId", strict=true, nullable=true),
+     * @QueryParam(name="categoryId", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
@@ -39,10 +34,18 @@ final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRes
     public function getAction(ParamFetcher $paramFetcher): Response
     {
         $teacherId = $paramFetcher->get('teacherId');
-        $filters = empty($teacherId) ? [['field' => 'status', 'operator' => '=', 'value' => 'published']] : [
-            ['field' => 'teacherId', 'operator' => 'CONTAINS', 'value' => $teacherId],
-            ['field' => 'status', 'operator' => '=', 'value' => 'published']
-        ];
+        $categoryId = $paramFetcher->get('categoryId');
+
+        $filters = [['field' => 'status', 'operator' => '=', 'value' => 'published']];
+
+        if (true !== empty($teacherId)) {
+            $filters[] = ['field' => 'teacherId', 'operator' => '=', 'value' => $teacherId];
+        }
+
+        if (true !== empty($categoryId)) {
+            $filters[] = ['field' => 'categoryId', 'operator' => '=', 'value' => $categoryId];
+        }
+
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = 'AND';
@@ -62,7 +65,7 @@ final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRes
             );
         } catch (CourseNotFoundException $exception) {
             return $this->handleView(
-                $this->view(Response::HTTP_NO_CONTENT)
+                $this->view([], Response::HTTP_NO_CONTENT)
             );
         }
 

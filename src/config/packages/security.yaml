@@ -57,6 +57,11 @@ security:
             methods: ['GET']
             anonymous: true
 
+        courses:
+            pattern:  ^/api/v1/courses
+            methods: ['GET']
+            anonymous: true
+
         api:
             pattern:   ^/api/v1
             anonymous: false

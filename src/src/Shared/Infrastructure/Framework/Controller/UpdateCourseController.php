@@ -25,8 +25,8 @@ final class UpdateCourseController extends AbstractFOSRestController
 
     /**
      * @Rest\Patch("/api/v1/panel/courses/{courseId}")
-     * @RequestParam(name="teacher_id")
-     * @RequestParam(name="category_id")
+     * @RequestParam(name="teacherId")
+     * @RequestParam(name="categoryId")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="level")
@@ -35,8 +35,8 @@ final class UpdateCourseController extends AbstractFOSRestController
     public function postAction(ParamFetcher $paramFetcher, string $courseId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $teacherId = $paramFetcher->get('teacher_id');
-        $categoryId = $paramFetcher->get('category_id');
+        $teacherId = $paramFetcher->get('teacherId');
+        $categoryId = $paramFetcher->get('categoryId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $level = $paramFetcher->get('level');

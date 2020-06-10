@@ -25,8 +25,8 @@ final class CreateCourseController extends AbstractFOSRestController
 
     /**
      * @Rest\Post("/api/v1/panel/courses")
-     * @RequestParam(name="teacher_id")
-     * @RequestParam(name="category_id")
+     * @RequestParam(name="teacherId")
+     * @RequestParam(name="categoryId")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="level")
@@ -35,8 +35,8 @@ final class CreateCourseController extends AbstractFOSRestController
     public function postAction(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $teacherId = $paramFetcher->get('teacher_id');
-        $categoryId = $paramFetcher->get('category_id');
+        $teacherId = $paramFetcher->get('teacherId');
+        $categoryId = $paramFetcher->get('categoryId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $level = $paramFetcher->get('level');

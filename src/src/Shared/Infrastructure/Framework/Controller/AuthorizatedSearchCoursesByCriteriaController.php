@@ -28,7 +28,7 @@ final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRes
 
     /**
      * @Rest\Get("/api/v1/panel/courses")
-     * @QueryParam(name="user_id", strict=true, nullable=true)
+     * @QueryParam(name="userId", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
@@ -37,7 +37,7 @@ final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRes
     public function getAction(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $userId = $paramFetcher->get('user_id');
+        $userId = $paramFetcher->get('userId');
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = 'AND';
