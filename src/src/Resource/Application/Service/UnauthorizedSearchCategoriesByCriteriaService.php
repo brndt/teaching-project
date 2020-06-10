@@ -14,7 +14,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
-final class UnauthorizedSearchCategoryByCriteriaService extends CategoryService
+final class UnauthorizedSearchCategoriesByCriteriaService extends CategoryService
 {
     public function __invoke(UnauthorizedSearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
     {
@@ -27,6 +27,7 @@ final class UnauthorizedSearchCategoryByCriteriaService extends CategoryService
         );
 
         $categories = $this->categoryRepository->matching($criteria);
+        $this->ensureCategoriesExist($categories);
 
         return new CategoryCollectionResponse(...$this->buildResponse(...$categories));
     }

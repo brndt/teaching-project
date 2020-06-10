@@ -9,10 +9,10 @@ final class AuthorizedSearchCategoryByIdRequest
     private string $requestAuthorId;
     private string $categoryId;
 
-    public function __construct(string $requestAuthorId, string $categoryName)
+    public function __construct(string $requestAuthorId, string $categoryId)
     {
         $this->requestAuthorId = $requestAuthorId;
-        $this->categoryId = $categoryName;
+        $this->categoryId = $categoryId;
     }
 
     public function getCategoryId(): string

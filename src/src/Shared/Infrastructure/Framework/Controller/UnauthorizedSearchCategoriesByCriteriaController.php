@@ -9,14 +9,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCategoryByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCategoriesByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UnauthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    private UnauthorizedSearchCategoryByCriteriaService $searchCategoriesByCriteria;
+    private UnauthorizedSearchCategoriesByCriteriaService $searchCategoriesByCriteria;
 
-    public function __construct(UnauthorizedSearchCategoryByCriteriaService $searchCategoriesByCriteria)
+    public function __construct(UnauthorizedSearchCategoriesByCriteriaService $searchCategoriesByCriteria)
     {
         $this->searchCategoriesByCriteria = $searchCategoriesByCriteria;
     }

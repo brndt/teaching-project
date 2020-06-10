@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
@@ -13,23 +14,12 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
-final class AuthorizedSearchCoursesByCriteriaService extends CourseService
+final class UnauthorizedSearchCoursesByCriteriaService extends CourseService
 {
-    public function __invoke(AuthorizedSearchCoursesByCriteriaRequest $request): CourseCollectionResponse
+    public function __invoke(UnauthorizedSearchCoursesByCriteriaRequest $request): CourseCollectionResponse
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
-
-        $filters = $this->createFiltersDependingByRoles($requestAuthor);
-
-        if (null !== $request->getUserId()) {
-            $userId = $this->createIdFromPrimitive($request->getUserId());
-            $filters = $filters->add($this->createFilterByTeacherId($userId));
-        }
-
         $criteria = new Criteria(
-            $filters,
+            Filters::fromValues($request->getFilters()),
             Order::fromValues($request->getOrderBy(), $request->getOrder()),
             Operator::fromValue($request->getOperator()),
             $request->getOffset(),

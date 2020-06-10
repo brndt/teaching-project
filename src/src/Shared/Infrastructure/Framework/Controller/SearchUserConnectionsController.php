@@ -8,9 +8,9 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByCriteriaService;
-use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionsByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUserConnectionsController extends AbstractFOSRestController
@@ -38,17 +38,23 @@ final class SearchUserConnectionsController extends AbstractFOSRestController
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        $connections = ($this->searchConnections)(
-            new SearchUserConnectionsByCriteriaRequest(
-                $requestAuthorId,
-                $userId,
-                $orderBy,
-                $order,
-                $operator,
-                $offset,
-                $limit
-            )
-        );
+        try {
+            $connections = ($this->searchConnections)(
+                new SearchUserConnectionsByCriteriaRequest(
+                    $requestAuthorId,
+                    $userId,
+                    $orderBy,
+                    $order,
+                    $operator,
+                    $offset,
+                    $limit
+                )
+            );
+        } catch (ConnectionNotFoundException $exception) {
+            return $this->handleView(
+                $this->view(null, Response::HTTP_NO_CONTENT)
+            );
+        }
 
         return $this->handleView(
             $this->view($connections, Response::HTTP_OK)

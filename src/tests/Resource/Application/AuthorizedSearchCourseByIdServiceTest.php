@@ -6,8 +6,10 @@ namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\SearchCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCourseByIdService;
 use LaSalle\StudentTeacher\Resource\Application\Service\SearchCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
@@ -20,9 +22,9 @@ use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CourseBuilder;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
-final class SearchCourseServiceTest extends TestCase
+final class AuthorizedSearchCourseByIdServiceTest extends TestCase
 {
-    private SearchCourseService $searchCourseService;
+    private AuthorizedSearchCourseByIdService $searchCourseService;
     private MockObject $courseRepository;
     private MockObject $categoryRepository;
     private MockObject $userRepository;
@@ -32,7 +34,7 @@ final class SearchCourseServiceTest extends TestCase
         $this->courseRepository = $this->createMock(CourseRepository::class);
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->searchCourseService = new SearchCourseService(
+        $this->searchCourseService = new AuthorizedSearchCourseByIdService(
             $this->courseRepository,
             $this->categoryRepository,
             $this->userRepository
@@ -41,7 +43,7 @@ final class SearchCourseServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $request = new SearchCourseRequest(
+        $request = new AuthorizedSearchCourseByIdRequest(
             Uuid::generate()->toString() . '-invalid',
             Uuid::generate()->toString(),
         );
@@ -52,7 +54,7 @@ final class SearchCourseServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsNotFoundThenThrowException()
     {
-        $request = new SearchCourseRequest(
+        $request = new AuthorizedSearchCourseByIdRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
         );
@@ -68,7 +70,7 @@ final class SearchCourseServiceTest extends TestCase
 
     public function testWhenCourseIdIsInvalidThenThrowException()
     {
-        $request = new SearchCourseRequest(
+        $request = new AuthorizedSearchCourseByIdRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString() . '-invalid',
         );
@@ -88,7 +90,7 @@ final class SearchCourseServiceTest extends TestCase
 
     public function testWhenCourseIsNotFoundThenThrowException()
     {
-        $request = new SearchCourseRequest(
+        $request = new AuthorizedSearchCourseByIdRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
         );
@@ -113,7 +115,7 @@ final class SearchCourseServiceTest extends TestCase
 
     public function testWhenRequestIsValidThenSearchCourse()
     {
-        $request = new SearchCourseRequest(
+        $request = new AuthorizedSearchCourseByIdRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
         );

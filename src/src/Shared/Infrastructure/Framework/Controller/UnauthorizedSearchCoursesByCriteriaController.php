@@ -10,25 +10,27 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCoursesByCriteriaService;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRestController
+final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
-    private AuthorizedSearchCoursesByCriteriaService $searchCourses;
+    private UnauthorizedSearchCoursesByCriteriaService $searchCourses;
 
-    public function __construct(AuthorizedSearchCoursesByCriteriaService $searchCourses)
+    public function __construct(UnauthorizedSearchCoursesByCriteriaService $searchCourses)
     {
         $this->searchCourses = $searchCourses;
     }
 
     /**
-     * @Rest\Get("/api/v1/panel/courses")
-     * @QueryParam(name="user_id", strict=true, nullable=true)
+     * @Rest\Get("/api/v1/courses")
+     * @QueryParam(name="teacherId", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
@@ -36,8 +38,11 @@ final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRes
      */
     public function getAction(ParamFetcher $paramFetcher): Response
     {
-        $requestAuthorId = $this->getUser()->getId();
-        $userId = $paramFetcher->get('user_id');
+        $teacherId = $paramFetcher->get('teacherId');
+        $filters = empty($teacherId) ? [['field' => 'status', 'operator' => '=', 'value' => 'published']] : [
+            ['field' => 'teacherId', 'operator' => 'CONTAINS', 'value' => $teacherId],
+            ['field' => 'status', 'operator' => '=', 'value' => 'published']
+        ];
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = 'AND';
@@ -46,9 +51,8 @@ final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRes
 
         try {
             $courses = ($this->searchCourses)(
-                new AuthorizedSearchCoursesByCriteriaRequest(
-                    $requestAuthorId,
-                    $userId,
+                new UnauthorizedSearchCoursesByCriteriaRequest(
+                    $filters,
                     $orderBy,
                     $order,
                     $operator,
@@ -58,7 +62,7 @@ final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRes
             );
         } catch (CourseNotFoundException $exception) {
             return $this->handleView(
-                $this->view(null,Response::HTTP_NO_CONTENT)
+                $this->view(Response::HTTP_NO_CONTENT)
             );
         }
 

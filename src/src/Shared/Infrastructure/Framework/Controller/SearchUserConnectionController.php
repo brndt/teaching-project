@@ -37,7 +37,7 @@ final class SearchUserConnectionController extends AbstractFOSRestController
             );
         } catch (ConnectionNotFoundException $exception) {
             return $this->handleView(
-                $this->view( Response::HTTP_NO_CONTENT)
+                $this->view(null, Response::HTTP_NO_CONTENT)
             );
         }
 

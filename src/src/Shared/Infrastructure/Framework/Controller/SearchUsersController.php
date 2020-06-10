@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUsersByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +41,15 @@ final class SearchUsersController extends AbstractFOSRestController
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        $usersResponse = ($this->searchUsersByCriteria)(
-            new SearchUsersByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit)
-        );
+        try {
+            $usersResponse = ($this->searchUsersByCriteria)(
+                new SearchUsersByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit)
+            );
+        } catch (UserNotFoundException $exception) {
+            return $this->handleView(
+                $this->view(null,Response::HTTP_NO_CONTENT)
+            );
+        }
 
         return $this->handleView($this->view($usersResponse, Response::HTTP_OK));
     }

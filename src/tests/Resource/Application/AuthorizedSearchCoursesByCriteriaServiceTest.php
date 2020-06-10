@@ -6,7 +6,7 @@ namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
-use LaSalle\StudentTeacher\Resource\Application\Request\SearchCoursesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CourseBuilder;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
-final class SearchCoursesByCriteriaServiceTest extends TestCase
+final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
 {
     private AuthorizedSearchCoursesByCriteriaService $searchCoursesByCriteriaService;
     private MockObject $courseRepository;
@@ -45,7 +45,7 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $request = new SearchCoursesByCriteriaRequest(
+        $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString() . '-invalid',
             null,
             null,
@@ -61,7 +61,7 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsNotFoundThenThrowException()
     {
-        $request = new SearchCoursesByCriteriaRequest(
+        $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
             null,
             null,
@@ -82,7 +82,7 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestAuthorRoleIsNotAdminOrTeacherThenThrowException()
     {
-        $request = new SearchCoursesByCriteriaRequest(
+        $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
             null,
             null,
@@ -108,7 +108,7 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
 
     public function testWhenUserIdIsNotNullAndIsInvalidThenThrowException()
     {
-        $request = new SearchCoursesByCriteriaRequest(
+        $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString() . '-invalid',
             null,
@@ -132,9 +132,9 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
         ($this->searchCoursesByCriteriaService)($request);
     }
 
-    public function testWhenCoursesNotFoundThenReturnEmptyResult()
+    public function testWhenCoursesNotFoundThenThrowException()
     {
-        $request = new SearchCoursesByCriteriaRequest(
+        $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             null,
@@ -143,13 +143,12 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
             null,
             null
         );
+        $this->expectException(CourseNotFoundException::class);
 
         $requestAuthor = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...[]));
-
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -159,13 +158,12 @@ final class SearchCoursesByCriteriaServiceTest extends TestCase
             ->expects($this->once())
             ->method('matching')
             ->willReturn([]);
-        $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);
-        $this->assertEquals($expectedCourseCollectionResponse, $actualCourseCollectionResponse);
+        ($this->searchCoursesByCriteriaService)($request);
     }
 
     public function testWhenRequestIsValidThenReturnCourses()
     {
-        $request = new SearchCoursesByCriteriaRequest(
+        $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
             Uuid::generate()->toString(),
             null,

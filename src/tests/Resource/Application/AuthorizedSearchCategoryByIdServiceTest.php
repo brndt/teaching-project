@@ -6,10 +6,9 @@ namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
+use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoriesByCriteria;
+use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoryByIdService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -23,9 +22,9 @@ use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CategoryBuilder;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
 
-final class SearchCategoriesByCriteriaServiceTest extends TestCase
+final class AuthorizedSearchCategoryByIdServiceTest extends TestCase
 {
-    private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria;
+    private AuthorizedSearchCategoryByIdService $searchCategoryByIdService;
     private MockObject $categoryRepository;
     private MockObject $userRepository;
 
@@ -33,7 +32,7 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->searchCategoriesByCriteria = new AuthorizedSearchCategoriesByCriteria(
+        $this->searchCategoryByIdService = new AuthorizedSearchCategoryByIdService(
             $this->categoryRepository,
             $this->userRepository
         );
@@ -41,30 +40,20 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
     {
-        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
-            '48d34c63-6bba-4c72-a461-8aac1fd7d138-invalid',
-            [],
-            null,
-            null,
-            null,
-            null,
-            null
+        $request = new AuthorizedSearchCategoryByIdRequest(
+            Uuid::generate()->toString() . '-invalid',
+            Uuid::generate()->toString(),
         );
 
         $this->expectException(InvalidArgumentException::class);
-        ($this->searchCategoriesByCriteria)($request);
+        ($this->searchCategoryByIdService)($request);
     }
 
     public function testWhenUserIdIsNotFoundThenThrowException()
     {
-        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
-            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            [],
-            null,
-            null,
-            null,
-            null,
-            null
+        $request = new AuthorizedSearchCategoryByIdRequest(
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
         );
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
@@ -72,19 +61,14 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
-        ($this->searchCategoriesByCriteria)($request);
+        ($this->searchCategoryByIdService)($request);
     }
 
     public function testWhenRequestAuthorIsNotAdminThenThrowException()
     {
-        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
-            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            [],
-            null,
-            null,
-            null,
-            null,
-            null
+        $request = new AuthorizedSearchCategoryByIdRequest(
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
         );
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::STUDENT]))
@@ -95,27 +79,20 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
-        ($this->searchCategoriesByCriteria)($request);
+        ($this->searchCategoryByIdService)($request);
     }
 
-    public function testWhenCategoriesDontExistThenReturnEmptyResult()
+    public function testWhenCategoryDoesntExistThenThrowException()
     {
-        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
-            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            [],
-            null,
-            null,
-            null,
-            null,
-            null
+        $request = new AuthorizedSearchCategoryByIdRequest(
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
         );
+        $this->expectException(CategoryNotFound::class);
+
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $expectedCategoryCollectionResponse = new CategoryCollectionResponse(
-            ...
-            $this->buildResponse(...[])
-        );
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -123,32 +100,22 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
             ->willReturn($user);
         $this->categoryRepository
             ->expects($this->once())
-            ->method('matching')
-            ->willReturn([]);
-        $actualCategoryCollectionResponse = ($this->searchCategoriesByCriteria)($request);
-        $this->assertEquals($expectedCategoryCollectionResponse, $actualCategoryCollectionResponse);
+            ->method('ofId')
+            ->willReturn(null);
+        ($this->searchCategoryByIdService)($request);
     }
 
-    public function testWhenRequestIsValidThenReturnCategories()
+    public function testWhenRequestIsValidThenReturnCategory()
     {
-        $request = new AuthorizedSearchCategoriesByCriteriaRequest(
-            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
-            [],
-            null,
-            null,
-            null,
-            null,
-            null
+        $request = new AuthorizedSearchCategoryByIdRequest(
+            Uuid::generate()->toString(),
+            Uuid::generate()->toString(),
         );
         $category = (new CategoryBuilder())->build();
-        $anotherCategory = (new CategoryBuilder())->build();
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $expectedCategoryCollectionResponse = new CategoryCollectionResponse(
-            ...
-            $this->buildResponse(...[$category, $anotherCategory])
-        );
+        $expectedCategoryResponse = $this->buildResponse($category);
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')
@@ -156,24 +123,19 @@ final class SearchCategoriesByCriteriaServiceTest extends TestCase
             ->willReturn($user);
         $this->categoryRepository
             ->expects($this->once())
-            ->method('matching')
-            ->willReturn([$category, $anotherCategory]);
+            ->method('ofId')
+            ->willReturn($category);
 
-        $actualCategoryCollectionResponse = ($this->searchCategoriesByCriteria)($request);
-        $this->assertEquals($expectedCategoryCollectionResponse, $actualCategoryCollectionResponse);
+        $actualCategoryResponse = ($this->searchCategoryByIdService)($request);
+        $this->assertEquals($expectedCategoryResponse, $actualCategoryResponse);
     }
 
-    private function buildResponse(Category ...$categories): array
+    private function buildResponse(Category $category): CategoryResponse
     {
-        return array_map(
-            static function (Category $category) {
-                return new CategoryResponse(
-                    $category->getId()->toString(),
-                    $category->getName(),
-                    $category->getStatus()->value(),
-                );
-            },
-            $categories
+        return new CategoryResponse(
+            $category->getId()->toString(),
+            $category->getName(),
+            $category->getStatus()->value(),
         );
     }
 

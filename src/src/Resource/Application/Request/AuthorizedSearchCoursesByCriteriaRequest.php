@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-final class SearchCoursesByCriteriaRequest
+final class AuthorizedSearchCoursesByCriteriaRequest
 {
     private string $requestAuthorId;
     private ?string $userId;

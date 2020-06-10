@@ -162,7 +162,7 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
         ($this->searchUserConnectionService)($request);
     }
 
-    public function testWhenConnectionIsNotFoundThenReturnEmptyResult()
+    public function testWhenConnectionIsNotFoundThenThrowException()
     {
         $request = new SearchUserConnectionsByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
@@ -173,17 +173,14 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             null,
             null
         );
+        $this->expectException(ConnectionNotFoundException::class);
+
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
         $firstUser = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-        $expectedUserConnectionCollectionResponse = new UserConnectionCollectionResponse(
-            ...
-            $this->buildStudentResponse(...[])
-        );
-
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
             $request->getRequestAuthorId()
         )->willReturn($author);
@@ -192,8 +189,7 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
         )->willReturn($firstUser);
         $this->userConnectionRepository->expects($this->once())->method('matching')->willReturn([]);
 
-        $userConnectionCollectionResponse = ($this->searchUserConnectionService)($request);
-        $this->assertEquals($expectedUserConnectionCollectionResponse, $userConnectionCollectionResponse);
+        ($this->searchUserConnectionService)($request);
     }
 
     public function testWhenRequestIsValidAndAuthorIsStudentThenReturnUserConnection()

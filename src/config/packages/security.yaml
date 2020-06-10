@@ -52,6 +52,11 @@ security:
             methods: ['POST']
             anonymous: true
 
+        categories:
+            pattern:  ^/api/v1/categories
+            methods: ['GET']
+            anonymous: true
+
         api:
             pattern:   ^/api/v1
             anonymous: false
