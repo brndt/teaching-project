@@ -23,11 +23,23 @@ services:
     resource: '../src/Shared/Infrastructure/Framework/Controller'
     tags: ['controller.service_arguments']
 
+  LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus:
+    alias: 'LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus'
+
+  #LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus:
+  #  arguments:
+  #    $eventBus: '@event.bus'
+
   acme_api.event.jwt_created_listener:
     class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Event\JWTCreatedListener
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
+  #LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
+  #  tags:
+  #    - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
+
   LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
-    tags:
-      - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
+          autoconfigure: false
+          tags:
+              - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
