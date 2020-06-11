@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
+use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class CreateUserService extends UserService
 {
     private DomainEventBus $eventBus;
+    private RandomStringGenerator $randomStringGenerator;
 
-    public function __construct(UserRepository $userRepository, DomainEventBus $eventBus)
+    public function __construct(RandomStringGenerator $randomStringGenerator, UserRepository $userRepository, DomainEventBus $eventBus)
     {
         parent::__construct($userRepository);
         $this->eventBus = $eventBus;
+        $this->randomStringGenerator = $randomStringGenerator;
     }
 
     public function __invoke(CreateUserRequest $request): void
@@ -40,7 +45,12 @@ final class CreateUserService extends UserService
             $lastName,
             $roles,
             $request->getCreated(),
-            false
+            false,
+            null,
+            null,
+            null,
+            new Token($this->randomStringGenerator->generate()),
+            new DateTimeImmutable('+1 day')
         );
 
         $this->userRepository->save($user);

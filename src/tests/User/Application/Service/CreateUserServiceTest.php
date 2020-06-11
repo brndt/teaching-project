@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
+use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Application\Service\CreateUserService;
@@ -25,13 +26,15 @@ final class CreateUserServiceTest extends TestCase
 {
     private CreateUserService $createUser;
     private MockObject $repository;
+    private MockObject $randomStringGenerator;
     private MockObject $eventBus;
 
     public function setUp(): void
     {
         $this->repository = $this->createMock(UserRepository::class);
         $this->eventBus = $this->createMock(DomainEventBus::class);
-        $this->createUser = new CreateUserService($this->repository, $this->eventBus);
+        $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
+        $this->createUser = new CreateUserService( $this->randomStringGenerator, $this->repository, $this->eventBus,);
     }
 
     public function testWhenUserEmailIsInvalidThenThrowException()

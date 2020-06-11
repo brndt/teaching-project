@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest;
 use LaSalle\StudentTeacher\User\Domain\EmailSender;
+use LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class SendEmailConfirmationService extends UserService
 {
-    private EmailSender $emailSender;
     private RandomStringGenerator $randomStringGenerator;
+    private DomainEventBus $eventBus;
 
-    public function __construct(EmailSender $emailSender, RandomStringGenerator $randomStringGenerator, UserRepository $userRepository)
+    public function __construct(DomainEventBus $eventBus, RandomStringGenerator $randomStringGenerator, UserRepository $userRepository)
     {
         parent::__construct($userRepository);
-        $this->emailSender = $emailSender;
         $this->randomStringGenerator = $randomStringGenerator;
+        $this->eventBus = $eventBus;
     }
 
     public function __invoke(SendEmailConfirmationRequest $request): void
@@ -35,12 +37,14 @@ final class SendEmailConfirmationService extends UserService
 
         $this->userRepository->save($user);
 
-        $this->emailSender->sendEmailConfirmation(
-            $user->getEmail(),
-            $user->getId(),
-            $user->getFirstName(),
-            $user->getLastName(),
-            $user->getConfirmationToken()
+        $this->eventBus->dispatch(
+            new EmailConfirmationRequestReceivedDomainEvent(
+                $user->getId()->toString(),
+                $user->getEmail()->toString(),
+                $user->getFirstName()->toString(),
+                $user->getLastName()->toString(),
+                $user->getConfirmationToken()->toString()
+            )
         );
     }
 }

@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\Event;
 
-use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 
-final class UserCreatedDomainEvent extends DomainEvent
+final class EmailConfirmationRequestReceivedDomainEvent extends DomainEvent
 {
     private string $email;
     private string $firstName;
@@ -23,12 +19,18 @@ final class UserCreatedDomainEvent extends DomainEvent
         string $firstName,
         string $lastName,
         string $confirmationToken
+
     ) {
         parent::__construct($aggregateId);
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->confirmationToken = $confirmationToken;
+    }
+
+    public function getConfirmationToken(): string
+    {
+        return $this->confirmationToken;
     }
 
     public function getEmail(): string
@@ -48,11 +50,6 @@ final class UserCreatedDomainEvent extends DomainEvent
 
     public static function eventName(): string
     {
-        return 'user.created';
-    }
-
-    public function getConfirmationToken(): string
-    {
-        return $this->confirmationToken;
+        return 'email.confirmation.request.received';
     }
 }

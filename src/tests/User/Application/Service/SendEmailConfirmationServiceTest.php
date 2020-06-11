@@ -6,12 +6,14 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmationService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\EmailSender;
+use LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,16 +24,16 @@ final class SendEmailConfirmationServiceTest extends TestCase
 {
     private SendEmailConfirmationService $sendEmailConfirmationService;
     private MockObject $repository;
-    private MockObject $emailSender;
+    private MockObject $eventBus;
     private MockObject $randomStringGenerator;
 
     public function setUp(): void
     {
         $this->repository = $this->createMock(UserRepository::class);
-        $this->emailSender = $this->createMock(EmailSender::class);
+        $this->eventBus = $this->createMock(DomainEventBus::class);
         $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
         $this->sendEmailConfirmationService = new SendEmailConfirmationService(
-            $this->emailSender,
+            $this->eventBus,
             $this->randomStringGenerator,
             $this->repository
         );
@@ -56,6 +58,7 @@ final class SendEmailConfirmationServiceTest extends TestCase
     {
         $request = new SendEmailConfirmationRequest('user@example.com');
         $userToSendEmail = (new UserBuilder())
+            ->withId(Uuid::generate())
             ->withConfirmationToken(new Token('random_token'))
             ->withExpirationDate(new DateTimeImmutable('+ 1 day'))
             ->build();
@@ -64,13 +67,14 @@ final class SendEmailConfirmationServiceTest extends TestCase
         $this->repository->expects($this->once())->method('save')->with(
             $this->callback($this->userComparator($userToSendEmail))
         );
-        $this->emailSender->expects($this->once())->method('sendEmailConfirmation')->with(
-            $userToSendEmail->getEmail(),
-            $userToSendEmail->getId(),
-            $userToSendEmail->getFirstName(),
-            $userToSendEmail->getLastName(),
-            $userToSendEmail->getConfirmationToken()
+        $event = new EmailConfirmationRequestReceivedDomainEvent(
+            $userToSendEmail->getId()->toString(),
+            $userToSendEmail->getEmail()->toString(),
+            $userToSendEmail->getFirstName()->toString(),
+            $userToSendEmail->getLastName()->toString(),
+            $userToSendEmail->getConfirmationToken()->toString()
         );
+        $this->eventBus->expects($this->once())->method('dispatch')->with($this->callback($this->domainEventComparator($event)));
 
         ($this->sendEmailConfirmationService)($request);
     }
@@ -80,6 +84,17 @@ final class SendEmailConfirmationServiceTest extends TestCase
         return function (User $userActual) use ($userExpected) {
             return $userExpected->getExpirationDate() === $userActual->getExpirationDate()
                 && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken();
+        };
+    }
+
+    private function domainEventComparator(EmailConfirmationRequestReceivedDomainEvent $eventExpected): callable
+    {
+        return function (EmailConfirmationRequestReceivedDomainEvent $eventActual) use ($eventExpected) {
+            return $eventExpected->getAggregateId() === $eventActual->getAggregateId()
+                && $eventExpected->getEmail() === $eventActual->getEmail()
+                && $eventExpected->getFirstName() === $eventActual->getFirstName()
+                && $eventExpected->getLastName() === $eventActual->getLastName()
+                && $eventExpected->getConfirmationToken() === $eventActual->getConfirmationToken();
         };
     }
 }

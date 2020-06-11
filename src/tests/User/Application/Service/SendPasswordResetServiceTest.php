@@ -6,13 +6,14 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SendPasswordResetService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\EmailSender;
+use LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,17 +24,17 @@ final class SendPasswordResetServiceTest extends TestCase
 {
     private SendPasswordResetService $sendPasswordResetService;
     private MockObject $repository;
-    private MockObject $emailSender;
+    private MockObject $eventBus;
     private MockObject $randomStringGenerator;
 
     public function setUp(): void
     {
         $this->repository = $this->createMock(UserRepository::class);
-        $this->emailSender = $this->createMock(EmailSender::class);
+        $this->eventBus = $this->createMock(DomainEventBus::class);
         $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
         $this->sendPasswordResetService = new SendPasswordResetService(
-            $this->emailSender,
             $this->randomStringGenerator,
+            $this->eventBus,
             $this->repository
         );
     }
@@ -79,12 +80,15 @@ final class SendPasswordResetServiceTest extends TestCase
         $this->repository->expects($this->once())->method('save')->with(
             $this->callback($this->userComparator($userToSendEmail))
         );
-        $this->emailSender->expects($this->once())->method('sendPasswordReset')->with(
-            $userToSendEmail->getEmail(),
-            $userToSendEmail->getId(),
-            $userToSendEmail->getFirstName(),
-            $userToSendEmail->getLastName(),
-            $userToSendEmail->getConfirmationToken()
+        $event = new PasswordResetRequestReceivedDomainEvent(
+            $userToSendEmail->getId()->toString(),
+            $userToSendEmail->getEmail()->toString(),
+            $userToSendEmail->getFirstName()->toString(),
+            $userToSendEmail->getLastName()->toString(),
+            $userToSendEmail->getConfirmationToken()->toString()
+        );
+        $this->eventBus->expects($this->once())->method('dispatch')->with(
+            $this->callback($this->domainEventComparator($event))
         );
 
         ($this->sendPasswordResetService)($request);
@@ -96,6 +100,17 @@ final class SendPasswordResetServiceTest extends TestCase
             return $userExpected->getEnabled() === $userActual->getEnabled()
                 && $userExpected->getExpirationDate() === $userActual->getExpirationDate()
                 && $userExpected->getConfirmationToken() === $userActual->getConfirmationToken();
+        };
+    }
+
+    private function domainEventComparator(PasswordResetRequestReceivedDomainEvent $eventExpected): callable
+    {
+        return function (PasswordResetRequestReceivedDomainEvent $eventActual) use ($eventExpected) {
+            return $eventExpected->getAggregateId() === $eventActual->getAggregateId()
+                && $eventExpected->getEmail() === $eventActual->getEmail()
+                && $eventExpected->getFirstName() === $eventActual->getFirstName()
+                && $eventExpected->getLastName() === $eventActual->getLastName()
+                && $eventExpected->getConfirmationToken() === $eventActual->getConfirmationToken();
         };
     }
 }

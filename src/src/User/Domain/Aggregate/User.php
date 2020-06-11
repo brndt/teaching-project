@@ -74,7 +74,8 @@ final class User
         ?string $image = null,
         ?string $experience = null,
         ?string $education = null,
-        ?Token $confirmationToken = null
+        ?Token $confirmationToken = null,
+        ?DateTimeImmutable $expirationDate = null
     ): self {
         $instance = new static(
             $id,
@@ -88,20 +89,17 @@ final class User
             $image,
             $experience,
             $education,
-            $confirmationToken
+            $confirmationToken,
+            $expirationDate
         );
-
-        $domainEventId = Uuid::generate();
 
         $instance->recordThat(
             new UserCreatedDomainEvent(
-                $domainEventId,
-                $instance->getId(),
-                $instance->getEmail(),
-                $instance->getFirstName(),
-                $instance->getLastName(),
-                $instance->getCreated(),
-                $instance->getEnabled(),
+                $instance->getId()->toString(),
+                $instance->getEmail()->toString(),
+                $instance->getFirstName()->toString(),
+                $instance->getLastName()->toString(),
+                $instance->getConfirmationToken()->toString(),
             )
         );
 

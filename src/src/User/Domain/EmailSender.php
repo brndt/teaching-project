@@ -11,6 +11,6 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 interface EmailSender
 {
-    public function sendEmailConfirmation(Email $email, Uuid $userId, Name $firstName, Name $lastName, Token $confirmationToken);
-    public function sendPasswordReset(Email $email, Uuid $userId, Name $firstName, Name $lastName, Token $confirmationToken);
+    public function sendEmailConfirmation(string $email, string $userId, string $firstName, string $lastName, string $confirmationToken);
+    public function sendPasswordReset(string $email, string $userId, string $firstName, string $lastName, string $confirmationToken);
 }
