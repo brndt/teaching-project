@@ -16,8 +16,20 @@ services:
   php-fpm:
     build:
       ./docker/php
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://rabbitmq:rabbitmq_pass@rabbitmq:5672/%2f/messages
     ports:
       - 9000:9000
+    volumes:
+      - ./src/:/usr/share/nginx/html
+    networks:
+      - backend
+
+  php-consume:
+    build:
+      ./docker/php-consume
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://rabbitmq:rabbitmq_pass@rabbitmq:5672/%2f/messages
     volumes:
       - ./src/:/usr/share/nginx/html
     networks:
@@ -33,6 +45,25 @@ services:
       - POSTGRES_PASSWORD=nimda
     networks:
       - backend
+
+  rabbitmq:
+    build:
+      ./docker/rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq_pass"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq:cached
+    networks:
+      - backend
+
+volumes:
+    rabbitmq:
 
 networks:
   backend:
