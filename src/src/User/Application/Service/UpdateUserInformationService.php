@@ -25,11 +25,10 @@ final class UpdateUserInformationService extends UserService
 
         $firstName = $this->createNameFromPrimitive($request->getFirstName());
         $lastName = $this->createNameFromPrimitive($request->getLastName());
-        
+
         $userToUpdate->setEmail($email);
         $userToUpdate->setFirstName($firstName);
         $userToUpdate->setLastName($lastName);
-        $userToUpdate->setImage($request->getImage());
         $userToUpdate->setEducation($request->getEducation());
         $userToUpdate->setExperience($request->getExperience());
 

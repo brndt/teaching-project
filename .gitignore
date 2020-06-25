@@ -4,6 +4,11 @@
 /src/.env.*.local
 /src/config/secrets/prod/prod.decrypt.private.php
 /src/public/bundles/
+
+/src/public/avatars/*
+!/src/public/avatars/.gitignore
+
+
 /src/var/
 /src/vendor/
 ###< symfony/framework-bundle ###

@@ -11,14 +11,17 @@ use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UpdateUserController extends AbstractFOSRestController
 {
     private UpdateUserInformationService $updateUserInformation;
+    private ValidatorInterface $validator;
 
-    public function __construct(UpdateUserInformationService $updateUser)
+    public function __construct(UpdateUserInformationService $updateUser, ValidatorInterface $validator)
     {
         $this->updateUserInformation = $updateUser;
+        $this->validator = $validator;
     }
 
     /**
@@ -26,7 +29,6 @@ final class UpdateUserController extends AbstractFOSRestController
      * @RequestParam(name="email")
      * @RequestParam(name="firstName")
      * @RequestParam(name="lastName")
-     * @RequestParam(name="image", nullable=true)
      * @RequestParam(name="education", nullable=true)
      * @RequestParam(name="experience", nullable=true)
      */
@@ -36,12 +38,19 @@ final class UpdateUserController extends AbstractFOSRestController
         $email = $paramFetcher->get('email');
         $firstName = $paramFetcher->get('firstName');
         $lastName = $paramFetcher->get('lastName');
-        $image = $paramFetcher->get('image');
         $education = $paramFetcher->get('education');
         $experience = $paramFetcher->get('experience');
 
         ($this->updateUserInformation)(
-            new UpdateUserInformationRequest($requestAuthorId, $userId, $email, $firstName, $lastName, $image, $experience, $education)
+            new UpdateUserInformationRequest(
+                $requestAuthorId,
+                $userId,
+                $email,
+                $firstName,
+                $lastName,
+                $experience,
+                $education
+            )
         );
 
         return $this->handleView(

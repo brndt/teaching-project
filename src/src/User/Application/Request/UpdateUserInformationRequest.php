@@ -11,7 +11,6 @@ final class UpdateUserInformationRequest
     private string $email;
     private string $firstName;
     private string $lastName;
-    private ?string $image;
     private ?string $experience;
     private ?string $education;
 
@@ -21,7 +20,6 @@ final class UpdateUserInformationRequest
         string $email,
         string $firstName,
         string $lastName,
-        ?string $image,
         ?string $experience,
         ?string $education
     ) {
@@ -30,7 +28,6 @@ final class UpdateUserInformationRequest
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->image = $image;
         $this->experience = $experience;
         $this->education = $education;
     }
@@ -53,11 +50,6 @@ final class UpdateUserInformationRequest
     public function getLastName(): string
     {
         return $this->lastName;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
     }
 
     public function getExperience(): ?string

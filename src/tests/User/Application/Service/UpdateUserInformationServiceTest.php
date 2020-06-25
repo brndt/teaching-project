@@ -39,7 +39,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -56,7 +55,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -78,7 +76,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -103,7 +100,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -133,7 +129,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -162,7 +157,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'examplemail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -195,7 +189,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'notavailable@example.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -236,7 +229,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex i$$$',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -265,7 +257,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson  ',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -296,7 +287,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             'example@mail.com',
             'Alex',
             'Johnsson',
-            'image.jpg',
             '10 years',
             'la salle'
         );
@@ -329,7 +319,6 @@ final class UpdateUserInformationServiceTest extends TestCase
                 && $userExpected->getEmail()->toString() === $userActual->getEmail()->toString()
                 && $userExpected->getFirstName()->toString() === $userActual->getFirstName()->toString()
                 && $userExpected->getLastName()->toString() === $userActual->getLastName()->toString()
-                && $userExpected->getImage() === $userActual->getImage()
                 && $userExpected->getExperience() === $userActual->getExperience()
                 && $userExpected->getEducation() === $userActual->getEducation();
         };
