@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Test\LaSalle\StudentTeacher\Behat\Context\:
+        resource: '../tests/Behat/Context'
