@@ -14,12 +14,12 @@ use LaSalle\StudentTeacher\Shared\Infrastructure\Behat\MinkHelper;
 use LaSalle\StudentTeacher\Shared\Infrastructure\Behat\MinkSessionRequestHelper;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-final class DemoContext extends RawMinkContext implements Context
+final class ApiContext extends RawMinkContext implements Context
 {
     private KernelInterface $kernel;
-    private $sessionHelper;
-    private $minkSession;
-    private $request;
+    private MinkHelper $sessionHelper;
+    private Session $minkSession;
+    private MinkSessionRequestHelper $request;
 
     public function __construct(Session $minkSession, KernelInterface $kernel)
     {
@@ -49,6 +49,22 @@ final class DemoContext extends RawMinkContext implements Context
         if ($expected !== $actual) {
             throw new RuntimeException(
                 sprintf("The outputs does not match!\n\n-- Expected:\n%s\n\n-- Actual:\n%s", $expected, $actual)
+            );
+        }
+    }
+
+    /**
+     * @Then the response status code should be :expectedResponseCode
+     */
+    public function theResponseStatusCodeShouldBe($expectedResponseCode): void
+    {
+        if ($this->minkSession->getStatusCode() !== (int) $expectedResponseCode) {
+            throw new RuntimeException(
+                sprintf(
+                    'The status code <%s> does not match the expected <%s>',
+                    $this->minkSession->getStatusCode(),
+                    $expectedResponseCode
+                )
             );
         }
     }
