@@ -5,6 +5,9 @@
     "behat/gherkin": {
         "version": "v4.6.2"
     },
+    "behat/mink-browserkit-driver": {
+        "version": "v1.3.4"
+    },
     "behat/transliterator": {
         "version": "v1.3.0"
     },
@@ -113,9 +116,6 @@
     },
     "friends-of-behat/mink": {
         "version": "v1.8.0"
-    },
-    "friends-of-behat/mink-browserkit-driver": {
-        "version": "v1.4.0"
     },
     "friends-of-behat/mink-extension": {
         "version": "v2.4.0"

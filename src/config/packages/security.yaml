@@ -27,11 +27,6 @@ security:
             methods: ['POST']
             anonymous: true
 
-        sign_out:
-            pattern:  ^/api/v1/users/sign_out$
-            methods: ['DELETE']
-            anonymous: true
-
         email_confirmation:
             pattern:  ^/api/v1/users/[a-zA-Z0-9-]+/email_confirmation
             methods: ['POST']

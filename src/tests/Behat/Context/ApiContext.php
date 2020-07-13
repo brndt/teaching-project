@@ -9,9 +9,9 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Session;
 use Behat\MinkExtension\Context\RawMinkContext;
 use DAMA\DoctrineTestBundle\Doctrine\DBAL\StaticDriver;
-use RuntimeException;
 use LaSalle\StudentTeacher\Shared\Infrastructure\Behat\MinkHelper;
 use LaSalle\StudentTeacher\Shared\Infrastructure\Behat\MinkSessionRequestHelper;
+use RuntimeException;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 final class ApiContext extends RawMinkContext implements Context
@@ -20,14 +20,16 @@ final class ApiContext extends RawMinkContext implements Context
     private MinkHelper $sessionHelper;
     private Session $minkSession;
     private MinkSessionRequestHelper $request;
+    private string $token;
+    private string $refreshToken;
 
     public function __construct(Session $minkSession, KernelInterface $kernel)
     {
         $this->kernel = $kernel;
 
-        $this->minkSession   = $minkSession;
+        $this->minkSession = $minkSession;
         $this->sessionHelper = new MinkHelper($this->minkSession);
-        $this->request       = new MinkSessionRequestHelper(new MinkHelper($minkSession));
+        $this->request = new MinkSessionRequestHelper(new MinkHelper($minkSession));
     }
 
     /**
@@ -39,12 +41,30 @@ final class ApiContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Given /^I am authenticated as "([^"]*)" with "([^"]*)" password$/
+     */
+    public function iAmAuthenticatedAs($email, $password)
+    {
+        $credentials = ['email' => $email, 'password' => $password];
+
+        $this->request->sendRequest(
+            'POST',
+            $this->locatePath('/api/v1/users/sign_in'),
+            ['content' => json_encode($credentials)]
+        );
+
+        $response = json_decode($this->sessionHelper->getResponse(), true);
+
+        $this->sessionHelper->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $response['token']));
+    }
+
+    /**
      * @Then the response content should be:
      */
     public function theResponseContentShouldBe(PyStringNode $expectedResponse): void
     {
         $expected = $this->sanitizeOutput($expectedResponse->getRaw());
-        $actual   = $this->sanitizeOutput($this->sessionHelper->getResponse());
+        $actual = $this->sanitizeOutput($this->sessionHelper->getResponse());
 
         if ($expected !== $actual) {
             throw new RuntimeException(
@@ -58,7 +78,7 @@ final class ApiContext extends RawMinkContext implements Context
      */
     public function theResponseStatusCodeShouldBe($expectedResponseCode): void
     {
-        if ($this->minkSession->getStatusCode() !== (int) $expectedResponseCode) {
+        if ($this->minkSession->getStatusCode() !== (int)$expectedResponseCode) {
             throw new RuntimeException(
                 sprintf(
                     'The status code <%s> does not match the expected <%s>',

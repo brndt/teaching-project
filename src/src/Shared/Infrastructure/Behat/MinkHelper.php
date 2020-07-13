@@ -50,6 +50,11 @@ final class MinkHelper
         return $this->getSession()->getPage()->getContent();
     }
 
+    public function setServerParameter(string $key, string $value): void
+    {
+        $this->getClient()->setServerParameter($key, $value);
+    }
+
     public function getResponseHeaders(): array
     {
         return $this->normalizeHeaders(

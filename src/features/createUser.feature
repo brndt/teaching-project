@@ -21,10 +21,10 @@ Feature: Creating user
 
   Scenario: Creating user when email already exists
     Given there are Users with the following details:
-      | firstName | lastName    | email             |
-      | nikita    | grichinenko | nikita@lasalle.es |
-      | irving    | cruz        | irving@lasalle.es |
-    And I send a POST request to "/api/v1/users" with body:
+      | firstName | lastName    | email             | password |
+      | nikita    | grichinenko | nikita@lasalle.es | 123456Aq |
+      | irving    | cruz        | irving@lasalle.es | qwertY12 |
+    When I send a POST request to "/api/v1/users" with body:
      """
     {
       "email": "nikita@lasalle.es",

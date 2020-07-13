@@ -49,6 +49,6 @@ final class SignInController extends AbstractFOSRestController
 
         $response = array_merge($userResponse->toPrimitives(), ['email' => $email, 'token' => $generateTokensResponse->getToken(), 'refreshToken' => $generateTokensResponse->getRefreshToken()]);
 
-        return $this->handleView($this->view($response, Response::HTTP_CREATED));
+        return $this->handleView($this->view($response, Response::HTTP_OK));
     }
 }
