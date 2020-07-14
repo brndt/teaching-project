@@ -1,7 +1,7 @@
-Feature: Authorizated Search Categories By Criteria
+Feature: Authorized search categories by criteria
 
   Scenario: Search categories by criteria when all inputs are valid
-    Given there are Users with the following details:
+    Given there are users with the following details:
       | id                                   | firstName | lastName    | email             | password | roles |
       | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin |
     And there are categories with the following details:

@@ -1,10 +1,10 @@
 Feature: Sign out user
 
   Scenario: Sign out user when all inputs are valid
-    Given there are Users with the following details:
+    Given there are users with the following details:
       | id                                   | firstName | lastName    | email             | password | roles   |
       | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | student |
-    And there are RefreshTokens with the following details:
+    And there are refresh tokens with the following details:
       | refreshToken                                                                                                                     |
       | 6e4965317dd91ed1edee4af180b03775c84177c4ac82b63fe4e0c8e418e5832458036a89aa9f7c620ca51dc9f8606abc499ce018075662e4b4f4ad44ed6ed708 |
     And I am authenticated as "nikita@lasalle.es" with "123456Aq" password

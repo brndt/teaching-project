@@ -33,7 +33,7 @@ class DataSetupContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * @Given there are Users with the following details:
+     * @Given there are users with the following details:
      */
     public function thereAreUsersWithTheFollowingDetails(TableNode $users)
     {
@@ -44,6 +44,12 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $email = new Email($val['email']);
             $password = Password::fromPlainPassword($val['password']);
             $roles = Roles::fromArrayOfPrimitives([$val['roles']]);
+            $created = $val['created'] ? new DateTimeImmutable($val['created']) : new DateTimeImmutable();
+            $image = $val['image'];
+            $education = $val['education'];
+            $experience = $val['experience'];
+            $confirmationToken = $val['confirmationToken'] ? new Token($val['confirmationToken']) : null;
+            $expirationDate = $val['expirationDate'] ? new DateTimeImmutable($val['expirationDate']) : null;
 
             $user = (new UserBuilder())
                 ->withId($id)
@@ -52,6 +58,12 @@ class DataSetupContext implements Context, SnippetAcceptingContext
                 ->withEmail($email)
                 ->withPassword($password)
                 ->withRoles($roles)
+                ->withCreated($created)
+                ->withImage($image)
+                ->withEducation($education)
+                ->withExperience($experience)
+                ->withConfirmationToken($confirmationToken)
+                ->withExpirationDate($expirationDate)
                 ->withEnabled(true)
                 ->build();
 
@@ -61,7 +73,7 @@ class DataSetupContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * @Given there are RefreshTokens with the following details:
+     * @Given there are refresh tokens with the following details:
      */
     public function thereAreRefreshTokensWithTheFollowingDetails(TableNode $refreshTokens)
     {
@@ -72,8 +84,8 @@ class DataSetupContext implements Context, SnippetAcceptingContext
 
             $refreshToken = (new RefreshTokenBuilder())
                 ->withRefreshToken($token)
-                //    ->withUserId($userId)
-                //    ->withExpirationDate($expirationDate)
+            //    ->withUserId($userId)
+            //    ->withExpirationDate($expirationDate)
                 ->build();
 
             $this->entityManager->persist($refreshToken);
