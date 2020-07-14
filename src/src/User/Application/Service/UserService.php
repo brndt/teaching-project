@@ -93,7 +93,7 @@ abstract class UserService
 
     protected function ensureNewEmailIsAvailable(Email $newEmail, Email $oldEmail): void
     {
-        $userWithNewEmail = $this->userRepository->ofEmail($oldEmail);
+        $userWithNewEmail = $this->userRepository->ofEmail($newEmail);
         if (null !== $userWithNewEmail && false === $newEmail->equalsTo($oldEmail)) {
             throw new UserAlreadyExistsException();
         }

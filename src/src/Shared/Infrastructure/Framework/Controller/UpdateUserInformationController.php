@@ -13,7 +13,7 @@ use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UpdateUserController extends AbstractFOSRestController
+final class UpdateUserInformationController extends AbstractFOSRestController
 {
     private UpdateUserInformationService $updateUserInformation;
     private ValidatorInterface $validator;

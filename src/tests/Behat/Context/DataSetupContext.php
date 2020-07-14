@@ -79,13 +79,13 @@ class DataSetupContext implements Context, SnippetAcceptingContext
     {
         foreach ($refreshTokens->getColumnsHash() as $key => $val) {
             $token = new Token($val['refreshToken']);
-            //$userId = new Uuid($val['userId']);
-            //$expirationDate = new DateTimeImmutable($val['expirationDate']);
+            $userId = new Uuid($val['userId']);
+            $expirationDate = new DateTimeImmutable($val['expirationDate']);
 
             $refreshToken = (new RefreshTokenBuilder())
                 ->withRefreshToken($token)
-            //    ->withUserId($userId)
-            //    ->withExpirationDate($expirationDate)
+                ->withUserId($userId)
+                ->withExpirationDate($expirationDate)
                 ->build();
 
             $this->entityManager->persist($refreshToken);
