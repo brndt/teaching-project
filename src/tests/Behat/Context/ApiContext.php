@@ -33,6 +33,14 @@ final class ApiContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Given I send a :method request to :url
+     */
+    public function iSendARequestTo($method, $url): void
+    {
+        $this->request->sendRequest($method, $this->locatePath($url));
+    }
+
+    /**
      * @Given I send a :method request to :url with body:
      */
     public function iSendARequestToWithBody($method, $url, PyStringNode $body): void

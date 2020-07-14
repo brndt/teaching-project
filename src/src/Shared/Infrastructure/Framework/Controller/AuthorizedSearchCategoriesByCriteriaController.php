@@ -13,7 +13,7 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategori
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoriesByCriteria;
 use Symfony\Component\HttpFoundation\Response;
 
-final class AuthorizatedSearchCategoriesByCriteriaController extends AbstractFOSRestController
+final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
     private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria;
 

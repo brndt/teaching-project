@@ -11,7 +11,7 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategory
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoryByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class AuthorizatedSearchCategoryByIdController extends AbstractFOSRestController
+final class AuthorizedSearchCategoryByIdController extends AbstractFOSRestController
 {
     private AuthorizedSearchCategoryByIdService $searchCategoryByIdService;
 

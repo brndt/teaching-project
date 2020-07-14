@@ -11,7 +11,7 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseBy
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCourseByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class AuthorizatedSearchCourseByIdController extends AbstractFOSRestController
+final class AuthorizedSearchCourseByIdController extends AbstractFOSRestController
 {
     private AuthorizedSearchCourseByIdService $searchCourse;
 

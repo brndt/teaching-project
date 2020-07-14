@@ -17,7 +17,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class AuthorizatedSearchCoursesByCriteriaController extends AbstractFOSRestController
+final class AuthorizedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
     private AuthorizedSearchCoursesByCriteriaService $searchCourses;
 
