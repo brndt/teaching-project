@@ -1,6 +1,6 @@
 Feature: Create course
 
-  Scenario: Create course when all inputs are valid
+  Scenario: Creating course when all inputs are valid
     Given there are users with the following details:
       | id                                   | firstName | lastName    | email             | password | roles   |
       | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin   |
@@ -20,10 +20,38 @@ Feature: Create course
       "status": "published"
     }
     """
-    Then the response content should be:
+    Then the response status code should be 201
+    And the response content should be:
     """
     {
       "message": "Course has been successfully created"
     }
     """
-    And the response status code should be 201
+
+  Scenario: Creating course when I don't have at least teacher permissions
+    Given there are users with the following details:
+      | id                                   | firstName | lastName    | email             | password | roles   |
+      | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | student |
+    And there are categories with the following details:
+      | id                                   | name     | status    |
+      | b2c3532f-6629-435a-9908-63f9d3811ccd | language | published |
+    And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
+    When I send a POST request to "/api/v1/panel/courses" with body:
+    """
+    {
+      "teacherId": "16bf6c6a-c855-4a36-a3dd-5b9f6d92c753",
+      "categoryId": "b2c3532f-6629-435a-9908-63f9d3811ccd",
+      "name": "course name",
+      "description": "course description",
+      "level": "basic",
+      "status": "published"
+    }
+    """
+    Then the response status code should be 403
+    And the response content should be:
+    """
+    {
+      "code": 403,
+      "message": "You do not have permission to perform this action"
+    }
+    """

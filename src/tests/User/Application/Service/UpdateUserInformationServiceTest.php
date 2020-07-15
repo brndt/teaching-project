@@ -214,7 +214,7 @@ final class UpdateUserInformationServiceTest extends TestCase
         $this->repository
             ->expects($this->once())
             ->method('ofEmail')
-            ->with($user->getEmail())
+            ->with($request->getEmail())
             ->willReturn($userToSearchEmail);
         ($this->updateUserInformationService)($request);
     }

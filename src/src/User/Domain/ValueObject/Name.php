@@ -36,7 +36,7 @@ final class Name
 
     private function assertIsValid(string $name): void
     {
-        if (0 === preg_match("/^[a-zA-Z'-]+$/", $name)) {
+        if (0 === preg_match("/^[a-zA-Z'-]+( [a-zA-Z'-]+)*$/", $name)) {
             throw new InvalidNameException();
         }
     }
