@@ -32,3 +32,11 @@ Feature: Search users
     }
     ]
     """
+
+  Scenario: Searching users when users don't exist
+    When I send a GET request to "/api/v1/users"
+    Then the response status code should be 204
+    And the response content should be:
+    """
+    null
+    """

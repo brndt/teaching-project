@@ -11,6 +11,6 @@ final class IncorrectConfirmationTokenException extends Exception
 {
     public function __construct($code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf('Confirmation Token is incorrect'), $code, $previous);
+        parent::__construct(sprintf('Confirmation token is incorrect'), $code, $previous);
     }
 }
