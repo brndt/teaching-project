@@ -23,9 +23,9 @@ final class AuthorizedSearchCoursesByCriteriaService extends CourseService
 
         $filters = $this->createFiltersDependingByRoles($requestAuthor);
 
-        if (null !== $request->getUserId()) {
-            $userId = $this->createIdFromPrimitive($request->getUserId());
-            $filters = $filters->add($this->createFilterByTeacherId($userId));
+        if (null !== $request->getTeacherId()) {
+            $teacherId = $this->createIdFromPrimitive($request->getTeacherId());
+            $filters = $filters->add($this->createFilterByTeacherId($teacherId));
         }
 
         $criteria = new Criteria(

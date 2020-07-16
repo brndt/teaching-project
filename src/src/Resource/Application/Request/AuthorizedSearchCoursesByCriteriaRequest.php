@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 final class AuthorizedSearchCoursesByCriteriaRequest
 {
     private string $requestAuthorId;
-    private ?string $userId;
+    private ?string $teacherId;
     private ?string $orderBy;
     private ?string $order;
     private ?string $operator;
@@ -16,7 +16,7 @@ final class AuthorizedSearchCoursesByCriteriaRequest
 
     public function __construct(
         string $requestAuthorId,
-        ?string $userId,
+        ?string $teacherId,
         ?string $orderBy,
         ?string $order,
         ?string $operator,
@@ -24,7 +24,7 @@ final class AuthorizedSearchCoursesByCriteriaRequest
         ?int $limit
     ) {
         $this->requestAuthorId = $requestAuthorId;
-        $this->userId = $userId;
+        $this->teacherId = $teacherId;
         $this->orderBy = $orderBy;
         $this->order = $order;
         $this->operator = $operator;
@@ -62,8 +62,8 @@ final class AuthorizedSearchCoursesByCriteriaRequest
         return $this->limit;
     }
 
-    public function getUserId(): ?string
+    public function getTeacherId(): ?string
     {
-        return $this->userId;
+        return $this->teacherId;
     }
 }
