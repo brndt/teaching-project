@@ -92,3 +92,31 @@ Feature: Update course
       "message": "JWT Token not found"
     }
     """
+
+  Scenario: Updating course when course doesn't exist
+    Given there are users with the following details:
+      | id                                   | firstName | lastName    | email             | password | roles |
+      | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin |
+    And there are categories with the following details:
+      | id                                   | name     | status    |
+      | b2c3532f-6629-435a-9908-63f9d3811ccd | language | published |
+    And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
+    When I send a PATCH request to "/api/v1/panel/courses/cfe849f3-7832-435a-b484-83fabf530794" with body:
+    """
+    {
+      "teacherId": "16bf6c6a-c855-4a36-a3dd-5b9f6d92c753",
+      "categoryId": "b2c3532f-6629-435a-9908-63f9d3811ccd",
+      "name": "some new title",
+      "description": "some new description",
+      "level": "advanced",
+      "status": "unpublished"
+    }
+    """
+    Then the response status code should be 404
+    And the response content should be:
+    """
+    {
+      "code": 404,
+      "message": "Course not found"
+    }
+    """

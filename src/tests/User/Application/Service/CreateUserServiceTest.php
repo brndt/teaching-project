@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Application\Service\CreateUserService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
@@ -34,7 +34,7 @@ final class CreateUserServiceTest extends TestCase
         $this->repository = $this->createMock(UserRepository::class);
         $this->eventBus = $this->createMock(DomainEventBus::class);
         $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
-        $this->createUser = new CreateUserService( $this->randomStringGenerator, $this->repository, $this->eventBus,);
+        $this->createUser = new CreateUserService($this->randomStringGenerator, $this->repository, $this->eventBus,);
     }
 
     public function testWhenUserEmailIsInvalidThenThrowException()
@@ -47,7 +47,7 @@ final class CreateUserServiceTest extends TestCase
         ($this->createUser)($request);
     }
 
-    public function testWhenUserAlreadyExistsThenThrowException()
+    public function testWhenUserEmailAlreadyExistsThenThrowException()
     {
         $request = new CreateUserRequest(
             'user@example.com', '123456aa', 'Alex', 'Johnson', ['teacher'], new \DateTimeImmutable('2020-04-27')
@@ -55,7 +55,7 @@ final class CreateUserServiceTest extends TestCase
         $user = (new UserBuilder())->build();
 
         $this->repository->method('ofEmail')->willReturn($user);
-        $this->expectException(UserAlreadyExistsException::class);
+        $this->expectException(EmailAlreadyExistsException::class);
         ($this->createUser)($request);
     }
 

@@ -38,7 +38,7 @@ Feature: Sign up user
      """
     {
       "code": 400,
-      "message": "User is already exists"
+      "message": "Email already in use"
     }
     """
     And the response status code should be 400

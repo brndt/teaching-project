@@ -29,10 +29,11 @@ final class UpdateUserConnectionService extends UserConnectionService
         $userConnection = $this->userConnectionRepository->ofId($student->getId(), $teacher->getId());
         $this->ensureConnectionExists($userConnection);
 
-        $newState = $this->stateFactory->create($request->getStatus());
+        $newState = $this->createNewState($request->getStatus());
         $isSpecifierChanged = $this->verifySpecifierChanged($newSpecifier->getId(), $userConnection->getSpecifierId());
 
-        $userConnection->setState($newState, $isSpecifierChanged);
+        $this->setNewState($userConnection, $newState, $isSpecifierChanged);
+
         $userConnection->setSpecifierId($newSpecifier->getId());
 
         $this->userConnectionRepository->save($userConnection);

@@ -15,7 +15,8 @@ Feature: Unauthorized search courses By Criteria
       "limit": "10"
     }
     """
-    Then the response content should be:
+    Then the response status code should be 200
+    And the response content should be:
     """
     [
     {
@@ -42,4 +43,19 @@ Feature: Unauthorized search courses By Criteria
     }
     ]
     """
-    And the response status code should be 200
+
+  Scenario: Unauthorized searching courses by criteria they don't exist
+    Given there are users with the following details:
+      | id                                   | firstName | lastName    | email             | password | roles |
+      | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin |
+   When I send a GET request to "/api/v1/courses" with body:
+     """
+    {
+      "limit": "10"
+    }
+    """
+    Then the response status code should be 204
+    Then the response content should be:
+    """
+    null
+    """

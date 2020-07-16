@@ -10,6 +10,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
+use LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
@@ -95,14 +96,14 @@ abstract class UserService
     {
         $userWithNewEmail = $this->userRepository->ofEmail($newEmail);
         if (null !== $userWithNewEmail && false === $newEmail->equalsTo($oldEmail)) {
-            throw new UserAlreadyExistsException();
+            throw new EmailAlreadyExistsException();
         }
     }
 
     protected function ensureUserDoesntExistByEmail(Email $email): void
     {
         if (null !== $this->userRepository->ofEmail($email)) {
-            throw new UserAlreadyExistsException();
+            throw new EmailAlreadyExistsException();
         }
     }
 

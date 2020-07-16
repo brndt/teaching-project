@@ -309,13 +309,55 @@ final class UpdateUserConnectionServiceTest extends TestCase
 
     public function testWhenNewStateIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidStateException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $request = new UpdateUserConnectionRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'cfe849f3-7832-435a-b484-83fabf530794',
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'pended'
+        );
+        $author = (new UserBuilder())
+            ->withId(new Uuid($request->getRequestAuthorId()))
+            ->build();
+        $firstUser = (new UserBuilder())
+            ->withId(new Uuid($request->getFirstUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::STUDENT]))
+            ->build();
+        $secondUser = (new UserBuilder())
+            ->withId(new Uuid($request->getSecondUser()))
+            ->withRoles(Roles::fromArrayOfPrimitives([Role::TEACHER]))
+            ->build();
+        $userConnection = new UserConnection(
+            $firstUser->getId(),
+            $secondUser->getId(),
+            new Pended(),
+            $firstUser->getId()
+        );
+        $this->userRepository->expects($this->at(0))->method('ofId')->with(
+            $request->getRequestAuthorId()
+        )->willReturn($author);
+        $this->userRepository->expects($this->at(1))->method('ofId')->with(
+            $request->getFirstUser()
+        )->willReturn($firstUser);
+        $this->userRepository->expects($this->at(2))->method('ofId')->with(
+            $request->getSecondUser()
+        )->willReturn($secondUser);
+        $this->stateFactory->expects($this->once())->method('create')->willReturn(new Pended());
+        $this->userConnectionRepository->expects($this->once())->method('ofId')->willReturn($userConnection);
+
+        ($this->updateUserConnectionService)($request);
+    }
+
+    public function testWhenNewStateIsIncorrectThenThrowException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $request = new UpdateUserConnectionRequest(
+            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
+            'cfe849f3-7832-435a-b484-83fabf530794',
+            '48d34c63-6bba-4c72-a461-8aac1fd7d138',
+            'error'
         );
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))

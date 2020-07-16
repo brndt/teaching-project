@@ -50,10 +50,10 @@ final class UpdateUserImageController extends AbstractFOSRestController
             $imageViolations = $this->hasImageViolations($newImageAsFile);
             if (null !== $imageViolations) {
                 return $this->handleView(
-                    $this->view(['message' => $imageViolations], Response::HTTP_BAD_REQUEST)
+                    $this->view(['code' => Response::HTTP_BAD_REQUEST, 'message' => $imageViolations], Response::HTTP_BAD_REQUEST)
                 );
             }
-            $fileUploader = new FileUploader('./avatars/');
+            $fileUploader = new FileUploader($this->getParameter('imagesDirectory'));
             $image = $fileUploader->upload($newImageAsFile);
         }
 
@@ -66,11 +66,11 @@ final class UpdateUserImageController extends AbstractFOSRestController
         );
     }
 
-    private function hasImageViolations(?File $file): ?array
+    private function hasImageViolations(?File $file): ?string
     {
         $violations = $this->validator->validate(
             $file,
-            [new Image(['maxSize' => '3M', 'maxWidth' => 800, 'maxHeight' => 800])]
+            [new Image(['maxSize' => '2M', 'maxWidth' => 800, 'maxHeight' => 800])]
         );
 
         if (0 !== count($violations)) {
@@ -78,7 +78,7 @@ final class UpdateUserImageController extends AbstractFOSRestController
             foreach ($violations as $violation) {
                 $messageViolations[] = $violation->getMessage();
             }
-            return $messageViolations;
+            return implode(",", $messageViolations);
         }
         return null;
     }

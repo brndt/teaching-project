@@ -7,7 +7,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
+use LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService;
@@ -181,7 +181,7 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserEmailIsNotAvailableThenThrowException()
     {
-        $this->expectException(UserAlreadyExistsException::class);
+        $this->expectException(EmailAlreadyExistsException::class);
 
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',

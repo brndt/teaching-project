@@ -11,13 +11,16 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
-use LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
+use LaSalle\StudentTeacher\User\Domain\Exception\IncorrectStateException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\State\State;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 
 abstract class UserConnectionService
@@ -144,6 +147,23 @@ abstract class UserConnectionService
     {
         if (false === $author->isInRole(new Role('admin')) && false === $author->idEqualsTo($user->getId())) {
             throw new PermissionDeniedException();
+        }
+    }
+
+    protected function createNewState(string $state): State
+    {
+        try {
+            return $this->stateFactory->create($state);
+        } catch (IncorrectStateException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+
+    protected function setNewState(UserConnection $userConnection, State $newState, bool $isSpecifierChanged): void {
+        try {
+            $userConnection->setState($newState, $isSpecifierChanged);
+        } catch (InvalidStateException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
         }
     }
 }

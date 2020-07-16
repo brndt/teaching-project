@@ -35,6 +35,7 @@ fos_rest:
       LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException: 400
       LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException: 400
       LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException: 400
       LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException: 400
       LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
       LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403
