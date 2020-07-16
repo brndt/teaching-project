@@ -60,8 +60,11 @@ Feature: Authorized search category by id
       | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin |
     And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
     When I send a GET request to "/api/v1/panel/categories/cfe849f3-7832-435a-b484-83fabf530794"
-    Then the response status code should be 204
+    Then the response status code should be 404
     And the response content should be:
     """
-    null
+    {
+      "code": 404,
+      "message": "Category not found"
+    }
     """

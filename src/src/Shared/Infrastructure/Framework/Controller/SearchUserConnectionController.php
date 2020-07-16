@@ -6,7 +6,6 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SearchUserConnectionByIdService;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,19 +26,13 @@ final class SearchUserConnectionController extends AbstractFOSRestController
     {
         $requestAuthorId = $this->getUser()->getId();
 
-        try {
-            $connection = ($this->searchConnection)(
-                new SearchUserConnectionByCriteriaRequest(
-                    $requestAuthorId,
-                    $userId,
-                    $friendId
-                )
-            );
-        } catch (ConnectionNotFoundException $exception) {
-            return $this->handleView(
-                $this->view(null, Response::HTTP_NO_CONTENT)
-            );
-        }
+        $connection = ($this->searchConnection)(
+            new SearchUserConnectionByCriteriaRequest(
+                $requestAuthorId,
+                $userId,
+                $friendId
+            )
+        );
 
         return $this->handleView(
             $this->view($connection, Response::HTTP_OK)

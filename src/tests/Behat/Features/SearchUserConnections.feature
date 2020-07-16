@@ -77,8 +77,8 @@ Feature: Search user connections
       | cfe849f3-7832-435a-b484-83fabf530794 | irving    | cruz        | irving@lasalle.es | qwertY12 | teacher |
     And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
     When I send a GET request to "/api/v1/users/16bf6c6a-c855-4a36-a3dd-5b9f6d92c753/connections"
-    Then the response status code should be 204
+    Then the response status code should be 200
     And the response content should be:
      """
-    null
+    []
     """

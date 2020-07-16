@@ -41,15 +41,9 @@ final class SearchUsersController extends AbstractFOSRestController
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        try {
-            $usersResponse = ($this->searchUsersByCriteria)(
-                new SearchUsersByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit)
-            );
-        } catch (UserNotFoundException $exception) {
-            return $this->handleView(
-                $this->view(null,Response::HTTP_NO_CONTENT)
-            );
-        }
+        $usersResponse = ($this->searchUsersByCriteria)(
+            new SearchUsersByCriteriaRequest($filters, $orderBy, $order, $operator, $offset, $limit)
+        );
 
         return $this->handleView($this->view($usersResponse, Response::HTTP_OK));
     }

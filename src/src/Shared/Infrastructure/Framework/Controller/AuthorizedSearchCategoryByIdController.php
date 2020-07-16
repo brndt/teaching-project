@@ -27,15 +27,9 @@ final class AuthorizedSearchCategoryByIdController extends AbstractFOSRestContro
     {
         $requestAuthorId = $this->getUser()->getId();
 
-        try {
-            $category = ($this->searchCategoryByIdService)(
-                new AuthorizedSearchCategoryByIdRequest($requestAuthorId, $categoryId)
-            );
-        } catch (CategoryNotFound $exception) {
-            return $this->handleView(
-                $this->view(null,Response::HTTP_NO_CONTENT)
-            );
-        }
+        $category = ($this->searchCategoryByIdService)(
+            new AuthorizedSearchCategoryByIdRequest($requestAuthorId, $categoryId)
+        );
 
         return $this->handleView(
             $this->view($category, Response::HTTP_OK)

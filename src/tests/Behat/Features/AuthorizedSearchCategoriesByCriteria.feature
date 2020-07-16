@@ -92,8 +92,8 @@ Feature: Authorized search categories by criteria
       | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin |
     And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
     When I send a GET request to "/api/v1/panel/categories"
-    Then the response status code should be 204
+    Then the response status code should be 200
     And the response content should be:
     """
-    null
+    []
     """

@@ -7,7 +7,6 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionCollectionResponse;
@@ -162,7 +161,7 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
         ($this->searchUserConnectionService)($request);
     }
 
-    public function testWhenConnectionIsNotFoundThenThrowException()
+    public function testWhenConnectionsAreNotFoundThenReturnEmptyArray()
     {
         $request = new SearchUserConnectionsByCriteriaRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
@@ -173,8 +172,10 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             null,
             null
         );
-        $this->expectException(ConnectionNotFoundException::class);
-
+        $expectedUserConnectionCollectionResponse = new UserConnectionCollectionResponse(
+            ...
+            $this->buildTeacherResponse(...[])
+        );
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
@@ -189,7 +190,8 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
         )->willReturn($firstUser);
         $this->userConnectionRepository->expects($this->once())->method('matching')->willReturn([]);
 
-        ($this->searchUserConnectionService)($request);
+        $userConnectionCollectionResponse = ($this->searchUserConnectionService)($request);
+        $this->assertEquals($expectedUserConnectionCollectionResponse, $userConnectionCollectionResponse);
     }
 
     public function testWhenRequestIsValidAndAuthorIsStudentThenReturnUserConnection()

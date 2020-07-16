@@ -52,22 +52,16 @@ final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRes
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        try {
-            $courses = ($this->searchCourses)(
-                new UnauthorizedSearchCoursesByCriteriaRequest(
-                    $filters,
-                    $orderBy,
-                    $order,
-                    $operator,
-                    $offset,
-                    $limit
-                )
-            );
-        } catch (CourseNotFoundException $exception) {
-            return $this->handleView(
-                $this->view([], Response::HTTP_NO_CONTENT)
-            );
-        }
+        $courses = ($this->searchCourses)(
+            new UnauthorizedSearchCoursesByCriteriaRequest(
+                $filters,
+                $orderBy,
+                $order,
+                $operator,
+                $offset,
+                $limit
+            )
+        );
 
         return $this->handleView(
             $this->view($courses, Response::HTTP_OK)

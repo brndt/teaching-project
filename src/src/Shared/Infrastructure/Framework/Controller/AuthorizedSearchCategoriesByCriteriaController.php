@@ -8,7 +8,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoriesByCriteria;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,23 +40,17 @@ final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRe
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        try {
-            $categories = ($this->searchCategoriesByCriteria)(
-                new AuthorizedSearchCategoriesByCriteriaRequest(
-                    $requestAuthorId,
-                    $filters,
-                    $orderBy,
-                    $order,
-                    $operator,
-                    $offset,
-                    $limit
-                )
-            );
-        } catch (CategoryNotFound $exception) {
-            return $this->handleView(
-                $this->view(null,Response::HTTP_NO_CONTENT)
-            );
-        }
+        $categories = ($this->searchCategoriesByCriteria)(
+            new AuthorizedSearchCategoriesByCriteriaRequest(
+                $requestAuthorId,
+                $filters,
+                $orderBy,
+                $order,
+                $operator,
+                $offset,
+                $limit
+            )
+        );
 
         return $this->handleView(
             $this->view($categories, Response::HTTP_OK)

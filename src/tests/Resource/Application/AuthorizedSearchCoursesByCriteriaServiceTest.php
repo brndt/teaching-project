@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use InvalidArgumentException;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
@@ -132,7 +131,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
         ($this->searchCoursesByCriteriaService)($request);
     }
 
-    public function testWhenCoursesNotFoundThenThrowException()
+    public function testWhenCoursesNotFoundThenReturnEmptyArray()
     {
         $request = new AuthorizedSearchCoursesByCriteriaRequest(
             Uuid::generate()->toString(),
@@ -143,8 +142,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
             null,
             null
         );
-        $this->expectException(CourseNotFoundException::class);
-
+        $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...[]));
         $requestAuthor = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
@@ -158,7 +156,8 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
             ->expects($this->once())
             ->method('matching')
             ->willReturn([]);
-        ($this->searchCoursesByCriteriaService)($request);
+        $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);
+        $this->assertEquals($expectedCourseCollectionResponse, $actualCourseCollectionResponse);
     }
 
     public function testWhenRequestIsValidThenReturnCourses()

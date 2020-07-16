@@ -27,7 +27,6 @@ final class UnauthorizedSearchCoursesByCriteriaService extends CourseService
         );
 
         $courses = $this->courseRepository->matching($criteria);
-        $this->ensureCoursesExist($courses);
 
         return new CourseCollectionResponse(...$this->buildResponse(...$courses));
     }

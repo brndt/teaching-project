@@ -30,11 +30,12 @@ final class SearchUsersByCriteriaServiceTest extends TestCase
         $this->searchUsersByCriteriaService = new SearchUsersByCriteriaService($this->repository);
     }
 
-    public function testWhenUsersAreNotFoundThenThrowException()
+    public function testWhenUsersAreNotFoundThenReturnEmptyArray()
     {
         $request = new SearchUsersByCriteriaRequest([], null, null, null, null, null);
-        $this->expectException(UserNotFoundException::class);
-
+        $expectedUserCollectionResponse = new UserCollectionResponse(
+            ...$this->buildResponse(...[])
+        );
         $criteria = new Criteria(
             Filters::fromValues($request->getFilters()),
             Order::fromValues($request->getOrderBy(), $request->getOrder()),
@@ -43,7 +44,8 @@ final class SearchUsersByCriteriaServiceTest extends TestCase
             $request->getLimit()
         );
         $this->repository->expects($this->once())->method('matching')->with($criteria)->willReturn([]);
-        ($this->searchUsersByCriteriaService)($request);
+        $userCollectionResponse = ($this->searchUsersByCriteriaService)($request);
+        $this->assertEquals($expectedUserCollectionResponse, $userCollectionResponse);
     }
 
     public function testWhenOneUserIsFoundThenReturnUserCollectionResponse()

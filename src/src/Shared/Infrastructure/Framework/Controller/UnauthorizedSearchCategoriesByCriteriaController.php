@@ -46,22 +46,16 @@ final class UnauthorizedSearchCategoriesByCriteriaController extends AbstractFOS
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        try {
-            $categories = ($this->searchCategoriesByCriteria)(
-                new UnauthorizedSearchCategoriesByCriteriaRequest(
-                    $filters,
-                    $orderBy,
-                    $order,
-                    $operator,
-                    $offset,
-                    $limit
-                )
-            );
-        } catch (CategoryNotFound $exception) {
-            return $this->handleView(
-                $this->view([], Response::HTTP_NO_CONTENT)
-            );
-        }
+        $categories = ($this->searchCategoriesByCriteria)(
+            new UnauthorizedSearchCategoriesByCriteriaRequest(
+                $filters,
+                $orderBy,
+                $order,
+                $operator,
+                $offset,
+                $limit
+            )
+        );
 
         return $this->handleView(
             $this->view($categories, Response::HTTP_OK)

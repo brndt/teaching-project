@@ -27,15 +27,9 @@ final class AuthorizedSearchCourseByIdController extends AbstractFOSRestControll
     {
         $requestAuthorId = $this->getUser()->getId();
 
-        try {
-            $courses = ($this->searchCourse)(
-                new AuthorizedSearchCourseByIdRequest($requestAuthorId, $courseId)
-            );
-        } catch (CourseNotFoundException $exception) {
-            return $this->handleView(
-                $this->view(null,Response::HTTP_NO_CONTENT)
-            );
-        }
+        $courses = ($this->searchCourse)(
+            new AuthorizedSearchCourseByIdRequest($requestAuthorId, $courseId)
+        );
 
         return $this->handleView(
             $this->view($courses, Response::HTTP_OK)

@@ -45,7 +45,7 @@ final class UnauthorizedSearchCoursesByCriteriaServiceTest extends TestCase
         );
     }
 
-    public function testWhenCoursesNotFoundThenThrowException()
+    public function testWhenCoursesNotFoundThenReturnEmptyArray()
     {
         $request = new UnauthorizedSearchCoursesByCriteriaRequest(
             [],
@@ -55,12 +55,13 @@ final class UnauthorizedSearchCoursesByCriteriaServiceTest extends TestCase
             null,
             null
         );
-        $this->expectException(CourseNotFoundException::class);
+        $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...[]));
         $this->courseRepository
             ->expects($this->once())
             ->method('matching')
             ->willReturn([]);
-        ($this->searchCoursesByCriteriaService)($request);
+        $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);
+        $this->assertEquals($expectedCourseCollectionResponse, $actualCourseCollectionResponse);
     }
 
     public function testWhenRequestIsValidThenReturnCourses()

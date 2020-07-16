@@ -19,3 +19,14 @@ Feature: Search user
       "experience": "10 years"
     }
     """
+
+  Scenario: Searching user when user doesn't exist
+    When I send a GET request to "/api/v1/users/16bf6c6a-c855-4a36-a3dd-5b9f6d92c753"
+    Then the response status code should be 404
+    And the response content should be:
+    """
+    {
+      "code": 404,
+      "message": "User was not found"
+    }
+    """

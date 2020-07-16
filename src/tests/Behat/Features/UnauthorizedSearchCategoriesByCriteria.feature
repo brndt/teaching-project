@@ -54,8 +54,8 @@ Feature: Unauthorized search categories by criteria
       | id                                   | firstName | lastName    | email             | password | roles |
       | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | nikita    | grichinenko | nikita@lasalle.es | 123456Aq | admin |
     When I send a GET request to "/api/v1/categories"
-    And the response status code should be 204
+    And the response status code should be 200
     Then the response content should be:
     """
-    null
+    []
     """
