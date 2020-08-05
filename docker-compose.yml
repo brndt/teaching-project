@@ -2,6 +2,7 @@ version: '3.5'
 
 services:
   nginx:
+    container_name: nginx 
     image: nginx:latest
     depends_on:
       - php-fpm
@@ -14,6 +15,7 @@ services:
       - backend
 
   php-fpm:
+    container_name: fpm 
     build:
       ./docker/php
     environment:
@@ -21,11 +23,14 @@ services:
     ports:
       - 9000:9000
     volumes:
+      - ./Makefile:/usr/share/nginx/html/Makefile
+      - ./tests.parallel:/usr/share/nginx/html/tests.parallel
       - ./src/:/usr/share/nginx/html
     networks:
       - backend
 
-  php-consume:
+  php-consume: 
+    container_name: consumer
     build:
       ./docker/php-consume
     environment:
@@ -36,6 +41,7 @@ services:
       - backend
 
   postgres:
+    container_name: postgres
     image: postgres
     ports:
       - 5432:5432
@@ -47,6 +53,7 @@ services:
       - backend
 
   rabbitmq:
+    container_name: rabbitmq
     build:
       ./docker/rabbitmq
     environment:
