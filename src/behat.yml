@@ -1,0 +1,18 @@
+default:
+  suites:
+    default:
+      paths:
+        - tests/Behat/Features
+      contexts:
+        - Test\LaSalle\StudentTeacher\Behat\Context\ApiContext
+        - Test\LaSalle\StudentTeacher\Behat\Context\DataSetupContext
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      kernel:
+        class: LaSalle\StudentTeacher\Kernel
+      bootstrap: config/bootstrap.php
+    Behat\MinkExtension:
+      sessions:
+        symfony:
+          symfony: ~
+      base_url: ''
