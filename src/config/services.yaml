@@ -12,6 +12,10 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  _instanceof:
+    LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventSubscriber:
+      tags: ['domain_event_subscriber']
+
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
   LaSalle\StudentTeacher\:
@@ -24,8 +28,29 @@ services:
     resource: '../src/Shared/Infrastructure/Framework/Controller'
     tags: ['controller.service_arguments']
 
+  LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqEventBus:
+    arguments: ['@LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqConnection', '%env(RABBITMQ_EXCHANGE)%']
+
   LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus:
-    alias: 'LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus'
+    alias: 'LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqEventBus'
+
+  LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqDomainEventsConsumer:
+    arguments:
+      - '@LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqConnection'
+      - '@LaSalle\StudentTeacher\Shared\Infrastructure\Event\DomainEventJsonDeserializer'
+      - '%env(RABBITMQ_EXCHANGE)%'
+      - '%env(RABBITMQ_MAX_RETRIES)%'
+
+  LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqConnection:
+    arguments:
+      - host: '%env(RABBITMQ_HOST)%'
+        port: '%env(RABBITMQ_PORT)%'
+        login: '%env(RABBITMQ_LOGIN)%'
+        vhost: '%env(RABBITMQ_VHOST)%'
+        password: '%env(RABBITMQ_PASSWORD)%'
+        read_timeout: 2
+        write_timeout: 2
+        connect_timeout: 5
 
   #LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus:
   #  arguments:
@@ -36,21 +61,33 @@ services:
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
+  LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Command\ConfigureRabbitMqCommand:
+    arguments:
+      - '@LaSalle\StudentTeacher\Shared\Infrastructure\Event\RabbitMqConfigurer'
+      - '%env(RABBITMQ_EXCHANGE)%'
+      - !tagged domain_event_subscriber
+
+  LaSalle\StudentTeacher\Shared\Infrastructure\Event\DomainEventMapping:
+    arguments: [!tagged domain_event_subscriber]
+
+  LaSalle\StudentTeacher\Shared\Infrastructure\Event\DomainEventSubscriberLocator:
+    arguments: [!tagged domain_event_subscriber]
+
   #LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
   #  tags:
   #    - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
-          autoconfigure: false
-          tags:
-              - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
+  #LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
+  #        autoconfigure: false
+  #        tags:
+  #            - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnEmailConfirmationRequestReceived:
-    autoconfigure: false
-    tags:
-      - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent }
+  #LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnEmailConfirmationRequestReceived:
+  #  autoconfigure: false
+  #  tags:
+  #    - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendPasswordResetOnPasswordRequestReceived:
-    autoconfigure: false
-    tags:
-      - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainEvent }
+  #LaSalle\StudentTeacher\User\Application\Event\SendPasswordResetOnPasswordRequestReceived:
+  #  autoconfigure: false
+  #  tags:
+  #    - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainEvent }

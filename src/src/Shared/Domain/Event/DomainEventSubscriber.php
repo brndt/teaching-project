@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Shared\Domain\Event;
 
-interface DomainEventBus
+interface DomainEventSubscriber
 {
-    public function dispatch(DomainEvent ...$events);
+    public static function subscribedTo(): array;
 }

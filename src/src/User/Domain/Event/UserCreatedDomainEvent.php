@@ -22,9 +22,11 @@ final class UserCreatedDomainEvent extends DomainEvent
         string $email,
         string $firstName,
         string $lastName,
-        string $confirmationToken
+        string $confirmationToken,
+        string $eventId = null,
+        string $occurredOn = null
     ) {
-        parent::__construct($aggregateId);
+        parent::__construct($aggregateId, $eventId, $occurredOn);
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -54,5 +56,24 @@ final class UserCreatedDomainEvent extends DomainEvent
     public function getConfirmationToken(): string
     {
         return $this->confirmationToken;
+    }
+
+    public static function fromPrimitives(
+        string $aggregateId,
+        array $body,
+        string $eventId,
+        string $occurredOn
+    ): DomainEvent {
+        return new self($aggregateId, $body['email'], $body['firstName'], $body['lastName'], $body['confirmationToken'], $eventId, $occurredOn);
+    }
+
+    public function toPrimitives(): array
+    {
+        return [
+            'email' => $this->getEmail(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'confirmationToken' => $this->getConfirmationToken(),
+        ];
     }
 }

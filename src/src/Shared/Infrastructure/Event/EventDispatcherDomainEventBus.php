@@ -17,8 +17,8 @@ final class EventDispatcherDomainEventBus implements DomainEventBus
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function dispatch(DomainEvent $event, string $eventName = null)
+    public function dispatch(DomainEvent ...$events)
     {
-        $this->eventDispatcher->dispatch($event);
+        $this->eventDispatcher->dispatch($events);
     }
 }
