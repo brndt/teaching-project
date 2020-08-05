@@ -20,6 +20,7 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
 abstract class CourseService
@@ -27,6 +28,7 @@ abstract class CourseService
     protected CourseRepository $courseRepository;
     protected CategoryRepository $categoryRepository;
     protected UserRepository $userRepository;
+    protected UserService $userService;
 
     public function __construct(
         CourseRepository $courseRepository,
@@ -36,6 +38,7 @@ abstract class CourseService
         $this->courseRepository = $courseRepository;
         $this->categoryRepository = $categoryRepository;
         $this->userRepository = $userRepository;
+        $this->userService = new UserService($userRepository);
     }
 
     protected function createIdFromPrimitive(string $uuid): Uuid

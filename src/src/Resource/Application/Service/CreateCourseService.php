@@ -6,18 +6,17 @@ namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCourseRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class CreateCourseService extends CourseService
 {
     public function __invoke(CreateCourseRequest $request): void
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
 
-        $teacherId = $this->createIdFromPrimitive($request->getTeacherId());
-        $teacher = $this->userRepository->ofId($teacherId);
-        $this->ensureUserExists($teacher);
+        $teacherId = new Uuid($request->getTeacherId());
+        $teacher = $this->userService->findUser($teacherId);
 
         $this->ensureRequestAuthorHasPermissions($requestAuthor, $teacher);
 

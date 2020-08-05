@@ -12,6 +12,7 @@ use LaSalle\StudentTeacher\Resource\Application\Service\CreateCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -56,7 +57,7 @@ final class CreateCourseServiceTest extends TestCase
             'published',
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         ($this->createCourseService)($request);
     }
 
@@ -101,7 +102,7 @@ final class CreateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')
