@@ -18,10 +18,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: make composer-install keys-install
+        run: make -C src composer-install keys-install
 
       - name: Start all the environment
-        run: make start
+        run: make -C src start
 
       - name: Wait for the environment to get up
         run: |
@@ -31,4 +31,4 @@ jobs:
           done
 
       - name: Run the tests
-        run: make parallel-test
+        run: make -C src parallel-test
