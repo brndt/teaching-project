@@ -23,8 +23,6 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ./Makefile:/usr/share/nginx/html/Makefile
-      - ./tests.parallel:/usr/share/nginx/html/tests.parallel
       - ./src/:/usr/share/nginx/html
     networks:
       - backend
