@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
@@ -32,9 +33,10 @@ final class ConfirmUserEmailServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new ConfirmUserEmailRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid', 'confirmation_token');
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->confirmUserEmailService)($request);
     }
 

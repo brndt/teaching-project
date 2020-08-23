@@ -39,15 +39,6 @@ abstract class UserConnectionService
         $this->stateFactory = $stateFactory;
     }
 
-    protected function createIdFromPrimitive(string $uuid): Uuid
-    {
-        try {
-            return new Uuid($uuid);
-        } catch (InvalidUuidException $error) {
-            throw new InvalidArgumentException($error->getMessage());
-        }
-    }
-
     protected function ensureUsersAreNotEqual(User $firstUser, User $secondUser): void
     {
         if (true === $firstUser->idEqualsTo($secondUser->getId())) {
@@ -82,7 +73,7 @@ abstract class UserConnectionService
 
     protected function identifyStudentAndTeacher(User $firstUser, User $secondUser): array
     {
-        $this->ensureUsersAreNotEqual($firstUser, $secondUser);
+        $firstUser->ensureUsersAreNotEqual($secondUser);
         $this->ensureRolesAreNotEqual($firstUser, $secondUser);
 
         return [Role::STUDENT, Role::TEACHER] === [

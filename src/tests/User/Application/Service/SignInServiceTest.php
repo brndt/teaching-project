@@ -11,6 +11,7 @@ use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SignInRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserResponse;
 use LaSalle\StudentTeacher\User\Application\Service\SignInService;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +32,7 @@ final class SignInServiceTest extends TestCase
     {
         $request = new SignInRequest('userexample.com', '123456aa');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidEmailException::class);
         ($this->signInService)($request);
     }
 

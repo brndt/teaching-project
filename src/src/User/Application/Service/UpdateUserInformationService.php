@@ -4,27 +4,40 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 
-final class UpdateUserInformationService extends UserService
+final class UpdateUserInformationService
 {
+    private UserRepository $repository;
+    private UserService $userService;
+    private AuthorizationService $authorizationService;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->repository = $userRepository;
+        $this->userService = new UserService($userRepository);
+        $this->authorizationService = new AuthorizationService();
+    }
+
     public function __invoke(UpdateUserInformationRequest $request): void
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $userId = new Uuid($request->getUserId());
+        $email = new Email($request->getEmail());
+        $firstName = new Name($request->getFirstName());
+        $lastName = new Name($request->getLastName());
 
-        $userId = $this->createIdFromPrimitive($request->getUserId());
-        $userToUpdate = $this->userRepository->ofId($userId);
-        $this->ensureUserExists($userToUpdate);
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
+        $userToUpdate = $this->userService->findUser($userId);
 
-        $this->ensureRequestAuthorIsUser($requestAuthor, $userToUpdate);
-
-        $email = $this->createEmailFromPrimitive($request->getEmail());
-        $this->ensureNewEmailIsAvailable($email, $userToUpdate->getEmail());
-
-        $firstName = $this->createNameFromPrimitive($request->getFirstName());
-        $lastName = $this->createNameFromPrimitive($request->getLastName());
+        $this->authorizationService->ensureRequestAuthorIsCertainUser($requestAuthor, $userToUpdate);
+        $this->userService->ensureNewEmailIsAvailable($email, $userToUpdate->getEmail());
 
         $userToUpdate->setEmail($email);
         $userToUpdate->setFirstName($firstName);
@@ -32,6 +45,6 @@ final class UpdateUserInformationService extends UserService
         $userToUpdate->setEducation($request->getEducation());
         $userToUpdate->setExperience($request->getExperience());
 
-        $this->userRepository->save($userToUpdate);
+        $this->repository->save($userToUpdate);
     }
 }

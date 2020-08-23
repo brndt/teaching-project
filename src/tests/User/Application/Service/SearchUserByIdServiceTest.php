@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserByIdRequest;
@@ -31,9 +32,10 @@ final class SearchUserByIdServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new SearchUserByIdRequest(Uuid::generate()->toString() . 'invalidCharacters');
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->searchUserByIdService)($request);
     }
 

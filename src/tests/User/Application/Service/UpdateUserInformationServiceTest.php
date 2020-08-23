@@ -6,12 +6,15 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNameException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,9 +32,9 @@ final class UpdateUserInformationServiceTest extends TestCase
         $this->updateUserInformationService = new UpdateUserInformationService($this->repository);
     }
 
-    public function testWhenRequestAuthorIsInvalidThenThrowException()
+    public function testWhenRequestAuthorIdIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
 
         $request = new UpdateUserInformationRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
@@ -68,7 +71,7 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
 
         $request = new UpdateUserInformationRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
@@ -83,7 +86,6 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
         $this->repository
-            ->expects($this->once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
@@ -149,7 +151,7 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidEmailException::class);
 
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -167,12 +169,10 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->withId(new Uuid($request->getUserId()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
         $this->repository
-            ->expects($this->at(1))
             ->method('ofId')
             ->with($request->getUserId())
             ->willReturn($user);
@@ -202,17 +202,14 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->withEmail(new Email($request->getEmail()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
         $this->repository
-            ->expects($this->at(1))
             ->method('ofId')
             ->with($request->getUserId())
             ->willReturn($user);
         $this->repository
-            ->expects($this->once())
             ->method('ofEmail')
             ->with($request->getEmail())
             ->willReturn($userToSearchEmail);
@@ -221,7 +218,7 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserFirstNameIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidNameException::class);
 
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -238,10 +235,10 @@ final class UpdateUserInformationServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-        $this->repository->expects($this->at(0))->method('ofId')->with(
+        $this->repository->method('ofId')->with(
             $request->getRequestAuthorId()
         )->willReturn($author);
-        $this->repository->expects($this->at(1))->method('ofId')->with(
+        $this->repository->method('ofId')->with(
             $request->getUserId()
         )->willReturn($user);
         ($this->updateUserInformationService)($request);
@@ -249,7 +246,7 @@ final class UpdateUserInformationServiceTest extends TestCase
 
     public function testWhenUserLastNameIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidNameException::class);
 
         $request = new UpdateUserInformationRequest(
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -267,12 +264,10 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->withId(new Uuid($request->getUserId()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
         $this->repository
-            ->expects($this->at(1))
             ->method('ofId')
             ->with($request->getUserId())
             ->willReturn($user);

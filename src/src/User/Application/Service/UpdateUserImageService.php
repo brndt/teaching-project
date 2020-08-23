@@ -4,24 +4,37 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserImageRequest;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
-final class UpdateUserImageService extends UserService
+final class UpdateUserImageService
 {
+    private UserRepository $repository;
+    private UserService $userService;
+    private AuthorizationService $authorizationService;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->repository = $userRepository;
+        $this->userService = new UserService($userRepository);
+        $this->authorizationService = new AuthorizationService();
+    }
+
     public function __invoke(UpdateUserImageRequest $request): void
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $userId = new Uuid($request->getUserId());
 
-        $userId = $this->createIdFromPrimitive($request->getUserId());
-        $userToUpdate = $this->userRepository->ofId($userId);
-        $this->ensureUserExists($userToUpdate);
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
+        $userToUpdate = $this->userService->findUser($userId);
 
-        $this->ensureRequestAuthorIsUser($requestAuthor, $userToUpdate);
+        $this->authorizationService->ensureRequestAuthorIsCertainUser($requestAuthor, $userToUpdate);
 
         $userToUpdate->setImage($request->getImage());
 
-        $this->userRepository->save($userToUpdate);
+        $this->repository->save($userToUpdate);
     }
 }

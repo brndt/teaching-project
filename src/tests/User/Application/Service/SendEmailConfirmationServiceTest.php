@@ -14,6 +14,7 @@ use LaSalle\StudentTeacher\User\Application\Request\SendEmailConfirmationRequest
 use LaSalle\StudentTeacher\User\Application\Service\SendEmailConfirmationService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -41,8 +42,9 @@ final class SendEmailConfirmationServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidEmailException::class);
+
         $request = new SendEmailConfirmationRequest('userexample.com');
-        $this->expectException(InvalidArgumentException::class);
         ($this->sendEmailConfirmationService)($request);
     }
 

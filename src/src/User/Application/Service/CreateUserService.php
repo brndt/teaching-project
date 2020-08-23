@@ -10,35 +10,43 @@ use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
-final class CreateUserService extends UserService
+final class CreateUserService
 {
     private DomainEventBus $eventBus;
     private RandomStringGenerator $randomStringGenerator;
 
     public function __construct(RandomStringGenerator $randomStringGenerator, UserRepository $userRepository, DomainEventBus $eventBus)
     {
-        parent::__construct($userRepository);
+        $this->repository = $userRepository;
         $this->eventBus = $eventBus;
         $this->randomStringGenerator = $randomStringGenerator;
+        $this->userService = new UserService($userRepository);
+        $this->authorizationService = new AuthorizationService();
     }
 
     public function __invoke(CreateUserRequest $request): void
     {
-        $email = $this->createEmailFromPrimitive($request->getEmail());
-        $this->ensureUserDoesntExistByEmail($email);
+        $email = new Email($request->getEmail());
+        $this->userService->ensureUserDoesntExistByEmail($email);
 
-        $password = $this->createPasswordFromPrimitive($request->getPassword());
+        $password = Password::fromPlainPassword($request->getPassword());
 
-        $firstName = $this->createNameFromPrimitive($request->getFirstName());
-        $lastName = $this->createNameFromPrimitive($request->getLastName());
+        $firstName = new Name($request->getFirstName());
+        $lastName = new Name($request->getLastName());
 
-        $roles = $this->createRolesFromPrimitive($request->getRoles());
-        $this->ensureRolesDontContainsAdmin($roles);
+        $roles = Roles::fromArrayOfPrimitives($request->getRoles());
+        $roles->ensureRolesDontContainsAdmin();
 
         $user = User::create(
-            $this->userRepository->nextIdentity(),
+            $this->repository->nextIdentity(),
             $email,
             $password,
             $firstName,
@@ -53,7 +61,7 @@ final class CreateUserService extends UserService
             new DateTimeImmutable('+1 day')
         );
 
-        $this->userRepository->save($user);
+        $this->repository->save($user);
 
         foreach ($user->pullDomainEvents() as $domainEvent) {
             $this->eventBus->dispatch($domainEvent);

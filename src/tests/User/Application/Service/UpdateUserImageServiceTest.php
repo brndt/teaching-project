@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -30,9 +31,9 @@ final class UpdateUserImageServiceTest extends TestCase
         $this->updateUserImageService = new UpdateUserImageService($this->repository);
     }
 
-    public function testWhenRequestAuthorIsInvalidThenThrowException()
+    public function testWhenRequestAuthorIdIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
 
         $request = new UpdateUserImageRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
@@ -61,7 +62,7 @@ final class UpdateUserImageServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
 
         $request = new UpdateUserImageRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
@@ -72,7 +73,6 @@ final class UpdateUserImageServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
         $this->repository
-            ->expects($this->once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);

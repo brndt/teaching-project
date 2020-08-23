@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
+use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 
 final class Roles
@@ -66,6 +67,13 @@ final class Roles
     public function contains(Role $role): bool
     {
         return in_array($role->toString(), $this->getArrayOfPrimitives());
+    }
+
+    public function ensureRolesDontContainsAdmin(): void
+    {
+        if ($this->contains(new Role(Role::ADMIN))) {
+            throw new PermissionDeniedException();
+        }
     }
 
 }

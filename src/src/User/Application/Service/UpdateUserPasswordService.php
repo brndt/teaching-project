@@ -4,26 +4,39 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 
-final class UpdateUserPasswordService extends UserService
+final class UpdateUserPasswordService
 {
+    private UserRepository $repository;
+    private UserService $userService;
+    private AuthorizationService $authorizationService;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->repository = $userRepository;
+        $this->userService = new UserService($userRepository);
+        $this->authorizationService = new AuthorizationService();
+    }
+
     public function __invoke(UpdateUserPasswordRequest $request): void
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $userId = new Uuid($request->getUserId());
 
-        $userId = $this->createIdFromPrimitive($request->getUserId());
-        $userToUpdate = $this->userRepository->ofId($userId);
-        $this->ensureUserExists($userToUpdate);
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
+        $userToUpdate = $this->userService->findUser($userId);
 
-        $this->ensureRequestAuthorIsUser($requestAuthor, $userToUpdate);
+        $this->authorizationService->ensureRequestAuthorIsCertainUser($requestAuthor, $userToUpdate);
+        $userToUpdate->getPassword()->verify($request->getOldPassword());
 
-        $this->verifyPassword($request->getOldPassword(), $userToUpdate->getPassword());
+        $userToUpdate->setPassword(Password::fromPlainPassword($request->getNewPassword()));
 
-        $userToUpdate->setPassword($this->createPasswordFromPrimitive($request->getNewPassword()));
-
-        $this->userRepository->save($userToUpdate);
+        $this->repository->save($userToUpdate);
     }
 }

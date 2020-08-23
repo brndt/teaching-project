@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
@@ -13,15 +14,15 @@ final class SearchUserConnectionByIdService extends UserConnectionService
 {
     public function __invoke(SearchUserConnectionByCriteriaRequest $request)
     {
-        $authorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
+        $authorId = new Uuid($request->getRequestAuthorId());
         $author = $this->userRepository->ofId($authorId);
         $this->ensureUserExists($author);
 
-        $userId = $this->createIdFromPrimitive($request->getUserId());
+        $userId = new Uuid($request->getUserId());
         $user = $this->userRepository->ofId($userId);
         $this->ensureUserExists($user);
 
-        $friendId = $this->createIdFromPrimitive($request->getFriendId());
+        $friendId = new Uuid($request->getFriendId());
         $friend = $this->userRepository->ofId($friendId);
         $this->ensureUserExists($friend);
 

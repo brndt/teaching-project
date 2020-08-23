@@ -5,8 +5,14 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 
 use DateTimeImmutable;
+use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
+use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
+use LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException;
+use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
+use LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException;
 use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
@@ -174,7 +180,7 @@ final class User
         return $this->id;
     }
 
-    public function getPassword()
+    public function getPassword(): Password
     {
         return $this->password;
     }
@@ -229,6 +235,13 @@ final class User
         return $this->enabled;
     }
 
+    public function ensureUserEnabled(): void
+    {
+        if (false === $this->getEnabled()) {
+            throw new UserNotEnabledException();
+        }
+    }
+
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
@@ -262,5 +275,25 @@ final class User
     public function isConfirmationTokenExpired()
     {
         return $this->expirationDate <= new \DateTime();
+    }
+
+    public function validateConfirmationToken(Token $tokenFromRequest): void
+    {
+        if (null === $this->getConfirmationToken()) {
+            throw new ConfirmationTokenNotFoundException();
+        }
+        if (true === $this->isConfirmationTokenExpired()) {
+            throw new ConfirmationTokenIsExpiredException();
+        }
+        if (false === $this->confirmationTokenEqualsTo($tokenFromRequest)) {
+            throw new IncorrectConfirmationTokenException();
+        }
+    }
+
+    public function ensureUsersAreNotEqual(User $otherUser): void
+    {
+        if (true === $this->idEqualsTo($otherUser->getId())) {
+            throw new UsersAreEqualException();
+        }
     }
 }
