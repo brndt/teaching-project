@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException;
@@ -14,6 +15,7 @@ use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\ConfirmUserPasswordResetRequest;
 use LaSalle\StudentTeacher\User\Application\Service\ConfirmUserPasswordResetService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
@@ -34,13 +36,14 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new ConfirmUserPasswordResetRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
             'newValidPassword123',
             'confirmation_token',
         );
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->confirmUserPasswordResetService)($request);
     }
 
@@ -124,7 +127,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
             ->withExpirationDate(new DateTimeImmutable('+ 1 day'))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidNumberContainingException::class);
         $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn($user);
         ($this->confirmUserPasswordResetService)($request);
     }

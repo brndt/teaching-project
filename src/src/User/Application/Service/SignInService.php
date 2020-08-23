@@ -7,16 +7,25 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 use LaSalle\StudentTeacher\User\Application\Request\SignInRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
-final class SignInService extends UserService
+final class SignInService
 {
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->repository = $userRepository;
+        $this->userService = new UserService($userRepository);
+    }
+
     public function __invoke(SignInRequest $request): UserResponse
     {
-        $email = $this->createEmailFromPrimitive($request->getEmail());
-        $user = $this->userRepository->ofEmail($email);
-        $this->ensureUserExists($user);
-        $this->ensureUserEnabled($user);
-        $this->verifyPassword($request->getPassword(), $user->getPassword());
+        $email = new Email($request->getEmail());
+        $user = $this->userService->findUserByEmail($email);
+        $user->ensureUserEnabled();
+
+        $user->getPassword()->verify($request->getPassword());
 
         return $this->buildResponse($user);
     }

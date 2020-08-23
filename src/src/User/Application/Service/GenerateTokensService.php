@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\GenerateTokensRequest;
 use LaSalle\StudentTeacher\User\Application\Response\TokensResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\RefreshToken;
@@ -13,7 +14,7 @@ final class GenerateTokensService extends RefreshTokenService
 {
     public function __invoke(GenerateTokensRequest $request): TokensResponse
     {
-        $userId = $this->createIdFromPrimitive($request->getUserId());
+        $userId = new Uuid($request->getUserId());
         $expirationDate = $request->getExpirationDate();
 
         $token = new Token($this->randomStringGenerator->generate());

@@ -8,6 +8,7 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionResponse;
@@ -18,11 +19,11 @@ final class SearchUserConnectionsByCriteriaService extends UserConnectionService
 {
     public function __invoke(SearchUserConnectionsByCriteriaRequest $request)
     {
-        $authorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
+        $authorId = new Uuid($request->getRequestAuthorId());
         $author = $this->userRepository->ofId($authorId);
         $this->ensureUserExists($author);
 
-        $userId = $this->createIdFromPrimitive($request->getUserId());
+        $userId = new Uuid($request->getUserId());
         $user = $this->userRepository->ofId($userId);
         $this->ensureUserExists($user);
 

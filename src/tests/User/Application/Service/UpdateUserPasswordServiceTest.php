@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -29,9 +30,9 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $this->updateUserPasswordService = new UpdateUserPasswordService($this->repository);
     }
 
-    public function testWhenRequestAuthorIsInvalidThenThrowException()
+    public function testWhenRequestAuthorIdIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
 
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid',
@@ -62,7 +63,7 @@ final class UpdateUserPasswordServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
 
         $request = new UpdateUserPasswordRequest(
             '16bf6c6a-c855-4a36-a3dd-5b9f6d92c753',
@@ -74,7 +75,6 @@ final class UpdateUserPasswordServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
         $this->repository
-            ->expects($this->once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);

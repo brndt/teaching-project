@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\GenerateTokensRequest;
@@ -43,9 +44,10 @@ final class GenerateTokensServiceTest extends TestCase
 
     public function testWhenUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new GenerateTokensRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753-invalid', new DateTimeImmutable());
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->generateTokensService)($request);
     }
 

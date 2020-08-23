@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException;
@@ -46,8 +47,10 @@ final class UpdateUserConnectionServiceTest extends TestCase
         );
     }
 
-    public function testWhenRequestAuthorIsInvalidThenThrowException()
+    public function testWhenRequestAuthorIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new UpdateUserConnectionRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138-invalid',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -55,7 +58,6 @@ final class UpdateUserConnectionServiceTest extends TestCase
             'approved'
         );
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->updateUserConnectionService)($request);
     }
 
@@ -77,6 +79,8 @@ final class UpdateUserConnectionServiceTest extends TestCase
 
     public function testWhenFirstUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new UpdateUserConnectionRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'cfe849f3-7832-435a-b484-83fabf530794-invalid',
@@ -87,7 +91,6 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')
@@ -120,6 +123,8 @@ final class UpdateUserConnectionServiceTest extends TestCase
 
     public function testWhenSecondUserIdIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidUuidException::class);
+
         $request = new UpdateUserConnectionRequest(
             '48d34c63-6bba-4c72-a461-8aac1fd7d138',
             'cfe849f3-7832-435a-b484-83fabf530794',
@@ -134,7 +139,6 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->withId(new Uuid($request->getFirstUser()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
         $this->userRepository->expects($this->at(0))->method('ofId')->with(
             $request->getRequestAuthorId()
         )->willReturn($author);

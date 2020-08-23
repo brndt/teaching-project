@@ -12,9 +12,17 @@ use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest
 use LaSalle\StudentTeacher\User\Application\Response\UserCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserResponse;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 
-final class SearchUsersByCriteriaService extends UserService
+final class SearchUsersByCriteriaService
 {
+    private UserRepository $repository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->repository = $userRepository;
+    }
+
     public function __invoke(SearchUsersByCriteriaRequest $request): UserCollectionResponse
     {
         $criteria = new Criteria(
@@ -25,7 +33,7 @@ final class SearchUsersByCriteriaService extends UserService
             $request->getLimit()
         );
 
-        $users = $this->userRepository->matching($criteria);
+        $users = $this->repository->matching($criteria);
 
         return new UserCollectionResponse(...$this->buildResponse(...$users));
     }

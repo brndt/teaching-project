@@ -13,6 +13,12 @@ use LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsExceptio
 use LaSalle\StudentTeacher\User\Application\Request\CreateUserRequest;
 use LaSalle\StudentTeacher\User\Application\Service\CreateUserService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNameException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
@@ -39,11 +45,12 @@ final class CreateUserServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidEmailException::class);
+
         $request = new CreateUserRequest(
             'userexample.com', '123456aa', 'Alex', 'Johnson', ['teacher'], new \DateTimeImmutable('2020-04-27')
         );
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($request);
     }
 
@@ -65,7 +72,7 @@ final class CreateUserServiceTest extends TestCase
             'user@example.com', '123456a', 'Alex', 'Johnson', ['teacher'], new \DateTimeImmutable('2020-04-27')
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidPasswordLengthException::class);
         ($this->createUser)($request);
     }
 
@@ -80,7 +87,7 @@ final class CreateUserServiceTest extends TestCase
             new \DateTimeImmutable('2020-04-27')
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidNumberContainingException::class);
         ($this->createUser)($request);
     }
 
@@ -95,17 +102,18 @@ final class CreateUserServiceTest extends TestCase
             new \DateTimeImmutable()
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidLetterContainingException::class);
         ($this->createUser)($request);
     }
 
     public function testWhenFirstNameIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidNameException::class);
+
         $request = new CreateUserRequest(
             'user@example.com', '123456aa', 'Alex.', 'Johnson', ['teacher'], new DateTimeImmutable()
         );
 
-        $this->expectException(InvalidArgumentException::class);
         ($this->createUser)($request);
     }
 
@@ -115,7 +123,7 @@ final class CreateUserServiceTest extends TestCase
             'user@example.com', '123456aa', 'Alex', 'Johnson ', ['teacher'], new \DateTimeImmutable()
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidNameException::class);
         ($this->createUser)($request);
     }
 
@@ -125,7 +133,7 @@ final class CreateUserServiceTest extends TestCase
             'user@example.com', '123456aa', 'Alex', 'Johnson', ['invalid'], new DateTimeImmutable('2020-04-27')
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidRoleException::class);
         ($this->createUser)($request);
     }
 

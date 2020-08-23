@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\Service;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
 final class UserService
 {
@@ -25,5 +27,29 @@ final class UserService
             throw new UserNotFoundException();
         }
         return $user;
+    }
+
+    public function findUserByEmail(Email $email): User
+    {
+        $user = $this->repository->ofEmail($email);
+        if (null === $user) {
+            throw new UserNotFoundException();
+        }
+        return $user;
+    }
+
+    public function ensureNewEmailIsAvailable(Email $newEmail, Email $oldEmail): void
+    {
+        $userWithNewEmail = $this->repository->ofEmail($newEmail);
+        if (null !== $userWithNewEmail && false === $newEmail->equalsTo($oldEmail)) {
+            throw new EmailAlreadyExistsException();
+        }
+    }
+
+    public function ensureUserDoesntExistByEmail(Email $email): void
+    {
+        if (null !== $this->repository->ofEmail($email)) {
+            throw new EmailAlreadyExistsException();
+        }
     }
 }

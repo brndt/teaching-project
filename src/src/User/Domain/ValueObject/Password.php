@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
+use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
@@ -41,9 +42,11 @@ final class Password
         return $this->password;
     }
 
-    public static function verify(string $plainPassword, Password $hashedPassword): bool
+    public function verify(string $plainPassword): void
     {
-        return password_verify($plainPassword, $hashedPassword->toString());
+        if (false === password_verify($plainPassword, $this->toString())) {
+            throw new IncorrectPasswordException();
+        }
     }
 
     private function __construct(string $password)

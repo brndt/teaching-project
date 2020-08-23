@@ -14,6 +14,7 @@ use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
 use LaSalle\StudentTeacher\User\Application\Service\SendPasswordResetService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainEvent;
+use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -41,8 +42,9 @@ final class SendPasswordResetServiceTest extends TestCase
 
     public function testWhenUserEmailIsInvalidThenThrowException()
     {
+        $this->expectException(InvalidEmailException::class);
+
         $request = new SendPasswordResetRequest('userexample.com');
-        $this->expectException(InvalidArgumentException::class);
         ($this->sendPasswordResetService)($request);
     }
 
