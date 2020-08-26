@@ -40,4 +40,10 @@ fos_rest:
       LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
       LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403
       LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException: 400
-
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidNameException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException: 400
