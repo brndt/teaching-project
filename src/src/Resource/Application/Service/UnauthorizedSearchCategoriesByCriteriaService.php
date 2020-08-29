@@ -9,13 +9,21 @@ use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCatego
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
-final class UnauthorizedSearchCategoriesByCriteriaService extends CategoryService
+final class UnauthorizedSearchCategoriesByCriteriaService
 {
+    private CategoryRepository $categoryRepository;
+
+    public function __construct(CategoryRepository $courseRepository)
+    {
+        $this->categoryRepository = $courseRepository;
+    }
+
     public function __invoke(UnauthorizedSearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
     {
         $criteria = new Criteria(

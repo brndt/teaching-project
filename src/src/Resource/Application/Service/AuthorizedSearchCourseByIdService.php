@@ -4,25 +4,38 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
-final class AuthorizedSearchCourseByIdService extends CourseService
+final class AuthorizedSearchCourseByIdService
 {
+    private AuthorizationService $authorizationService;
+    private CourseService $courseService;
+    private UserService $userService;
+
+    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository)
+    {
+        $this->courseService = new CourseService($courseRepository);
+        $this->userService = new UserService($userRepository);
+        $this->authorizationService = new AuthorizationService();
+    }
+
     public function __invoke(AuthorizedSearchCourseByIdRequest $request): CourseResponse
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
+        $authorId = new Uuid($request->getRequestAuthorId());
+        $requestAuthor = $this->userService->findUser($authorId);
 
-        $course = $this->courseRepository->ofId($this->createIdFromPrimitive($request->getCourseId()));
-        $this->ensureCourseExists($course);
+        $courseId = new Uuid($request->getCourseId());
+        $course = $this->courseService->findCourse($courseId);
 
-        $this->ensureRequestAuthorHasPermissionsToCourse($requestAuthor, $course);
+        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
 
         return $this->buildResponse($course);
     }

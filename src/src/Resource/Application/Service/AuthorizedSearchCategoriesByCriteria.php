@@ -8,19 +8,41 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategori
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CategoryService;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
-final class AuthorizedSearchCategoriesByCriteria extends CategoryService
+final class AuthorizedSearchCategoriesByCriteria
 {
+    private CategoryRepository $categoryRepository;
+    private CourseService $courseService;
+    private AuthorizationService $authorizationService;
+    private CategoryService $categoryService;
+    private UserService $userService;
+
+    public function __construct(
+        UserRepository $userRepository,
+        CategoryRepository $categoryRepository
+    ) {
+        $this->categoryRepository = $categoryRepository;
+        $this->userService = new UserService($userRepository);
+        $this->authorizationService = new AuthorizationService();
+    }
+
     public function __invoke(AuthorizedSearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
-        $this->ensureRequestAuthorIsAdmin($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
+        $this->authorizationService->ensureRequestAuthorIsAdmin($requestAuthor);
 
         $criteria = new Criteria(
             Filters::fromValues($request->getFilters()),

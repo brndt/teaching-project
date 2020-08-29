@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
@@ -12,6 +11,7 @@ use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -37,8 +37,8 @@ final class UpdateCourseServiceTest extends TestCase
         $this->userRepository = $this->createMock(UserRepository::class);
         $this->updateCourseService = new UpdateCourseService(
             $this->courseRepository,
+            $this->userRepository,
             $this->categoryRepository,
-            $this->userRepository
         );
     }
 
@@ -56,7 +56,7 @@ final class UpdateCourseServiceTest extends TestCase
             'published',
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         ($this->updateCourseService)($request);
     }
 
@@ -101,7 +101,7 @@ final class UpdateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')
@@ -164,7 +164,7 @@ final class UpdateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getTeacherId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')
@@ -249,7 +249,7 @@ final class UpdateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getCategoryId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')

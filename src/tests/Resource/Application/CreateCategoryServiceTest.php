@@ -8,9 +8,11 @@ use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -42,7 +44,7 @@ final class CreateCategoryServiceTest extends TestCase
             'published'
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         ($this->createCategoryService)($request);
     }
 
@@ -119,7 +121,7 @@ final class CreateCategoryServiceTest extends TestCase
         $user = (new UserBuilder())
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidStatusException::class);
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')

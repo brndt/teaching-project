@@ -8,24 +8,40 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesB
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
-final class AuthorizedSearchCoursesByCriteriaService extends CourseService
+final class AuthorizedSearchCoursesByCriteriaService
 {
+    private CourseRepository $courseRepository;
+    private CourseService $courseService;
+    private UserService $userService;
+
+    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository)
+    {
+        $this->courseRepository = $courseRepository;
+        $this->courseService = new CourseService($courseRepository);
+        $this->userService = new UserService($userRepository);
+    }
+
     public function __invoke(AuthorizedSearchCoursesByCriteriaRequest $request): CourseCollectionResponse
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
 
-        $filters = $this->createFiltersDependingByRoles($requestAuthor);
+        $filters = $this->courseService->createFiltersDependingByRoles($requestAuthor);
 
         if (null !== $request->getTeacherId()) {
-            $teacherId = $this->createIdFromPrimitive($request->getTeacherId());
-            $filters = $filters->add($this->createFilterByTeacherId($teacherId));
+            $teacherId = new Uuid($request->getTeacherId());
+            $filters = $filters->add($this->courseService->createFilterByTeacherId($teacherId));
         }
 
         $criteria = new Criteria(
