@@ -6,34 +6,56 @@ namespace LaSalle\StudentTeacher\User\Application\Service;
 
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserConnectionRequest;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserConnectionService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 
-final class UpdateUserConnectionService extends UserConnectionService
+final class UpdateUserConnectionService
 {
+    private UserRepository $userRepository;
+    private UserConnectionRepository $userConnectionRepository;
+    private UserService $userService;
+    private AuthorizationService $authorizationService;
+    private UserConnectionService $userConnectionService;
+    private StateFactory $stateFactory;
+
+    public function __construct(
+        UserConnectionRepository $userConnectionRepository,
+        UserRepository $userRepository,
+        StateFactory $stateFactory
+    ) {
+        $this->userRepository = $userRepository;
+        $this->userConnectionRepository = $userConnectionRepository;
+        $this->stateFactory = $stateFactory;
+        $this->userService = new UserService($this->userRepository);
+        $this->authorizationService = new AuthorizationService();
+        $this->userConnectionService = new UserConnectionService($this->userConnectionRepository);
+    }
+
     public function __invoke(UpdateUserConnectionRequest $request)
     {
         $authorId = new Uuid($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($authorId);
-        $this->ensureUserExists($requestAuthor);
+        $requestAuthor = $this->userService->findUser($authorId);
 
         $firstUserId = new Uuid($request->getFirstUser());
-        $firstUser = $this->userRepository->ofId($firstUserId);
-        $this->ensureUserExists($firstUser);
+        $firstUser = $this->userService->findUser($firstUserId);
 
         $secondUserId = new Uuid($request->getSecondUser());
-        $secondUser = $this->userRepository->ofId($secondUserId);
-        $this->ensureUserExists($secondUser);
+        $secondUser = $this->userService->findUser($secondUserId);
 
-        $newSpecifier = $this->identifySpecifier($authorId, $firstUser, $secondUser);
+        $newSpecifier = $this->userConnectionService->identifySpecifier($requestAuthor, $firstUser, $secondUser);
 
-        [$student, $teacher] = $this->identifyStudentAndTeacher($firstUser, $secondUser);
+        [$student, $teacher] = $this->userConnectionService->identifyStudentAndTeacher($firstUser, $secondUser);
 
-        $userConnection = $this->userConnectionRepository->ofId($student->getId(), $teacher->getId());
-        $this->ensureConnectionExists($userConnection);
+        $userConnection = $this->userConnectionService->findUserConnection($student, $teacher);
 
-        $newState = $this->createNewState($request->getStatus());
-        $isSpecifierChanged = $this->verifySpecifierChanged($newSpecifier->getId(), $userConnection->getSpecifierId());
+        $newState = $this->stateFactory->create($request->getStatus());
+        $isSpecifierChanged = $this->userConnectionService->verifySpecifierChanged($newSpecifier->getId(), $userConnection->getSpecifierId());
 
-        $this->setNewState($userConnection, $newState, $isSpecifierChanged);
+        $userConnection->setState($newState, $isSpecifierChanged);
 
         $userConnection->setSpecifierId($newSpecifier->getId());
 
