@@ -47,3 +47,4 @@ fos_rest:
       LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException: 400
       LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException: 400
       LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException: 400
+      LaSalle\StudentTeacher\User\Domain\Exception\IncorrectStateException: 400

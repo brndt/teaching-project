@@ -12,22 +12,43 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUserConnectionsByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserConnectionResponse;
+use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserConnectionService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
-final class SearchUserConnectionsByCriteriaService extends UserConnectionService
+final class SearchUserConnectionsByCriteriaService
 {
+    private UserRepository $userRepository;
+    private UserConnectionRepository $userConnectionRepository;
+    private UserService $userService;
+    private AuthorizationService $authorizationService;
+    private UserConnectionService $userConnectionService;
+
+    public function __construct(
+        UserConnectionRepository $userConnectionRepository,
+        UserRepository $userRepository
+    ) {
+        $this->userRepository = $userRepository;
+        $this->userConnectionRepository = $userConnectionRepository;
+        $this->userService = new UserService($this->userRepository);
+        $this->authorizationService = new AuthorizationService();
+        $this->userConnectionService = new UserConnectionService($this->userConnectionRepository);
+    }
+
     public function __invoke(SearchUserConnectionsByCriteriaRequest $request)
     {
         $authorId = new Uuid($request->getRequestAuthorId());
-        $author = $this->userRepository->ofId($authorId);
-        $this->ensureUserExists($author);
+        $author = $this->userService->findUser($authorId);
 
         $userId = new Uuid($request->getUserId());
-        $user = $this->userRepository->ofId($userId);
-        $this->ensureUserExists($user);
+        $user = $this->userService->findUser($userId);
 
-        $this->ensureRequestAuthorHasPermissions($author, $user);
+        $this->authorizationService->ensureRequestAuthorHasPermissionsToUserConnection($author, $user);
 
         $criteria = new Criteria(
             Filters::fromValues($this->createFiltersByUserId($user)),
@@ -74,5 +95,13 @@ final class SearchUserConnectionsByCriteriaService extends UserConnectionService
             },
             $connections
         );
+    }
+
+    private function createFiltersByUserId(User $user): array
+    {
+        if (true === $user->isInRole(new Role(Role::STUDENT))) {
+            return [['field' => 'studentId', 'operator' => '=', 'value' => $user->getId()->toString()]];
+        }
+        return [['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]];
     }
 }
