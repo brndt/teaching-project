@@ -7,19 +7,40 @@ namespace LaSalle\StudentTeacher\Resource\Application\Service;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CategoryService;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
-final class AuthorizedSearchCategoryByIdService extends CategoryService
+final class AuthorizedSearchCategoryByIdService
 {
+    private CategoryRepository $categoryRepository;
+    private CourseService $courseService;
+    private AuthorizationService $authorizationService;
+    private CategoryService $categoryService;
+    private UserService $userService;
+
+    public function __construct(
+        CategoryRepository $categoryRepository,
+        UserRepository $userRepository
+    ) {
+        $this->categoryRepository = $categoryRepository;
+        $this->userService = new UserService($userRepository);
+        $this->categoryService = new CategoryService($categoryRepository);
+        $this->authorizationService = new AuthorizationService();
+    }
+
     public function __invoke(AuthorizedSearchCategoryByIdRequest $request): CategoryResponse
     {
-        $requestAuthorId = $this->createIdFromPrimitive($request->getRequestAuthorId());
-        $requestAuthor = $this->userRepository->ofId($requestAuthorId);
-        $this->ensureUserExists($requestAuthor);
-        $this->ensureRequestAuthorIsAdmin($requestAuthor);
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
+        $this->authorizationService->ensureRequestAuthorIsAdmin($requestAuthor);
 
-        $category = $this->categoryRepository->ofId($this->createIdFromPrimitive($request->getCategoryId()));
-
-        $this->ensureCategoryExists($category);
+        $categoryId = new Uuid($request->getCategoryId());
+        $category = $this->categoryService->findCategory($categoryId);
 
         return $this->buildResponse($category);
     }

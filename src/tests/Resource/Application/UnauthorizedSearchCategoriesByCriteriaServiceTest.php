@@ -19,15 +19,12 @@ final class UnauthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
 {
     private UnauthorizedSearchCategoriesByCriteriaService $searchCategoriesByCriteria;
     private MockObject $categoryRepository;
-    private MockObject $userRepository;
 
     public function setUp(): void
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
-        $this->userRepository = $this->createMock(UserRepository::class);
         $this->searchCategoriesByCriteria = new UnauthorizedSearchCategoriesByCriteriaService(
             $this->categoryRepository,
-            $this->userRepository
         );
     }
 

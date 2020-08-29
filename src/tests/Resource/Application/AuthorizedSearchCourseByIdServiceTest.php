@@ -14,6 +14,7 @@ use LaSalle\StudentTeacher\Resource\Application\Service\SearchCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -26,17 +27,14 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
 {
     private AuthorizedSearchCourseByIdService $searchCourseService;
     private MockObject $courseRepository;
-    private MockObject $categoryRepository;
     private MockObject $userRepository;
 
     public function setUp(): void
     {
         $this->courseRepository = $this->createMock(CourseRepository::class);
-        $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
         $this->searchCourseService = new AuthorizedSearchCourseByIdService(
             $this->courseRepository,
-            $this->categoryRepository,
             $this->userRepository
         );
     }
@@ -48,7 +46,7 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
             Uuid::generate()->toString(),
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         ($this->searchCourseService)($request);
     }
 
@@ -79,7 +77,7 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')

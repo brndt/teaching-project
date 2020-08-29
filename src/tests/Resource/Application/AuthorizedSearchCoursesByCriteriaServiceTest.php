@@ -13,6 +13,7 @@ use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -27,17 +28,14 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
 {
     private AuthorizedSearchCoursesByCriteriaService $searchCoursesByCriteriaService;
     private MockObject $courseRepository;
-    private MockObject $categoryRepository;
     private MockObject $userRepository;
 
     public function setUp(): void
     {
         $this->courseRepository = $this->createMock(CourseRepository::class);
-        $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
         $this->searchCoursesByCriteriaService = new AuthorizedSearchCoursesByCriteriaService(
             $this->courseRepository,
-            $this->categoryRepository,
             $this->userRepository
         );
     }
@@ -54,7 +52,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
             null
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         ($this->searchCoursesByCriteriaService)($request);
     }
 
@@ -122,7 +120,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->once())
             ->method('ofId')

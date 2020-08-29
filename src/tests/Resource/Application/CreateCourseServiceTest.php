@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\CreateCourseService;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -37,8 +37,8 @@ final class CreateCourseServiceTest extends TestCase
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
         $this->createCourseService = new CreateCourseService(
-            $this->courseRepository,
             $this->categoryRepository,
+            $this->courseRepository,
             $this->userRepository
         );
     }
@@ -166,17 +166,30 @@ final class CreateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
+        $category = (new CategoryBuilder())
+            ->withId(new Uuid($request->getCategoryId()))
+            ->build();
+
         $this->expectException(PermissionDeniedException::class);
+
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
+
         $this->userRepository
             ->expects($this->at(1))
             ->method('ofId')
             ->with($request->getTeacherId())
             ->willReturn($teacher);
+
+        $this->categoryRepository
+            ->expects($this->at(0))
+            ->method('ofId')
+            ->with($request->getCategoryId())
+            ->willReturn($category);
+
         ($this->createCourseService)($request);
     }
 
@@ -203,7 +216,7 @@ final class CreateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')
@@ -290,7 +303,7 @@ final class CreateCourseServiceTest extends TestCase
             ->withId(new Uuid($request->getCategoryId()))
             ->build();
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidStatusException::class);
         $this->userRepository
             ->expects($this->at(0))
             ->method('ofId')

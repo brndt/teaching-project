@@ -11,7 +11,9 @@ use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoriesByCriteria;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -32,10 +34,7 @@ final class AuthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->searchCategoriesByCriteria = new AuthorizedSearchCategoriesByCriteria(
-            $this->categoryRepository,
-            $this->userRepository
-        );
+        $this->searchCategoriesByCriteria = new AuthorizedSearchCategoriesByCriteria($this->userRepository, $this->categoryRepository);
     }
 
     public function testWhenRequestAuthorIsInvalidThenThrowException()
@@ -50,7 +49,7 @@ final class AuthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
             null
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidUuidException::class);
         ($this->searchCategoriesByCriteria)($request);
     }
 
