@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Domain\Aggregate;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\ResourceType;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -16,9 +17,32 @@ final class Resource
     private string $description;
     private string $content;
     private ResourceType $resourceType;
-    private \DateTimeImmutable $created;
-    private \DateTimeImmutable $modified;
+    private DateTimeImmutable $created;
+    private DateTimeImmutable $modified;
     private Status $status;
+
+    public function __construct(
+        Uuid $id,
+        Uuid $unitId,
+        string $name,
+        string $description,
+        string $content,
+        ResourceType $resourceType,
+        DateTimeImmutable $created,
+        DateTimeImmutable $modified,
+        Status $status
+    ) {
+        $this->id = $id;
+        $this->unitId = $unitId;
+        $this->name = $name;
+        $this->description = $description;
+        $this->content = $content;
+        $this->resourceType = $resourceType;
+        $this->created = $created;
+        $this->modified = $modified;
+        $this->status = $status;
+
+    }
 
     public function getId(): Uuid
     {
@@ -80,22 +104,22 @@ final class Resource
         $this->resourceType = $resourceType;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeImmutable $created): void
+    public function setCreated(DateTimeImmutable $created): void
     {
         $this->created = $created;
     }
 
-    public function getModified(): \DateTimeImmutable
+    public function getModified(): DateTimeImmutable
     {
         return $this->modified;
     }
 
-    public function setModified(\DateTimeImmutable $modified): void
+    public function setModified(DateTimeImmutable $modified): void
     {
         $this->modified = $modified;
     }
