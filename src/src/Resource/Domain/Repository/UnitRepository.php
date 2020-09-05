@@ -10,7 +10,7 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 interface UnitRepository
 {
-    public function save(Unit $category): void;
+    public function save(Unit $unit): void;
 
     public function ofId(Uuid $id): ?Unit;
 
