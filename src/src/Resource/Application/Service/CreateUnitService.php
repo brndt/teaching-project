@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
-
 
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateUnitRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
@@ -15,7 +15,7 @@ use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
-class CreateUnitService
+final class CreateUnitService
 {
     private UserService $userService;
     private UnitRepository $unitRepository;
@@ -29,7 +29,6 @@ class CreateUnitService
         $this->courseService = new CourseService($courseRepository);
         $this->authorizationService = new AuthorizationService();
     }
-
 
     public function __invoke(CreateUnitRequest $request): void
     {
