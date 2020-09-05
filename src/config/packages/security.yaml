@@ -62,6 +62,11 @@ security:
             methods: ['GET']
             anonymous: true
 
+        units:
+            pattern: ^/api/v1/units
+            methods: [ 'GET' ]
+            anonymous: true
+
         api:
             pattern:   ^/api/v1
             anonymous: false

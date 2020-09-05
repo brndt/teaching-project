@@ -12,20 +12,20 @@ final class Unit
     private Uuid $id;
     private Uuid $courseId;
     private string $name;
-    private string $description;
+    private ?string $description;
     private string $level;
     private \DateTimeImmutable $created;
-    private \DateTimeImmutable $modified;
+    private ?\DateTimeImmutable $modified;
     private Status $status;
 
     public function __construct(
         Uuid $id,
         Uuid $courseId,
         string $name,
-        string $description,
+        ?string $description,
         string $level,
         \DateTimeImmutable $created,
-        \DateTimeImmutable $modified,
+        ?\DateTimeImmutable $modified,
         Status $status
     ) {
         $this->id = $id;
@@ -68,12 +68,12 @@ final class Unit
         $this->name = $name;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -98,12 +98,12 @@ final class Unit
         $this->created = $created;
     }
 
-    public function getModified(): \DateTimeImmutable
+    public function getModified(): ?\DateTimeImmutable
     {
         return $this->modified;
     }
 
-    public function setModified(\DateTimeImmutable $modified): void
+    public function setModified(?\DateTimeImmutable $modified): void
     {
         $this->modified = $modified;
     }

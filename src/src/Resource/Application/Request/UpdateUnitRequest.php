@@ -1,104 +1,69 @@
 <?php
 
+declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-
-use DateTimeImmutable;
-
-class CreateUnitRequest
+final class UpdateUnitRequest
 {
     private string $requestAuthorId;
-    private string $courseId;
+    private string $unitId;
     private string $name;
     private ?string $description;
     private string $level;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
     private string $status;
+    private string $courseId;
 
     public function __construct(
         string $requestAuthorId,
         string $courseId,
+        string $unitId,
         string $name,
         ?string $description,
         string $level,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
         string $status
     ) {
         $this->requestAuthorId = $requestAuthorId;
-        $this->courseId = $courseId;
+        $this->unitId = $unitId;
         $this->name = $name;
         $this->description = $description;
         $this->level = $level;
-        $this->created = $created;
-        $this->modified = $modified;
         $this->status = $status;
+        $this->courseId = $courseId;
     }
 
-    /**
-     * @return string
-     */
-    public function getRequestAuthorId(): string
-    {
-        return $this->requestAuthorId;
-    }
-
-    /**
-     * @return string
-     */
     public function getCourseId(): string
     {
         return $this->courseId;
     }
 
-    /**
-     * @return string
-     */
+    public function getRequestAuthorId(): string
+    {
+        return $this->requestAuthorId;
+    }
+
+    public function getUnitId(): string
+    {
+        return $this->unitId;
+    }
+
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
     public function getLevel(): string
     {
         return $this->level;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
-    public function getCreated(): DateTimeImmutable
-    {
-        return $this->created;
-    }
-
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getModified(): ?DateTimeImmutable
-    {
-        return $this->modified;
-    }
-
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
-
 }
