@@ -1,0 +1,6 @@
+<doctrine-mapping>
+  <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource" table="video_resource">
+    <field name="videoUrl" type="string" nullable="false" />
+    <field name="text" type="string" nullable="false" />
+  </entity>
+</doctrine-mapping>

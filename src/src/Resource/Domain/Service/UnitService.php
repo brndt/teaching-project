@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\Resource\Domain\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Exception\UnitNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
-use LaSalle\StudentTeacher\Resource\Domain\Exception\UnitAlreadyExists;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\UnitAlreadyExistsException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
@@ -32,7 +32,7 @@ final class UnitService
     {
         $unit = $this->repository->ofName($unitName);
         if (null !== $unit) {
-            throw new UnitAlreadyExists();
+            throw new UnitAlreadyExistsException();
         }
     }
 }
