@@ -14,6 +14,8 @@ interface ResourceRepository
 
     public function ofId(Uuid $id): ?Resource;
 
+    public function ofName(string $name): ?Resource;
+
     public function nextIdentity(): Uuid;
 
     public function matching(Criteria $criteria): array;
