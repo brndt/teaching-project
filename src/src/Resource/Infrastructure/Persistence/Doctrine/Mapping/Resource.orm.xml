@@ -6,6 +6,7 @@
         <discriminator-column name="type" type="smallint" />
         <discriminator-map>
             <discriminator-mapping value="1" class="LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource" />
+            <discriminator-mapping value="2" class="LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource" />
         </discriminator-map>
         <id name="id" type="uuid" />
         <field name="unitId" type="uuid" nullable="false"/>

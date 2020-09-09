@@ -12,6 +12,7 @@ doctrine:
       token: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\TokenType
       state: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\StateType
       status: LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Type\StatusType
+      test_questions: LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Type\TestQuestionsType
 
   orm:
     auto_generate_proxy_classes: true
