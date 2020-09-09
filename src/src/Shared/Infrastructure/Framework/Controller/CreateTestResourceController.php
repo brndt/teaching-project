@@ -8,28 +8,27 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateVideoResourceRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateVideoResourceService;
+use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceRequest;
+use LaSalle\StudentTeacher\Resource\Application\Service\CreateTestResourceService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CreateVideoResourceController extends AbstractFOSRestController
+final class CreateTestResourceController extends AbstractFOSRestController
 {
-    private CreateVideoResourceService $createVideoResourceService;
+    private CreateTestResourceService $createTestResourceService;
 
-    public function __construct(CreateVideoResourceService $createUnitService)
+    public function __construct(CreateTestResourceService $createTestResourceService)
     {
-        $this->createVideoResourceService = $createUnitService;
+        $this->createTestResourceService = $createTestResourceService;
     }
 
     /**
-     * @Rest\Post("/api/v1/panel/video_resources")
+     * @Rest\Post("/api/v1/panel/test_resources")
      * @RequestParam(name="unitId")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="content")
      * @RequestParam(name="status")
-     * @RequestParam(name="videoURL")
-     * @RequestParam(name="text")
+     * @RequestParam(name="questions", map=true)
      */
     public function __invoke(ParamFetcher $paramFetcher): Response
     {
@@ -39,11 +38,10 @@ final class CreateVideoResourceController extends AbstractFOSRestController
         $description = $paramFetcher->get('description');
         $content = $paramFetcher->get('content');
         $status = $paramFetcher->get('status');
-        $videoURL = $paramFetcher->get('videoURL');
-        $text = $paramFetcher->get('text');
+        $questions = $paramFetcher->get('questions');
 
-        ($this->createVideoResourceService)(
-            new CreateVideoResourceRequest(
+        ($this->createTestResourceService)(
+            new CreateTestResourceRequest(
                 $requestAuthorId,
                 $unitId,
                 $name,
@@ -52,13 +50,12 @@ final class CreateVideoResourceController extends AbstractFOSRestController
                 new \DateTimeImmutable(),
                 null,
                 $status,
-                $videoURL,
-                $text
+                $questions,
             )
         );
 
         return $this->handleView(
-            $this->view(['message' => 'Resource has been successfully created'], Response::HTTP_CREATED)
+            $this->view(['message' => 'Test resource has been successfully created'], Response::HTTP_CREATED)
         );
     }
 }

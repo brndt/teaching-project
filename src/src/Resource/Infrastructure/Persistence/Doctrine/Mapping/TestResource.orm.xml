@@ -1,0 +1,5 @@
+<doctrine-mapping>
+  <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource" table="test_resource">
+    <field name="questions" column="questions" type="test_questions" />
+  </entity>
+</doctrine-mapping>
