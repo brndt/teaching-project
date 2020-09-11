@@ -1,0 +1,11 @@
+<doctrine-mapping>
+    <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\CoursePermission" table="course_permission">
+        <id name="id" type="uuid" />
+        <field name="courseId" type="uuid" nullable="false"/>
+        <field name="studentId" type="uuid" nullable="false"/>
+        <field name="created" type="datetime_immutable" nullable="false"/>
+        <field name="modified" type="datetime_immutable" nullable="true"/>
+        <field name="until" type="datetime_immutable" nullable="true"/>
+        <field name="status" type="status" nullable="false"/>
+    </entity>
+</doctrine-mapping>
