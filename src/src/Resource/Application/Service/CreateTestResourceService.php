@@ -13,6 +13,7 @@ use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestQuestion;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
