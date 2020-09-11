@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateVideoResourceRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource;
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
@@ -15,7 +13,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
-use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestQuestion;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -79,7 +76,8 @@ final class CreateTestResourceService
         $this->resourceRepository->save($resourse);
     }
 
-    private function questionMaker(): callable {
+    private function questionMaker(): callable
+    {
         return static function (array $values): TestQuestion {
             return TestQuestion::fromValues($values);
         };
