@@ -8,6 +8,7 @@ use LaSalle\StudentTeacher\Resource\Application\Request\CreateStudentCoursePermi
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\CoursePermission;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
@@ -27,11 +28,12 @@ final class CreateStudentCoursePermissionService
     public function __construct(
         CourseRepository $courseRepository,
         UserRepository $userRepository,
-        CoursePermissionRepository $repository
+        CoursePermissionRepository $repository,
+        AuthorizationService $authorizationService
     ) {
         $this->userService = new UserService($userRepository);
         $this->courseService = new CourseService($courseRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
         $this->repository = $repository;
         $this->coursePermissionService = new CoursePermissionService($repository);
     }

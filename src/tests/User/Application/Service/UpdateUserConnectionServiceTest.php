@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -18,6 +20,7 @@ use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Approved;
@@ -40,10 +43,15 @@ final class UpdateUserConnectionServiceTest extends TestCase
         $this->userConnectionRepository = $this->createMock(UserConnectionRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
         $this->stateFactory = $this->createMock(StateFactory::class);
+        $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
+        $unitRepository = $this->createMock(UnitRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);
+
         $this->updateUserConnectionService = new UpdateUserConnectionService(
             $this->userConnectionRepository,
             $this->userRepository,
-            $this->stateFactory
+            $this->stateFactory,
+            $authorizationService
         );
     }
 

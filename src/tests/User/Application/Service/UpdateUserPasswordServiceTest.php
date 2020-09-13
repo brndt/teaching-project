@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -14,6 +16,7 @@ use LaSalle\StudentTeacher\User\Application\Request\UpdateUserPasswordRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserPasswordService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +30,10 @@ final class UpdateUserPasswordServiceTest extends TestCase
     public function setUp(): void
     {
         $this->repository = $this->createMock(UserRepository::class);
-        $this->updateUserPasswordService = new UpdateUserPasswordService($this->repository);
+        $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
+        $unitRepository = $this->createMock(UnitRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);
+        $this->updateUserPasswordService = new UpdateUserPasswordService($this->repository, $authorizationService);
     }
 
     public function testWhenRequestAuthorIdIsInvalidThenThrowException()

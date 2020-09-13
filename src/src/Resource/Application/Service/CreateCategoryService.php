@@ -23,12 +23,13 @@ final class CreateCategoryService
 
     public function __construct(
         CategoryRepository $categoryRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        AuthorizationService $authorizationService
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->categoryService = new CategoryService($categoryRepository);
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateCategoryRequest $request): void

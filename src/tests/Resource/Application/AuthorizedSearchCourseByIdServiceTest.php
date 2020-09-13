@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\SearchCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCourseByIdService;
-use LaSalle\StudentTeacher\Resource\Application\Service\SearchCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CourseBuilder;
@@ -33,9 +30,11 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
     {
         $this->courseRepository = $this->createMock(CourseRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
+        $authorizationService = $this->createMock(AuthorizationService::class);
         $this->searchCourseService = new AuthorizedSearchCourseByIdService(
             $this->courseRepository,
-            $this->userRepository
+            $this->userRepository,
+            $authorizationService
         );
     }
 

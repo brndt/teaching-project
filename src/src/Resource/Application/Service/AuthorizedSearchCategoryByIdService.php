@@ -8,6 +8,8 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategory
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CategoryService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -25,12 +27,13 @@ final class AuthorizedSearchCategoryByIdService
 
     public function __construct(
         CategoryRepository $categoryRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        AuthorizationService $authorizationService
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->userService = new UserService($userRepository);
         $this->categoryService = new CategoryService($categoryRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(AuthorizedSearchCategoryByIdRequest $request): CategoryResponse

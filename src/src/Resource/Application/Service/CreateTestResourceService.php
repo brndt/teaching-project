@@ -34,7 +34,8 @@ final class CreateTestResourceService
         CourseRepository $courseRepository,
         UnitRepository $unitRepository,
         UserRepository $userRepository,
-        ResourceRepository $resourceRepository
+        ResourceRepository $resourceRepository,
+        AuthorizationService $authorizationService
     ) {
         $this->userService = new UserService($userRepository);
         $this->courseService = new CourseService($courseRepository);
@@ -42,7 +43,7 @@ final class CreateTestResourceService
         $this->unitService = new UnitService($unitRepository);
         $this->resourceRepository = $resourceRepository;
         $this->resourceService = new ResourceService($resourceRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateTestResourceRequest $request)

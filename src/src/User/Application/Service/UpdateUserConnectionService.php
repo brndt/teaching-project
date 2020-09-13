@@ -25,13 +25,14 @@ final class UpdateUserConnectionService
     public function __construct(
         UserConnectionRepository $userConnectionRepository,
         UserRepository $userRepository,
-        StateFactory $stateFactory
+        StateFactory $stateFactory,
+        AuthorizationService $authorizationService
     ) {
         $this->userRepository = $userRepository;
         $this->userConnectionRepository = $userConnectionRepository;
         $this->stateFactory = $stateFactory;
         $this->userService = new UserService($this->userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
         $this->userConnectionService = new UserConnectionService($this->userConnectionRepository);
     }
 

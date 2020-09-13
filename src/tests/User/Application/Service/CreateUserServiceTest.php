@@ -20,6 +20,7 @@ use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingExceptio
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
@@ -40,7 +41,9 @@ final class CreateUserServiceTest extends TestCase
         $this->repository = $this->createMock(UserRepository::class);
         $this->eventBus = $this->createMock(DomainEventBus::class);
         $this->randomStringGenerator = $this->createMock(RandomStringGenerator::class);
-        $this->createUser = new CreateUserService($this->randomStringGenerator, $this->repository, $this->eventBus,);
+        $authorizationService = $this->createMock(AuthorizationService::class);
+
+        $this->createUser = new CreateUserService($this->randomStringGenerator, $this->repository, $this->eventBus, $authorizationService);
     }
 
     public function testWhenUserEmailIsInvalidThenThrowException()

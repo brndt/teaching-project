@@ -5,12 +5,30 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\Service;
 
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Resource;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\CoursePermissionNotFound;
+use LaSalle\StudentTeacher\Resource\Domain\Exception\ResourceNotFoundException;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
+use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
-final class AuthorizationService
+class AuthorizationService
 {
+    private CoursePermissionService $coursePermissionService;
+    private UnitService $unitService;
+
+    public function __construct(CoursePermissionRepository $coursePermissionRepository, UnitRepository $unitRepository)
+    {
+        $this->coursePermissionService = new CoursePermissionService($coursePermissionRepository);
+        $this->unitService = new UnitService($unitRepository);
+    }
+
     public function ensureRequestAuthorIsCertainUser(User $requestAuthor, User $certainUser)
     {
         if (false === $requestAuthor->idEqualsTo($certainUser->getId())) {
@@ -73,8 +91,19 @@ final class AuthorizationService
         return false;
     }
 
-    public function ensureRequestAuthorIsAdmin(User $requestAuthor): void {
+    public function ensureRequestAuthorIsAdmin(User $requestAuthor): void
+    {
         if (false === $requestAuthor->getRoles()->contains(new Role(Role::ADMIN))) {
+            throw new PermissionDeniedException();
+        }
+    }
+
+    public function ensureStudentHasAccessToRecourse(Uuid $studentId, Resource $recourseId): void
+    {
+        $unit = $this->unitService->findUnit($recourseId->getUnitId());
+        try {
+            $this->coursePermissionService->findCoursePermission($unit->getCourseId(), $studentId);
+        } catch (CoursePermissionNotFound $exception) {
             throw new PermissionDeniedException();
         }
     }

@@ -24,13 +24,13 @@ final class CreateUnitService
     private AuthorizationService $authorizationService;
     private UnitService $unitService;
 
-    public function __construct(UnitRepository $unitRepository, UserRepository $userRepository, CourseRepository $courseRepository)
+    public function __construct(UnitRepository $unitRepository, UserRepository $userRepository, CourseRepository $courseRepository, AuthorizationService $authorizationService)
     {
         $this->userService = new UserService($userRepository);
         $this->unitRepository = $unitRepository;
         $this->unitService = new UnitService($unitRepository);
         $this->courseService = new CourseService($courseRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateUnitRequest $request): void

@@ -23,13 +23,13 @@ final class CreateUserService
     private DomainEventBus $eventBus;
     private RandomStringGenerator $randomStringGenerator;
 
-    public function __construct(RandomStringGenerator $randomStringGenerator, UserRepository $userRepository, DomainEventBus $eventBus)
+    public function __construct(RandomStringGenerator $randomStringGenerator, UserRepository $userRepository, DomainEventBus $eventBus, AuthorizationService $authorizationService)
     {
         $this->repository = $userRepository;
         $this->eventBus = $eventBus;
         $this->randomStringGenerator = $randomStringGenerator;
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateUserRequest $request): void

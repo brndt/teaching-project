@@ -10,7 +10,6 @@ use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCategoriesByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\CategoryBuilder;
@@ -23,6 +22,7 @@ final class UnauthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
     public function setUp(): void
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
+
         $this->searchCategoriesByCriteria = new UnauthorizedSearchCategoriesByCriteriaService(
             $this->categoryRepository,
         );

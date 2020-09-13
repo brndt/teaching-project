@@ -20,11 +20,11 @@ final class AuthorizedSearchCourseByIdService
     private CourseService $courseService;
     private UserService $userService;
 
-    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository)
+    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository, AuthorizationService $authorizationService)
     {
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(AuthorizedSearchCourseByIdRequest $request): CourseResponse

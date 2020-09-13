@@ -9,12 +9,15 @@ use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundExceptio
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,10 +38,15 @@ final class UpdateCourseServiceTest extends TestCase
         $this->courseRepository = $this->createMock(CourseRepository::class);
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
+        $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
+        $unitRepository = $this->createMock(UnitRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);
+
         $this->updateCourseService = new UpdateCourseService(
             $this->courseRepository,
             $this->userRepository,
             $this->categoryRepository,
+            $authorizationService
         );
     }
 

@@ -17,6 +17,7 @@ use LaSalle\StudentTeacher\User\Application\Service\CreateUserConnectionService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
@@ -37,10 +38,12 @@ final class CreateUserConnectionServiceTest extends TestCase
         $this->userConnectionRepository = $this->createMock(UserConnectionRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
         $this->stateFactory = $this->createMock(StateFactory::class);
+        $authorizationService = $this->createMock(AuthorizationService::class);
+
         $this->createUserConnectionService = new CreateUserConnectionService(
             $this->userConnectionRepository,
             $this->userRepository,
-            $this->stateFactory
+            $authorizationService
         );
     }
 

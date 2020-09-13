@@ -27,14 +27,15 @@ final class UpdateUnitService
     public function __construct(
         CourseRepository $courseRepository,
         UserRepository $userRepository,
-        UnitRepository $unitRepository
+        UnitRepository $unitRepository,
+        AuthorizationService $authorizationService
     ) {
         $this->courseRepository = $courseRepository;
         $this->unitRepository = $unitRepository;
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);
         $this->unitService = new UnitService($unitRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(UpdateUnitRequest $request)

@@ -24,12 +24,13 @@ final class CreateUserConnectionService
 
     public function __construct(
         UserConnectionRepository $userConnectionRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        AuthorizationService $authorizationService
     ) {
         $this->userRepository = $userRepository;
         $this->userConnectionRepository = $userConnectionRepository;
         $this->userService = new UserService($this->userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
         $this->userConnectionService = new UserConnectionService($this->userConnectionRepository);
     }
 

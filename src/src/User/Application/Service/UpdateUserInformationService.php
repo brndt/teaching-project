@@ -18,11 +18,11 @@ final class UpdateUserInformationService
     private UserService $userService;
     private AuthorizationService $authorizationService;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, AuthorizationService $authorizationService)
     {
         $this->repository = $userRepository;
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(UpdateUserInformationRequest $request): void

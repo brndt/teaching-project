@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaSalle\StudentTeacher\Resource\Domain\ValueObject;
+
+use function Lambdish\Phunctional\map;
+
+final class StudentTestAnswer
+{
+    private string $question;
+    private string $studentAssumption;
+    private array $answers;
+
+    public function __construct(string $question, string $studentAssumption, TestAnswer ...$answers)
+    {
+        $this->question = $question;
+        $this->studentAssumption = $studentAssumption;
+        $this->answers = $answers;
+    }
+
+    public function toValues(): array
+    {
+        return [
+            'question' => $this->question(),
+            'student_assumption' => $this->studentAssumption(),
+            'answers' => map($this->answerToValues(), $this->answers()),
+        ];
+    }
+
+    public static function fromValues(array $values): self
+    {
+        return new self($values['question'], $values['student_assumption'], ...map(self::valuesToAnswer(), $values['answers']));
+    }
+
+    public function question(): string
+    {
+        return $this->question;
+    }
+
+    public function studentAssumption(): string
+    {
+        return $this->studentAssumption;
+    }
+
+    public function answers(): array
+    {
+        return $this->answers;
+    }
+
+    private function answerToValues(): callable
+    {
+        return static function (TestAnswer $answer): array {
+            return $answer->toValues();
+        };
+    }
+
+    private static function valuesToAnswer(): callable
+    {
+        return static function (array $values): TestAnswer {
+            return TestAnswer::fromValues($values);
+        };
+    }
+}

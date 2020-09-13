@@ -23,12 +23,12 @@ final class CreateCourseService
     private CourseRepository $courseRepository;
     private CategoryService $categoryService;
 
-    public function __construct(CategoryRepository $categoryRepository, CourseRepository $courseRepository, UserRepository $userRepository)
+    public function __construct(CategoryRepository $categoryRepository, CourseRepository $courseRepository, UserRepository $userRepository, AuthorizationService $authorizationService)
     {
         $this->courseRepository = $courseRepository;
         $this->categoryService = new CategoryService($categoryRepository);
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = new AuthorizationService();
+        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateCourseRequest $request): void
