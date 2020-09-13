@@ -23,6 +23,8 @@ fos_rest:
       LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists: 400
       LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound: 404
       LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException: 404
+      LaSalle\StudentTeacher\Resource\Domain\Exception\UnitAlreadyExistsException: 400
+      LaSalle\StudentTeacher\Resource\Domain\Exception\UnitNotFoundException: 400
       LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException: 403
       LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException: 400
       LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException: 404

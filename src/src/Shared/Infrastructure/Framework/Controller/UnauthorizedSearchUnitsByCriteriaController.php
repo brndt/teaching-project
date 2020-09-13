@@ -59,7 +59,7 @@ class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestControl
         );
 
         return $this->handleView(
-            $this->view($coursesResponse, Response::HTTP_CREATED)
+            $this->view($coursesResponse, Response::HTTP_OK)
         );
     }
 

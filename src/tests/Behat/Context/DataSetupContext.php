@@ -9,6 +9,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
@@ -161,6 +162,28 @@ class DataSetupContext implements Context, SnippetAcceptingContext
                 ->build();
 
             $this->entityManager->persist($course);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @Given there are units with the following details:
+     */
+    public function thereAreUnitsWithTheFollowingDetails(TableNode $refreshTokens)
+    {
+        foreach ($refreshTokens->getColumnsHash() as $key => $val) {
+            $id = new Uuid($val['id']);
+            $courseId = new Uuid($val['courseId']);
+            $name = $val['name'];
+            $description = $val['description'];
+            $level = $val['level'];
+            $created = new DateTimeImmutable($val['created']);
+            $modified = new DateTimeImmutable($val['modified']);
+            $status = new Status($val['status']);
+
+            $unit = new Unit($id, $courseId, $name, $description, $level, $created, $modified, $status);
+
+            $this->entityManager->persist($unit);
             $this->entityManager->flush();
         }
     }

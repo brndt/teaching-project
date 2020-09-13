@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Resource\Application\Exception;
+namespace LaSalle\StudentTeacher\Resource\Domain\Exception;
 
 use Exception;
 use Throwable;
 
-final class UnitNotFound extends Exception
+final class UnitNotFoundException extends Exception
 {
     public function __construct($code = 0, Throwable $previous = null)
     {
