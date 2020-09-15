@@ -10,12 +10,11 @@ Feature: Create unit
       | b2c3532f-6629-435a-9908-63f9d3811ccd | language | published |
     And there are courses with the following details:
       | id                                   | categoryId                           | teacherId                            | name           | description      | level      | created                   | modified                  | status    |
-      | cfe849f3-7832-435a-b484-83fabf530794 | b2c3532f-6629-435a-9908-63f9d3811ccd | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | spanish course | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
+      | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | b2c3532f-6629-435a-9908-63f9d3811ccd | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | spanish course | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
     And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
-    When I send a POST request to "/api/v1/panel/units" with body:
+    When I send a POST request to "/api/v1/panel/courses/ea4f0311-4ffc-4fd0-9b4a-f2743565d851/units" with body:
     """
     {
-      "courseId": "cfe849f3-7832-435a-b484-83fabf530794",
       "name": "random unit",
       "description": "random description",
       "level": "basic",
@@ -40,15 +39,14 @@ Feature: Create unit
       | b2c3532f-6629-435a-9908-63f9d3811ccd | language | published |
     And there are courses with the following details:
       | id                                   | categoryId                           | teacherId                            | name           | description      | level      | created                   | modified                  | status    |
-      | cfe849f3-7832-435a-b484-83fabf530794 | b2c3532f-6629-435a-9908-63f9d3811ccd | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | spanish course | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
+      | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | b2c3532f-6629-435a-9908-63f9d3811ccd | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | spanish course | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
     And there are units with the following details:
       | id                                   | courseId                             | name        | description      | level      | created                   | modified                  | status    |
-      | cfe849f3-7832-435a-b484-83fabf530794 | cfe849f3-7832-435a-b484-83fabf530794 | random unit | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
+      | cfe849f3-7832-435a-b484-83fabf530794 | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | random unit | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
     And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
-    When I send a POST request to "/api/v1/panel/units" with body:
+    When I send a POST request to "/api/v1/panel/courses/ea4f0311-4ffc-4fd0-9b4a-f2743565d851/units" with body:
     """
     {
-      "courseId": "cfe849f3-7832-435a-b484-83fabf530794",
       "name": "random unit",
       "description": "random description",
       "level": "basic",
@@ -74,14 +72,13 @@ Feature: Create unit
       | b2c3532f-6629-435a-9908-63f9d3811ccd | language | published |
     And there are courses with the following details:
       | id                                   | categoryId                           | teacherId                            | name           | description      | level      | created                   | modified                  | status    |
-      | cfe849f3-7832-435a-b484-83fabf530794 | b2c3532f-6629-435a-9908-63f9d3811ccd | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | spanish course | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
+      | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | b2c3532f-6629-435a-9908-63f9d3811ccd | 16bf6c6a-c855-4a36-a3dd-5b9f6d92c753 | spanish course | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
     And there are units with the following details:
       | id                                   | courseId                             | name        | description      | level      | created                   | modified                  | status    |
-      | cfe849f3-7832-435a-b484-83fabf530794 | cfe849f3-7832-435a-b484-83fabf530794 | random unit | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
-    When I send a POST request to "/api/v1/panel/units" with body:
+      | cfe849f3-7832-435a-b484-83fabf530794 | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | random unit | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
+    When I send a POST request to "/api/v1/panel/courses/ea4f0311-4ffc-4fd0-9b4a-f2743565d851/units" with body:
     """
     {
-      "courseId": "cfe849f3-7832-435a-b484-83fabf530794",
       "name": "random unit",
       "description": "random description",
       "level": "basic",

@@ -22,18 +22,16 @@ class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestControl
     }
 
     /**
-     * @Rest\Get("/api/v1/units")
+     * @Rest\Get("/api/v1/courses/{courseId}/units")
      * @QueryParam(name="teacherId", strict=true, nullable=true),
-     * @QueryParam(name="courseId", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function postAction(ParamFetcher $paramFetcher): Response
+    public function postAction(ParamFetcher $paramFetcher, string $courseId): Response
     {
         $teacherId = $paramFetcher->get('teacherId');
-        $courseId = $paramFetcher->get('courseId');
 
         $filters = [['field' => 'status', 'operator' => '=', 'value' => 'published']];
 
@@ -47,7 +45,7 @@ class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestControl
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        $coursesResponse = ($this->unauthorizedSearchUnitByCriteriaService)(
+        $unitsResponse = ($this->unauthorizedSearchUnitByCriteriaService)(
             new UnauthorizedSearchUnitsByCriteriaRequest(
                 $filters,
                 $orderBy,
@@ -59,7 +57,7 @@ class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestControl
         );
 
         return $this->handleView(
-            $this->view($coursesResponse, Response::HTTP_OK)
+            $this->view($unitsResponse, Response::HTTP_OK)
         );
     }
 

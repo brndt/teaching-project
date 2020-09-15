@@ -22,17 +22,15 @@ final class UpdateUnitController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Patch("/api/v1/panel/units/{unitId}")
-     * @RequestParam(name="courseId")
+     * @Rest\Patch("/api/v1/panel/courses/{courseId}/units/{unitId}")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="level")
      * @RequestParam(name="status")
      */
-    public function postAction(ParamFetcher $paramFetcher, string $unitId): Response
+    public function postAction(ParamFetcher $paramFetcher, string $courseId, string $unitId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $courseId = $paramFetcher->get('courseId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $level = $paramFetcher->get('level');

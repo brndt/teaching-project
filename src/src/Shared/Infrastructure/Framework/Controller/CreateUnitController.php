@@ -23,17 +23,15 @@ final class CreateUnitController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/v1/panel/units")
-     * @RequestParam(name="courseId")
+     * @Rest\Post("/api/v1/panel/courses/{courseId}/units")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="level")
      * @RequestParam(name="status")
      */
-    public function postAction(ParamFetcher $paramFetcher): Response
+    public function postAction(string $courseId, ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $courseId = $paramFetcher->get('courseId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $level = $paramFetcher->get('level');
