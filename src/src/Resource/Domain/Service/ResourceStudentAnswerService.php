@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Resource\Domain\Service;
 
 use LaSalle\StudentTeacher\Resource\Domain\Exception\StudentAnswerAlreadyExists;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\RecourseStudentAnswerRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceStudentAnswerRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
@@ -14,19 +14,19 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class ResourceStudentAnswerService
 {
-    private RecourseStudentAnswerRepository $repository;
+    private ResourceStudentAnswerRepository $repository;
 
-    public function __construct(RecourseStudentAnswerRepository $repository)
+    public function __construct(ResourceStudentAnswerRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function ensureStudentAnswerNotExists(Uuid $studentId, Uuid $recourseId)
+    public function ensureStudentAnswerNotExists(Uuid $studentId, Uuid $resourceId)
     {
         $criteria = new Criteria(
             Filters::fromValues(
                 [
-                    ['field' => 'recourseId', 'operator' => '=', 'value' => $recourseId->toString()],
+                    ['field' => 'resourceId', 'operator' => '=', 'value' => $resourceId->toString()],
                     ['field' => 'studentId', 'operator' => '=', 'value' => $studentId->toString()]
                 ]
             ), Order::fromValues(null, null), Operator::fromValue(null), null, null

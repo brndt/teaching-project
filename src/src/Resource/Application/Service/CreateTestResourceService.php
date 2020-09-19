@@ -60,7 +60,7 @@ final class CreateTestResourceService
 
         $this->resourceService->ensureResourceNotExistsWithThisName($request->getName());
 
-        $resourse = new TestResource(
+        $resource = new TestResource(
             $id,
             $unitId,
             $request->getName(),
@@ -75,7 +75,7 @@ final class CreateTestResourceService
         $course = $this->courseService->findCourse($unit->getCourseId());
         $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
 
-        $this->resourceRepository->save($resourse);
+        $this->resourceRepository->save($resource);
     }
 
     private function questionMaker(): callable

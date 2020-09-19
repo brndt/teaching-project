@@ -1,4 +1,4 @@
-Feature: Create test recourse student answer
+Feature: Create test resource student answer
 
   Scenario: Creating unit when all inputs are valid
     Given there are users with the following details:
@@ -22,10 +22,10 @@ Feature: Create test recourse student answer
       | id                                   | courseId                             | studentId                            | created                   | modified                  | status    |
       | 5a79de58-3cd0-4c4d-8d33-cb5aee5eb84a | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | ab0642f0-ac7f-406a-903e-1c5480e7b7f8 | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
     And I am authenticated as "student@lasalle.es" with "qwertY12" password
-    When I send a POST request to "/api/v1/panel/test_recourse_student_permission" with body:
+    When I send a POST request to "/api/v1/panel/test_resource_student_permission" with body:
     """
     {
-      "recourseId": "6caf1483-92b9-4c67-b1fc-d0945052d1c3",
+      "resourceId": "6caf1483-92b9-4c67-b1fc-d0945052d1c3",
       "points": "10/10",
       "teacherComment": "some comment",
       "status": "status",
@@ -65,6 +65,6 @@ Feature: Create test recourse student answer
     And the response content should be:
     """
     {
-      "message": "Test recourse student answer has been successfully created"
+      "message": "Test resource student answer has been successfully created"
     }
     """

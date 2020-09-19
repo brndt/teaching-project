@@ -9,22 +9,22 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestRecourseStudentAnswerRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateTestRecourseStudentAnswerService;
+use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceStudentAnswerRequest;
+use LaSalle\StudentTeacher\Resource\Application\Service\CreateTestResourceStudentAnswerService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CreateTestRecourseStudentAnswerController extends AbstractFOSRestController
+final class CreateTestResourceStudentAnswerController extends AbstractFOSRestController
 {
-    private CreateTestRecourseStudentAnswerService $createTestRecourseStudentAnswerService;
+    private CreateTestResourceStudentAnswerService $createTestResourceStudentAnswerService;
 
-    public function __construct(CreateTestRecourseStudentAnswerService $createTestRecourseStudentAnswerService)
+    public function __construct(CreateTestResourceStudentAnswerService $createTestResourceStudentAnswerService)
     {
-        $this->createTestRecourseStudentAnswerService = $createTestRecourseStudentAnswerService;
+        $this->createTestResourceStudentAnswerService = $createTestResourceStudentAnswerService;
     }
 
     /**
-     * @Rest\Post("/api/v1/panel/test_recourse_student_permission")
-     * @RequestParam(name="recourseId")
+     * @Rest\Post("/api/v1/panel/test_resource_student_permission")
+     * @RequestParam(name="resourceId")
      * @RequestParam(name="points")
      * @RequestParam(name="teacherComment")
      * @RequestParam(name="status")
@@ -34,14 +34,14 @@ final class CreateTestRecourseStudentAnswerController extends AbstractFOSRestCon
     public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $recourseId = $paramFetcher->get('recourseId');
+        $resourceId = $paramFetcher->get('resourceId');
         $status = $paramFetcher->get('status');
         $assumptions = $paramFetcher->get('assumptions');
 
-        ($this->createTestRecourseStudentAnswerService)(
-            new CreateTestRecourseStudentAnswerRequest(
+        ($this->createTestResourceStudentAnswerService)(
+            new CreateTestResourceStudentAnswerRequest(
                 $requestAuthorId,
-                $recourseId,
+                $resourceId,
                 $status,
                 $assumptions
             )
@@ -49,7 +49,7 @@ final class CreateTestRecourseStudentAnswerController extends AbstractFOSRestCon
 
         return $this->handleView(
             $this->view(
-                ['message' => 'Test recourse student answer has been successfully created'],
+                ['message' => 'Test resource student answer has been successfully created'],
                 Response::HTTP_CREATED
             )
         );

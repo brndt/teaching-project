@@ -8,10 +8,10 @@ use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
-abstract class RecourseStudentAnswer
+abstract class ResourceStudentAnswer
 {
     private Uuid $id;
-    private Uuid $recourseId;
+    private Uuid $resourceId;
     private Uuid $studentId;
     private ?string $points;
     private ?string $teacher_comment;
@@ -22,7 +22,7 @@ abstract class RecourseStudentAnswer
 
     public function __construct(
         Uuid $id,
-        Uuid $recourseId,
+        Uuid $resourceId,
         Uuid $studentId,
         ?string $points,
         ?string $teacherComment,
@@ -32,7 +32,7 @@ abstract class RecourseStudentAnswer
         Status $status
     ) {
         $this->id = $id;
-        $this->recourseId = $recourseId;
+        $this->resourceId = $resourceId;
         $this->studentId = $studentId;
         $this->points = $points;
         $this->teacher_comment = $teacherComment;
@@ -47,9 +47,9 @@ abstract class RecourseStudentAnswer
         return $this->id;
     }
 
-    public function getRecourseId(): Uuid
+    public function getResourceId(): Uuid
     {
-        return $this->recourseId;
+        return $this->resourceId;
     }
 
     public function getStudentId(): Uuid

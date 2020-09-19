@@ -98,9 +98,9 @@ class AuthorizationService
         }
     }
 
-    public function ensureStudentHasAccessToRecourse(Uuid $studentId, Resource $recourseId): void
+    public function ensureStudentHasAccessToResource(Uuid $studentId, Resource $resourceId): void
     {
-        $unit = $this->unitService->findUnit($recourseId->getUnitId());
+        $unit = $this->unitService->findUnit($resourceId->getUnitId());
         try {
             $this->coursePermissionService->findCoursePermission($unit->getCourseId(), $studentId);
         } catch (CoursePermissionNotFound $exception) {

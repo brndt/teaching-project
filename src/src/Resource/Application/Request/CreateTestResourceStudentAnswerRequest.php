@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-final class CreateTestRecourseStudentAnswerRequest
+final class CreateTestResourceStudentAnswerRequest
 {
     private string $requestAuthorId;
-    private string $recourseId;
+    private string $resourceId;
     private string $status;
     private array $assumptions;
 
     public function __construct(
         string $requestAuthorId,
-        string $recourseId,
+        string $resourceId,
         string $status,
         array $assumptions
     ) {
         $this->requestAuthorId = $requestAuthorId;
-        $this->recourseId = $recourseId;
+        $this->resourceId = $resourceId;
         $this->status = $status;
         $this->assumptions = $assumptions;
     }
@@ -28,9 +28,9 @@ final class CreateTestRecourseStudentAnswerRequest
         return $this->requestAuthorId;
     }
 
-    public function getRecourseId(): string
+    public function getResourceId(): string
     {
-        return $this->recourseId;
+        return $this->resourceId;
     }
 
     public function getStatus(): string

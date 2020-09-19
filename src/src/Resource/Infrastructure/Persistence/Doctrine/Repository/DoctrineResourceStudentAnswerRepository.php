@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\RecourseStudentAnswer;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\RecourseStudentAnswerRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\ResourceStudentAnswer;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceStudentAnswerRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Shared\Infrastructure\Persistence\Doctrine\DoctrineCriteriaConverter;
 
-final class DoctrineRecourseStudentAnswerRepository implements RecourseStudentAnswerRepository
+final class DoctrineResourceStudentAnswerRepository implements ResourceStudentAnswerRepository
 {
     private EntityManagerInterface $entityManager;
 
@@ -20,18 +20,18 @@ final class DoctrineRecourseStudentAnswerRepository implements RecourseStudentAn
         $this->entityManager = $entityManager;
     }
 
-    public function save(RecourseStudentAnswer $recourseStudentAnswer): void
+    public function save(ResourceStudentAnswer $resourceStudentAnswer): void
     {
-        $this->entityManager->persist($recourseStudentAnswer);
+        $this->entityManager->persist($resourceStudentAnswer);
         $this->entityManager->flush();
     }
 
     /**
-     * @return object|RecourseStudentAnswer|null
+     * @return object|ResourceStudentAnswer|null
      */
-    public function ofId(Uuid $id): ?RecourseStudentAnswer
+    public function ofId(Uuid $id): ?ResourceStudentAnswer
     {
-        return $this->entityManager->getRepository(RecourseStudentAnswer::class)->find($id);
+        return $this->entityManager->getRepository(ResourceStudentAnswer::class)->find($id);
     }
 
     public function nextIdentity(): Uuid
@@ -42,7 +42,7 @@ final class DoctrineRecourseStudentAnswerRepository implements RecourseStudentAn
     public function matching(Criteria $criteria): array
     {
         $doctrineCriteria = DoctrineCriteriaConverter::convert($criteria);
-        return $this->entityManager->getRepository(RecourseStudentAnswer::class)->matching(
+        return $this->entityManager->getRepository(ResourceStudentAnswer::class)->matching(
             $doctrineCriteria
         )->toArray();
     }

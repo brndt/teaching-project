@@ -1,5 +1,5 @@
 <doctrine-mapping>
-  <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestRecourseStudentAnswer" table="test_recourse_student_answer">
+  <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResourceStudentAnswer" table="test_resource_student_answer">
     <field name="assumptions" column="assumptions" type="test_student_assumptions" />
   </entity>
 </doctrine-mapping>

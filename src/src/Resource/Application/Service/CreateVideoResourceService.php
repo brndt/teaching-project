@@ -58,7 +58,7 @@ final class CreateVideoResourceService
 
         $this->resourceService->ensureResourceNotExistsWithThisName($request->getName());
 
-        $resourse = new VideoResource(
+        $resource = new VideoResource(
             $id,
             $unitId,
             $request->getName(),
@@ -74,6 +74,6 @@ final class CreateVideoResourceService
         $course = $this->courseService->findCourse($unit->getCourseId());
         $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
 
-        $this->resourceRepository->save($resourse);
+        $this->resourceRepository->save($resource);
     }
 }

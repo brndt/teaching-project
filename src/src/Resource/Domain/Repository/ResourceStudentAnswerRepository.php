@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Domain\Repository;
 
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\RecourseStudentAnswer;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\ResourceStudentAnswer;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
-interface RecourseStudentAnswerRepository
+interface ResourceStudentAnswerRepository
 {
-    public function save(RecourseStudentAnswer $recourseStudentAnswer): void;
+    public function save(ResourceStudentAnswer $resourceStudentAnswer): void;
 
-    public function ofId(Uuid $id): ?RecourseStudentAnswer;
+    public function ofId(Uuid $id): ?ResourceStudentAnswer;
 
     public function nextIdentity(): Uuid;
 
