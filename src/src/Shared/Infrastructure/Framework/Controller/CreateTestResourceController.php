@@ -22,18 +22,16 @@ final class CreateTestResourceController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/v1/panel/test_resources")
-     * @RequestParam(name="unitId")
+     * @Rest\Post("/api/v1/panel/courses/{courseId}/units/{unitId}/test_resources")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="content")
      * @RequestParam(name="status")
      * @RequestParam(name="questions", map=true)
      */
-    public function __invoke(ParamFetcher $paramFetcher): Response
+    public function __invoke(ParamFetcher $paramFetcher, string $courseId, string $unitId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $unitId = $paramFetcher->get('unitId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $content = $paramFetcher->get('content');
@@ -43,6 +41,7 @@ final class CreateTestResourceController extends AbstractFOSRestController
         ($this->createTestResourceService)(
             new CreateTestResourceRequest(
                 $requestAuthorId,
+                $courseId,
                 $unitId,
                 $name,
                 $description,

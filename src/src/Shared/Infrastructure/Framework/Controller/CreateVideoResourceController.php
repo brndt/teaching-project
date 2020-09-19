@@ -22,8 +22,7 @@ final class CreateVideoResourceController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/api/v1/panel/video_resources")
-     * @RequestParam(name="unitId")
+     * @Rest\Post("/api/v1/panel/courses/{courseId}/units/{unitId}/video_resources")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="content")
@@ -31,10 +30,9 @@ final class CreateVideoResourceController extends AbstractFOSRestController
      * @RequestParam(name="videoURL")
      * @RequestParam(name="text")
      */
-    public function __invoke(ParamFetcher $paramFetcher): Response
+    public function __invoke(ParamFetcher $paramFetcher, string $courseId, string $unitId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $unitId = $paramFetcher->get('unitId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $content = $paramFetcher->get('content');
@@ -45,6 +43,7 @@ final class CreateVideoResourceController extends AbstractFOSRestController
         ($this->createVideoResourceService)(
             new CreateVideoResourceRequest(
                 $requestAuthorId,
+                $courseId,
                 $unitId,
                 $name,
                 $description,

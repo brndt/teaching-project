@@ -9,8 +9,12 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\CoursePermission;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestQuestion;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
@@ -186,5 +190,55 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $this->entityManager->persist($unit);
             $this->entityManager->flush();
         }
+    }
+
+    /**
+     * @Given there are test resources with the following details:
+     */
+    public function thereAreTestResourcesWithTheFollowingDetails(TableNode $resources)
+    {
+        foreach ($resources->getColumnsHash() as $key => $val) {
+            $id = new Uuid($val['id']);
+            $unitId = new Uuid($val['unitId']);
+            $name = $val['name'];
+            $description = $val['description'];
+            $content = $val['content'];
+            $created = new DateTimeImmutable($val['created']);
+            $modified = new DateTimeImmutable($val['modified']);
+            $status = new Status($val['status']);
+            $questions = array_map($this->questionMaker(), json_decode($val['questions'], true));
+
+            $unit = new TestResource($id, $unitId, $name, $description, $content, $created, $modified, $status, ...$questions);
+
+            $this->entityManager->persist($unit);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @Given there are course permissions with the following details:
+     */
+    public function thereAreCoursePermissionsWithTheFollowingDetails(TableNode $coursePermissions)
+    {
+        foreach ($coursePermissions->getColumnsHash() as $key => $val) {
+            $id = new Uuid($val['id']);
+            $courseId = new Uuid($val['courseId']);
+            $studentId = new Uuid($val['studentId']);
+            $created = new DateTimeImmutable($val['created']);
+            $modified = new DateTimeImmutable($val['modified']);
+            $status = new Status($val['status']);
+
+            $unit = new CoursePermission($id, $courseId, $studentId, $created, $modified, $until, $status);
+
+            $this->entityManager->persist($unit);
+            $this->entityManager->flush();
+        }
+    }
+
+    private function questionMaker(): callable
+    {
+        return static function (array $values): TestQuestion {
+            return TestQuestion::fromValues($values);
+        };
     }
 }
