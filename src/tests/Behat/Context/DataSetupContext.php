@@ -208,9 +208,33 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $status = new Status($val['status']);
             $questions = array_map($this->questionMaker(), json_decode($val['questions'], true));
 
-            $unit = new TestResource($id, $unitId, $name, $description, $content, $created, $modified, $status, ...$questions);
+            $testResource = new TestResource($id, $unitId, $name, $description, $content, $created, $modified, $status, ...$questions);
 
-            $this->entityManager->persist($unit);
+            $this->entityManager->persist($testResource);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @Given there are video resources with the following details:
+     */
+    public function thereAreVideoResourcesWithTheFollowingDetails(TableNode $resources)
+    {
+        foreach ($resources->getColumnsHash() as $key => $val) {
+            $id = new Uuid($val['id']);
+            $unitId = new Uuid($val['unitId']);
+            $name = $val['name'];
+            $description = $val['description'];
+            $content = $val['content'];
+            $created = new DateTimeImmutable($val['created']);
+            $modified = new DateTimeImmutable($val['modified']);
+            $status = new Status($val['status']);
+            $videoURL = $val['videoURL'];
+            $text = $val['text'];
+
+            $videoResource = new VideoResource($id, $unitId, $name, $description, $content, $created, $modified, $status, $videoURL, $text);
+
+            $this->entityManager->persist($videoResource);
             $this->entityManager->flush();
         }
     }
@@ -226,6 +250,7 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $studentId = new Uuid($val['studentId']);
             $created = new DateTimeImmutable($val['created']);
             $modified = new DateTimeImmutable($val['modified']);
+            $until = null;
             $status = new Status($val['status']);
 
             $unit = new CoursePermission($id, $courseId, $studentId, $created, $modified, $until, $status);
