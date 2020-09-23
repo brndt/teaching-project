@@ -22,7 +22,7 @@ Feature: Authorized search test resource by id
         | id                                   | courseId                             | studentId                            | created                   | modified                  | status    |
         | 5a79de58-3cd0-4c4d-8d33-cb5aee5eb84a | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | ab0642f0-ac7f-406a-903e-1c5480e7b7f8 | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
         And I am authenticated as "nikita@lasalle.es" with "123456Aq" password
-        When I send a GET request to "/api/v1/panel/courses/cfe849f3-7832-435a-b484-83fabf530794/units/5fd6fb25-a2a9-4376-af45-3c48508acd16/video_resources/6caf1483-92b9-4c67-b1fc-d0945052d1c3"
+        When I send a GET request to "/api/v1/panel/courses/cfe849f3-7832-435a-b484-83fabf530794/units/5fd6fb25-a2a9-4376-af45-3c48508acd16/test_resources/6caf1483-92b9-4c67-b1fc-d0945052d1c3"
         Then the response status code should be 200
         And the response content should be:
         """

@@ -26,7 +26,7 @@ final class AuthorizedSearchTestResourceByIdController extends AbstractFOSRestCo
     }
 
     /**
-     * @Rest\Get("/api/v1/panel/courses/{courseId}/units/{unitId}/video_resources/{resourceId}")
+     * @Rest\Get("/api/v1/panel/courses/{courseId}/units/{unitId}/test_resources/{resourceId}")
      */
     public function __invoke(ParamFetcher $paramFetcher, string $courseId, string $unitId, string $resourceId): Response
     {
