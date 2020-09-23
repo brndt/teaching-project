@@ -35,6 +35,11 @@ final class CoursePermission
         $this->status = $status;
     }
 
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
+
     public function getCourseId(): Uuid
     {
         return $this->courseId;
