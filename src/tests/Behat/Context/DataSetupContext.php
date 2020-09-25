@@ -11,9 +11,12 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\CoursePermission;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResourceStudentAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResourceStudentAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\StudentTestAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestQuestion;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
@@ -216,6 +219,54 @@ class DataSetupContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @Given there are test resource student answers with the following details:
+     */
+    public function thereAreTestResourceStudentAnswersWithTheFollowingDetails(TableNode $resources)
+    {
+        foreach ($resources->getColumnsHash() as $key => $val) {
+            $id = new Uuid($val['id']);
+            $resourceId = new Uuid($val['resourceId']);
+            $studentId = new Uuid($val['studentId']);
+            $points = $val['points'];
+            $teacherComment = $val['teacherComment'];
+            $created = new DateTimeImmutable($val['created']);
+            $modified = new DateTimeImmutable($val['modified']);
+            $until = $val['until'] ? new DateTimeImmutable($val['until']) : null;
+            $status = new Status($val['status']);
+            $assumptions = array_map($this->assumptionMaker(), json_decode($val['assumptions'], true));
+
+            $testResource = new TestResourceStudentAnswer($id, $resourceId, $studentId, $points, $teacherComment, $created, $modified, $until, $status, ...$assumptions);
+
+            $this->entityManager->persist($testResource);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @Given there are video resource student answers with the following details:
+     */
+    public function thereAreVideoResourceStudentAnswersWithTheFollowingDetails(TableNode $resources)
+    {
+        foreach ($resources->getColumnsHash() as $key => $val) {
+            $id = new Uuid($val['id']);
+            $resourceId = new Uuid($val['resourceId']);
+            $studentId = new Uuid($val['studentId']);
+            $points = $val['points'];
+            $teacherComment = $val['teacherComment'];
+            $created = new DateTimeImmutable($val['created']);
+            $modified = new DateTimeImmutable($val['modified']);
+            $until = $val['until'] ? new DateTimeImmutable($val['until']) : null;
+            $status = new Status($val['status']);
+            $studentAnswer = $val['studentAnswer'];
+
+            $testResource = new VideoResourceStudentAnswer($id, $resourceId, $studentId, $points, $teacherComment, $created, $modified, $until, $status, $studentAnswer);
+
+            $this->entityManager->persist($testResource);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
      * @Given there are video resources with the following details:
      */
     public function thereAreVideoResourcesWithTheFollowingDetails(TableNode $resources)
@@ -264,6 +315,13 @@ class DataSetupContext implements Context, SnippetAcceptingContext
     {
         return static function (array $values): TestQuestion {
             return TestQuestion::fromValues($values);
+        };
+    }
+
+    private function assumptionMaker(): callable
+    {
+        return static function (array $values): StudentTestAnswer {
+            return StudentTestAnswer::fromValues($values);
         };
     }
 }

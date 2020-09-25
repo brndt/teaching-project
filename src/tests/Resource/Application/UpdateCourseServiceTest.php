@@ -40,7 +40,8 @@ final class UpdateCourseServiceTest extends TestCase
         $this->userRepository = $this->createMock(UserRepository::class);
         $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
         $unitRepository = $this->createMock(UnitRepository::class);
-        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);
+        $courseRepository = $this->createMock(CourseRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository, $courseRepository);
 
         $this->updateCourseService = new UpdateCourseService(
             $this->courseRepository,

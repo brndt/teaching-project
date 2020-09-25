@@ -10,7 +10,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
-use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;

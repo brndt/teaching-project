@@ -8,11 +8,12 @@ use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Resource;
 use LaSalle\StudentTeacher\Resource\Domain\Exception\CoursePermissionNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
@@ -20,10 +21,12 @@ class AuthorizationService
 {
     private CoursePermissionService $coursePermissionService;
     private UnitService $unitService;
+    private CourseService $courseService;
 
-    public function __construct(CoursePermissionRepository $coursePermissionRepository, UnitRepository $unitRepository)
+    public function __construct(CoursePermissionRepository $coursePermissionRepository, UnitRepository $unitRepository, CourseRepository $courseRepository)
     {
         $this->coursePermissionService = new CoursePermissionService($coursePermissionRepository);
+        $this->courseService = new CourseService($courseRepository);
         $this->unitService = new UnitService($unitRepository);
     }
 
@@ -96,13 +99,27 @@ class AuthorizationService
         }
     }
 
-    public function ensureStudentHasAccessToResource(Uuid $studentId, Resource $resourceId): void
+    public function ensureUserHasAccessToResource(User $user, Resource $resource): void
+    {
+        $unit = $this->unitService->findUnit($resource->getUnitId());
+        $course = $this->courseService->findCourse($unit->getCourseId());
+
+        if (
+            false === $this->validateStudentPermissionToCourse($user, $resource)
+            &&
+            false === $this->validateAuthorPermissionToManageCourse($user, $course)) {
+            throw new PermissionDeniedException();
+        }
+    }
+
+    private function validateStudentPermissionToCourse(User $user, Resource $resourceId): bool
     {
         $unit = $this->unitService->findUnit($resourceId->getUnitId());
         try {
-            $this->coursePermissionService->findCoursePermission($unit->getCourseId(), $studentId);
+            $this->coursePermissionService->findCoursePermission($unit->getCourseId(), $user->getId());
         } catch (CoursePermissionNotFound $exception) {
-            throw new PermissionDeniedException();
+            return false;
         }
+        return true;
     }
 }

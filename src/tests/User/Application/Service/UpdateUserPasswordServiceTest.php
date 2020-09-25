@@ -6,6 +6,7 @@ namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
@@ -32,7 +33,8 @@ final class UpdateUserPasswordServiceTest extends TestCase
         $this->repository = $this->createMock(UserRepository::class);
         $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
         $unitRepository = $this->createMock(UnitRepository::class);
-        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);
+        $courseRepository = $this->createMock(CourseRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository, $courseRepository);
         $this->updateUserPasswordService = new UpdateUserPasswordService($this->repository, $authorizationService);
     }
 

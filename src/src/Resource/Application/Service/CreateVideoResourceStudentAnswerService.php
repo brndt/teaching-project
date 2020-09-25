@@ -65,7 +65,7 @@ final class CreateVideoResourceStudentAnswerService
             $request->getStudentAnswer()
         );
 
-        $this->authorizationService->ensureStudentHasAccessToResource($requestAuthorId, $resource);
+        $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
 
         $this->repository->save($testResourceStudentAnswer);
     }

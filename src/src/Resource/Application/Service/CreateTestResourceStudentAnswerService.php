@@ -65,7 +65,7 @@ final class CreateTestResourceStudentAnswerService
             ...array_map($this->assumptionMaker(), $request->getAssumptions()),
         );
 
-        $this->authorizationService->ensureStudentHasAccessToResource($requestAuthorId, $resource);
+        $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
 
         $this->repository->save($testResourceStudentAnswer);
     }

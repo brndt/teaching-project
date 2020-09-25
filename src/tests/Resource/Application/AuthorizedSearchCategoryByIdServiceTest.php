@@ -12,6 +12,7 @@ use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategory
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
@@ -38,7 +39,10 @@ final class AuthorizedSearchCategoryByIdServiceTest extends TestCase
         $this->userRepository = $this->createMock(UserRepository::class);
         $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
         $unitRepository = $this->createMock(UnitRepository::class);
-        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);        $this->searchCategoryByIdService = new AuthorizedSearchCategoryByIdService(
+        $courseRepository = $this->createMock(CourseRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository, $courseRepository);
+
+        $this->searchCategoryByIdService = new AuthorizedSearchCategoryByIdService(
             $this->categoryRepository,
             $this->userRepository,
             $authorizationService

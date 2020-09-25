@@ -9,7 +9,9 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseBy
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCourseByIdService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -30,7 +32,11 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
     {
         $this->courseRepository = $this->createMock(CourseRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $authorizationService = $this->createMock(AuthorizationService::class);
+        $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
+        $unitRepository = $this->createMock(UnitRepository::class);
+        $courseRepository = $this->createMock(CourseRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository, $courseRepository);
+
         $this->searchCourseService = new AuthorizedSearchCourseByIdService(
             $this->courseRepository,
             $this->userRepository,

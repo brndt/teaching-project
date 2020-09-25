@@ -11,6 +11,7 @@ use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
 use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
@@ -38,7 +39,8 @@ final class CreateCategoryServiceTest extends TestCase
         $this->userRepository = $this->createMock(UserRepository::class);
         $coursePermissionRepository = $this->createMock(CoursePermissionRepository::class);
         $unitRepository = $this->createMock(UnitRepository::class);
-        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository);
+        $courseRepository = $this->createMock(CourseRepository::class);
+        $authorizationService = new AuthorizationService($coursePermissionRepository, $unitRepository, $courseRepository);
 
         $this->createCategoryService = new CreateCategoryService($this->categoryRepository, $this->userRepository, $authorizationService);
     }
