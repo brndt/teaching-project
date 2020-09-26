@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Resource\Domain\Service;
 
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Resource;
-use LaSalle\StudentTeacher\Resource\Domain\Exception\ResourceAlreadyExistsException;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource;
 use LaSalle\StudentTeacher\Resource\Domain\Exception\ResourceNotFoundException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -19,6 +20,9 @@ final class ResourceService
         $this->repository = $repository;
     }
 
+    /**
+     * @return VideoResource|TestResource
+     */
     public function findResource(Uuid $id): Resource
     {
         $resource = $this->repository->ofId($id);

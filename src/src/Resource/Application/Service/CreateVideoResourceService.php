@@ -49,24 +49,22 @@ final class CreateVideoResourceService
         $requestAuthorId = new Uuid($request->getRequestAuthor());
         $requestAuthor = $this->userService->findUser($requestAuthorId);
 
-        $id = $this->resourceRepository->nextIdentity();
-
         $unitId = new Uuid($request->getUnitId());
         $unit = $this->unitService->findUnit($unitId);
+
         $course = $this->courseService->findCourse($unit->getCourseId());
+
         $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
-        $status = new Status($request->getStatus());
-
         $resource = new VideoResource(
-            $id,
+            $this->resourceRepository->nextIdentity(),
             $unitId,
             $request->getName(),
             $request->getDescription(),
             $request->getContent(),
             new \DateTimeImmutable(),
             null,
-            $status,
+            new Status($request->getStatus()),
             $request->getVideoUrl(),
             $request->getVideoDescription()
         );

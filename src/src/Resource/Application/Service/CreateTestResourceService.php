@@ -53,14 +53,13 @@ final class CreateTestResourceService
 
         $unitId = new Uuid($request->getUnitId());
         $unit = $this->unitService->findUnit($unitId);
+
         $course = $this->courseService->findCourse($unit->getCourseId());
 
         $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
-        $id = $this->resourceRepository->nextIdentity();
-
         $resource = new TestResource(
-            $id,
+            $this->resourceRepository->nextIdentity(),
             $unitId,
             $request->getName(),
             $request->getDescription(),

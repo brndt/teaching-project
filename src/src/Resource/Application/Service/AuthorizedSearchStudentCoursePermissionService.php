@@ -45,9 +45,9 @@ final class AuthorizedSearchStudentCoursePermissionService
         $studentId = new Uuid($request->getStudentId());
         $this->userService->findUser($studentId);
 
-        $coursePermission = $this->coursePermissionService->findCoursePermission($courseId, $studentId);
-
         $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
+
+        $coursePermission = $this->coursePermissionService->findCoursePermission($courseId, $studentId);
 
         return new CoursePermissionResponse(
             $coursePermission->getId()->toString(),

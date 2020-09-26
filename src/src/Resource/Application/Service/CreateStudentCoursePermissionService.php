@@ -8,7 +8,6 @@ use LaSalle\StudentTeacher\Resource\Application\Request\CreateStudentCoursePermi
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\CoursePermission;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
@@ -49,15 +48,19 @@ final class CreateStudentCoursePermissionService
         $studentId = new Uuid($request->getStudentId());
         $this->userService->findUser($studentId);
 
-        $status = new Status($request->getStatus());
-
         $this->coursePermissionService->ensureCoursePermissionNotExists($courseId, $studentId);
 
-        $id = $this->repository->nextIdentity();
-
-        $coursePermission = new CoursePermission($id, $courseId, $studentId, new \DateTimeImmutable(), null, $request->getUntil(), $status);
-
         $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
+
+        $coursePermission = new CoursePermission(
+            $this->repository->nextIdentity(),
+            $courseId,
+            $studentId,
+            new \DateTimeImmutable(),
+            null,
+            $request->getUntil(),
+            new Status($request->getStatus())
+        );
 
         $this->repository->save($coursePermission);
     }

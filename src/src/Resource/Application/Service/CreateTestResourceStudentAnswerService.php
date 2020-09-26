@@ -46,14 +46,12 @@ final class CreateTestResourceStudentAnswerService
         $resourceId = new Uuid($request->getResourceId());
         $resource = $this->resourceService->findResource($resourceId);
 
-        $id = $this->repository->nextIdentity();
-
-        $resourceId = new Uuid($request->getResourceId());
-
         $this->resourceStudentAnswerService->ensureStudentAnswerNotExists($requestAuthorId, $resourceId);
 
+        $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
+
         $testResourceStudentAnswer = new TestResourceStudentAnswer(
-            $id,
+            $this->repository->nextIdentity(),
             $resourceId,
             $requestAuthorId,
             null,
@@ -64,8 +62,6 @@ final class CreateTestResourceStudentAnswerService
             new Status(Status::PUBLISHED),
             ...array_map($this->assumptionMaker(), $request->getAssumptions()),
         );
-
-        $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
 
         $this->repository->save($testResourceStudentAnswer);
     }

@@ -27,21 +27,18 @@ final class CreateVideoResourceStudentAnswerController extends AbstractFOSRestCo
     /**
      * @Rest\Post("/api/v1/panel/video_resource_student_permission")
      * @RequestParam(name="resourceId")
-     * @RequestParam(name="status")
      * @RequestParam(name="studentAnswer")
      */
     public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $resourceId = $paramFetcher->get('resourceId');
-        $status = $paramFetcher->get('status');
         $studentAnswer = $paramFetcher->get('studentAnswer');
 
         ($this->createVideoResourceStudentAnswerService)(
             new CreateVideoResourceStudentAnswerRequest(
                 $requestAuthorId,
                 $resourceId,
-                $status,
                 $studentAnswer
             )
         );

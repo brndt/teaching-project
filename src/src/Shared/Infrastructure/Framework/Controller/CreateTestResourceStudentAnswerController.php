@@ -25,24 +25,18 @@ final class CreateTestResourceStudentAnswerController extends AbstractFOSRestCon
     /**
      * @Rest\Post("/api/v1/panel/test_resource_student_permission")
      * @RequestParam(name="resourceId")
-     * @RequestParam(name="points")
-     * @RequestParam(name="teacherComment")
-     * @RequestParam(name="status")
-     * @RequestParam(name="until", nullable=true)
      * @RequestParam(name="assumptions", map=true)
      */
     public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $resourceId = $paramFetcher->get('resourceId');
-        $status = $paramFetcher->get('status');
         $assumptions = $paramFetcher->get('assumptions');
 
         ($this->createTestResourceStudentAnswerService)(
             new CreateTestResourceStudentAnswerRequest(
                 $requestAuthorId,
                 $resourceId,
-                $status,
                 $assumptions
             )
         );

@@ -11,7 +11,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceStudentAnswerRepos
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceStudentAnswerService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
-use LaSalle\StudentTeacher\Resource\Domain\ValueObject\StudentTestAnswer;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
@@ -46,14 +45,12 @@ final class CreateVideoResourceStudentAnswerService
         $resourceId = new Uuid($request->getResourceId());
         $resource = $this->resourceService->findResource($resourceId);
 
-        $id = $this->repository->nextIdentity();
-
-        $resourceId = new Uuid($request->getResourceId());
-
         $this->resourceStudentAnswerService->ensureStudentAnswerNotExists($requestAuthorId, $resourceId);
 
+        $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
+
         $testResourceStudentAnswer = new VideoResourceStudentAnswer(
-            $id,
+            $this->repository->nextIdentity(),
             $resourceId,
             $requestAuthorId,
             null,
@@ -64,8 +61,6 @@ final class CreateVideoResourceStudentAnswerService
             new Status(Status::PUBLISHED),
             $request->getStudentAnswer()
         );
-
-        $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
 
         $this->repository->save($testResourceStudentAnswer);
     }

@@ -32,6 +32,7 @@ final class CreateStudentCoursePermissionController extends AbstractFOSRestContr
     public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
+
         $courseId = $paramFetcher->get('courseId');
         $studentId = $paramFetcher->get('studentId');
         $status = $paramFetcher->get('status');
