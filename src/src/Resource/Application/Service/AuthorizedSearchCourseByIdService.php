@@ -35,7 +35,7 @@ final class AuthorizedSearchCourseByIdService
         $courseId = new Uuid($request->getCourseId());
         $course = $this->courseService->findCourse($courseId);
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         return $this->buildResponse($course);
     }

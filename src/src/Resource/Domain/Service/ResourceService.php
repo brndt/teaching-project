@@ -27,12 +27,4 @@ final class ResourceService
         }
         return $resource;
     }
-
-    public function ensureResourceNotExistsWithThisName(string $resourceName): void
-    {
-        $resource = $this->repository->ofName($resourceName);
-        if (null !== $resource) {
-            throw new ResourceAlreadyExistsException();
-        }
-    }
 }

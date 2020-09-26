@@ -53,10 +53,10 @@ final class CreateVideoResourceService
 
         $unitId = new Uuid($request->getUnitId());
         $unit = $this->unitService->findUnit($unitId);
+        $course = $this->courseService->findCourse($unit->getCourseId());
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         $status = new Status($request->getStatus());
-
-        $this->resourceService->ensureResourceNotExistsWithThisName($request->getName());
 
         $resource = new VideoResource(
             $id,
@@ -64,15 +64,12 @@ final class CreateVideoResourceService
             $request->getName(),
             $request->getDescription(),
             $request->getContent(),
-            $request->getCreated(),
-            $request->getModified(),
+            new \DateTimeImmutable(),
+            null,
             $status,
             $request->getVideoUrl(),
-            $request->getText()
+            $request->getVideoDescription()
         );
-
-        $course = $this->courseService->findCourse($unit->getCourseId());
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
 
         $this->resourceRepository->save($resource);
     }

@@ -23,7 +23,7 @@ Feature: Create video resource
       "content": "some content",
       "status": "published",
       "videoURL": "https://www.youtube.com/watch?v=sX8ct1MKfgY",
-      "text": "some text"
+      "videoDescription": "some text"
     }
     """
     Then the response status code should be 201

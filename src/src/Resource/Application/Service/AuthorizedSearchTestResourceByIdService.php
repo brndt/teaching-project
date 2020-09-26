@@ -53,7 +53,7 @@ final class AuthorizedSearchTestResourceByIdService
         $unit = $this->unitService->findUnit($resource->getUnitId());
         $course = $this->courseService->findCourse($unit->getCourseId());
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         return $this->buildResponse($resource);
     }

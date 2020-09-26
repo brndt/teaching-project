@@ -28,7 +28,7 @@ final class CreateVideoResourceController extends AbstractFOSRestController
      * @RequestParam(name="content")
      * @RequestParam(name="status")
      * @RequestParam(name="videoURL")
-     * @RequestParam(name="text")
+     * @RequestParam(name="videoDescription")
      */
     public function __invoke(ParamFetcher $paramFetcher, string $courseId, string $unitId): Response
     {
@@ -38,21 +38,18 @@ final class CreateVideoResourceController extends AbstractFOSRestController
         $content = $paramFetcher->get('content');
         $status = $paramFetcher->get('status');
         $videoURL = $paramFetcher->get('videoURL');
-        $text = $paramFetcher->get('text');
+        $videoDescription = $paramFetcher->get('videoDescription');
 
         ($this->createVideoResourceService)(
             new CreateVideoResourceRequest(
                 $requestAuthorId,
-                $courseId,
                 $unitId,
                 $name,
                 $description,
                 $content,
-                new \DateTimeImmutable(),
-                null,
                 $status,
                 $videoURL,
-                $text
+                $videoDescription
             )
         );
 

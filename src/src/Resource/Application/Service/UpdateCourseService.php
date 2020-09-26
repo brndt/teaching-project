@@ -50,7 +50,7 @@ final class UpdateCourseService
         $courseId = new Uuid($request->getId());
         $course = $this->courseService->findCourse($courseId);
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         $course->setDescription($request->getDescription());
         $course->setLevel($request->getLevel());

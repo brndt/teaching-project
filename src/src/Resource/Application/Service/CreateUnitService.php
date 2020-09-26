@@ -58,7 +58,7 @@ final class CreateUnitService
             $status
         );
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         $this->unitRepository->save($unit);
     }

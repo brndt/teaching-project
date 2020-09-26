@@ -50,7 +50,7 @@ final class AuthorizedSearchVideoResourceByIdService
         $unit = $this->unitService->findUnit($resource->getUnitId());
         $course = $this->courseService->findCourse($unit->getCourseId());
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         return $this->buildResponse($resource);
     }
@@ -67,7 +67,7 @@ final class AuthorizedSearchVideoResourceByIdService
             $resource->getStatus()->value(),
             $resource->getContent(),
             $resource->getVideoURL(),
-            $resource->getText()
+            $resource->getVideoDescription()
         );
     }
 

@@ -9,46 +9,32 @@ use DateTimeImmutable;
 final class CreateVideoResourceRequest
 {
     private string $requestAuthor;
-    private string $courseId;
     private string $unitId;
     private string $name;
     private ?string $description;
     private string $content;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
     private string $status;
     private string $videoUrl;
-    private string $text;
+    private string $videoDescription;
 
     public function __construct(
         string $requestAuthor,
-        string $courseId,
         string $unitId,
         string $name,
         ?string $description,
         string $content,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
         string $status,
         string $videoUrl,
-        string $text
+        string $videoDescription
     ) {
         $this->requestAuthor = $requestAuthor;
-        $this->courseId = $courseId;
         $this->unitId = $unitId;
         $this->name = $name;
         $this->description = $description;
         $this->content = $content;
-        $this->created = $created;
-        $this->modified = $modified;
         $this->status = $status;
         $this->videoUrl = $videoUrl;
-        $this->text = $text;
-    }
-
-    public function getCourseId(): string
-    {
-        return $this->courseId;
+        $this->videoDescription = $videoDescription;
     }
 
     public function getUnitId(): string
@@ -66,16 +52,6 @@ final class CreateVideoResourceRequest
         return $this->description;
     }
 
-    public function getCreated(): DateTimeImmutable
-    {
-        return $this->created;
-    }
-
-    public function getModified(): ?DateTimeImmutable
-    {
-        return $this->modified;
-    }
-
     public function getStatus(): string
     {
         return $this->status;
@@ -86,9 +62,9 @@ final class CreateVideoResourceRequest
         return $this->videoUrl;
     }
 
-    public function getText(): string
+    public function getVideoDescription(): string
     {
-        return $this->text;
+        return $this->videoDescription;
     }
 
     public function getRequestAuthor(): string

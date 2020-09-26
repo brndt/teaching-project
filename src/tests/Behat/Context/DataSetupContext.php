@@ -281,9 +281,9 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $modified = new DateTimeImmutable($val['modified']);
             $status = new Status($val['status']);
             $videoURL = $val['videoURL'];
-            $text = $val['text'];
+            $videoDescription = $val['videoDescription'];
 
-            $videoResource = new VideoResource($id, $unitId, $name, $description, $content, $created, $modified, $status, $videoURL, $text);
+            $videoResource = new VideoResource($id, $unitId, $name, $description, $content, $created, $modified, $status, $videoURL, $videoDescription);
 
             $this->entityManager->persist($videoResource);
             $this->entityManager->flush();

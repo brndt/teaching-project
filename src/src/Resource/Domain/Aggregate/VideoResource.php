@@ -11,7 +11,7 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 final class VideoResource extends Resource
 {
     private string $videoUrl;
-    private string $text;
+    private string $videoDescription;
 
     public function __construct(
         Uuid $id,
@@ -23,12 +23,12 @@ final class VideoResource extends Resource
         ?DateTimeImmutable $modified,
         Status $status,
         string $videoUrl,
-        string $text
+        string $videoDescription
     ) {
         parent::__construct($id, $unitId, $name, $description, $content, $created, $modified, $status);
 
         $this->videoUrl = $videoUrl;
-        $this->text = $text;
+        $this->videoDescription = $videoDescription;
     }
 
     public function getVideoUrl(): string
@@ -36,8 +36,8 @@ final class VideoResource extends Resource
         return $this->videoUrl;
     }
 
-    public function getText(): string
+    public function getVideoDescription(): string
     {
-        return $this->text;
+        return $this->videoDescription;
     }
 }

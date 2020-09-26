@@ -16,7 +16,7 @@ Feature: Authorized search video resource by id
         | id                                   | courseId                             | name        | description      | level      | created                   | modified                  | status    |
         | 5fd6fb25-a2a9-4376-af45-3c48508acd16 | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | random unit | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
         And there are video resources with the following details:
-        | id                                   | unitId                               | name        | description      | content      | created                   | modified                  | status    | videoURL                                    | text            |
+        | id                                   | unitId                               | name        | description      | content      | created                   | modified                  | status    | videoURL                                    | videoDescription            |
         | 6caf1483-92b9-4c67-b1fc-d0945052d1c3 | 5fd6fb25-a2a9-4376-af45-3c48508acd16 | random unit | some description | some content | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published | https://www.youtube.com/watch?v=j_K-MIW71ck | nothing special |
         And there are course permissions with the following details:
         | id                                   | courseId                             | studentId                            | created                   | modified                  | status    |
@@ -36,6 +36,6 @@ Feature: Authorized search video resource by id
         "status": "published",
         "content": "some content",
         "videoUrl": "https:\/\/www.youtube.com\/watch?v=j_K-MIW71ck",
-        "text": "nothing special"
+        "videoDescription": "nothing special"
         }
         """

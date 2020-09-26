@@ -57,7 +57,7 @@ final class CreateStudentCoursePermissionService
 
         $coursePermission = new CoursePermission($id, $courseId, $studentId, new \DateTimeImmutable(), null, $request->getUntil(), $status);
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         $this->repository->save($coursePermission);
     }

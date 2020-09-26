@@ -48,7 +48,7 @@ final class AuthorizedSearchUnitsByCriteriaService
 
         $courseId = new Uuid($request->getCourseId());
         $course = $this->courseService->findCourse($courseId);
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         $filters = Filters::fromValues([['field' => 'courseId', 'operator' => '=', 'value' => $courseId->toString()]]);
 

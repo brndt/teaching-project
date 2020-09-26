@@ -51,9 +51,9 @@ class AuthorizationService
         }
     }
 
-    public function ensureRequestAuthorHasPermissionsToManageCourse(User $requestAuthor, Course $course): void
+    public function ensureUserHasPermissionsToManageCourse(User $user, Course $course): void
     {
-        if (false === $this->validateAuthorPermissionToManageCourse($requestAuthor, $course)) {
+        if (false === $this->validateUserPermissionToManageCourse($user, $course)) {
             throw new PermissionDeniedException();
         }
     }
@@ -63,19 +63,6 @@ class AuthorizationService
         if (false === $this->validateAuthorPermissionToCreateCourse($requestAuthor, $user)) {
             throw new PermissionDeniedException();
         }
-    }
-
-    private function validateAuthorPermissionToManageCourse(User $requestAuthor, Course $course): bool
-    {
-        if (true === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
-            return true;
-        }
-
-        if (true === $requestAuthor->idEqualsTo($course->getTeacherId())) {
-            return true;
-        }
-
-        return false;
     }
 
     private function validateAuthorPermissionToCreateCourse(User $requestAuthor, User $user): bool
@@ -107,7 +94,7 @@ class AuthorizationService
         if (
             false === $this->validateStudentPermissionToCourse($user, $resource)
             &&
-            false === $this->validateAuthorPermissionToManageCourse($user, $course)) {
+            false === $this->validateUserPermissionToManageCourse($user, $course)) {
             throw new PermissionDeniedException();
         }
     }
@@ -121,5 +108,18 @@ class AuthorizationService
             return false;
         }
         return true;
+    }
+
+    private function validateUserPermissionToManageCourse(User $requestAuthor, Course $course): bool
+    {
+        if (true === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
+            return true;
+        }
+
+        if (true === $requestAuthor->idEqualsTo($course->getTeacherId())) {
+            return true;
+        }
+
+        return false;
     }
 }

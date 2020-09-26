@@ -49,7 +49,7 @@ final class UpdateUnitService
         $unitId = new Uuid($request->getUnitId());
         $unit = $this->unitService->findUnit($unitId);
 
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
         $unit->setCourseId($courseId);
         $unit->setDescription($request->getDescription());

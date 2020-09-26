@@ -1,6 +1,6 @@
 <doctrine-mapping>
   <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource" table="video_resource">
     <field name="videoUrl" column="video_url" type="string" />
-    <field name="text" column="text" type="string" />
+    <field name="videoDescription" column="video_description" type="string" />
   </entity>
 </doctrine-mapping>

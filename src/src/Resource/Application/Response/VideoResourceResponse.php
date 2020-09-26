@@ -17,7 +17,7 @@ final class VideoResourceResponse
     private string $status;
     private string $content;
     private string $videoUrl;
-    private string $text;
+    private string $videoDescription;
 
     public function __construct(
         string $id,
@@ -29,7 +29,7 @@ final class VideoResourceResponse
         string $status,
         string $content,
         string $videoUrl,
-        string $text
+        string $videoDescription
     ) {
         $this->id = $id;
         $this->unitId = $unitId;
@@ -40,7 +40,7 @@ final class VideoResourceResponse
         $this->status = $status;
         $this->content = $content;
         $this->videoUrl = $videoUrl;
-        $this->text = $text;
+        $this->videoDescription = $videoDescription;
     }
 
     public function getId(): string
@@ -88,8 +88,8 @@ final class VideoResourceResponse
         return $this->videoUrl;
     }
 
-    public function getText(): string
+    public function getVideoDescription(): string
     {
-        return $this->text;
+        return $this->videoDescription;
     }
 }

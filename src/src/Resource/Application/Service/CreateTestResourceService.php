@@ -51,14 +51,13 @@ final class CreateTestResourceService
         $requestAuthorId = new Uuid($request->getRequestAuthor());
         $requestAuthor = $this->userService->findUser($requestAuthorId);
 
-        $id = $this->resourceRepository->nextIdentity();
-
         $unitId = new Uuid($request->getUnitId());
         $unit = $this->unitService->findUnit($unitId);
+        $course = $this->courseService->findCourse($unit->getCourseId());
 
-        $status = new Status($request->getStatus());
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
 
-        $this->resourceService->ensureResourceNotExistsWithThisName($request->getName());
+        $id = $this->resourceRepository->nextIdentity();
 
         $resource = new TestResource(
             $id,
@@ -66,14 +65,11 @@ final class CreateTestResourceService
             $request->getName(),
             $request->getDescription(),
             $request->getContent(),
-            $request->getCreated(),
-            $request->getModified(),
-            $status,
+            new \DateTimeImmutable(),
+            null,
+            new Status($request->getStatus()),
             ...array_map($this->questionMaker(), $request->getQuestions()),
         );
-
-        $course = $this->courseService->findCourse($unit->getCourseId());
-        $this->authorizationService->ensureRequestAuthorHasPermissionsToManageCourse($requestAuthor, $course);
 
         $this->resourceRepository->save($resource);
     }

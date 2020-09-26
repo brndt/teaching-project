@@ -4,49 +4,32 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-use DateTimeImmutable;
-
 final class CreateTestResourceRequest
 {
     private string $requestAuthor;
-    private string $courseId;
     private string $unitId;
     private string $name;
     private ?string $description;
     private string $content;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
     private string $status;
     private array $questions;
 
     public function __construct(
         string $requestAuthor,
-        string $courseId,
         string $unitId,
         string $name,
         ?string $description,
         string $content,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
         string $status,
         array $questions
     ) {
         $this->requestAuthor = $requestAuthor;
-        $this->courseId = $courseId;
         $this->unitId = $unitId;
         $this->name = $name;
         $this->description = $description;
         $this->content = $content;
-        $this->created = $created;
-        $this->modified = $modified;
         $this->status = $status;
         $this->questions = $questions;
-        $this->courseId = $courseId;
-    }
-
-    public function getCourseId(): string
-    {
-        return $this->courseId;
     }
 
     public function getUnitId(): string
@@ -62,16 +45,6 @@ final class CreateTestResourceRequest
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function getCreated(): DateTimeImmutable
-    {
-        return $this->created;
-    }
-
-    public function getModified(): ?DateTimeImmutable
-    {
-        return $this->modified;
     }
 
     public function getStatus(): string

@@ -41,13 +41,10 @@ final class CreateTestResourceController extends AbstractFOSRestController
         ($this->createTestResourceService)(
             new CreateTestResourceRequest(
                 $requestAuthorId,
-                $courseId,
                 $unitId,
                 $name,
                 $description,
                 $content,
-                new \DateTimeImmutable(),
-                null,
                 $status,
                 $questions,
             )
