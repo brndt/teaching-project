@@ -29,11 +29,11 @@ Feature: Create video resource
           "answers": {
             "0": {
               "answer" : "bien",
-              "is_correct": true
+              "isCorrect": true
             },
             "1": {
               "answer" : "mal",
-              "is_correct": false
+              "isCorrect": false
             }
            }
           },
@@ -42,11 +42,11 @@ Feature: Create video resource
             "answers": {
               "0": {
                 "answer" : "perfecto",
-                "is_correct": true
+                "isCorrect": true
               },
               "1": {
                 "answer" : "fatal",
-                "is_correct": false
+                "isCorrect": false
               }
             }
           }

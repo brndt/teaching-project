@@ -17,10 +17,10 @@ Feature: Authorized search test resource by id
       | 5fd6fb25-a2a9-4376-af45-3c48508acd16 | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | random unit | some description | some level | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
     And there are test resources with the following details:
       | id                                   | unitId                               | name        | description      | content      | created                   | modified                  | status    | questions                                                                                                                                                                                                                                  |
-      | 6caf1483-92b9-4c67-b1fc-d0945052d1c3 | 5fd6fb25-a2a9-4376-af45-3c48508acd16 | random unit | some description | some content | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published | [{"question":"hola como estas","answers":[{"answer":"bien","is_correct":true},{"answer":"mal","is_correct":false}]},{"question":"hola que tal","answers":[{"answer":"perfecto","is_correct":true},{"answer":"fatal","is_correct":false}]}] |
+      | 6caf1483-92b9-4c67-b1fc-d0945052d1c3 | 5fd6fb25-a2a9-4376-af45-3c48508acd16 | random unit | some description | some content | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published | [{"question":"hola como estas","answers":[{"answer":"bien","isCorrect":true},{"answer":"mal","isCorrect":false}]},{"question":"hola que tal","answers":[{"answer":"perfecto","isCorrect":true},{"answer":"fatal","isCorrect":false}]}] |
     And there are test resource student answers with the following details:
       | id                                   | resourceId                           | studentId                            | points | teacherComment | created                   | modified                  | status    | assumptions                                                                                                                                                                                                                                                                                            |
-      | 4b71acce-eeda-475c-a4a2-6ac2fe472a7e | 6caf1483-92b9-4c67-b1fc-d0945052d1c3 | ab0642f0-ac7f-406a-903e-1c5480e7b7f8 | 10/10  | some comment   | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published | [{"question":"hola como estas","student_assumption":"bien","answers":[{"answer":"bien","is_correct":true},{"answer":"mal","is_correct":false}]},{"question":"hola que tal","student_assumption":"perfecto","answers":[{"answer":"perfecto","is_correct":true},{"answer":"fatal","is_correct":false}]}] |
+      | 4b71acce-eeda-475c-a4a2-6ac2fe472a7e | 6caf1483-92b9-4c67-b1fc-d0945052d1c3 | ab0642f0-ac7f-406a-903e-1c5480e7b7f8 | 10/10  | some comment   | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published | [{"question":"hola como estas","student_assumption":"bien","answers":[{"answer":"bien","isCorrect":true},{"answer":"mal","isCorrect":false}]},{"question":"hola que tal","student_assumption":"perfecto","answers":[{"answer":"perfecto","isCorrect":true},{"answer":"fatal","isCorrect":false}]}] |
     And there are course permissions with the following details:
       | id                                   | courseId                             | studentId                            | created                   | modified                  | status    |
       | 5a79de58-3cd0-4c4d-8d33-cb5aee5eb84a | ea4f0311-4ffc-4fd0-9b4a-f2743565d851 | ab0642f0-ac7f-406a-903e-1c5480e7b7f8 | 2020-07-14T13:54:13+00:00 | 2020-07-14T13:54:13+00:00 | published |
@@ -45,11 +45,11 @@ Feature: Authorized search test resource by id
               "answers": [
                 {
                   "answer": "bien",
-                  "is_correct":true
+                  "isCorrect":true
                 },
                 {
                   "answer":"mal",
-                  "is_correct":false
+                  "isCorrect":false
                 }
                ]
             },
@@ -59,11 +59,11 @@ Feature: Authorized search test resource by id
               "answers": [
                 {
                   "answer": "perfecto",
-                  "is_correct": true
+                  "isCorrect": true
                 },
                 {
                   "answer": "fatal",
-                  "is_correct":false
+                  "isCorrect":false
                 }
               ]
             }

@@ -19,13 +19,13 @@ final class TestAnswer
     {
         return [
             'answer'     => $this->answer(),
-            'is_correct' => $this->isCorrect(),
+            'isCorrect' => $this->isCorrect(),
         ];
     }
 
     public static function fromValues(array $values): self
     {
-        return new self($values['answer'], $values['is_correct']);
+        return new self($values['answer'], $values['isCorrect']);
     }
 
     public function answer(): string
