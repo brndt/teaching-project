@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceStudentAnswerRequest;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Resource;
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResourceStudentAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceStudentAnswerRepository;
@@ -12,10 +14,13 @@ use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceStudentAnswerService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\StudentTestAnswer;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestAnswer;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\TestQuestion;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use phpDocumentor\Reflection\Types\Resource_;
 
 final class CreateTestResourceStudentAnswerService
 {
@@ -50,6 +55,8 @@ final class CreateTestResourceStudentAnswerService
 
         $this->authorizationService->ensureUserHasAccessToResource($requestAuthor, $resource);
 
+        $assumptions = $this->assumptionMaker($resource, $request->getAssumptions());
+
         $testResourceStudentAnswer = new TestResourceStudentAnswer(
             $this->repository->nextIdentity(),
             $resourceId,
@@ -60,15 +67,23 @@ final class CreateTestResourceStudentAnswerService
             null,
             null,
             new Status(Status::PUBLISHED),
-            ...array_map($this->assumptionMaker(), $request->getAssumptions()),
+            ...$assumptions,
         );
 
         $this->repository->save($testResourceStudentAnswer);
     }
 
-    private function assumptionMaker(): callable
-    {
-        return static function (array $values): StudentTestAnswer {
+    private function assumptionMaker(Resource $resource, array $assumptions) {
+        return array_filter(array_map($this->studentTestAnswerMaker($resource), $assumptions), fn($value) => !is_null($value));
+    }
+
+    private function studentTestAnswerMaker(Resource $resource) {
+        return static function (array $values) use ($resource): ?StudentTestAnswer {
+            $indexOfQuestion = array_search($values['question'], array_map(fn(TestQuestion $testQuestion) => $testQuestion->question(), $resource->getQuestions()));
+            if (false === $indexOfQuestion) return null;
+            $indexOfAnswer = array_search($values['student_assumption'], array_map(fn(TestAnswer $element) => $element->answer(), $resource->getQuestions()[$indexOfQuestion]->answers()));
+            if (false === $indexOfAnswer) return null;
+            $values['answers'] = array_map(fn(TestAnswer $testQuestion) => $testQuestion->toValues(), $resource->getQuestions()[$indexOfQuestion]->answers());
             return StudentTestAnswer::fromValues($values);
         };
     }
