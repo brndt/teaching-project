@@ -14,6 +14,8 @@ interface UnitRepository
 
     public function ofId(Uuid $id): ?Unit;
 
+    public function ofName(string $unitName): ?Unit;
+
     public function nextIdentity(): Uuid;
 
     public function matching(Criteria $criteria): array;
