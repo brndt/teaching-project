@@ -6,16 +6,9 @@ namespace LaSalle\StudentTeacher\Resource\Application\Response;
 
 use DateTimeImmutable;
 
-final class VideoResourceResponse
+final class VideoResourceResponse extends ResourceResponse
 {
-    private string $id;
-    private string $unitId;
-    private string $name;
-    private ?string $description;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
-    private string $status;
-    private string $content;
+
     private string $videoUrl;
     private string $videoDescription;
 
@@ -31,56 +24,9 @@ final class VideoResourceResponse
         string $videoUrl,
         string $videoDescription
     ) {
-        $this->id = $id;
-        $this->unitId = $unitId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
-        $this->content = $content;
+        parent::__construct($id, $unitId, $name, $description, $content, $created, $modified, $status);
         $this->videoUrl = $videoUrl;
         $this->videoDescription = $videoDescription;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getUnitId(): string
-    {
-        return $this->unitId;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getCreated(): DateTimeImmutable
-    {
-        return $this->created;
-    }
-
-    public function getModified(): ?DateTimeImmutable
-    {
-        return $this->modified;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
     }
 
     public function getVideoUrl(): string
