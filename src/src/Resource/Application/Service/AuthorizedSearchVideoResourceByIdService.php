@@ -55,7 +55,7 @@ final class AuthorizedSearchVideoResourceByIdService
         return $this->buildResponse($resource);
     }
 
-    private function buildResponse(VideoResource $resource): VideoResourceResponse
+    private function buildResponse(Resource $resource): VideoResourceResponse
     {
         return new VideoResourceResponse(
             $resource->getId()->toString(),
