@@ -27,14 +27,6 @@ Feature: Authorized search test resource by id
         And the response content should be:
         """
         {
-            "id": "6caf1483-92b9-4c67-b1fc-d0945052d1c3",
-            "unitId": "5fd6fb25-a2a9-4376-af45-3c48508acd16",
-            "name": "random unit",
-            "description": "some description",
-            "created": "2020-07-14T13:54:13+00:00",
-            "modified": "2020-07-14T13:54:13+00:00",
-            "status": "published",
-            "content": "some content",
             "questions": [
                 {
                     "question": "hola como estas",
@@ -62,6 +54,14 @@ Feature: Authorized search test resource by id
                         }
                     ]
                 }
-            ]
+            ],
+            "id": "6caf1483-92b9-4c67-b1fc-d0945052d1c3",
+            "unitId": "5fd6fb25-a2a9-4376-af45-3c48508acd16",
+            "name": "random unit",
+            "description": "some description",
+            "created": "2020-07-14T13:54:13+00:00",
+            "modified": "2020-07-14T13:54:13+00:00",
+            "status": "published",
+            "content": "some content"
         }
         """

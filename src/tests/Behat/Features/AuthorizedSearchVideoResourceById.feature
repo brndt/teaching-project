@@ -27,6 +27,8 @@ Feature: Authorized search video resource by id
         And the response content should be:
         """
         {
+        "videoUrl": "https:\/\/www.youtube.com\/watch?v=j_K-MIW71ck",
+        "videoDescription": "nothing special",
         "id": "6caf1483-92b9-4c67-b1fc-d0945052d1c3",
         "unitId": "5fd6fb25-a2a9-4376-af45-3c48508acd16",
         "name": "random unit",
@@ -34,8 +36,6 @@ Feature: Authorized search video resource by id
         "created": "2020-07-14T13:54:13+00:00",
         "modified": "2020-07-14T13:54:13+00:00",
         "status": "published",
-        "content": "some content",
-        "videoUrl": "https:\/\/www.youtube.com\/watch?v=j_K-MIW71ck",
-        "videoDescription": "nothing special"
+        "content": "some content"
         }
         """
