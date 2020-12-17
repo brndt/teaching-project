@@ -14,7 +14,10 @@ composer composer-install composer-update:
 		--user $(id -u):$(id -g) \
 		--volume $(current-dir):/app \
 		--volume ${COMPOSER_HOME:-$HOME/.composer}:/tmp \
-		composer install
+		composer install \
+		--ignore-platform-reqs \
+		--no-ansi \
+        --no-interaction
 
 reload:
 	@docker-compose exec php-fpm kill -USR2 1
