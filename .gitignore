@@ -1,30 +1,41 @@
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
+/public/avatars/*
+!/public/avatars/.gitkeep
+###> friends-of-behat/symfony-extension ###
+###< friends-of-behat/symfony-extension ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
 ###> symfony/framework-bundle ###
-/src/.env.local
-/src/.env.local.php
-/src/.env.*.local
-/src/config/secrets/prod/prod.decrypt.private.php
-/src/public/bundles/
-
-/src/public/avatars/*
-!/src/public/avatars/.gitignore
-
-
-/src/var/
-/src/vendor/
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
 ###< symfony/framework-bundle ###
 
-###> symfony/web-server-bundle ###
-/src/.web-server-pid
-###< symfony/web-server-bundle ###
-
 ###> lexik/jwt-authentication-bundle ###
-/src/config/jwt/*.pem
+/config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
 ###> symfony/phpunit-bridge ###
-/src/.phpunit
-/src/.phpunit.result.cache
-/src/phpunit.xml.dist
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
+
+/build/
 
 .idea

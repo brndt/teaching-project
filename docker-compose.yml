@@ -2,20 +2,20 @@ version: '3.5'
 
 services:
   nginx:
-    container_name: nginx 
+    container_name: nginx
     image: nginx:latest
     depends_on:
       - php-fpm
     ports:
       - 8080:80
     volumes:
-      - ./src/:/usr/share/nginx/html
+      - ./:/usr/share/nginx/html
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - backend
 
   php-fpm:
-    container_name: fpm 
+    container_name: fpm
     build:
       ./docker/php
     environment:
@@ -23,18 +23,18 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ./src/:/usr/share/nginx/html
+      - ./:/usr/share/nginx/html
     networks:
       - backend
 
-  php-consume: 
+  php-consume:
     container_name: consumer
     build:
       ./docker/php-consume
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://rabbitmq:rabbitmq_pass@rabbitmq:5672/%2f/messages
     volumes:
-      - ./src/:/usr/share/nginx/html
+      - ./:/usr/share/nginx/html
     networks:
       - backend
 

@@ -13,7 +13,7 @@ composer composer-install composer-update:
 	@docker run --rm --interactive --user $(id -u):$(id -g) \
 		--volume $(current-dir):/app \
 		--volume ${COMPOSER_HOME:-$HOME/.composer}:/tmp \
-		clevyr/prestissimo $(CMD) \
+		composer:2 $(CMD) \
 			--ignore-platform-reqs \
 			--no-ansi \
 			--no-interaction
