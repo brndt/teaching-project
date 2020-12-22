@@ -13,11 +13,9 @@ fos_rest:
       rss: false
     mime_types:
       json: ['application/json', 'application/x-json']
-  routing_loader:
-    default_format:  json
-    include_format:  false
   exception:
     enabled: true
+    map_exception_codes: true
     codes:
       InvalidArgumentException: 400
       LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists: 400
