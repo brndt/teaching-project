@@ -52,12 +52,12 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $email = new Email($val['email']);
             $password = Password::fromPlainPassword($val['password']);
             $roles = Roles::fromArrayOfPrimitives([$val['roles']]);
-            $created = $val['created'] ? new DateTimeImmutable($val['created']) : new DateTimeImmutable();
-            $image = $val['image'];
-            $education = $val['education'];
-            $experience = $val['experience'];
-            $confirmationToken = $val['confirmationToken'] ? new Token($val['confirmationToken']) : null;
-            $expirationDate = $val['expirationDate'] ? new DateTimeImmutable($val['expirationDate']) : null;
+            $created = isset($val['created']) ? new DateTimeImmutable($val['created']) : new DateTimeImmutable();
+            $image = $val['image'] ?? null;
+            $education = $val['education'] ?? null;
+            $experience = $val['experience'] ?? null;
+            $confirmationToken = isset($val['confirmationToken']) ? new Token($val['confirmationToken']) : null;
+            $expirationDate = isset($val['expirationDate']) ? new DateTimeImmutable($val['expirationDate']) : null;
 
             $user = (new UserBuilder())
                 ->withId($id)
@@ -231,7 +231,7 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $teacherComment = $val['teacherComment'];
             $created = new DateTimeImmutable($val['created']);
             $modified = new DateTimeImmutable($val['modified']);
-            $until = $val['until'] ? new DateTimeImmutable($val['until']) : null;
+            $until = isset($val['until']) ? new DateTimeImmutable($val['until']) : null;
             $status = new Status($val['status']);
             $assumptions = array_map($this->assumptionMaker(), json_decode($val['assumptions'], true));
 
@@ -255,7 +255,7 @@ class DataSetupContext implements Context, SnippetAcceptingContext
             $teacherComment = $val['teacherComment'];
             $created = new DateTimeImmutable($val['created']);
             $modified = new DateTimeImmutable($val['modified']);
-            $until = $val['until'] ? new DateTimeImmutable($val['until']) : null;
+            $until = isset($val['until']) ? new DateTimeImmutable($val['until']) : null;
             $status = new Status($val['status']);
             $studentAnswer = $val['studentAnswer'];
 

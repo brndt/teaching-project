@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af67bad6c20250069499e62c9812092c",
+    "content-hash": "2c20fafc66564fd5682cd4c2b7d9b81a",
     "packages": [
         {
             "name": "brick/math",
@@ -1521,16 +1521,16 @@
         },
         {
             "name": "friendsofsymfony/rest-bundle",
-            "version": "3.0.4",
+            "version": "3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "0564bdff0e4ee08f5cd418272a749bceecde75bf"
+                "reference": "780be7e35d90d12b76d94a17922b0d95d317f9a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/0564bdff0e4ee08f5cd418272a749bceecde75bf",
-                "reference": "0564bdff0e4ee08f5cd418272a749bceecde75bf",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/780be7e35d90d12b76d94a17922b0d95d317f9a9",
+                "reference": "780be7e35d90d12b76d94a17922b0d95d317f9a9",
                 "shasum": ""
             },
             "require": {
@@ -1580,6 +1580,7 @@
                 "symfony/serializer": "Add support for basic serialization capabilities and xml decoding, requires ^2.7|^3.0",
                 "symfony/validator": "Add support for validation capabilities in the ParamFetcher, requires ^2.7|^3.0"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1620,9 +1621,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FriendsOfSymfony/FOSRestBundle/issues",
-                "source": "https://github.com/FriendsOfSymfony/FOSRestBundle/tree/3.0.4"
+                "source": "https://github.com/FriendsOfSymfony/FOSRestBundle/tree/3.x"
             },
-            "time": "2020-12-10T20:14:08+00:00"
+            "time": "2020-12-21T21:30:18+00:00"
         },
         {
             "name": "lambdish/phunctional",
@@ -10367,12 +10368,13 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "friendsofsymfony/rest-bundle": 20,
         "friends-of-behat/symfony-extension": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4",
+        "php": "^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
