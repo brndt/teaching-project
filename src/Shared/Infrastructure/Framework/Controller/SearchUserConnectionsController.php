@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUserConnectionsController extends AbstractFOSRestController
 {
-    private SearchUserConnectionsByCriteriaService $searchConnections;
-
-    public function __construct(SearchUserConnectionsByCriteriaService $searchConnections)
+    public function __construct(private SearchUserConnectionsByCriteriaService $searchConnections)
     {
-        $this->searchConnections = $searchConnections;
     }
 
     /**

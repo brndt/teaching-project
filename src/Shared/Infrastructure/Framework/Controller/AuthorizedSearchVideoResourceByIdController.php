@@ -16,11 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchVideoResourceByIdController extends AbstractFOSRestController
 {
-    private AuthorizedSearchVideoResourceByIdService $searchVideoResourceByIdService;
-
-    public function __construct(AuthorizedSearchVideoResourceByIdService $searchVideoResourceByIdService)
+    public function __construct(private AuthorizedSearchVideoResourceByIdService $searchVideoResourceByIdService)
     {
-        $this->searchVideoResourceByIdService = $searchVideoResourceByIdService;
     }
 
     /**

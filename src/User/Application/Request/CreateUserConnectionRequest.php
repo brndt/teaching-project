@@ -6,15 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class CreateUserConnectionRequest
 {
-    private string $requestAuthorId;
-    private string $firstUser;
-    private string $secondUser;
-
-    public function __construct(string $requestAuthorId, string $firstUser, string $secondUser)
+    public function __construct(private string $requestAuthorId, private string $firstUser, private string $secondUser)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->firstUser = $firstUser;
-        $this->secondUser = $secondUser;
     }
 
     public function getRequestAuthorId(): string

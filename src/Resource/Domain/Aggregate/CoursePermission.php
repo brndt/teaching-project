@@ -9,30 +9,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class CoursePermission
 {
-    private Uuid $id;
-    private Uuid $courseId;
-    private Uuid $studentId;
-    private \DateTimeImmutable $created;
-    private ?\DateTimeImmutable $modified;
-    private ?\DateTimeImmutable $until;
-    private Status $status;
-
-    public function __construct(
-        Uuid $id,
-        Uuid $courseId,
-        Uuid $studentId,
-        \DateTimeImmutable $created,
-        ?\DateTimeImmutable $modified,
-        ?\DateTimeImmutable $until,
-        Status $status
-    ) {
-        $this->id = $id;
-        $this->courseId = $courseId;
-        $this->studentId = $studentId;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->until = $until;
-        $this->status = $status;
+    public function __construct(private Uuid $id, private Uuid $courseId, private Uuid $studentId, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private ?\DateTimeImmutable $until, private Status $status)
+    {
     }
 
     public function getId(): Uuid

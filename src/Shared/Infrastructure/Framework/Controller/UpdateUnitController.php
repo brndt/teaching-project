@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUnitController extends AbstractFOSRestController
 {
-    private UpdateUnitService $updateUnitService;
-
-    public function __construct(UpdateUnitService $updateUnitService)
+    public function __construct(private UpdateUnitService $updateUnitService)
     {
-        $this->updateUnitService = $updateUnitService;
     }
 
     /**

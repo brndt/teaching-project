@@ -18,11 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchStudentCoursePermissionController extends AbstractFOSRestController
 {
-    private AuthorizedSearchStudentCoursePermissionService $searchStudentCoursePermissionService;
-
-    public function __construct(AuthorizedSearchStudentCoursePermissionService $searchStudentCoursePermissionService)
+    public function __construct(private AuthorizedSearchStudentCoursePermissionService $searchStudentCoursePermissionService)
     {
-        $this->searchStudentCoursePermissionService = $searchStudentCoursePermissionService;
     }
 
     /**

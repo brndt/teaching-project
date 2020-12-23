@@ -69,19 +69,19 @@ final class CreateUnitServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
 
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getCourseId())
             ->willReturn($course);
 
         $this->unitRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofName')
             ->with($request->getName())
             ->willReturn(null);

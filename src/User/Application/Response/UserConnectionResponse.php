@@ -6,17 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Response;
 
 final class UserConnectionResponse
 {
-    private string $userId;
-    private string $friendId;
-    private ?string $status;
-    private ?string $specifierId;
-
-    public function __construct(string $userId, string $friendId, string $status = null, string $specifierId = null)
+    public function __construct(private string $userId, private string $friendId, private ?string $status = null, private ?string $specifierId = null)
     {
-        $this->userId = $userId;
-        $this->friendId = $friendId;
-        $this->status = $status;
-        $this->specifierId = $specifierId;
     }
 
     public function getUserId(): string

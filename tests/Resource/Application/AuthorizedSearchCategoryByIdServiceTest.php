@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
@@ -68,7 +67,7 @@ final class AuthorizedSearchCategoryByIdServiceTest extends TestCase
         );
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
@@ -86,7 +85,7 @@ final class AuthorizedSearchCategoryByIdServiceTest extends TestCase
             ->build();
         $this->expectException(PermissionDeniedException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
@@ -105,12 +104,12 @@ final class AuthorizedSearchCategoryByIdServiceTest extends TestCase
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->willReturn(null);
         ($this->searchCategoryByIdService)($request);
@@ -128,12 +127,12 @@ final class AuthorizedSearchCategoryByIdServiceTest extends TestCase
             ->build();
         $expectedCategoryResponse = $this->buildResponse($category);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->willReturn($category);
 

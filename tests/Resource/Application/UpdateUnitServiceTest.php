@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateUnitRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\UnitResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\UpdateUnitService;
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
@@ -75,19 +73,19 @@ final class UpdateUnitServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
 
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getCourseId())
             ->willReturn($course);
 
         $this->unitRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getUnitId())
             ->willReturn($unit);

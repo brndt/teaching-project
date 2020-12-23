@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateCategoryController extends AbstractFOSRestController
 {
-    private CreateCategoryService $createCategory;
-
-    public function __construct(CreateCategoryService $createCategory)
+    public function __construct(private CreateCategoryService $createCategory)
     {
-        $this->createCategory = $createCategory;
     }
 
     /**

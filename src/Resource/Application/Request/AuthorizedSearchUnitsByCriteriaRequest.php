@@ -6,30 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class AuthorizedSearchUnitsByCriteriaRequest
 {
-    private string $requestAuthorId;
-    private ?string $courseId;
-    private ?string $orderBy;
-    private ?string $order;
-    private ?string $operator;
-    private ?int $offset;
-    private ?int $limit;
-
-    public function __construct(
-        string $requestAuthorId,
-        ?string $teacherId,
-        ?string $orderBy,
-        ?string $order,
-        ?string $operator,
-        ?int $offset,
-        ?int $limit
-    ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->courseId = $teacherId;
-        $this->orderBy = $orderBy;
-        $this->order = $order;
-        $this->operator = $operator;
-        $this->offset = $offset;
-        $this->limit = $limit;
+    public function __construct(private string $requestAuthorId, private ?string $courseId, private ?string $orderBy, private ?string $order, private ?string $operator, private ?int $offset, private ?int $limit)
+    {
     }
 
     public function getRequestAuthorId(): string

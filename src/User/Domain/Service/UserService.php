@@ -13,11 +13,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
 final class UserService
 {
-    private UserRepository $repository;
-
-    public function __construct(UserRepository $repository)
+    public function __construct(private UserRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findUser(Uuid $id): User

@@ -16,11 +16,8 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
 final class UnauthorizedSearchCoursesByCriteriaService
 {
-    private CourseRepository $courseRepository;
-
-    public function __construct(CourseRepository $courseRepository)
+    public function __construct(private CourseRepository $courseRepository)
     {
-        $this->courseRepository = $courseRepository;
     }
 
     public function __invoke(UnauthorizedSearchCoursesByCriteriaRequest $request): CourseCollectionResponse

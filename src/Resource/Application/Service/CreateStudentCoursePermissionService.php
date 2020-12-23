@@ -19,21 +19,17 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 final class CreateStudentCoursePermissionService
 {
     private UserService $userService;
-    private AuthorizationService $authorizationService;
     private CourseService $courseService;
-    private CoursePermissionRepository $repository;
     private CoursePermissionService $coursePermissionService;
 
     public function __construct(
         CourseRepository $courseRepository,
         UserRepository $userRepository,
-        CoursePermissionRepository $repository,
-        AuthorizationService $authorizationService
+        private CoursePermissionRepository $repository,
+        private AuthorizationService $authorizationService
     ) {
         $this->userService = new UserService($userRepository);
         $this->courseService = new CourseService($courseRepository);
-        $this->authorizationService = $authorizationService;
-        $this->repository = $repository;
         $this->coursePermissionService = new CoursePermissionService($repository);
     }
 

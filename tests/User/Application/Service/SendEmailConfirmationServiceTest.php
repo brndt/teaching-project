@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -66,7 +65,7 @@ final class SendEmailConfirmationServiceTest extends TestCase
             ->build();
         $this->repository->method('ofEmail')->willReturn($userToSendEmail);
         $this->randomStringGenerator->method('generate')->willReturn('random_token');
-        $this->repository->expects($this->once())->method('save')->with(
+        $this->repository->expects(self::once())->method('save')->with(
             $this->callback($this->userComparator($userToSendEmail))
         );
         $event = new EmailConfirmationRequestReceivedDomainEvent(
@@ -76,7 +75,9 @@ final class SendEmailConfirmationServiceTest extends TestCase
             $userToSendEmail->getLastName()->toString(),
             $userToSendEmail->getConfirmationToken()->toString()
         );
-        $this->eventBus->expects($this->once())->method('dispatch')->with($this->callback($this->domainEventComparator($event)));
+        $this->eventBus->expects(self::once())->method('dispatch')->with(
+            $this->callback($this->domainEventComparator($event))
+        );
 
         ($this->sendEmailConfirmationService)($request);
     }

@@ -23,21 +23,15 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
 final class SearchUserConnectionsByCriteriaService
 {
-    private UserRepository $userRepository;
-    private UserConnectionRepository $userConnectionRepository;
     private UserService $userService;
-    private AuthorizationService $authorizationService;
     private UserConnectionService $userConnectionService;
 
     public function __construct(
-        UserConnectionRepository $userConnectionRepository,
-        UserRepository $userRepository,
-        AuthorizationService $authorizationService
+        private UserConnectionRepository $userConnectionRepository,
+        private UserRepository $userRepository,
+        private AuthorizationService $authorizationService
     ) {
-        $this->userRepository = $userRepository;
-        $this->userConnectionRepository = $userConnectionRepository;
         $this->userService = new UserService($this->userRepository);
-        $this->authorizationService = $authorizationService;
         $this->userConnectionService = new UserConnectionService($this->userConnectionRepository);
     }
 

@@ -19,21 +19,17 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class AuthorizedSearchCategoryByIdService
 {
-    private CategoryRepository $categoryRepository;
     private CourseService $courseService;
-    private AuthorizationService $authorizationService;
     private CategoryService $categoryService;
     private UserService $userService;
 
     public function __construct(
-        CategoryRepository $categoryRepository,
+        private CategoryRepository $categoryRepository,
         UserRepository $userRepository,
-        AuthorizationService $authorizationService
+        private AuthorizationService $authorizationService
     ) {
-        $this->categoryRepository = $categoryRepository;
         $this->userService = new UserService($userRepository);
         $this->categoryService = new CategoryService($categoryRepository);
-        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(AuthorizedSearchCategoryByIdRequest $request): CategoryResponse

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
@@ -23,7 +22,6 @@ use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
@@ -82,7 +80,7 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn(null);
@@ -106,9 +104,11 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
+        $this->userRepository
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+
         ($this->searchUserConnectionService)($request);
     }
 
@@ -128,16 +128,12 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             ->build();
 
         $this->expectException(UserNotFoundException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, null);
+
         ($this->searchUserConnectionService)($request);
     }
 
@@ -161,14 +157,13 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             ->withId(new Uuid($request->getUserId()))
             ->build();
 
-
         $this->expectException(PermissionDeniedException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getUserId()
-        )->willReturn($user);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
+
         ($this->searchUserConnectionService)($request);
     }
 
@@ -190,16 +185,16 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
         $author = (new UserBuilder())
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
-        $firstUser = (new UserBuilder())
+        $user = (new UserBuilder())
             ->withId(new Uuid($request->getUserId()))
             ->build();
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getUserId()
-        )->willReturn($firstUser);
-        $this->userConnectionRepository->expects($this->once())->method('matching')->willReturn([]);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
+
+        $this->userConnectionRepository->expects(self::once())->method('matching')->willReturn([]);
 
         $userConnectionCollectionResponse = ($this->searchUserConnectionService)($request);
         $this->assertEquals($expectedUserConnectionCollectionResponse, $userConnectionCollectionResponse);
@@ -230,13 +225,12 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             $this->buildStudentResponse($userConnection)
         );
 
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $user->getId()
-        )->willReturn($user);
-        $this->userConnectionRepository->expects($this->once())->method('matching')->willReturn([$userConnection]);
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$user->getId()])
+            ->willReturn($author, $user);
+
+        $this->userConnectionRepository->expects(self::once())->method('matching')->willReturn([$userConnection]);
 
         $userConnectionCollectionResponse = ($this->searchUserConnectionService)($request);
         $this->assertEquals($expectedUserConnectionCollectionResponse, $userConnectionCollectionResponse);
@@ -282,13 +276,12 @@ final class SearchUserConnectionsByCriteriaServiceTest extends TestCase
             $this->buildTeacherResponse($userConnection)
         );
 
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $user->getId()
-        )->willReturn($user);
-        $this->userConnectionRepository->expects($this->once())->method('matching')->willReturn([$userConnection]);
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
+
+        $this->userConnectionRepository->expects(self::once())->method('matching')->willReturn([$userConnection]);
 
         $userConnectionCollectionResponse = ($this->searchUserConnectionService)($request);
         $this->assertEquals($expectedUserConnectionCollectionResponse, $userConnectionCollectionResponse);

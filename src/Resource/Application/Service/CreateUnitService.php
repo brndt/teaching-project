@@ -19,18 +19,14 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 final class CreateUnitService
 {
     private UserService $userService;
-    private UnitRepository $unitRepository;
     private CourseService $courseService;
-    private AuthorizationService $authorizationService;
     private UnitService $unitService;
 
-    public function __construct(UnitRepository $unitRepository, UserRepository $userRepository, CourseRepository $courseRepository, AuthorizationService $authorizationService)
+    public function __construct(private UnitRepository $unitRepository, UserRepository $userRepository, CourseRepository $courseRepository, private AuthorizationService $authorizationService)
     {
         $this->userService = new UserService($userRepository);
-        $this->unitRepository = $unitRepository;
         $this->unitService = new UnitService($unitRepository);
         $this->courseService = new CourseService($courseRepository);
-        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateUnitRequest $request): void

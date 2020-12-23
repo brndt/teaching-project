@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
 
-final class Roles
+final class Roles implements \Stringable
 {
     private array $roles;
 

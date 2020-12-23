@@ -6,11 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class DeleteRefreshTokenRequest
 {
-    private string $refreshTokenValue;
-
-    public function __construct($refreshTokenValue)
+    public function __construct(private $refreshTokenValue)
     {
-        $this->refreshTokenValue = $refreshTokenValue;
     }
 
     public function getRefreshTokenValue(): string

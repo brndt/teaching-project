@@ -13,11 +13,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class ResourceService
 {
-    private ResourceRepository $repository;
-
-    public function __construct(ResourceRepository $repository)
+    public function __construct(private ResourceRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     /**

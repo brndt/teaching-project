@@ -8,39 +8,8 @@ use DateTimeImmutable;
 
 final class VideoResourceStudentAnswerResponse
 {
-    private string $id;
-    private string $resourceId;
-    private string $studentId;
-    private ?string $points;
-    private ?string $teacher_comment;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
-    private ?DateTimeImmutable $until;
-    private string $status;
-    private string $studentAnswer;
-
-    public function __construct(
-        string $id,
-        string $resourceId,
-        string $studentId,
-        ?string $points,
-        ?string $teacher_comment,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
-        ?DateTimeImmutable $until,
-        string $status,
-        string $studentAnswer
-    ) {
-        $this->id = $id;
-        $this->resourceId = $resourceId;
-        $this->studentId = $studentId;
-        $this->points = $points;
-        $this->teacher_comment = $teacher_comment;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->until = $until;
-        $this->status = $status;
-        $this->studentAnswer = $studentAnswer;
+    public function __construct(private string $id, private string $resourceId, private string $studentId, private ?string $points, private ?string $teacher_comment, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private ?DateTimeImmutable $until, private string $status, private string $studentAnswer)
+    {
     }
 
     public function getId(): string

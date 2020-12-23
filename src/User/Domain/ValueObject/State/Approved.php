@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
 
-final class Approved implements State
+final class Approved implements State, \Stringable
 {
     public const NAME = 'approved';
 
@@ -18,7 +18,7 @@ final class Approved implements State
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return self::NAME;
     }

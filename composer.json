@@ -39,8 +39,9 @@
         "friends-of-behat/mink-extension": "^2.4",
         "friends-of-behat/symfony-extension": "2.1.0-BETA.1",
         "symfony/maker-bundle": "^1.15",
-	    "phpunit/phpunit": "^8.5",
-        "symfony/test-pack": "^1.0"
+	    "phpunit/phpunit": "^9.5",
+        "symfony/test-pack": "^1.0",
+        "rector/rector": "dev-master"
     },
     "config": {
         "preferred-install": {

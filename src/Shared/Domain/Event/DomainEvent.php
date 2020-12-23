@@ -9,13 +9,11 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 abstract class DomainEvent
 {
-    private string $aggregateId;
     protected string $id;
     private string $occurredOn;
 
-    public function __construct(string $aggregateId, string $eventId = null, string $occurredOn = null)
+    public function __construct(private string $aggregateId, string $eventId = null, string $occurredOn = null)
     {
-        $this->aggregateId = $aggregateId;
         $this->id = Uuid::generate()->toString();
         $this->occurredOn = (new DateTimeImmutable())->format('Y-m-d H:i:s');
     }

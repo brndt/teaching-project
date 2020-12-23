@@ -8,33 +8,8 @@ use DateTimeImmutable;
 
 final class UserResponse
 {
-    private string $id;
-    private string $firstName;
-    private string $lastName;
-    private array $roles;
-    private \DateTimeImmutable $created;
-    private ?string $image;
-    private ?string $education;
-    private ?string $experience;
-
-    public function __construct(
-        string $id,
-        string $firstName,
-        string $lastName,
-        array $roles,
-        DateTimeImmutable $created,
-        ?string $image,
-        ?string $experience,
-        ?string $education
-    ) {
-        $this->id = $id;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->roles = $roles;
-        $this->created = $created;
-        $this->image = $image;
-        $this->experience = $experience;
-        $this->education = $education;
+    public function __construct(private string $id, private string $firstName, private string $lastName, private array $roles, private DateTimeImmutable $created, private ?string $image, private ?string $experience, private ?string $education)
+    {
     }
 
     public function getId(): string

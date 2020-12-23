@@ -16,11 +16,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
 final class UserConnectionService
 {
-    private UserConnectionRepository $repository;
-
-    public function __construct(UserConnectionRepository $repository)
+    public function __construct(private UserConnectionRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findUserConnection(User $student, User $teacher): UserConnection

@@ -6,15 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserImageRequest
 {
-    private string $userId;
-    private string $image;
-    private string $requestAuthorId;
-
-    public function __construct(string $requestAuthorId, string $userId, string $image)
+    public function __construct(private string $requestAuthorId, private string $userId, private string $image)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->userId = $userId;
-        $this->image = $image;
     }
 
     public function getRequestAuthorId(): string

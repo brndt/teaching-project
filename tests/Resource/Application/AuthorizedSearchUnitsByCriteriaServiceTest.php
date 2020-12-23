@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchUnitsByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateUnitRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\UnitCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\UnitResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchUnitsByCriteriaService;
@@ -76,19 +75,19 @@ final class AuthorizedSearchUnitsByCriteriaServiceTest extends TestCase
         $expectedUnitCollectionResponse = new UnitCollectionResponse(...$this->buildResponse(...$units));
 
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
 
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getCourseId())
             ->willReturn($course);
 
         $this->unitRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn($units);
 

@@ -14,11 +14,8 @@ use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 
 final class DoctrineCategoryRepository implements CategoryRepository
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function save(Category $category): void

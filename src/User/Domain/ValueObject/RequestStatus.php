@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
-final class RequestStatus
+final class RequestStatus implements \Stringable
 {
     private string $requestStatus;
 
@@ -23,7 +23,7 @@ final class RequestStatus
         return $this->requestStatus;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->requestStatus;
     }

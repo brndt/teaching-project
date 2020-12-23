@@ -39,7 +39,7 @@ final class UnauthorizedSearchCoursesByCriteriaServiceTest extends TestCase
         );
         $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...[]));
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn([]);
         $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);
@@ -60,7 +60,7 @@ final class UnauthorizedSearchCoursesByCriteriaServiceTest extends TestCase
         $courses = [(new CourseBuilder())->build(), (new CourseBuilder())->build()];
         $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...$courses));
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn($courses);
         $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);

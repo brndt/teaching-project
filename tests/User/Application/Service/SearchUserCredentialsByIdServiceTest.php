@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -41,7 +40,7 @@ final class SearchUserCredentialsByIdServiceTest extends TestCase
         $request = new SearchUserCredentialsByIdRequest(Uuid::generate()->toString());
 
         $this->expectException(UserNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn(null);
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn(null);
         ($this->searchUserCredentialsByIdService)($request);
     }
 
@@ -59,7 +58,7 @@ final class SearchUserCredentialsByIdServiceTest extends TestCase
             $user->getEnabled(),
         );
 
-        $this->repository->expects($this->once())->method('ofId')->with($user->getId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($user->getId())->willReturn($user);
         $userCredentialsResponse = ($this->searchUserCredentialsByIdService)($request);
 
         $this->assertEquals($expectedUserCredentialsResponse, $userCredentialsResponse);

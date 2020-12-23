@@ -6,19 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Response;
 
 final class UserCredentialsResponse
 {
-    private string $id;
-    private string $email;
-    private string $password;
-    private array $roles;
-    private bool $enabled;
-
-    public function __construct(string $id, string $email, string $password, array $roles, bool $enabled)
+    public function __construct(private string $id, private string $email, private string $password, private array $roles, private bool $enabled)
     {
-        $this->id = $id;
-        $this->email = $email;
-        $this->password = $password;
-        $this->roles = $roles;
-        $this->enabled = $enabled;
     }
 
     public function getId(): string

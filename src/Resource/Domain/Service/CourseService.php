@@ -16,11 +16,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
 
 final class CourseService
 {
-    private CourseRepository $repository;
-
-    public function __construct(CourseRepository $repository)
+    public function __construct(private CourseRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findCourse(Uuid $id): Course

@@ -15,11 +15,8 @@ use LaSalle\StudentTeacher\Shared\Infrastructure\Persistence\Doctrine\DoctrineCr
 
 final class DoctrineCoursePermissionRepository implements CoursePermissionRepository
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function save(CoursePermission $course): void

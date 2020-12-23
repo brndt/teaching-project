@@ -8,33 +8,8 @@ use DateTimeImmutable;
 
 class CreateUnitRequest
 {
-    private string $requestAuthorId;
-    private string $courseId;
-    private string $name;
-    private ?string $description;
-    private string $level;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
-    private string $status;
-
-    public function __construct(
-        string $requestAuthorId,
-        string $courseId,
-        string $name,
-        ?string $description,
-        string $level,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
-        string $status
-    ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->courseId = $courseId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->level = $level;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
+    public function __construct(private string $requestAuthorId, private string $courseId, private string $name, private ?string $description, private string $level, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private string $status)
+    {
     }
 
     /**

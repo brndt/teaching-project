@@ -13,13 +13,11 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class SearchUserByIdService
 {
-    private UserRepository $repository;
     private UserService $userService;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $repository)
     {
-        $this->repository = $userRepository;
-        $this->userService = new UserService($userRepository);
+        $this->userService = new UserService($repository);
     }
 
     public function __invoke(SearchUserByIdRequest $request): UserResponse

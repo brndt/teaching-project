@@ -15,16 +15,11 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class SendPasswordResetService
 {
-    private RandomStringGenerator $randomStringGenerator;
-    private DomainEventBus $eventBus;
-
     public function __construct(
-        RandomStringGenerator $randomStringGenerator,
-        DomainEventBus $eventBus,
+        private RandomStringGenerator $randomStringGenerator,
+        private DomainEventBus $eventBus,
         UserRepository $repository
     ) {
-        $this->randomStringGenerator = $randomStringGenerator;
-        $this->eventBus = $eventBus;
         $this->repository = $repository;
         $this->userService = new UserService($repository);
     }

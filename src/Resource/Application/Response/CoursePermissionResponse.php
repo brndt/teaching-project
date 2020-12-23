@@ -6,30 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Response;
 
 final class CoursePermissionResponse
 {
-    private string $id;
-    private string $courseId;
-    private string $studentId;
-    private \DateTimeImmutable $created;
-    private ?\DateTimeImmutable $modified;
-    private ?\DateTimeImmutable $until;
-    private string $status;
-
-    public function __construct(
-        string $id,
-        string $courseId,
-        string $studentId,
-        \DateTimeImmutable $created,
-        ?\DateTimeImmutable $modified,
-        ?\DateTimeImmutable $until,
-        string $status
-    ) {
-        $this->id = $id;
-        $this->courseId = $courseId;
-        $this->studentId = $studentId;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->until = $until;
-        $this->status = $status;
+    public function __construct(private string $id, private string $courseId, private string $studentId, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private ?\DateTimeImmutable $until, private string $status)
+    {
     }
 
     public function getId(): string

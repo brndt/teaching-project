@@ -19,13 +19,11 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class AuthorizedSearchCoursesByCriteriaService
 {
-    private CourseRepository $courseRepository;
     private CourseService $courseService;
     private UserService $userService;
 
-    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository)
+    public function __construct(private CourseRepository $courseRepository, UserRepository $userRepository)
     {
-        $this->courseRepository = $courseRepository;
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);
     }

@@ -40,7 +40,7 @@ final class UnauthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
         );
         $expectedCategoryCollectionResponse = new CategoryCollectionResponse(...$this->buildResponse(...[]));
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn([]);
         $actualCategoryCollectionResponse = ($this->searchCategoriesByCriteria)($request);
@@ -65,7 +65,7 @@ final class UnauthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
             $this->buildResponse(...[$category, $anotherCategory])
         );
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn([$category, $anotherCategory]);
 

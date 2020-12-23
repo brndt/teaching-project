@@ -6,36 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class CreateCourseRequest
 {
-    private string $requestAuthorId;
-    private string $teacherId;
-    private string $categoryId;
-    private string $name;
-    private ?string $description;
-    private string $level;
-    private \DateTimeImmutable $created;
-    private ?\DateTimeImmutable $modified;
-    private string $status;
-
-    public function __construct(
-        string $requestAuthorId,
-        string $teacherId,
-        string $categoryId,
-        string $name,
-        ?string $description,
-        string $level,
-        \DateTimeImmutable $created,
-        ?\DateTimeImmutable $modified,
-        string $status
-    ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->teacherId = $teacherId;
-        $this->categoryId = $categoryId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->level = $level;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
+    public function __construct(private string $requestAuthorId, private string $teacherId, private string $categoryId, private string $name, private ?string $description, private string $level, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private string $status)
+    {
     }
 
     public function getRequestAuthorId(): string

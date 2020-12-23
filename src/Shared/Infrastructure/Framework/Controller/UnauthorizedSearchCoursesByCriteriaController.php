@@ -15,11 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
-    private UnauthorizedSearchCoursesByCriteriaService $searchCourses;
-
-    public function __construct(UnauthorizedSearchCoursesByCriteriaService $searchCourses)
+    public function __construct(private UnauthorizedSearchCoursesByCriteriaService $searchCourses)
     {
-        $this->searchCourses = $searchCourses;
     }
 
     /**

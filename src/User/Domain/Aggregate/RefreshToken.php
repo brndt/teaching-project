@@ -9,15 +9,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class RefreshToken
 {
-    private Token $refreshToken;
-    private Uuid $userId;
-    private \DateTimeImmutable $expirationDate;
-
-    public function __construct(Token $refreshToken, Uuid $userId, \DateTimeImmutable $expirationDate)
+    public function __construct(private Token $refreshToken, private Uuid $userId, private \DateTimeImmutable $expirationDate)
     {
-        $this->refreshToken = $refreshToken;
-        $this->userId = $userId;
-        $this->expirationDate = $expirationDate;
     }
 
     public function getRefreshToken(): Token

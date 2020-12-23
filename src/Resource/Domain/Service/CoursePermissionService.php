@@ -16,11 +16,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class CoursePermissionService
 {
-    private CoursePermissionRepository $repository;
-
-    public function __construct(CoursePermissionRepository $repository)
+    public function __construct(private CoursePermissionRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findCoursePermission(Uuid $courseId, Uuid $studentId): CoursePermission

@@ -6,15 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class ConfirmUserPasswordResetRequest
 {
-    private string $userId;
-    private string $newPassword;
-    private string $confirmationToken;
-
-    public function __construct(string $userId, string $newPassword, string $confirmationToken)
+    public function __construct(private string $userId, private string $newPassword, private string $confirmationToken)
     {
-        $this->userId = $userId;
-        $this->newPassword = $newPassword;
-        $this->confirmationToken = $confirmationToken;
     }
 
     public function getUserId(): string

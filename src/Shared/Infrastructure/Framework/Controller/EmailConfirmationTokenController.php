@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class EmailConfirmationTokenController extends AbstractFOSRestController
 {
-    private ConfirmUserEmailService $confirmUserEmail;
-
-    public function __construct(ConfirmUserEmailService $confirmUserEmail)
+    public function __construct(private ConfirmUserEmailService $confirmUserEmail)
     {
-        $this->confirmUserEmail = $confirmUserEmail;
     }
 
     /**

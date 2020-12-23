@@ -6,36 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 final class CreateResourceRequest
 {
 
-    private string $requestAuthorId;
-    private string $unitId;
-    private string $name;
-    private ?string $description;
-    private string $content;
-    private string $resourceType;
-    private \DateTimeImmutable $created;
-    private ?\DateTimeImmutable $modified;
-    private string $status;
-
-    public function __construct(
-        string $requestAuthorId,
-        string $unitId,
-        string $name,
-        ?string $description,
-        string $content,
-        string $resourceType,
-        \DateTimeImmutable $created,
-        ?\DateTimeImmutable $modified,
-        string $status
-    ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->unitId = $unitId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->content = $content;
-        $this->resourceType = $resourceType;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
+    public function __construct(private string $requestAuthorId, private string $unitId, private string $name, private ?string $description, private string $content, private string $resourceType, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private string $status)
+    {
     }
 
     public function getRequestAuthorId(): string

@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 
-final class Email
+final class Email implements \Stringable
 {
     private string $email;
 
@@ -23,7 +23,7 @@ final class Email
         return $this->email;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->email;
     }

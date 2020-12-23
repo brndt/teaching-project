@@ -15,11 +15,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class CategoryService
 {
-    private CategoryRepository $repository;
-
-    public function __construct(CategoryRepository $repository)
+    public function __construct(private CategoryRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findCategory(Uuid $id): Category

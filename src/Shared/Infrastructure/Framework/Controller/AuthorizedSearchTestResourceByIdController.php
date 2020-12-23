@@ -18,11 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchTestResourceByIdController extends AbstractFOSRestController
 {
-    private AuthorizedSearchTestResourceByIdService $searchTestResourceByIdService;
-
-    public function __construct(AuthorizedSearchTestResourceByIdService $searchTestResourceByIdService)
+    public function __construct(private AuthorizedSearchTestResourceByIdService $searchTestResourceByIdService)
     {
-        $this->searchTestResourceByIdService = $searchTestResourceByIdService;
     }
 
     /**

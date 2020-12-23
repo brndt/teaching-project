@@ -50,7 +50,7 @@ final class UnauthorizedSearchUnitsByCriteriaServiceTest extends TestCase
         $expectedUnitCollectionResponse = new UnitCollectionResponse(...$this->buildResponse(...$units));
 
         $this->unitRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn($units);
 

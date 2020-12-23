@@ -11,11 +11,8 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 final class JWTTokenManager implements TokenManager
 {
-    private JWTTokenManagerInterface $tokenManager;
-
-    public function __construct(JWTTokenManagerInterface $tokenManager)
+    public function __construct(private JWTTokenManagerInterface $tokenManager)
     {
-        $this->tokenManager = $tokenManager;
     }
 
     public function generate(User $user): string

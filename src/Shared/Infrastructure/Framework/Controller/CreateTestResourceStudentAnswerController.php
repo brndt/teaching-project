@@ -15,11 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateTestResourceStudentAnswerController extends AbstractFOSRestController
 {
-    private CreateTestResourceStudentAnswerService $createTestResourceStudentAnswerService;
-
-    public function __construct(CreateTestResourceStudentAnswerService $createTestResourceStudentAnswerService)
+    public function __construct(private CreateTestResourceStudentAnswerService $createTestResourceStudentAnswerService)
     {
-        $this->createTestResourceStudentAnswerService = $createTestResourceStudentAnswerService;
     }
 
     /**

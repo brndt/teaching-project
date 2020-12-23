@@ -8,36 +8,8 @@ use DateTimeImmutable;
 
 final class TestResourceResponse
 {
-    private string $id;
-    private string $unitId;
-    private string $name;
-    private ?string $description;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
-    private string $status;
-    private string $content;
-    private array $questions;
-
-    public function __construct(
-        string $id,
-        string $unitId,
-        string $name,
-        ?string $description,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
-        string $status,
-        string $content,
-        array $questions
-    ) {
-        $this->id = $id;
-        $this->unitId = $unitId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
-        $this->content = $content;
-        $this->questions = $questions;
+    public function __construct(private string $id, private string $unitId, private string $name, private ?string $description, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private string $status, private string $content, private array $questions)
+    {
     }
 
     public function getId(): string

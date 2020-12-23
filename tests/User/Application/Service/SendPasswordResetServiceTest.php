@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
@@ -79,7 +78,7 @@ final class SendPasswordResetServiceTest extends TestCase
 
         $this->repository->method('ofEmail')->willReturn($userToSendEmail);
         $this->randomStringGenerator->method('generate')->willReturn('random_token');
-        $this->repository->expects($this->once())->method('save')->with(
+        $this->repository->expects(self::once())->method('save')->with(
             $this->callback($this->userComparator($userToSendEmail))
         );
         $event = new PasswordResetRequestReceivedDomainEvent(
@@ -89,7 +88,7 @@ final class SendPasswordResetServiceTest extends TestCase
             $userToSendEmail->getLastName()->toString(),
             $userToSendEmail->getConfirmationToken()->toString()
         );
-        $this->eventBus->expects($this->once())->method('dispatch')->with(
+        $this->eventBus->expects(self::once())->method('dispatch')->with(
             $this->callback($this->domainEventComparator($event))
         );
 

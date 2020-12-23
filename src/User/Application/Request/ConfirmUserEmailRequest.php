@@ -6,13 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class ConfirmUserEmailRequest
 {
-    private string $userId;
-    private string $confirmationToken;
-
-    public function __construct(string $userId, string $confirmationToken)
+    public function __construct(private string $userId, private string $confirmationToken)
     {
-        $this->userId = $userId;
-        $this->confirmationToken = $confirmationToken;
     }
 
     public function getUserId(): string

@@ -6,30 +6,15 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class UpdateUnitRequest
 {
-    private string $requestAuthorId;
-    private string $unitId;
-    private string $name;
-    private ?string $description;
-    private string $level;
-    private string $status;
-    private string $courseId;
-
     public function __construct(
-        string $requestAuthorId,
-        string $courseId,
-        string $unitId,
-        string $name,
-        ?string $description,
-        string $level,
-        string $status
+        private string $requestAuthorId,
+        private string $courseId,
+        private string $unitId,
+        private string $name,
+        private ?string $description,
+        private string $level,
+        private string $status
     ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->unitId = $unitId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->level = $level;
-        $this->status = $status;
-        $this->courseId = $courseId;
     }
 
     public function getCourseId(): string

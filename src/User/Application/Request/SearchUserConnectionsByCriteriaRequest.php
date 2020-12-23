@@ -6,30 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class SearchUserConnectionsByCriteriaRequest
 {
-    private string $requestAuthorId;
-    private string $userId;
-    private ?string $orderBy;
-    private ?string $order;
-    private ?string $operator;
-    private ?int $offset;
-    private ?int $limit;
-
-    public function __construct(
-        string $requestAuthorId,
-        string $userId,
-        ?string $orderBy,
-        ?string $order,
-        ?string $operator,
-        ?int $offset,
-        ?int $limit
-    ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->userId = $userId;
-        $this->orderBy = $orderBy;
-        $this->order = $order;
-        $this->operator = $operator;
-        $this->offset = $offset;
-        $this->limit = $limit;
+    public function __construct(private string $requestAuthorId, private string $userId, private ?string $orderBy, private ?string $order, private ?string $operator, private ?int $offset, private ?int $limit)
+    {
     }
 
     public function getRequestAuthorId(): string

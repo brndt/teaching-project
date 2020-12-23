@@ -9,15 +9,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class Category
 {
-    private Uuid $id;
-    private string $name;
-    private Status $status;
-
-    public function __construct(Uuid $id, string $name, Status $status)
+    public function __construct(private Uuid $id, private string $name, private Status $status)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->status = $status;
     }
 
     public function getId(): Uuid

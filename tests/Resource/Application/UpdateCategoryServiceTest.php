@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
@@ -69,7 +68,7 @@ final class UpdateCategoryServiceTest extends TestCase
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
@@ -90,7 +89,7 @@ final class UpdateCategoryServiceTest extends TestCase
             ->build();
         $this->expectException(PermissionDeniedException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
@@ -111,7 +110,7 @@ final class UpdateCategoryServiceTest extends TestCase
             ->build();
         $this->expectException(InvalidUuidException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
@@ -132,12 +131,12 @@ final class UpdateCategoryServiceTest extends TestCase
             ->build();
         $this->expectException(CategoryNotFound::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getCategoryId()))
             ->willReturn(null);
@@ -164,17 +163,17 @@ final class UpdateCategoryServiceTest extends TestCase
             ->build();
         $this->expectException(CategoryAlreadyExists::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getCategoryId()))
             ->willReturn($category);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofName')
             ->with($request->getNewName())
             ->willReturn($categoryOfName);
@@ -198,17 +197,17 @@ final class UpdateCategoryServiceTest extends TestCase
             ->build();
         $this->expectException(InvalidStatusException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getCategoryId()))
             ->willReturn($category);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofName')
             ->with($request->getNewName())
             ->willReturn(null);
@@ -231,22 +230,22 @@ final class UpdateCategoryServiceTest extends TestCase
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getCategoryId()))
             ->willReturn($category);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofName')
             ->with($request->getNewName())
             ->willReturn(null);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('save')
             ->with($category);
         ($this->updateCategoryService)($request);

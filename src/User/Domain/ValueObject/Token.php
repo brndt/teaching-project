@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
-final class Token
+use Stringable;
+
+final class Token implements Stringable
 {
     private string $token;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
@@ -27,7 +26,6 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Approved;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Withdrawn;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
@@ -126,16 +124,9 @@ final class UpdateUserConnectionServiceTest extends TestCase
         $this->expectException(UserNotFoundException::class);
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with(new Uuid($request->getRequestAuthorId()))
-            ->willReturn($author);
-
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with(new Uuid($request->getFirstUser()))
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()])
+            ->willReturn($author, null);
 
         ($this->updateUserConnectionService)($request);
     }
@@ -160,16 +151,9 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()])
+            ->willReturn($author, $firstUser);
 
         ($this->updateUserConnectionService)($request);
     }
@@ -192,20 +176,10 @@ final class UpdateUserConnectionServiceTest extends TestCase
         $this->expectException(UserNotFoundException::class);
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
-        $this->userRepository
-            ->expects($this->at(2))
-            ->method('ofId')
-            ->with($request->getSecondUser())
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, null);
+
         ($this->updateUserConnectionService)($request);
     }
 
@@ -272,21 +246,12 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(RolesOfUsersEqualException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
-        $this->userRepository
-            ->expects($this->at(2))
-            ->method('ofId')
-            ->with($request->getSecondUser())
-            ->willReturn($secondUser);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         ($this->updateUserConnectionService)($request);
     }
 
@@ -312,15 +277,12 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(PermissionDeniedException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         ($this->updateUserConnectionService)($request);
     }
 
@@ -350,22 +312,9 @@ final class UpdateUserConnectionServiceTest extends TestCase
         $this->expectException(ConnectionNotFoundException::class);
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
-
-        $this->userRepository
-            ->expects($this->at(2))
-            ->method('ofId')
-            ->with($request->getSecondUser())
-            ->willReturn($secondUser);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
 
         $this->userConnectionRepository
             ->method('ofId')
@@ -401,27 +350,18 @@ final class UpdateUserConnectionServiceTest extends TestCase
             new Pended(),
             $firstUser->getId()
         );
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
-        $this->userRepository
-            ->expects($this->at(2))
-            ->method('ofId')
-            ->with($request->getSecondUser())
-            ->willReturn($secondUser);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         $this->stateFactory
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('create')
             ->willReturn(new Pended());
         $this->userConnectionRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->willReturn($userConnection);
 
@@ -455,21 +395,12 @@ final class UpdateUserConnectionServiceTest extends TestCase
             new Pended(),
             $firstUser->getId()
         );
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
-        $this->userRepository
-            ->expects($this->at(2))
-            ->method('ofId')
-            ->with($request->getSecondUser())
-            ->willReturn($secondUser);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         $this->stateFactory
             ->method('create')
             ->willReturn(new Pended());
@@ -506,20 +437,9 @@ final class UpdateUserConnectionServiceTest extends TestCase
             $firstUser->getId()
         );
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getFirstUser())
-            ->willReturn($firstUser);
-        $this->userRepository
-            ->expects($this->at(2))
-            ->method('ofId')
-            ->with($request->getSecondUser())
-            ->willReturn($secondUser);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
         $this->stateFactory
             ->method('create')
             ->willReturn(new Approved());
@@ -527,6 +447,7 @@ final class UpdateUserConnectionServiceTest extends TestCase
             ->method('ofId')
             ->willReturn($userConnection);
         $this->userConnectionRepository
+            ->expects(self::once())
             ->method('save')
             ->with($userConnection);
         ($this->updateUserConnectionService)($request);

@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SignUpUserController extends AbstractFOSRestController
 {
-    private CreateUserService $createUser;
-
-    public function __construct(CreateUserService $createUser)
+    public function __construct(private CreateUserService $createUser)
     {
-        $this->createUser = $createUser;
     }
 
     /**

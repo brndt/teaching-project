@@ -8,7 +8,6 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\SearchUsersByCriteriaRequest;
 use LaSalle\StudentTeacher\User\Application\Response\UserCollectionResponse;
 use LaSalle\StudentTeacher\User\Application\Response\UserResponse;
@@ -43,7 +42,7 @@ final class SearchUsersByCriteriaServiceTest extends TestCase
             $request->getOffset(),
             $request->getLimit()
         );
-        $this->repository->expects($this->once())->method('matching')->with($criteria)->willReturn([]);
+        $this->repository->expects(self::once())->method('matching')->with($criteria)->willReturn([]);
         $userCollectionResponse = ($this->searchUsersByCriteriaService)($request);
         $this->assertEquals($expectedUserCollectionResponse, $userCollectionResponse);
     }
@@ -61,7 +60,7 @@ final class SearchUsersByCriteriaServiceTest extends TestCase
         $arrayOfOneUser[] = (new UserBuilder())->build();
         $userCollectionResponseWithOneUser = new UserCollectionResponse(...$this->buildResponse(...$arrayOfOneUser));
 
-        $this->repository->expects($this->once())->method('matching')->with($criteria)->willReturn($arrayOfOneUser);
+        $this->repository->expects(self::once())->method('matching')->with($criteria)->willReturn($arrayOfOneUser);
         $userCollectionResponse = ($this->searchUsersByCriteriaService)($request);
         $this->assertEquals($userCollectionResponseWithOneUser, $userCollectionResponse);
     }
@@ -82,7 +81,7 @@ final class SearchUsersByCriteriaServiceTest extends TestCase
             ...$this->buildResponse(...$arrayOfManyUsers)
         );
 
-        $this->repository->expects($this->once())->method('matching')->with($criteria)->willReturn($arrayOfManyUsers);
+        $this->repository->expects(self::once())->method('matching')->with($criteria)->willReturn($arrayOfManyUsers);
         $userCollectionResponse = ($this->searchUsersByCriteriaService)($request);
         $this->assertEquals($userCollectionResponseWithManyUsers, $userCollectionResponse);
     }

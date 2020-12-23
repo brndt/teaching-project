@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
@@ -45,7 +44,7 @@ final class ConfirmUserEmailServiceTest extends TestCase
         $request = new ConfirmUserEmailRequest('16bf6c6a-c855-4a36-a3dd-5b9f6d92c753', 'confirmation_token');
 
         $this->expectException(UserNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with(new Uuid($request->getUserId()))->willReturn(
+        $this->repository->expects(self::once())->method('ofId')->with(new Uuid($request->getUserId()))->willReturn(
             null
         );
         ($this->confirmUserEmailService)($request);
@@ -60,7 +59,7 @@ final class ConfirmUserEmailServiceTest extends TestCase
             ->build();
 
         $this->expectException(ConfirmationTokenNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($user->getId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($user->getId())->willReturn($user);
         ($this->confirmUserEmailService)($request);
     }
 
@@ -74,7 +73,7 @@ final class ConfirmUserEmailServiceTest extends TestCase
             ->build();
 
         $this->expectException(ConfirmationTokenIsExpiredException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($user->getId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($user->getId())->willReturn($user);
         ($this->confirmUserEmailService)($request);
     }
 
@@ -88,7 +87,7 @@ final class ConfirmUserEmailServiceTest extends TestCase
             ->build();
 
         $this->expectException(IncorrectConfirmationTokenException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($user->getId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($user->getId())->willReturn($user);
         ($this->confirmUserEmailService)($request);
     }
 
@@ -108,8 +107,8 @@ final class ConfirmUserEmailServiceTest extends TestCase
             ->withEnabled(true)
             ->build();
 
-        $this->repository->expects($this->once())->method('ofId')->with($user->getId())->willReturn($user);
-        $this->repository->expects($this->once())->method('save')->with($this->equalTo($userAfterUpdate, 1));
+        $this->repository->expects(self::once())->method('ofId')->with($user->getId())->willReturn($user);
+        $this->repository->expects(self::once())->method('save')->with($this->equalToWithDelta($userAfterUpdate, 1));
         ($this->confirmUserEmailService)($request);
     }
 }

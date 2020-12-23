@@ -13,11 +13,8 @@ use LaSalle\StudentTeacher\User\Domain\Repository\UserConnectionRepository;
 
 final class UserConnectionRepositoryDoctrineRepository implements UserConnectionRepository
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function save(UserConnection $userConnection): void

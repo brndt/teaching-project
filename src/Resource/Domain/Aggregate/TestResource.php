@@ -25,7 +25,6 @@ final class TestResource extends Resource
         TestQuestion ...$questions
     ) {
         parent::__construct($id, $unitId, $name, $description, $content, $created, $modified, $status);
-
         $this->questions = $questions;
     }
 

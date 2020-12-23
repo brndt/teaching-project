@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
@@ -52,7 +51,7 @@ final class SignInServiceTest extends TestCase
             ->withEnabled(false)
             ->build();
 
-        $this->repository->expects($this->once())->method('ofEmail')->willReturn($user);
+        $this->repository->expects(self::once())->method('ofEmail')->willReturn($user);
         $this->expectException(UserNotEnabledException::class);
         ($this->signInService)($request);
     }
@@ -62,7 +61,7 @@ final class SignInServiceTest extends TestCase
         $request = new SignInRequest('user@xample.com', '123456aa1');
         $user = (new UserBuilder())->build();
 
-        $this->repository->expects($this->once())->method('ofEmail')->willReturn($user);
+        $this->repository->expects(self::once())->method('ofEmail')->willReturn($user);
         $this->expectException(IncorrectPasswordException::class);
         ($this->signInService)($request);
     }
@@ -82,7 +81,7 @@ final class SignInServiceTest extends TestCase
             $user->getEducation(),
         );
 
-        $this->repository->expects($this->once())->method('ofEmail')->willReturn($user);
+        $this->repository->expects(self::once())->method('ofEmail')->willReturn($user);
         $userResponse = ($this->signInService)($request);
         $this->assertEquals($expectedUserResponse, $userResponse);
     }

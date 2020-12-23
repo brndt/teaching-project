@@ -9,11 +9,8 @@ use LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainE
 
 final class SendPasswordResetOnPasswordRequestReceived
 {
-    private EmailSender $emailSender;
-
-    public function __construct(EmailSender $emailSender)
+    public function __construct(private EmailSender $emailSender)
     {
-        $this->emailSender = $emailSender;
     }
 
     public function __invoke(PasswordResetRequestReceivedDomainEvent $event): void

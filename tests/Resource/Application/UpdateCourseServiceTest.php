@@ -85,7 +85,7 @@ final class UpdateCourseServiceTest extends TestCase
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn(null);
@@ -112,7 +112,7 @@ final class UpdateCourseServiceTest extends TestCase
 
         $this->expectException(InvalidUuidException::class);
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
@@ -138,16 +138,12 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(UserNotFoundException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, null);
+
         ($this->updateCourseService)($request);
     }
 
@@ -174,16 +170,12 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidUuidException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         ($this->updateCourseService)($request);
     }
 
@@ -214,18 +206,14 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(CategoryNotFound::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn(null);
@@ -259,18 +247,14 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidUuidException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
@@ -308,23 +292,19 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(CourseNotFoundException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($course->getId())
             ->willReturn(null);
@@ -363,23 +343,19 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(PermissionDeniedException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($course->getId())
             ->willReturn($course);
@@ -418,27 +394,22 @@ final class UpdateCourseServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($expectedCourse->getId())
             ->willReturn($expectedCourse);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('save')
             ->with($expectedCourse);
         ($this->updateCourseService)($request);

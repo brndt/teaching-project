@@ -15,18 +15,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class IdUserProvider implements UserProviderInterface
 {
-    private SearchUserCredentialsByIdService $searchUser;
-
-    public function __construct(SearchUserCredentialsByIdService $searchUser)
+    public function __construct(private SearchUserCredentialsByIdService $searchUser)
     {
-        $this->searchUser = $searchUser;
     }
 
     public function loadUserByUsername($id)
     {
         try {
             $userResponse = ($this->searchUser)(new SearchUserCredentialsByIdRequest($id));
-        } catch (UserNotFoundException $exception) {
+        } catch (UserNotFoundException) {
             throw new UsernameNotFoundException(sprintf('No user found for id ' . $id));
         }
 
@@ -42,7 +39,7 @@ final class IdUserProvider implements UserProviderInterface
     public function refreshUser(UserInterface $user)
     {
         if (!$user instanceof SymfonyUser) {
-            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', $user::class));
         }
         return $this->loadUserByUsername($user->getId());
     }

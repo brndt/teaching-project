@@ -6,18 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class CreateVideoResourceStudentAnswerRequest
 {
-    private string $requestAuthorId;
-    private string $resourceId;
-    private string $studentAnswer;
-
-    public function __construct(
-        string $requestAuthorId,
-        string $resourceId,
-        string $studentAnswer
-    ) {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->resourceId = $resourceId;
-        $this->studentAnswer = $studentAnswer;
+    public function __construct(private string $requestAuthorId, private string $resourceId, private string $studentAnswer)
+    {
     }
 
     public function getRequestAuthorId(): string

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
@@ -70,7 +69,7 @@ final class UpdateUserInformationServiceTest extends TestCase
             'la salle'
         );
         $this->repository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
@@ -117,15 +116,9 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->repository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, null);
         ($this->updateUserInformationService)($request);
     }
 
@@ -145,15 +138,9 @@ final class UpdateUserInformationServiceTest extends TestCase
         $author = (new UserBuilder())->build();
         $user = (new UserBuilder())->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->repository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn($user);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
         ($this->updateUserInformationService)($request);
     }
 
@@ -300,16 +287,10 @@ final class UpdateUserInformationServiceTest extends TestCase
             ->withId(new Uuid($request->getUserId()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->repository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn($user);
-        $this->repository->expects($this->once())->method('save')->with(
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
+        $this->repository->expects(self::once())->method('save')->with(
             $this->callback($this->userComparator($user))
         );
         ($this->updateUserInformationService)($request);

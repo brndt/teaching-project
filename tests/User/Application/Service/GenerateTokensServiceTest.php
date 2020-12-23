@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -68,14 +67,14 @@ final class GenerateTokensServiceTest extends TestCase
         );
 
         $this->randomStringGenerator->method('generate')->willReturn($refreshToken->getRefreshToken()->toString());
-        $this->refreshTokenRepository->expects($this->once())->method('save')->with($refreshToken);
+        $this->refreshTokenRepository->expects(self::once())->method('save')->with($refreshToken);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($refreshToken->getUserId())
             ->willReturn($user);
         $this->tokenManager
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('generate')
             ->with($user)
             ->willReturn($expectedTokensResponse->getToken());

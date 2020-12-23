@@ -21,16 +21,14 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 final class UnauthorizedSearchUnitsByCriteriaService
 {
     private UserService $userService;
-    private UnitRepository $unitRepository;
     private CourseService $courseService;
 
     public function __construct(
-        UnitRepository $unitRepository,
+        private UnitRepository $unitRepository,
         UserRepository $userRepository,
         CourseRepository $courseRepository
     ) {
         $this->userService = new UserService($userRepository);
-        $this->unitRepository = $unitRepository;
         $this->courseService = new CourseService($courseRepository);
     }
 

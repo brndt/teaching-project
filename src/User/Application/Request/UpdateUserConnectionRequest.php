@@ -6,17 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserConnectionRequest
 {
-    private string $requestAuthorId;
-    private string $firstUser;
-    private string $secondUser;
-    private string $status;
-
-    public function __construct(string $requestAuthorId, string $firstUser, string $secondUser, string $status)
+    public function __construct(private string $requestAuthorId, private string $firstUser, private string $secondUser, private string $status)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->firstUser = $firstUser;
-        $this->secondUser = $secondUser;
-        $this->status = $status;
     }
 
     public function getRequestAuthorId(): string

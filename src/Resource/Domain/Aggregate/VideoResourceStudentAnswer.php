@@ -11,8 +11,6 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class VideoResourceStudentAnswer extends ResourceStudentAnswer
 {
-    private string $studentAnswer;
-
     public function __construct(
         Uuid $id,
         Uuid $resourceId,
@@ -23,10 +21,9 @@ final class VideoResourceStudentAnswer extends ResourceStudentAnswer
         ?DateTimeImmutable $modified,
         ?DateTimeImmutable $until,
         Status $status,
-        string $studentAnswer
+        private string $studentAnswer
     ) {
         parent::__construct($id, $resourceId, $studentId, $points, $teacherComment, $created, $modified, $until, $status);
-        $this->studentAnswer = $studentAnswer;
     }
 
     public function getStudentAnswer(): string

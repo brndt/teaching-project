@@ -23,49 +23,10 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class User
 {
-    private Uuid $id;
-    private Email $email;
-    private Password $password;
-    private Name $firstName;
-    private Name $lastName;
-    private Roles $roles;
-    private \DateTimeImmutable $created;
-    private bool $enabled;
-    private ?string $image;
-    private ?string $experience;
-    private ?string $education;
     private array $eventStream;
-    private ?Token $confirmationToken;
-    private ?DateTimeImmutable $expirationDate;
 
-    public function __construct(
-        Uuid $id,
-        Email $email,
-        Password $password,
-        Name $firstName,
-        Name $lastName,
-        Roles $roles,
-        DateTimeImmutable $created,
-        bool $enabled,
-        ?string $image = null,
-        ?string $experience = null,
-        ?string $education = null,
-        ?Token $confirmationToken = null,
-        ?DateTimeImmutable $expirationDate = null
-    ) {
-        $this->id = $id;
-        $this->email = $email;
-        $this->password = $password;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->roles = $roles;
-        $this->created = $created;
-        $this->image = $image;
-        $this->experience = $experience;
-        $this->education = $education;
-        $this->enabled = $enabled;
-        $this->confirmationToken = $confirmationToken;
-        $this->expirationDate = $expirationDate;
+    public function __construct(private Uuid $id, private Email $email, private Password $password, private Name $firstName, private Name $lastName, private Roles $roles, private DateTimeImmutable $created, private bool $enabled, private ?string $image = null, private ?string $experience = null, private ?string $education = null, private ?Token $confirmationToken = null, private ?DateTimeImmutable $expirationDate = null)
+    {
     }
 
     public static function create(

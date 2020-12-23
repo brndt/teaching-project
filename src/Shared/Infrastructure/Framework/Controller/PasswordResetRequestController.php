@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PasswordResetRequestController extends AbstractFOSRestController
 {
-    private SendPasswordResetService $sendPasswordReset;
-
-    public function __construct(SendPasswordResetService $sendPasswordReset)
+    public function __construct(private SendPasswordResetService $sendPasswordReset)
     {
-        $this->sendPasswordReset = $sendPasswordReset;
     }
 
     /**

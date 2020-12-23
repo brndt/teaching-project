@@ -11,11 +11,8 @@ use LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent;
 
 final class SendEmailConfirmationOnUserCreated
 {
-    private EmailSender $emailSender;
-
-    public function __construct(EmailSender $emailSender)
+    public function __construct(private EmailSender $emailSender)
     {
-        $this->emailSender = $emailSender;
     }
 
     public function __invoke(UserCreatedDomainEvent $event): void

@@ -47,7 +47,7 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
         $request = new UpdateRefreshTokenExpirationRequest('token_string', new DateTimeImmutable('+ 1 day'));
 
         $this->expectException(RefreshTokenNotFoundException::class);
-        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn(null);
+        $this->refreshTokenRepository->expects(self::once())->method('ofToken')->willReturn(null);
         ($this->updateRefreshTokenExpirationService)($request);
     }
 
@@ -59,7 +59,7 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
             ->build();
 
         $this->expectException(RefreshTokenIsExpiredException::class);
-        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($refreshToken);
+        $this->refreshTokenRepository->expects(self::once())->method('ofToken')->willReturn($refreshToken);
         ($this->updateRefreshTokenExpirationService)($request);
     }
 
@@ -80,14 +80,14 @@ final class UpdateRefreshTokenExpirationTest extends TestCase
             $refreshToken->getUserId()->toString()
         );
 
-        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn($refreshToken);
-        $this->refreshTokenRepository->expects($this->once())->method('save')->with(
+        $this->refreshTokenRepository->expects(self::once())->method('ofToken')->willReturn($refreshToken);
+        $this->refreshTokenRepository->expects(self::once())->method('save')->with(
             $this->callback($this->refreshTokenComparator($refreshToken))
         );
-        $this->userRepository->expects($this->once())->method('ofId')->with(
+        $this->userRepository->expects(self::once())->method('ofId')->with(
             $refreshToken->getUserId()
         )->willReturn($user);
-        $this->tokenManager->expects($this->once())->method('generate')->with(
+        $this->tokenManager->expects(self::once())->method('generate')->with(
             $this->callback($this->userComparator($user))
         )->willReturn('token_string');
 

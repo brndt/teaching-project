@@ -12,11 +12,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class RefreshTokenDoctrineRepository implements RefreshTokenRepository
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     /**

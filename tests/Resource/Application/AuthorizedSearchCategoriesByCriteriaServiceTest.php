@@ -75,7 +75,7 @@ final class AuthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
         );
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
@@ -98,7 +98,7 @@ final class AuthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
             ->build();
         $this->expectException(PermissionDeniedException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
@@ -125,12 +125,12 @@ final class AuthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
             $this->buildResponse(...[])
         );
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn([]);
         $actualCategoryCollectionResponse = ($this->searchCategoriesByCriteria)($request);
@@ -158,12 +158,12 @@ final class AuthorizedSearchCategoriesByCriteriaServiceTest extends TestCase
             $this->buildResponse(...[$category, $anotherCategory])
         );
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($user);
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn([$category, $anotherCategory]);
 

@@ -22,23 +22,19 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class CreateTestResourceStudentAnswerService
 {
-    private ResourceStudentAnswerRepository $repository;
     private UserService $userService;
     private ResourceService $resourceService;
     private ResourceStudentAnswerService $resourceStudentAnswerService;
-    private AuthorizationService $authorizationService;
 
     public function __construct(
         UserRepository $userRepository,
-        AuthorizationService $authorizationService,
+        private AuthorizationService $authorizationService,
         ResourceRepository $resourceRepository,
-        ResourceStudentAnswerRepository $repository
+        private ResourceStudentAnswerRepository $repository
     ) {
         $this->userService = new UserService($userRepository);
         $this->resourceService = new ResourceService($resourceRepository);
         $this->resourceStudentAnswerService = new ResourceStudentAnswerService($repository);
-        $this->authorizationService = $authorizationService;
-        $this->repository = $repository;
     }
 
     public function __invoke(CreateTestResourceStudentAnswerRequest $request)

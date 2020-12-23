@@ -13,11 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchCourseByIdController extends AbstractFOSRestController
 {
-    private AuthorizedSearchCourseByIdService $searchCourse;
-
-    public function __construct(AuthorizedSearchCourseByIdService $searchCourse)
+    public function __construct(private AuthorizedSearchCourseByIdService $searchCourse)
     {
-        $this->searchCourse = $searchCourse;
     }
 
     /**

@@ -6,19 +6,16 @@ namespace LaSalle\StudentTeacher\Shared\Domain\Criteria;
 
 final class Criteria
 {
-    private Filters $filters;
-    private Order   $order;
     private Operator $operator;
-    private ?int    $offset;
-    private ?int    $limit;
 
-    public function __construct(Filters $filters, Order $order, ?Operator $operator, ?int $offset, ?int $limit)
-    {
-        $this->filters = $filters;
-        $this->order   = $order;
-        $this->offset  = $offset;
-        $this->limit   = $limit;
-        $this->operator = $operator ?? Operator::fromValue(Operator::AND);
+    public function __construct(
+        private Filters $filters,
+        private Order $order,
+        ?Operator $operator,
+        private ?int $offset,
+        private ?int $limit
+    ) {
+        $this->operator = $operator ?? Operator::fromValue(Operator:: AND);
     }
 
     public function hasFilters(): bool

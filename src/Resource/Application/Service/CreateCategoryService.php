@@ -16,20 +16,16 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class CreateCategoryService
 {
-    private CategoryRepository $categoryRepository;
     private CategoryService $categoryService;
     private UserService $userService;
-    private AuthorizationService $authorizationService;
 
     public function __construct(
-        CategoryRepository $categoryRepository,
+        private CategoryRepository $categoryRepository,
         UserRepository $userRepository,
-        AuthorizationService $authorizationService
+        private AuthorizationService $authorizationService
     ) {
-        $this->categoryRepository = $categoryRepository;
         $this->categoryService = new CategoryService($categoryRepository);
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateCategoryRequest $request): void

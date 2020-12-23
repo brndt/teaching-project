@@ -6,17 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class UpdateCategoryRequest
 {
-    private string $requestAuthorId;
-    private string $categoryId;
-    private string $newName;
-    private string $newStatus;
-
-    public function __construct(string $requestAuthorId, string $categoryId, string $newName, string $newStatus)
+    public function __construct(private string $requestAuthorId, private string $categoryId, private string $newName, private string $newStatus)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->categoryId = $categoryId;
-        $this->newName = $newName;
-        $this->newStatus = $newStatus;
     }
 
     public function getRequestAuthorId(): string

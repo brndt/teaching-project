@@ -15,16 +15,11 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 final class SendEmailConfirmationService
 {
-    private RandomStringGenerator $randomStringGenerator;
-    private DomainEventBus $eventBus;
-
     public function __construct(
-        DomainEventBus $eventBus,
-        RandomStringGenerator $randomStringGenerator,
+        private DomainEventBus $eventBus,
+        private RandomStringGenerator $randomStringGenerator,
         UserRepository $userRepository
     ) {
-        $this->randomStringGenerator = $randomStringGenerator;
-        $this->eventBus = $eventBus;
         $this->repository = $userRepository;
         $this->userService = new UserService($userRepository);
     }

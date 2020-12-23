@@ -74,22 +74,15 @@ final class CreateStudentCoursePermissionServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with(new Uuid($request->getRequestAuthorId()))
-            ->willReturn($author);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getStudentId()])
+            ->willReturn($author, $student);
 
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getCourseId())
             ->willReturn($course);
-
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with(new Uuid($request->getStudentId()))
-            ->willReturn($student);
 
         ($this->createStudentCoursePermissionService)($request);
     }

@@ -9,36 +9,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class Course
 {
-    private Uuid $id;
-    private Uuid $teacherId;
-    private Uuid $categoryId;
-    private string $name;
-    private ?string $description;
-    private string $level;
-    private \DateTimeImmutable $created;
-    private ?\DateTimeImmutable $modified;
-    private Status $status;
-
-    public function __construct(
-        Uuid $id,
-        Uuid $teacherId,
-        Uuid $categoryId,
-        string $name,
-        ?string $description,
-        string $level,
-        \DateTimeImmutable $created,
-        ?\DateTimeImmutable $modified,
-        Status $status
-    ) {
-        $this->id = $id;
-        $this->teacherId = $teacherId;
-        $this->categoryId = $categoryId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->level = $level;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
+    public function __construct(private Uuid $id, private Uuid $teacherId, private Uuid $categoryId, private string $name, private ?string $description, private string $level, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private Status $status)
+    {
     }
 
     public function getId(): Uuid

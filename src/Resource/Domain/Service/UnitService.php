@@ -12,11 +12,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class UnitService
 {
-    private UnitRepository $repository;
-
-    public function __construct(UnitRepository $repository)
+    public function __construct(private UnitRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findUnit(Uuid $id): Unit

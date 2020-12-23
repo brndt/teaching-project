@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchTestResourceStudentAnswerController extends AbstractFOSRestController
 {
-    private AuthorizedSearchTestResourceStudentAnswerService $searchTestResourceStudentAnswerService;
-
-    public function __construct(AuthorizedSearchTestResourceStudentAnswerService $searchTestResourceStudentAnswerService
-    ) {
-        $this->searchTestResourceStudentAnswerService = $searchTestResourceStudentAnswerService;
+    public function __construct(private AuthorizedSearchTestResourceStudentAnswerService $searchTestResourceStudentAnswerService)
+    {
     }
 
     /**

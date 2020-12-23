@@ -6,13 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Domain\ValueObject;
 
 final class TestAnswer
 {
-    private string $answer;
-    private bool $isCorrect;
-
-    public function __construct(string $answer, bool $isCorrect)
+    public function __construct(private string $answer, private bool $isCorrect)
     {
-        $this->answer    = $answer;
-        $this->isCorrect = $isCorrect;
     }
 
     public function toValues(): array

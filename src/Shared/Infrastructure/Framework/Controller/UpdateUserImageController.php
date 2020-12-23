@@ -21,18 +21,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UpdateUserImageController extends AbstractFOSRestController
 {
-    private UpdateUserImageService $updateUserImage;
-    private SearchUserCredentialsByIdService $searchUser;
-    private ValidatorInterface $validator;
-
-    public function __construct(
-        UpdateUserImageService $updateUserImage,
-        ValidatorInterface $validator,
-        SearchUserCredentialsByIdService $searchUser
-    ) {
-        $this->updateUserImage = $updateUserImage;
-        $this->validator = $validator;
-        $this->searchUser = $searchUser;
+    public function __construct(private UpdateUserImageService $updateUserImage, private ValidatorInterface $validator, private SearchUserCredentialsByIdService $searchUser)
+    {
     }
 
     /**

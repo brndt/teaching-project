@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class EmailConfirmationRequestController extends AbstractFOSRestController
 {
-    private SendEmailConfirmationService $sendEmailConfirmation;
-
-    public function __construct(SendEmailConfirmationService $sendEmailConfirmation)
+    public function __construct(private SendEmailConfirmationService $sendEmailConfirmation)
     {
-        $this->sendEmailConfirmation = $sendEmailConfirmation;
     }
 
     /**

@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PasswordConfirmationTokenController extends AbstractFOSRestController
 {
-    private ConfirmUserPasswordResetService $confirmUserPasswordReset;
-
-    public function __construct(ConfirmUserPasswordResetService $confirmUserPasswordReset)
+    public function __construct(private ConfirmUserPasswordResetService $confirmUserPasswordReset)
     {
-        $this->confirmUserPasswordReset = $confirmUserPasswordReset;
     }
 
     /**

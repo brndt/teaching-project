@@ -6,19 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class CreateStudentCoursePermissionRequest
 {
-    private string $requestAuthorId;
-    private string $courseId;
-    private string $studentId;
-    private string $status;
-    private ?\DateTimeImmutable $until;
-
-    public function __construct(string $requestAuthorId, string $courseId, string $studentId, string $status, ?\DateTimeImmutable $until)
+    public function __construct(private string $requestAuthorId, private string $courseId, private string $studentId, private string $status, private ?\DateTimeImmutable $until)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->courseId = $courseId;
-        $this->studentId = $studentId;
-        $this->status = $status;
-        $this->until = $until;
     }
 
     public function getRequestAuthorId(): string

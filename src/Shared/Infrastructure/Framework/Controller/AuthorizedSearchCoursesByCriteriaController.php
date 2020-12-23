@@ -19,11 +19,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AuthorizedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
-    private AuthorizedSearchCoursesByCriteriaService $searchCourses;
-
-    public function __construct(AuthorizedSearchCoursesByCriteriaService $searchCourses)
+    public function __construct(private AuthorizedSearchCoursesByCriteriaService $searchCourses)
     {
-        $this->searchCourses = $searchCourses;
     }
 
     /**

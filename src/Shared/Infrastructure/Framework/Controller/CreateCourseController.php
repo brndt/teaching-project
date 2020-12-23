@@ -16,11 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateCourseController extends AbstractFOSRestController
 {
-    private CreateCourseService $createCourse;
-
-    public function __construct(CreateCourseService $createCourse)
+    public function __construct(private CreateCourseService $createCourse)
     {
-        $this->createCourse = $createCourse;
     }
 
     /**

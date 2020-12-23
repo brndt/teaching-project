@@ -4,22 +4,18 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException;
 use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
 use LaSalle\StudentTeacher\User\Application\Request\UpdateUserImageRequest;
-use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
 use LaSalle\StudentTeacher\User\Application\Service\UpdateUserImageService;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
@@ -61,7 +57,7 @@ final class UpdateUserImageServiceTest extends TestCase
             'image.jpg',
         );
         $this->repository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn(null);
@@ -100,15 +96,9 @@ final class UpdateUserImageServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->repository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, null);
         ($this->updateUserImageService)($request);
     }
 
@@ -124,15 +114,9 @@ final class UpdateUserImageServiceTest extends TestCase
         $author = (new UserBuilder())->build();
         $user = (new UserBuilder())->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->repository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn($user);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
         ($this->updateUserImageService)($request);
     }
 
@@ -150,16 +134,10 @@ final class UpdateUserImageServiceTest extends TestCase
             ->withId(new Uuid($request->getUserId()))
             ->build();
         $this->repository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->repository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getUserId())
-            ->willReturn($user);
-        $this->repository->expects($this->once())->method('save')->with(
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getUserId()])
+            ->willReturn($author, $user);
+        $this->repository->expects(self::once())->method('save')->with(
             $this->callback($this->userComparator($user))
         );
         ($this->updateUserImageService)($request);

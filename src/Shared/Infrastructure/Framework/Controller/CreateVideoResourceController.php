@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateVideoResourceController extends AbstractFOSRestController
 {
-    private CreateVideoResourceService $createVideoResourceService;
-
-    public function __construct(CreateVideoResourceService $createUnitService)
+    public function __construct(private CreateVideoResourceService $createVideoResourceService)
     {
-        $this->createVideoResourceService = $createUnitService;
     }
 
     /**

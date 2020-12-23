@@ -8,33 +8,8 @@ use DateTimeImmutable;
 
 final class CreateVideoResourceRequest
 {
-    private string $requestAuthor;
-    private string $unitId;
-    private string $name;
-    private ?string $description;
-    private string $content;
-    private string $status;
-    private string $videoUrl;
-    private string $videoDescription;
-
-    public function __construct(
-        string $requestAuthor,
-        string $unitId,
-        string $name,
-        ?string $description,
-        string $content,
-        string $status,
-        string $videoUrl,
-        string $videoDescription
-    ) {
-        $this->requestAuthor = $requestAuthor;
-        $this->unitId = $unitId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->content = $content;
-        $this->status = $status;
-        $this->videoUrl = $videoUrl;
-        $this->videoDescription = $videoDescription;
+    public function __construct(private string $requestAuthor, private string $unitId, private string $name, private ?string $description, private string $content, private string $status, private string $videoUrl, private string $videoDescription)
+    {
     }
 
     public function getUnitId(): string

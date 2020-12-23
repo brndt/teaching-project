@@ -6,13 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class AuthorizedSearchCourseByIdRequest
 {
-    private string $requestAuthorId;
-    private string $courseId;
-
-    public function __construct(string $requestAuthorId, string $courseId)
+    public function __construct(private string $requestAuthorId, private string $courseId)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->courseId = $courseId;
     }
 
     public function getCourseId(): string

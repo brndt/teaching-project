@@ -15,11 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SearchUserController extends AbstractFOSRestController
 {
-    private SearchUserByIdService $searchUserByIdService;
-
-    public function __construct(SearchUserByIdService $searchUserByIdService)
+    public function __construct(private SearchUserByIdService $searchUserByIdService)
     {
-        $this->searchUserByIdService = $searchUserByIdService;
     }
 
     /**

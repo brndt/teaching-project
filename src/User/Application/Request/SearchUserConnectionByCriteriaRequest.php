@@ -6,15 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class SearchUserConnectionByCriteriaRequest
 {
-    private string $requestAuthorId;
-    private string $userId;
-    private string $friendId;
-
-    public function __construct(string $requestAuthorId, string $userId, string $friendId)
+    public function __construct(private string $requestAuthorId, private string $userId, private string $friendId)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->userId = $userId;
-        $this->friendId = $friendId;
     }
 
     public function getRequestAuthorId(): string

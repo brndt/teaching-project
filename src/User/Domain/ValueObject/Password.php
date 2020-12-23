@@ -10,7 +10,7 @@ use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingExceptio
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
 
-final class Password
+final class Password implements \Stringable
 {
     private string $password;
 
@@ -37,7 +37,7 @@ final class Password
         return $this->password;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->password;
     }

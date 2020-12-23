@@ -24,21 +24,15 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class AuthorizedSearchUnitsByCriteriaService
 {
-    private CourseRepository $courseRepository;
     private CourseService $courseService;
     private UserService $userService;
-    private UnitRepository $unitRepository;
     private UnitService $unitService;
-    private AuthorizationService $authorizationService;
 
-    public function __construct(CourseRepository $courseRepository, UnitRepository $unitRepository, UserRepository $userRepository, AuthorizationService $authorizationService)
+    public function __construct(private CourseRepository $courseRepository, private UnitRepository $unitRepository, UserRepository $userRepository, private AuthorizationService $authorizationService)
     {
-        $this->courseRepository = $courseRepository;
-        $this->unitRepository = $unitRepository;
         $this->unitService = new UnitService($unitRepository);
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(AuthorizedSearchUnitsByCriteriaRequest $request): UnitCollectionResponse

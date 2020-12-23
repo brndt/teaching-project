@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
@@ -69,7 +68,7 @@ final class CreateUserConnectionServiceTest extends TestCase
         );
 
         $this->expectException(UserNotFoundException::class);
-        $this->userRepository->expects($this->once())->method('ofId')->with($request->getRequestAuthorId())->willReturn(
+        $this->userRepository->expects(self::once())->method('ofId')->with($request->getRequestAuthorId())->willReturn(
             null
         );
         ($this->createUserConnectionService)($request);
@@ -88,9 +87,11 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->withId(new Uuid($request->getRequestAuthorId()))
             ->build();
 
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
+        $this->userRepository
+            ->method('ofId')
+            ->with($request->getRequestAuthorId())
+            ->willReturn($author);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -106,12 +107,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(UserNotFoundException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn(null);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()])
+            ->willReturn($author, null);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -132,12 +133,11 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->withId(new Uuid($request->getFirstUser()))
             ->build();
 
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()])
+            ->willReturn($author, $firstUser);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -156,15 +156,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(UserNotFoundException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn(null);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, null);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -186,15 +183,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(UsersAreEqualException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -219,15 +213,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(RolesOfUsersEqualException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -252,15 +243,12 @@ final class CreateUserConnectionServiceTest extends TestCase
             ->build();
 
         $this->expectException(PermissionDeniedException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
         ($this->createUserConnectionService)($request);
     }
 
@@ -287,16 +275,13 @@ final class CreateUserConnectionServiceTest extends TestCase
         $userConnection = new UserConnection($firstUser->getId(), $secondUser->getId(), new Pended(), $author->getId());
 
         $this->expectException(ConnectionAlreadyExistsException::class);
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
-        $this->userConnectionRepository->expects($this->once())->method('ofId')->willReturn($userConnection);
+
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
+        $this->userConnectionRepository->expects(self::once())->method('ofId')->willReturn($userConnection);
 
         ($this->createUserConnectionService)($request);
     }
@@ -323,17 +308,20 @@ final class CreateUserConnectionServiceTest extends TestCase
 
         $userConnection = new UserConnection($firstUser->getId(), $secondUser->getId(), new Pended(), $author->getId());
 
-        $this->userRepository->expects($this->at(0))->method('ofId')->with(
-            $request->getRequestAuthorId()
-        )->willReturn($author);
-        $this->userRepository->expects($this->at(1))->method('ofId')->with(
-            $request->getFirstUser()
-        )->willReturn($firstUser);
-        $this->userRepository->expects($this->at(2))->method('ofId')->with(
-            $request->getSecondUser()
-        )->willReturn($secondUser);
-        $this->userConnectionRepository->expects($this->once())->method('ofId')->willReturn(null);
-        $this->userConnectionRepository->expects($this->once())->method('save')->with($userConnection);
+        $this->userRepository
+            ->method('ofId')
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getFirstUser()], [$request->getSecondUser()])
+            ->willReturn($author, $firstUser, $secondUser);
+
+        $this->userConnectionRepository
+            ->expects(self::once())
+            ->method('ofId')
+            ->willReturn(null);
+
+        $this->userConnectionRepository
+            ->expects(self::once())
+            ->method('save')
+            ->with($userConnection);
 
         ($this->createUserConnectionService)($request);
     }

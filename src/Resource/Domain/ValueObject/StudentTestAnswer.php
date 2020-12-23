@@ -8,14 +8,10 @@ use function Lambdish\Phunctional\map;
 
 final class StudentTestAnswer
 {
-    private string $question;
-    private string $studentAssumption;
     private array $answers;
 
-    public function __construct(string $question, string $studentAssumption, TestAnswer ...$answers)
+    public function __construct(private string $question, private string $studentAssumption, TestAnswer ...$answers)
     {
-        $this->question = $question;
-        $this->studentAssumption = $studentAssumption;
         $this->answers = $answers;
     }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
@@ -164,11 +163,15 @@ final class CreateUserServiceTest extends TestCase
             ->withCreated($request->getCreated())
             ->build();
 
-        $this->repository->expects($this->once())->method('ofEmail')->willReturn(null);
-        $this->repository->expects($this->once())->method('save')->with(
+        $this->repository->expects(self::once())->method('ofEmail')->willReturn(null);
+        $this->repository->expects(self::once())->method('save')->with(
             $this->callback($this->userComparator($user, $request->getPassword()))
         );
-        $this->eventBus->expects($this->atLeastOnce())->method('dispatch');
+
+        $this->eventBus
+            ->expects(self::atLeastOnce())
+            ->method('dispatch');
+
         ($this->createUser)($request);
     }
 

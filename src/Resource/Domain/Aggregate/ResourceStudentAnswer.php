@@ -10,36 +10,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 abstract class ResourceStudentAnswer
 {
-    private Uuid $id;
-    private Uuid $resourceId;
-    private Uuid $studentId;
-    private ?string $points;
-    private ?string $teacher_comment;
-    private DateTimeImmutable $created;
-    private ?DateTimeImmutable $modified;
-    private ?DateTimeImmutable $until;
-    private Status $status;
-
-    public function __construct(
-        Uuid $id,
-        Uuid $resourceId,
-        Uuid $studentId,
-        ?string $points,
-        ?string $teacherComment,
-        DateTimeImmutable $created,
-        ?DateTimeImmutable $modified,
-        ?DateTimeImmutable $until,
-        Status $status
-    ) {
-        $this->id = $id;
-        $this->resourceId = $resourceId;
-        $this->studentId = $studentId;
-        $this->points = $points;
-        $this->teacher_comment = $teacherComment;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->until = $until;
-        $this->status = $status;
+    public function __construct(private Uuid $id, private Uuid $resourceId, private Uuid $studentId, private ?string $points, private ?string $teacher_comment, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private ?DateTimeImmutable $until, private Status $status)
+    {
     }
 
     public function getId(): Uuid

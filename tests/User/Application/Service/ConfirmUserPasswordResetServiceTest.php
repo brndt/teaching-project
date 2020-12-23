@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
@@ -56,7 +55,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
         );
 
         $this->expectException(UserNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn(null);
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn(null);
         ($this->confirmUserPasswordResetService)($request);
     }
 
@@ -73,7 +72,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
             ->build();
 
         $this->expectException(ConfirmationTokenNotFoundException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn($user);
         ($this->confirmUserPasswordResetService)($request);
     }
 
@@ -91,7 +90,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
             ->build();
 
         $this->expectException(ConfirmationTokenIsExpiredException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn($user);
         ($this->confirmUserPasswordResetService)($request);
     }
 
@@ -110,7 +109,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
 
         $this->expectException(IncorrectConfirmationTokenException::class);
 
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn($user);
         ($this->confirmUserPasswordResetService)($request);
     }
 
@@ -128,7 +127,7 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidNumberContainingException::class);
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn($user);
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn($user);
         ($this->confirmUserPasswordResetService)($request);
     }
 
@@ -151,8 +150,8 @@ final class ConfirmUserPasswordResetServiceTest extends TestCase
             ->withExpirationDate(null)
             ->build();
 
-        $this->repository->expects($this->once())->method('ofId')->with($request->getUserId())->willReturn($user);
-        $this->repository->expects($this->once())->method('save')->with(
+        $this->repository->expects(self::once())->method('ofId')->with($request->getUserId())->willReturn($user);
+        $this->repository->expects(self::once())->method('save')->with(
             $this->callback($this->userComparator($userAfterUpdate, $request->getNewPassword()))
         );
         ($this->confirmUserPasswordResetService)($request);

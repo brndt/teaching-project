@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria;
-
-    public function __construct(AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria)
+    public function __construct(private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria)
     {
-        $this->searchCategoriesByCriteria = $searchCategoriesByCriteria;
     }
 
     /**

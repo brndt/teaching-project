@@ -15,11 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateStudentCoursePermissionController extends AbstractFOSRestController
 {
-    private CreateStudentCoursePermissionService $createStudentCoursePermissionService;
-
-    public function __construct(CreateStudentCoursePermissionService $createStudentCoursePermissionService)
+    public function __construct(private CreateStudentCoursePermissionService $createStudentCoursePermissionService)
     {
-        $this->createStudentCoursePermissionService = $createStudentCoursePermissionService;
     }
 
     /**

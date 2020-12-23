@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SignOutController extends AbstractFOSRestController
 {
-    private DeleteRefreshTokenService $deleteRefreshToken;
-
-    public function __construct(DeleteRefreshTokenService $deleteRefreshToken)
+    public function __construct(private DeleteRefreshTokenService $deleteRefreshToken)
     {
-        $this->deleteRefreshToken = $deleteRefreshToken;
     }
 
     /**

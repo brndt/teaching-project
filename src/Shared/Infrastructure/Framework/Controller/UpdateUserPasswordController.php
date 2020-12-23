@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserPasswordController extends AbstractFOSRestController
 {
-    private UpdateUserPasswordService $updateUserPassword;
-
-    public function __construct(UpdateUserPasswordService $updatePassword)
+    public function __construct(private UpdateUserPasswordService $updateUserPassword)
     {
-        $this->updateUserPassword = $updatePassword;
     }
 
     /**

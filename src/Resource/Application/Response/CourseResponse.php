@@ -4,38 +4,21 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Response;
 
+use DateTimeImmutable;
+
 final class CourseResponse
 {
-    private string $id;
-    private string $teacherId;
-    private string $categoryId;
-    private string $name;
-    private ?string $description;
-    private string $level;
-    private \DateTimeImmutable $created;
-    private ?\DateTimeImmutable $modified;
-    private string $status;
-
     public function __construct(
-        string $id,
-        string $teacherId,
-        string $categoryId,
-        string $name,
-        ?string $description,
-        string $level,
-        \DateTimeImmutable $created,
-        ?\DateTimeImmutable $modified,
-        string $status
+        private string $id,
+        private string $teacherId,
+        private string $categoryId,
+        private string $name,
+        private ?string $description,
+        private string $level,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private string $status
     ) {
-        $this->id = $id;
-        $this->teacherId = $teacherId;
-        $this->categoryId = $categoryId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->level = $level;
-        $this->created = $created;
-        $this->modified = $modified;
-        $this->status = $status;
     }
 
     public function getId(): string
@@ -68,12 +51,12 @@ final class CourseResponse
         return $this->level;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function getModified(): ?\DateTimeImmutable
+    public function getModified(): ?DateTimeImmutable
     {
         return $this->modified;
     }

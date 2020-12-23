@@ -16,11 +16,8 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class ResourceStudentAnswerService
 {
-    private ResourceStudentAnswerRepository $repository;
-
-    public function __construct(ResourceStudentAnswerRepository $repository)
+    public function __construct(private ResourceStudentAnswerRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findResourceStudentAnswer(Uuid $resourceId, Uuid $studentId): ResourceStudentAnswer

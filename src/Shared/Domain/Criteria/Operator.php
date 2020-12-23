@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\Shared\Domain\Criteria;
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Enum;
 
-final class Operator extends Enum
+final class Operator extends Enum implements \Stringable
 {
     public const AND  = 'AND';
     public const OR = 'OR';

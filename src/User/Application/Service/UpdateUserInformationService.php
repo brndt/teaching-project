@@ -14,15 +14,11 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
 
 final class UpdateUserInformationService
 {
-    private UserRepository $repository;
     private UserService $userService;
-    private AuthorizationService $authorizationService;
 
-    public function __construct(UserRepository $userRepository, AuthorizationService $authorizationService)
+    public function __construct(private UserRepository $repository, private AuthorizationService $authorizationService)
     {
-        $this->repository = $userRepository;
-        $this->userService = new UserService($userRepository);
-        $this->authorizationService = $authorizationService;
+        $this->userService = new UserService($repository);
     }
 
     public function __invoke(UpdateUserInformationRequest $request): void

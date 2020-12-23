@@ -43,7 +43,7 @@ final class DeleteRefreshTokenServiceTest extends TestCase
         $request = new DeleteRefreshTokenRequest('token_string');
 
         $this->expectException(RefreshTokenNotFoundException::class);
-        $this->refreshTokenRepository->expects($this->once())->method('ofToken')->willReturn(null);
+        $this->refreshTokenRepository->expects(self::once())->method('ofToken')->willReturn(null);
         ($this->deleteRefreshTokenService)($request);
     }
 
@@ -54,11 +54,11 @@ final class DeleteRefreshTokenServiceTest extends TestCase
             ->withRefreshToken(new Token($request->getRefreshTokenValue()))
             ->build();
         $this->refreshTokenRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofToken')
             ->with($refreshToken->getRefreshToken())
             ->willReturn($refreshToken);
-        $this->refreshTokenRepository->expects($this->once())->method('delete')->with($refreshToken);
+        $this->refreshTokenRepository->expects(self::once())->method('delete')->with($refreshToken);
 
         ($this->deleteRefreshTokenService)($request);
     }

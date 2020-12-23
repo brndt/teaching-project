@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserConnectionController extends AbstractFOSRestController
 {
-    private UpdateUserConnectionService $updateUserConnection;
-
-    public function __construct(UpdateUserConnectionService $updateUserConnection)
+    public function __construct(private UpdateUserConnectionService $updateUserConnection)
     {
-        $this->updateUserConnection = $updateUserConnection;
     }
 
     /**

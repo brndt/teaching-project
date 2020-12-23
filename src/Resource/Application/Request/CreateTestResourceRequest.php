@@ -6,30 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class CreateTestResourceRequest
 {
-    private string $requestAuthor;
-    private string $unitId;
-    private string $name;
-    private ?string $description;
-    private string $content;
-    private string $status;
-    private array $questions;
-
-    public function __construct(
-        string $requestAuthor,
-        string $unitId,
-        string $name,
-        ?string $description,
-        string $content,
-        string $status,
-        array $questions
-    ) {
-        $this->requestAuthor = $requestAuthor;
-        $this->unitId = $unitId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->content = $content;
-        $this->status = $status;
-        $this->questions = $questions;
+    public function __construct(private string $requestAuthor, private string $unitId, private string $name, private ?string $description, private string $content, private string $status, private array $questions)
+    {
     }
 
     public function getUnitId(): string

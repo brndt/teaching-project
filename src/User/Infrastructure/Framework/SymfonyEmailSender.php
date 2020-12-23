@@ -11,13 +11,8 @@ use Twig\Environment;
 
 final class SymfonyEmailSender implements EmailSender
 {
-    private MailerInterface $mailer;
-    private Environment $twig;
-
-    public function __construct(MailerInterface $mailer, Environment $twig)
+    public function __construct(private MailerInterface $mailer, private Environment $twig)
     {
-        $this->mailer = $mailer;
-        $this->twig = $twig;
     }
 
     public function sendEmailConfirmation(

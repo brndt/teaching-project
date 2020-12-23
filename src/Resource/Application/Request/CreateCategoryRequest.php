@@ -6,15 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class CreateCategoryRequest
 {
-    private string $requestAuthorId;
-    private string $categoryName;
-    private string $categoryStatus;
-
-    public function __construct(string $requestAuthorId, string $categoryName, string $categoryStatus)
+    public function __construct(private string $requestAuthorId, private string $categoryName, private string $categoryStatus)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->categoryName = $categoryName;
-        $this->categoryStatus = $categoryStatus;
     }
 
     public function getCategoryName(): string

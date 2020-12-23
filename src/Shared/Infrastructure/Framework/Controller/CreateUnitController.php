@@ -15,11 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateUnitController extends AbstractFOSRestController
 {
-    private CreateUnitService $createUnitService;
-
-    public function __construct(CreateUnitService $createUnitService)
+    public function __construct(private CreateUnitService $createUnitService)
     {
-        $this->createUnitService = $createUnitService;
     }
 
     /**

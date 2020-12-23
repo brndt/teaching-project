@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateCategoryController extends AbstractFOSRestController
 {
-    private UpdateCategoryService $updateCategory;
-
-    public function __construct(UpdateCategoryService $updateCategory)
+    public function __construct(private UpdateCategoryService $updateCategory)
     {
-        $this->updateCategory = $updateCategory;
     }
 
     /**

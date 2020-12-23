@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use InvalidArgumentException;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
@@ -70,7 +68,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn(null);
@@ -96,7 +94,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
 
         $this->expectException(PermissionDeniedException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($requestAuthor);
@@ -122,7 +120,7 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
 
         $this->expectException(InvalidUuidException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($requestAuthor);
@@ -146,12 +144,12 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
             ->withRoles(Roles::fromArrayOfPrimitives([Role::ADMIN]))
             ->build();
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($requestAuthor);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn([]);
         $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);
@@ -179,12 +177,12 @@ final class AuthorizedSearchCoursesByCriteriaServiceTest extends TestCase
         $expectedCourseCollectionResponse = new CourseCollectionResponse(...$this->buildResponse(...$courses));
 
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($requestAuthor);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('matching')
             ->willReturn($courses);
         $actualCourseCollectionResponse = ($this->searchCoursesByCriteriaService)($request);

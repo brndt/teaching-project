@@ -86,7 +86,7 @@ final class CreateCourseServiceTest extends TestCase
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn(null);
@@ -112,11 +112,13 @@ final class CreateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidUuidException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
+
         ($this->createCourseService)($request);
     }
 
@@ -139,16 +141,12 @@ final class CreateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(UserNotFoundException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn(null);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, null);
+
         ($this->createCourseService)($request);
     }
 
@@ -182,19 +180,12 @@ final class CreateCourseServiceTest extends TestCase
         $this->expectException(PermissionDeniedException::class);
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
 
         $this->categoryRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getCategoryId())
             ->willReturn($category);
@@ -226,16 +217,12 @@ final class CreateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidUuidException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         ($this->createCourseService)($request);
     }
 
@@ -267,21 +254,18 @@ final class CreateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(CategoryNotFound::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn(null);
+
         ($this->createCourseService)($request);
     }
 
@@ -313,23 +297,19 @@ final class CreateCourseServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidStatusException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('nextIdentity')
             ->willReturn(Uuid::generate());
         ($this->createCourseService)($request);
@@ -373,26 +353,21 @@ final class CreateCourseServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
             ->method('ofId')
-            ->with($request->getRequestAuthorId())
-            ->willReturn($author);
-        $this->userRepository
-            ->expects($this->at(1))
-            ->method('ofId')
-            ->with($request->getTeacherId())
-            ->willReturn($teacher);
+            ->withConsecutive([$request->getRequestAuthorId()], [$request->getTeacherId()])
+            ->willReturn($author, $teacher);
+
         $this->categoryRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($category->getId())
             ->willReturn($category);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('nextIdentity')
             ->willReturn($course->getId());
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('save')
             ->with($course);
         ($this->createCourseService)($request);

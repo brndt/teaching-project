@@ -21,27 +21,21 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 final class CreateVideoResourceService
 {
     private UserService $userService;
-    private UnitRepository $unitRepository;
-    private AuthorizationService $authorizationService;
     private UnitService $unitService;
     private ResourceService $resourceService;
-    private ResourceRepository $resourceRepository;
     private CourseService $courseService;
 
     public function __construct(
         CourseRepository $courseRepository,
-        UnitRepository $unitRepository,
+        private UnitRepository $unitRepository,
         UserRepository $userRepository,
-        ResourceRepository $resourceRepository,
-        AuthorizationService $authorizationService
+        private ResourceRepository $resourceRepository,
+        private AuthorizationService $authorizationService
     ) {
         $this->userService = new UserService($userRepository);
         $this->courseService = new CourseService($courseRepository);
-        $this->unitRepository = $unitRepository;
         $this->unitService = new UnitService($unitRepository);
-        $this->resourceRepository = $resourceRepository;
         $this->resourceService = new ResourceService($resourceRepository);
-        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(CreateVideoResourceRequest $request)

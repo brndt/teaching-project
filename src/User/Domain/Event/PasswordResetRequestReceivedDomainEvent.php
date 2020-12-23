@@ -8,24 +8,15 @@ use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 
 final class PasswordResetRequestReceivedDomainEvent extends DomainEvent
 {
-    private string $email;
-    private string $firstName;
-    private string $lastName;
-    private string $confirmationToken;
-
     public function __construct(
         string $aggregateId,
-        string $email,
-        string $firstName,
-        string $lastName,
-        string $confirmationToken
+        private string $email,
+        private string $firstName,
+        private string $lastName,
+        private string $confirmationToken
 
     ) {
         parent::__construct($aggregateId);
-        $this->email = $email;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->confirmationToken = $confirmationToken;
     }
 
     public function getConfirmationToken(): string

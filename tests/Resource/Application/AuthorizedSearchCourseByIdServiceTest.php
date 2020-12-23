@@ -64,7 +64,7 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
 
         $this->expectException(UserNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn(null);
@@ -83,11 +83,13 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
             ->build();
 
         $this->expectException(InvalidUuidException::class);
+
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
+
         ($this->searchCourseService)($request);
     }
 
@@ -104,12 +106,12 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
 
         $this->expectException(CourseNotFoundException::class);
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getCourseId()))
             ->willReturn(null);
@@ -133,12 +135,12 @@ final class AuthorizedSearchCourseByIdServiceTest extends TestCase
         $expectedCourseResponse = $this->buildResponse($course);
 
         $this->userRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($request->getRequestAuthorId())
             ->willReturn($author);
         $this->courseRepository
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('ofId')
             ->with($course->getId())
             ->willReturn($course);

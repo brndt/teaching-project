@@ -15,24 +15,16 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\State\StateFactory;
 
 final class UpdateUserConnectionService
 {
-    private UserRepository $userRepository;
-    private UserConnectionRepository $userConnectionRepository;
     private UserService $userService;
-    private AuthorizationService $authorizationService;
     private UserConnectionService $userConnectionService;
-    private StateFactory $stateFactory;
 
     public function __construct(
-        UserConnectionRepository $userConnectionRepository,
-        UserRepository $userRepository,
-        StateFactory $stateFactory,
-        AuthorizationService $authorizationService
+        private UserConnectionRepository $userConnectionRepository,
+        private UserRepository $userRepository,
+        private StateFactory $stateFactory,
+        private AuthorizationService $authorizationService
     ) {
-        $this->userRepository = $userRepository;
-        $this->userConnectionRepository = $userConnectionRepository;
-        $this->stateFactory = $stateFactory;
         $this->userService = new UserService($this->userRepository);
-        $this->authorizationService = $authorizationService;
         $this->userConnectionService = new UserConnectionService($this->userConnectionRepository);
     }
 

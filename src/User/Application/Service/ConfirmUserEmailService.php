@@ -12,12 +12,10 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class ConfirmUserEmailService
 {
-    private UserRepository $repository;
     private UserService $userService;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(private UserRepository $repository)
     {
-        $this->repository = $repository;
         $this->userService = new UserService($this->repository);
     }
 

@@ -6,13 +6,8 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class AuthorizedSearchCategoryByIdRequest
 {
-    private string $requestAuthorId;
-    private string $categoryId;
-
-    public function __construct(string $requestAuthorId, string $categoryId)
+    public function __construct(private string $requestAuthorId, private string $categoryId)
     {
-        $this->requestAuthorId = $requestAuthorId;
-        $this->categoryId = $categoryId;
     }
 
     public function getCategoryId(): string

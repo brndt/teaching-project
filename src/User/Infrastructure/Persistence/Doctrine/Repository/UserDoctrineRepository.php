@@ -14,11 +14,8 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
 
 final class UserDoctrineRepository implements UserRepository
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function save(User $user): void

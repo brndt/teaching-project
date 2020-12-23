@@ -16,15 +16,13 @@ use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class AuthorizedSearchCourseByIdService
 {
-    private AuthorizationService $authorizationService;
     private CourseService $courseService;
     private UserService $userService;
 
-    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository, AuthorizationService $authorizationService)
+    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository, private AuthorizationService $authorizationService)
     {
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);
-        $this->authorizationService = $authorizationService;
     }
 
     public function __invoke(AuthorizedSearchCourseByIdRequest $request): CourseResponse

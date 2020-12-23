@@ -17,11 +17,8 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 
 final class UnauthorizedSearchCategoriesByCriteriaService
 {
-    private CategoryRepository $categoryRepository;
-
-    public function __construct(CategoryRepository $courseRepository)
+    public function __construct(private CategoryRepository $categoryRepository)
     {
-        $this->categoryRepository = $courseRepository;
     }
 
     public function __invoke(UnauthorizedSearchCategoriesByCriteriaRequest $request): CategoryCollectionResponse

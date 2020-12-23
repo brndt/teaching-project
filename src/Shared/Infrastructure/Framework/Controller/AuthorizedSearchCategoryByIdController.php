@@ -6,18 +6,14 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoryByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchCategoryByIdController extends AbstractFOSRestController
 {
-    private AuthorizedSearchCategoryByIdService $searchCategoryByIdService;
-
-    public function __construct(AuthorizedSearchCategoryByIdService $searchCategoryByIdService)
+    public function __construct(private AuthorizedSearchCategoryByIdService $searchCategoryByIdService)
     {
-        $this->searchCategoryByIdService = $searchCategoryByIdService;
     }
 
     /**

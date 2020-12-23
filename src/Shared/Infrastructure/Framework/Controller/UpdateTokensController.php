@@ -19,18 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateTokensController extends AbstractFOSRestController
 {
-    private UpdateRefreshTokenExpirationService $updateRefreshTokenExpiration;
-    private SearchUsersByCriteriaService $searchUsersByCriteriaService;
-    private SearchUserCredentialsByIdService $searchUserCredentialsByIdService;
-
-    public function __construct(
-        UpdateRefreshTokenExpirationService $updateRefreshTokenExpiration,
-        SearchUsersByCriteriaService $searchUsersByCriteriaService,
-        SearchUserCredentialsByIdService $searchUserCredentialsByIdService
-    ) {
-        $this->updateRefreshTokenExpiration = $updateRefreshTokenExpiration;
-        $this->searchUsersByCriteriaService = $searchUsersByCriteriaService;
-        $this->searchUserCredentialsByIdService = $searchUserCredentialsByIdService;
+    public function __construct(private UpdateRefreshTokenExpirationService $updateRefreshTokenExpiration, private SearchUsersByCriteriaService $searchUsersByCriteriaService, private SearchUserCredentialsByIdService $searchUserCredentialsByIdService)
+    {
     }
 
     /**

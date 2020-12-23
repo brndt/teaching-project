@@ -6,7 +6,7 @@ namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
 
-final class Withdrawn implements State
+final class Withdrawn implements State, \Stringable
 {
     public const NAME = 'withdrawn';
 
@@ -17,7 +17,7 @@ final class Withdrawn implements State
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return self::NAME;
     }

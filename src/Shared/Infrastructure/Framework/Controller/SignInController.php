@@ -20,15 +20,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class SignInController extends AbstractFOSRestController
 {
-    private SignInService $signIn;
-    private GenerateTokensService $generateTokens;
-    private SearchUsersByCriteriaService $searchUsersByCriteriaService;
-
-    public function __construct(SignInService $signIn, GenerateTokensService $generateTokens, SearchUsersByCriteriaService $searchUsersByCriteriaService)
+    public function __construct(private SignInService $signIn, private GenerateTokensService $generateTokens, private SearchUsersByCriteriaService $searchUsersByCriteriaService)
     {
-        $this->signIn = $signIn;
-        $this->generateTokens = $generateTokens;
-        $this->searchUsersByCriteriaService = $searchUsersByCriteriaService;
     }
 
     /**

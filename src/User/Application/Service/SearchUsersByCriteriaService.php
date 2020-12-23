@@ -16,11 +16,8 @@ use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 
 final class SearchUsersByCriteriaService
 {
-    private UserRepository $repository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $repository)
     {
-        $this->repository = $userRepository;
     }
 
     public function __invoke(SearchUsersByCriteriaRequest $request): UserCollectionResponse

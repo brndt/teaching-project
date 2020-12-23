@@ -19,18 +19,16 @@ final class AuthorizedSearchStudentCoursePermissionService
 {
     private UserService $userService;
     private CourseService $courseService;
-    private AuthorizationService $authorizationService;
     private CoursePermissionService $coursePermissionService;
 
     public function __construct(
         CourseRepository $courseRepository,
         UserRepository $userRepository,
         CoursePermissionRepository $repository,
-        AuthorizationService $authorizationService
+        private AuthorizationService $authorizationService
     ) {
         $this->userService = new UserService($userRepository);
         $this->courseService = new CourseService($courseRepository);
-        $this->authorizationService = $authorizationService;
         $this->coursePermissionService = new CoursePermissionService($repository);
     }
 

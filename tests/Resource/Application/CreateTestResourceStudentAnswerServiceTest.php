@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateStudentCoursePermissionRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceStudentAnswerRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateStudentCoursePermissionService;
 use LaSalle\StudentTeacher\Resource\Application\Service\CreateTestResourceStudentAnswerService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
@@ -91,7 +89,7 @@ final class CreateTestResourceStudentAnswerServiceTest extends TestCase
             ->build();
 
         $this->userRepository
-            ->expects($this->at(0))
+            ->expects(self::once())
             ->method('ofId')
             ->with(new Uuid($request->getRequestAuthorId()))
             ->willReturn($author);

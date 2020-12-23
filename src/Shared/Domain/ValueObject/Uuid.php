@@ -7,7 +7,7 @@ namespace LaSalle\StudentTeacher\Shared\Domain\ValueObject;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
-class Uuid
+class Uuid implements \Stringable
 {
     private string $id;
 

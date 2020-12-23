@@ -6,15 +6,8 @@ namespace LaSalle\StudentTeacher\User\Application\Response;
 
 final class TokensResponse
 {
-    private string $token;
-    private string $refreshToken;
-    private string $userId;
-
-    public function __construct(string $token, string $refreshToken, string $userId)
+    public function __construct(private string $token, private string $refreshToken, private string $userId)
     {
-        $this->token = $token;
-        $this->refreshToken = $refreshToken;
-        $this->userId = $userId;
     }
 
     public function getToken(): string

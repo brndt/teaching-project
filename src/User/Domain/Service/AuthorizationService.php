@@ -104,7 +104,7 @@ class AuthorizationService
         $unit = $this->unitService->findUnit($resourceId->getUnitId());
         try {
             $this->coursePermissionService->findCoursePermission($unit->getCourseId(), $user->getId());
-        } catch (CoursePermissionNotFound $exception) {
+        } catch (CoursePermissionNotFound) {
             return false;
         }
         return true;

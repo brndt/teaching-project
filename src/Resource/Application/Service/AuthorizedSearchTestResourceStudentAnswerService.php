@@ -22,7 +22,6 @@ final class AuthorizedSearchTestResourceStudentAnswerService
 {
     private ResourceService $resourceService;
     private UserService $userService;
-    private AuthorizationService $authorizationService;
     private CoursePermissionService $coursePermissionService;
     private ResourceStudentAnswerService $resourceStudentAnswerService;
 
@@ -30,12 +29,11 @@ final class AuthorizedSearchTestResourceStudentAnswerService
         ResourceRepository $resourceRepository,
         UserRepository $userRepository,
         CoursePermissionRepository $coursePermissionRepository,
-        AuthorizationService $authorizationService,
+        private AuthorizationService $authorizationService,
         ResourceStudentAnswerRepository $resourceStudentAnswerRepository
     ) {
         $this->userService = new UserService($userRepository);
         $this->resourceService = new ResourceService($resourceRepository);
-        $this->authorizationService = $authorizationService;
         $this->coursePermissionService = new CoursePermissionService($coursePermissionRepository);
         $this->resourceStudentAnswerService = new ResourceStudentAnswerService($resourceStudentAnswerRepository);
     }
