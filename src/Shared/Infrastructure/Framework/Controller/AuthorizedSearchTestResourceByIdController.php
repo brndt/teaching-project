@@ -6,14 +6,9 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchTestResourceByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchVideoResourceByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateVideoResourceRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchTestResourceByIdService;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchVideoResourceByIdService;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateVideoResourceService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchTestResourceByIdController extends AbstractFOSRestController

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
+use DateTimeImmutable;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCourseService;
-use LaSalle\StudentTeacher\User\Application\Request\UpdateUserInformationRequest;
-use LaSalle\StudentTeacher\User\Application\Service\UpdateUserInformationService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateCourseController extends AbstractFOSRestController
@@ -40,7 +39,17 @@ final class UpdateCourseController extends AbstractFOSRestController
         $status = $paramFetcher->get('status');
 
         ($this->updateCourse)(
-            new UpdateCourseRequest($requestAuthorId, $courseId, $teacherId, $categoryId, $name, $description, $level, new \DateTimeImmutable(), $status)
+            new UpdateCourseRequest(
+                $requestAuthorId,
+                $courseId,
+                $teacherId,
+                $categoryId,
+                $name,
+                $description,
+                $level,
+                new DateTimeImmutable(),
+                $status
+            )
         );
 
         return $this->handleView(

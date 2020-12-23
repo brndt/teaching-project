@@ -1,13 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
+use DateTimeImmutable;
+
 final class CreateResourceRequest
 {
 
-    public function __construct(private string $requestAuthorId, private string $unitId, private string $name, private ?string $description, private string $content, private string $resourceType, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private string $status)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $unitId,
+        private string $name,
+        private ?string $description,
+        private string $content,
+        private string $resourceType,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private string $status
+    ) {
     }
 
     public function getRequestAuthorId(): string
@@ -40,12 +52,12 @@ final class CreateResourceRequest
         return $this->resourceType;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function getModified(): ?\DateTimeImmutable
+    public function getModified(): ?DateTimeImmutable
     {
         return $this->modified;
     }

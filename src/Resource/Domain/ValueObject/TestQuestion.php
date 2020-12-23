@@ -15,6 +15,18 @@ final class TestQuestion
         $this->answers = $answers;
     }
 
+    public static function fromValues(array $values): self
+    {
+        return new self($values['question'], ...map(self::valuesToAnswer(), $values['answers']));
+    }
+
+    private static function valuesToAnswer(): callable
+    {
+        return static function (array $values): TestAnswer {
+            return TestAnswer::fromValues($values);
+        };
+    }
+
     public function toValues(): array
     {
         return [
@@ -23,19 +35,9 @@ final class TestQuestion
         ];
     }
 
-    public static function fromValues(array $values): self
-    {
-        return new self($values['question'], ...map(self::valuesToAnswer(), $values['answers']));
-    }
-
     public function question(): string
     {
         return $this->question;
-    }
-
-    public function answers(): array
-    {
-        return $this->answers;
     }
 
     private function answerToValues(): callable
@@ -45,10 +47,8 @@ final class TestQuestion
         };
     }
 
-    private static function valuesToAnswer(): callable
+    public function answers(): array
     {
-        return static function (array $values): TestAnswer {
-            return TestAnswer::fromValues($values);
-        };
+        return $this->answers;
     }
 }

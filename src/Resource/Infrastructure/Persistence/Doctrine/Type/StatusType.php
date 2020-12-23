@@ -7,7 +7,6 @@ namespace LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Ty
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class StatusType extends Type
 {

@@ -22,16 +22,6 @@ final class TestQuestionsType extends JsonType
         return map($this->questionFromValues(), parent::convertToPHPValue($value, $platform));
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
-        return parent::convertToDatabaseValue(map($this->questionToValues(), $value), $platform);
-    }
-
-    public function getName()
-    {
-        return self::NAME;
-    }
-
     private function questionFromValues(): callable
     {
         return static function (array $values): TestQuestion {
@@ -39,10 +29,20 @@ final class TestQuestionsType extends JsonType
         };
     }
 
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    {
+        return parent::convertToDatabaseValue(map($this->questionToValues(), $value), $platform);
+    }
+
     private function questionToValues(): callable
     {
         return static function (TestQuestion $question): array {
             return $question->toValues();
         };
+    }
+
+    public function getName()
+    {
+        return self::NAME;
     }
 }

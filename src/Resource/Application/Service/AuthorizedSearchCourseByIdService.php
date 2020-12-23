@@ -8,10 +8,10 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseBy
 use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
-use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\User\Domain\Service\UserService;
 
 final class AuthorizedSearchCourseByIdService
@@ -19,8 +19,11 @@ final class AuthorizedSearchCourseByIdService
     private CourseService $courseService;
     private UserService $userService;
 
-    public function __construct(CourseRepository $courseRepository, UserRepository $userRepository, private AuthorizationService $authorizationService)
-    {
+    public function __construct(
+        CourseRepository $courseRepository,
+        UserRepository $userRepository,
+        private AuthorizationService $authorizationService
+    ) {
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);
     }

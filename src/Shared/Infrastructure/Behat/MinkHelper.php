@@ -42,6 +42,32 @@ final class MinkHelper
         return $crawler;
     }
 
+    private function getClient(): AbstractBrowser
+    {
+        return $this->getDriver()->getClient();
+    }
+
+    private function getDriver(): DriverInterface
+    {
+        return $this->getSession()->getDriver();
+    }
+
+    private function getSession(): Session
+    {
+        return $this->session;
+    }
+
+    private function resetRequestStuff(): void
+    {
+        $this->getSession()->reset();
+        $this->resetServerParameters();
+    }
+
+    public function resetServerParameters(): void
+    {
+        $this->getClient()->setServerParameters([]);
+    }
+
     public function getResponse(): string
     {
         return $this->getSession()->getPage()->getContent();
@@ -59,40 +85,14 @@ final class MinkHelper
         );
     }
 
-    public function resetServerParameters(): void
-    {
-        $this->getClient()->setServerParameters([]);
-    }
-
-    public function getRequest(): object
-    {
-        return $this->getClient()->getRequest();
-    }
-
-    private function getSession(): Session
-    {
-        return $this->session;
-    }
-
-    private function getDriver(): DriverInterface
-    {
-        return $this->getSession()->getDriver();
-    }
-
-    private function getClient(): AbstractBrowser
-    {
-        return $this->getDriver()->getClient();
-    }
-
     private function normalizeHeaders(array $headers): array
     {
         return array_map('implode', array_filter($headers));
     }
 
-    private function resetRequestStuff(): void
+    public function getRequest(): object
     {
-        $this->getSession()->reset();
-        $this->resetServerParameters();
+        return $this->getClient()->getRequest();
     }
 }
 

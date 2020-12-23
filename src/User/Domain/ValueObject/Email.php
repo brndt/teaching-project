@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
+use Stringable;
 
-final class Email implements \Stringable
+final class Email implements Stringable
 {
     private string $email;
 
@@ -16,16 +17,6 @@ final class Email implements \Stringable
     public function __construct(string $email)
     {
         $this->setValue($email);
-    }
-
-    public function toString(): string
-    {
-        return $this->email;
-    }
-
-    public function __toString(): string
-    {
-        return $this->email;
     }
 
     private function setValue(string $email)
@@ -41,8 +32,18 @@ final class Email implements \Stringable
         }
     }
 
+    public function __toString(): string
+    {
+        return $this->email;
+    }
+
     public function equalsTo(self $email): bool
     {
         return $email->toString() === $this->toString();
+    }
+
+    public function toString(): string
+    {
+        return $this->email;
     }
 }

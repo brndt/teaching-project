@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Request;
 
+use DateTimeImmutable;
+
 final class UpdateRefreshTokenExpirationRequest
 {
-    public function __construct(private string $refreshToken, private \DateTimeImmutable $newExpirationDate)
+    public function __construct(private string $refreshToken, private DateTimeImmutable $newExpirationDate)
     {
     }
 
@@ -15,7 +17,7 @@ final class UpdateRefreshTokenExpirationRequest
         return $this->refreshToken;
     }
 
-    public function getNewExpirationDate(): \DateTimeImmutable
+    public function getNewExpirationDate(): DateTimeImmutable
     {
         return $this->newExpirationDate;
     }

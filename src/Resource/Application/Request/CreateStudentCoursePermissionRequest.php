@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
+use DateTimeImmutable;
+
 final class CreateStudentCoursePermissionRequest
 {
-    public function __construct(private string $requestAuthorId, private string $courseId, private string $studentId, private string $status, private ?\DateTimeImmutable $until)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $courseId,
+        private string $studentId,
+        private string $status,
+        private ?DateTimeImmutable $until
+    ) {
     }
 
     public function getRequestAuthorId(): string
@@ -30,7 +37,7 @@ final class CreateStudentCoursePermissionRequest
         return $this->status;
     }
 
-    public function getUntil(): ?\DateTimeImmutable
+    public function getUntil(): ?DateTimeImmutable
     {
         return $this->until;
     }

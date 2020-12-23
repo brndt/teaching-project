@@ -22,16 +22,6 @@ final class TestStudentAssumptionsType extends JsonType
         return map($this->assumptionFromValues(), parent::convertToPHPValue($value, $platform));
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
-        return parent::convertToDatabaseValue(map($this->assumptionToValues(), $value), $platform);
-    }
-
-    public function getName()
-    {
-        return self::NAME;
-    }
-
     private function assumptionFromValues(): callable
     {
         return static function (array $values): StudentTestAnswer {
@@ -39,10 +29,20 @@ final class TestStudentAssumptionsType extends JsonType
         };
     }
 
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    {
+        return parent::convertToDatabaseValue(map($this->assumptionToValues(), $value), $platform);
+    }
+
     private function assumptionToValues(): callable
     {
         return static function (StudentTestAnswer $assumption): array {
             return $assumption->toValues();
         };
+    }
+
+    public function getName()
+    {
+        return self::NAME;
     }
 }

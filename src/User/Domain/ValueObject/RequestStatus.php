@@ -4,28 +4,33 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
-final class RequestStatus implements \Stringable
-{
-    private string $requestStatus;
+use InvalidArgumentException;
+use Stringable;
 
+final class RequestStatus implements Stringable
+{
     public const STATUS_PENDING = 'pending';
     public const STATUS_APPROVED = 'approved';
     public const STATUS_REJECTED = 'rejected';
     public const STATUS_WITHDRAWN = 'withdrawn';
+    private string $requestStatus;
 
     public function __construct(string $requestStatus)
     {
         $this->setValue($requestStatus);
     }
 
-    public function toString(): string
+    private function setValue(string $requestStatus)
     {
-        return $this->requestStatus;
+        $this->assertValueInArray($requestStatus);
+        $this->requestStatus = $requestStatus;
     }
 
-    public function __toString(): string
+    private function assertValueInArray(string $requestStatus): void
     {
-        return $this->requestStatus;
+        if (false === in_array($requestStatus, $this->ArrayOfRequestStatus())) {
+            throw new InvalidArgumentException();
+        }
     }
 
     public static function ArrayOfRequestStatus(): array
@@ -38,16 +43,13 @@ final class RequestStatus implements \Stringable
         ];
     }
 
-    private function setValue(string $requestStatus)
+    public function toString(): string
     {
-        $this->assertValueInArray($requestStatus);
-        $this->requestStatus = $requestStatus;
+        return $this->requestStatus;
     }
 
-    private function assertValueInArray(string $requestStatus): void
+    public function __toString(): string
     {
-        if (false === in_array($requestStatus, $this->ArrayOfRequestStatus())) {
-            throw new \InvalidArgumentException();
-        }
+        return $this->requestStatus;
     }
 }

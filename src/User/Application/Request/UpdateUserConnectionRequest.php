@@ -6,8 +6,12 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserConnectionRequest
 {
-    public function __construct(private string $requestAuthorId, private string $firstUser, private string $secondUser, private string $status)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $firstUser,
+        private string $secondUser,
+        private string $status
+    ) {
     }
 
     public function getRequestAuthorId(): string

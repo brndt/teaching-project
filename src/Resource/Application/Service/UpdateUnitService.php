@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Application\Request\UpdateUnitRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
@@ -50,7 +51,7 @@ final class UpdateUnitService
         $unit->setLevel($request->getLevel());
         $unit->setName($request->getName());
         $unit->setStatus(new Status($request->getStatus()));
-        $unit->setModified(new \DateTimeImmutable());
+        $unit->setModified(new DateTimeImmutable());
 
         $this->unitRepository->save($unit);
     }

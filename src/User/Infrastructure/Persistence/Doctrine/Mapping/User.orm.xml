@@ -1,6 +1,6 @@
 <doctrine-mapping>
     <entity name="LaSalle\StudentTeacher\User\Domain\Aggregate\User" table="user_account">
-        <id name="id" type="uuid" />
+        <id name="id" type="uuid"/>
         <field name="email" type="email" unique="true" nullable="false"/>
         <field name="firstName" type="name" nullable="false"/>
         <field name="lastName" type="name" nullable="false"/>

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Shared\Domain\Criteria;
 
@@ -14,7 +14,7 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Enum;
  */
 final class OrderType extends Enum
 {
-    public const ASC  = 'asc';
+    public const ASC = 'asc';
     public const DESC = 'desc';
     public const NONE = 'none';
 

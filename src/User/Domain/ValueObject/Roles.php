@@ -6,10 +6,21 @@ namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException;
+use Stringable;
 
-final class Roles implements \Stringable
+final class Roles implements Stringable
 {
     private array $roles;
+
+    private function __construct(Role ...$roles)
+    {
+        $this->setValue(...$roles);
+    }
+
+    private function setValue(Role ...$roles): void
+    {
+        $this->roles = $roles;
+    }
 
     /**
      * @throws InvalidRoleException
@@ -32,11 +43,6 @@ final class Roles implements \Stringable
         return new self(...$roles);
     }
 
-    public function getArrayOfPrimitives(): array
-    {
-        return array_map($this->roleToPrimitive(), $this->roles);
-    }
-
     public function toArrayOfRole(): array
     {
         return $this->roles;
@@ -47,14 +53,9 @@ final class Roles implements \Stringable
         return json_encode($this->getArrayOfPrimitives());
     }
 
-    private function __construct(Role ...$roles)
+    public function getArrayOfPrimitives(): array
     {
-        $this->setValue(...$roles);
-    }
-
-    private function setValue(Role ...$roles): void
-    {
-        $this->roles = $roles;
+        return array_map($this->roleToPrimitive(), $this->roles);
     }
 
     private function roleToPrimitive(): callable
@@ -64,16 +65,16 @@ final class Roles implements \Stringable
         };
     }
 
-    public function contains(Role $role): bool
-    {
-        return in_array($role->toString(), $this->getArrayOfPrimitives());
-    }
-
     public function ensureRolesDontContainsAdmin(): void
     {
         if ($this->contains(new Role(Role::ADMIN))) {
             throw new PermissionDeniedException();
         }
+    }
+
+    public function contains(Role $role): bool
+    {
+        return in_array($role->toString(), $this->getArrayOfPrimitives());
     }
 
 }

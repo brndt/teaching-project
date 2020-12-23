@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceStudentAnswerRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Resource;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResourceStudentAnswer;
@@ -57,7 +58,7 @@ final class CreateTestResourceStudentAnswerService
             $requestAuthorId,
             null,
             null,
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             null,
             null,
             new Status(Status::PUBLISHED),

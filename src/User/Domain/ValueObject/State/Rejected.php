@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 
-use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
+use Stringable;
 
-final class Rejected implements State, \Stringable
+final class Rejected implements State, Stringable
 {
     public const NAME = 'rejected';
 

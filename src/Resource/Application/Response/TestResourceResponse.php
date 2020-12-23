@@ -8,8 +8,17 @@ use DateTimeImmutable;
 
 final class TestResourceResponse
 {
-    public function __construct(private string $id, private string $unitId, private string $name, private ?string $description, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private string $status, private string $content, private array $questions)
-    {
+    public function __construct(
+        private string $id,
+        private string $unitId,
+        private string $name,
+        private ?string $description,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private string $status,
+        private string $content,
+        private array $questions
+    ) {
     }
 
     public function getId(): string

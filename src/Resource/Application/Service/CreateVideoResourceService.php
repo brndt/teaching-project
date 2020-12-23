@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateVideoResourceRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResource;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
@@ -56,7 +57,7 @@ final class CreateVideoResourceService
             $request->getName(),
             $request->getDescription(),
             $request->getContent(),
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             null,
             new Status($request->getStatus()),
             $request->getVideoUrl(),

@@ -6,8 +6,14 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class UnauthorizedSearchUnitsByCriteriaRequest
 {
-    public function __construct(private array $filters, private ?string $orderBy, private ?string $order, private ?string $operator, private ?int $offset, private ?int $limit)
-    {
+    public function __construct(
+        private array $filters,
+        private ?string $orderBy,
+        private ?string $order,
+        private ?string $operator,
+        private ?int $offset,
+        private ?int $limit
+    ) {
     }
 
     public function getFilters(): array

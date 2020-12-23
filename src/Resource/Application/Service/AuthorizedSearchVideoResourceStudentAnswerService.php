@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchTestResourceStudentAnswerRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchVideoResourceStudentAnswerRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\TestResourceStudentAnswerResponse;
 use LaSalle\StudentTeacher\Resource\Application\Response\VideoResourceStudentAnswerResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
@@ -14,7 +12,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceStudentAnswerRepos
 use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\ResourceStudentAnswerService;
-use LaSalle\StudentTeacher\Resource\Domain\ValueObject\StudentTestAnswer;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;

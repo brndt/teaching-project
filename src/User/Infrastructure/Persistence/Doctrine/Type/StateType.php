@@ -19,7 +19,7 @@ class StateType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return (string) $value;
+        return (string)$value;
     }
 
     public function getName()

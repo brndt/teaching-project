@@ -8,8 +8,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class SymfonyUser implements UserInterface
 {
-    public function __construct(private string $id, private string $username, private string $password, private array $roles, private bool $enabled)
+    public function __construct(
+        private string $id,
+        private string $username,
+        private string $password,
+        private array $roles,
+        private bool $enabled
+    ) {
+    }
+
+    public static function processValueToSymfonyRole(array $roles): array
     {
+        return array_map(
+            static function (string $role) {
+                return strtoupper('ROLE_' . $role);
+            },
+            $roles
+        );
     }
 
     public function getId()
@@ -43,15 +58,5 @@ final class SymfonyUser implements UserInterface
 
     public function eraseCredentials()
     {
-    }
-
-    public static function processValueToSymfonyRole(array $roles): array
-    {
-        return array_map(
-            static function (string $role) {
-                return strtoupper('ROLE_' . $role);
-            },
-            $roles
-        );
     }
 }

@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
-use DateTimeImmutable;
-
 final class CreateVideoResourceRequest
 {
-    public function __construct(private string $requestAuthor, private string $unitId, private string $name, private ?string $description, private string $content, private string $status, private string $videoUrl, private string $videoDescription)
-    {
+    public function __construct(
+        private string $requestAuthor,
+        private string $unitId,
+        private string $name,
+        private ?string $description,
+        private string $content,
+        private string $status,
+        private string $videoUrl,
+        private string $videoDescription
+    ) {
     }
 
     public function getUnitId(): string

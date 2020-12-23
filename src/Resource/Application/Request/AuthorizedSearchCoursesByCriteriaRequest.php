@@ -6,8 +6,15 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class AuthorizedSearchCoursesByCriteriaRequest
 {
-    public function __construct(private string $requestAuthorId, private ?string $teacherId, private ?string $orderBy, private ?string $order, private ?string $operator, private ?int $offset, private ?int $limit)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private ?string $teacherId,
+        private ?string $orderBy,
+        private ?string $order,
+        private ?string $operator,
+        private ?int $offset,
+        private ?int $limit
+    ) {
     }
 
     public function getRequestAuthorId(): string

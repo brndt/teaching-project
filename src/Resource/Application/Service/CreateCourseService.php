@@ -9,7 +9,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CategoryService;
-use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
@@ -21,8 +20,12 @@ final class CreateCourseService
     private UserService $userService;
     private CategoryService $categoryService;
 
-    public function __construct(CategoryRepository $categoryRepository, private CourseRepository $courseRepository, UserRepository $userRepository, private AuthorizationService $authorizationService)
-    {
+    public function __construct(
+        CategoryRepository $categoryRepository,
+        private CourseRepository $courseRepository,
+        UserRepository $userRepository,
+        private AuthorizationService $authorizationService
+    ) {
         $this->categoryService = new CategoryService($categoryRepository);
         $this->userService = new UserService($userRepository);
     }

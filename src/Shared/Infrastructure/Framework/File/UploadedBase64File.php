@@ -14,7 +14,7 @@ class UploadedBase64File extends UploadedFile
         $base64AsArray = explode(';base64,', $base64String);
         $filePath = tempnam(sys_get_temp_dir(), 'UploadedFile');
 
-        if(2 !== count($base64AsArray)) {
+        if (2 !== count($base64AsArray)) {
             throw new InvalidArgumentException(sprintf('Invalid image'));
         }
 

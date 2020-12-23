@@ -23,8 +23,11 @@ class AuthorizationService
     private UnitService $unitService;
     private CourseService $courseService;
 
-    public function __construct(CoursePermissionRepository $coursePermissionRepository, UnitRepository $unitRepository, CourseRepository $courseRepository)
-    {
+    public function __construct(
+        CoursePermissionRepository $coursePermissionRepository,
+        UnitRepository $unitRepository,
+        CourseRepository $courseRepository
+    ) {
         $this->coursePermissionService = new CoursePermissionService($coursePermissionRepository);
         $this->courseService = new CourseService($courseRepository);
         $this->unitService = new UnitService($unitRepository);
@@ -56,6 +59,19 @@ class AuthorizationService
         if (false === $this->validateUserPermissionToManageCourse($user, $course)) {
             throw new PermissionDeniedException();
         }
+    }
+
+    private function validateUserPermissionToManageCourse(User $requestAuthor, Course $course): bool
+    {
+        if (true === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
+            return true;
+        }
+
+        if (true === $requestAuthor->idEqualsTo($course->getTeacherId())) {
+            return true;
+        }
+
+        return false;
     }
 
     public function ensureRequestAuthorHasPermissionsToCreateCourse(User $requestAuthor, User $user): void
@@ -108,18 +124,5 @@ class AuthorizationService
             return false;
         }
         return true;
-    }
-
-    private function validateUserPermissionToManageCourse(User $requestAuthor, Course $course): bool
-    {
-        if (true === $requestAuthor->isInRole(new Role(Role::ADMIN))) {
-            return true;
-        }
-
-        if (true === $requestAuthor->idEqualsTo($course->getTeacherId())) {
-            return true;
-        }
-
-        return false;
     }
 }

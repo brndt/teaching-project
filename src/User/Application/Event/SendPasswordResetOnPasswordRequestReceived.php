@@ -15,6 +15,12 @@ final class SendPasswordResetOnPasswordRequestReceived
 
     public function __invoke(PasswordResetRequestReceivedDomainEvent $event): void
     {
-        ($this->emailSender)->sendPasswordReset($event->getEmail(), $event->getAggregateId(), $event->getFirstName(), $event->getLastName(), $event->getConfirmationToken());
+        ($this->emailSender)->sendPasswordReset(
+            $event->getEmail(),
+            $event->getAggregateId(),
+            $event->getFirstName(),
+            $event->getLastName(),
+            $event->getConfirmationToken()
+        );
     }
 }

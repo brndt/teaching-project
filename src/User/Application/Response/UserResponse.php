@@ -8,8 +8,16 @@ use DateTimeImmutable;
 
 final class UserResponse
 {
-    public function __construct(private string $id, private string $firstName, private string $lastName, private array $roles, private DateTimeImmutable $created, private ?string $image, private ?string $experience, private ?string $education)
-    {
+    public function __construct(
+        private string $id,
+        private string $firstName,
+        private string $lastName,
+        private array $roles,
+        private DateTimeImmutable $created,
+        private ?string $image,
+        private ?string $experience,
+        private ?string $education
+    ) {
     }
 
     public function getId(): string
@@ -52,7 +60,8 @@ final class UserResponse
         return $this->experience;
     }
 
-    public function toPrimitives(): array {
+    public function toPrimitives(): array
+    {
         return [
             'id' => $this->id,
             'firstName' => $this->firstName,

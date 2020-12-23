@@ -6,15 +6,16 @@ namespace LaSalle\StudentTeacher\Shared\Domain\Criteria;
 
 use InvalidArgumentException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Enum;
+use Stringable;
 
-final class Operator extends Enum implements \Stringable
+final class Operator extends Enum implements Stringable
 {
-    public const AND  = 'AND';
+    public const AND = 'AND';
     public const OR = 'OR';
 
     public static function fromValue(?string $operator): Operator
     {
-        return (null === $operator) ? new self(Operator::AND): new self($operator);
+        return (null === $operator) ? new self(Operator:: AND) : new self($operator);
     }
 
     public function __toString(): string

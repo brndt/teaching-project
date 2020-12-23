@@ -6,8 +6,11 @@ namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
 final class CreateCategoryRequest
 {
-    public function __construct(private string $requestAuthorId, private string $categoryName, private string $categoryStatus)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $categoryName,
+        private string $categoryStatus
+    ) {
     }
 
     public function getCategoryName(): string

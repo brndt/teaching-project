@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\Aggregate;
 
+use DateTime;
 use DateTimeImmutable;
-use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEvent;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException;
@@ -25,8 +25,21 @@ final class User
 {
     private array $eventStream;
 
-    public function __construct(private Uuid $id, private Email $email, private Password $password, private Name $firstName, private Name $lastName, private Roles $roles, private DateTimeImmutable $created, private bool $enabled, private ?string $image = null, private ?string $experience = null, private ?string $education = null, private ?Token $confirmationToken = null, private ?DateTimeImmutable $expirationDate = null)
-    {
+    public function __construct(
+        private Uuid $id,
+        private Email $email,
+        private Password $password,
+        private Name $firstName,
+        private Name $lastName,
+        private Roles $roles,
+        private DateTimeImmutable $created,
+        private bool $enabled,
+        private ?string $image = null,
+        private ?string $experience = null,
+        private ?string $education = null,
+        private ?Token $confirmationToken = null,
+        private ?DateTimeImmutable $expirationDate = null
+    ) {
     }
 
     public static function create(
@@ -73,17 +86,42 @@ final class User
         return $instance;
     }
 
+    private function recordThat(DomainEvent $event): void
+    {
+        $this->eventStream[] = $event;
+    }
+
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
+
+    public function getEmail(): Email
+    {
+        return $this->email;
+    }
+
+    public function getFirstName(): Name
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName(): Name
+    {
+        return $this->lastName;
+    }
+
+    public function getConfirmationToken(): ?Token
+    {
+        return $this->confirmationToken;
+    }
+
     public function pullDomainEvents(): array
     {
         $events = $this->eventStream ?: [];
         $this->eventStream = [];
 
         return $events;
-    }
-
-    private function recordThat(DomainEvent $event): void
-    {
-        $this->eventStream[] = $event;
     }
 
     public function setEmail(Email $email): void
@@ -121,7 +159,7 @@ final class User
         $this->experience = $experience;
     }
 
-    public function setCreated(\DateTimeImmutable $created): void
+    public function setCreated(DateTimeImmutable $created): void
     {
         $this->created = $created;
     }
@@ -131,29 +169,9 @@ final class User
         $this->education = $education;
     }
 
-    public function getEmail(): Email
-    {
-        return $this->email;
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
     public function getPassword(): Password
     {
         return $this->password;
-    }
-
-    public function getFirstName(): Name
-    {
-        return $this->firstName;
-    }
-
-    public function getLastName(): Name
-    {
-        return $this->lastName;
     }
 
     public function getRoles()
@@ -171,7 +189,7 @@ final class User
         return $this->experience;
     }
 
-    public function getCreated(): ?\DateTimeImmutable
+    public function getCreated(): ?DateTimeImmutable
     {
         return $this->created;
     }
@@ -181,19 +199,9 @@ final class User
         return $this->education;
     }
 
-    public function getConfirmationToken(): ?Token
-    {
-        return $this->confirmationToken;
-    }
-
     public function setConfirmationToken(?Token $confirmationToken): void
     {
         $this->confirmationToken = $confirmationToken;
-    }
-
-    public function getEnabled(): ?bool
-    {
-        return $this->enabled;
     }
 
     public function ensureUserEnabled(): void
@@ -203,19 +211,14 @@ final class User
         }
     }
 
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
-    }
-
-    public function confirmationTokenEqualsTo(Token $confirmationToken): bool
-    {
-        return $this->confirmationToken->equalsTo($confirmationToken);
-    }
-
-    public function idEqualsTo(Uuid $id): bool
-    {
-        return $this->id->equalsTo($id);
     }
 
     public function isInRole(Role $role): bool
@@ -233,11 +236,6 @@ final class User
         $this->expirationDate = $expirationDate;
     }
 
-    public function isConfirmationTokenExpired()
-    {
-        return $this->expirationDate <= new \DateTime();
-    }
-
     public function validateConfirmationToken(Token $tokenFromRequest): void
     {
         if (null === $this->getConfirmationToken()) {
@@ -251,10 +249,25 @@ final class User
         }
     }
 
+    public function isConfirmationTokenExpired()
+    {
+        return $this->expirationDate <= new DateTime();
+    }
+
+    public function confirmationTokenEqualsTo(Token $confirmationToken): bool
+    {
+        return $this->confirmationToken->equalsTo($confirmationToken);
+    }
+
     public function ensureUsersAreNotEqual(User $otherUser): void
     {
         if (true === $this->idEqualsTo($otherUser->getId())) {
             throw new UsersAreEqualException();
         }
+    }
+
+    public function idEqualsTo(Uuid $id): bool
+    {
+        return $this->id->equalsTo($id);
     }
 }

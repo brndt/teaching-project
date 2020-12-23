@@ -1,13 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Shared\Domain\Criteria;
 
 final class Filter
 {
-    public function __construct(private FilterField $field, private FilterOperator $operator, private FilterValue $value)
-    {
+    public function __construct(
+        private FilterField $field,
+        private FilterOperator $operator,
+        private FilterValue $value
+    ) {
     }
 
     public static function fromValues(array $values): self

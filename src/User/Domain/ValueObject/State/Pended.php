@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject\State;
 
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException;
+use Stringable;
 
-final class Pended implements State, \Stringable
+final class Pended implements State, Stringable
 {
     public const NAME = 'pended';
 

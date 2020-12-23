@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus;
 use LaSalle\StudentTeacher\Shared\Domain\RandomStringGenerator;
 use LaSalle\StudentTeacher\User\Application\Request\SendPasswordResetRequest;
@@ -33,7 +34,7 @@ final class SendPasswordResetService
         $token = new Token($this->randomStringGenerator->generate());
 
         $user->setConfirmationToken($token);
-        $user->setExpirationDate(new \DateTimeImmutable('+1 day'));
+        $user->setExpirationDate(new DateTimeImmutable('+1 day'));
 
         $this->repository->save($user);
 

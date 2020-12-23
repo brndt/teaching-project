@@ -1,6 +1,6 @@
 <doctrine-mapping>
     <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit" table="unit">
-        <id name="id" type="uuid" />
+        <id name="id" type="uuid"/>
         <field name="courseId" type="uuid" nullable="false"/>
         <field name="name" type="string" nullable="false"/>
         <field name="description" type="string" nullable="true"/>

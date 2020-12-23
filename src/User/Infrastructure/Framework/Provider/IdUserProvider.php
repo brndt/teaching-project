@@ -19,6 +19,14 @@ final class IdUserProvider implements UserProviderInterface
     {
     }
 
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$user instanceof SymfonyUser) {
+            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', $user::class));
+        }
+        return $this->loadUserByUsername($user->getId());
+    }
+
     public function loadUserByUsername($id)
     {
         try {
@@ -34,14 +42,6 @@ final class IdUserProvider implements UserProviderInterface
             SymfonyUser::processValueToSymfonyRole($userResponse->getRoles()),
             $userResponse->getEnabled()
         );
-    }
-
-    public function refreshUser(UserInterface $user)
-    {
-        if (!$user instanceof SymfonyUser) {
-            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', $user::class));
-        }
-        return $this->loadUserByUsername($user->getId());
     }
 
     public function supportsClass($class)

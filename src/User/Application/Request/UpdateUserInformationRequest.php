@@ -6,8 +6,15 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserInformationRequest
 {
-    public function __construct(private string $requestAuthorId, private string $userId, private string $email, private string $firstName, private string $lastName, private ?string $experience, private ?string $education)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $userId,
+        private string $email,
+        private string $firstName,
+        private string $lastName,
+        private ?string $experience,
+        private ?string $education
+    ) {
     }
 
     public function getUserId(): string

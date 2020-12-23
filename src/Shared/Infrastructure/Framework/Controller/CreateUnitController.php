@@ -34,7 +34,18 @@ final class CreateUnitController extends AbstractFOSRestController
         $level = $paramFetcher->get('level');
         $status = $paramFetcher->get('status');
 
-        ($this->createUnitService)(new CreateUnitRequest($requestAuthorId, $courseId, $name, $description, $level, new DateTimeImmutable(), null, $status));
+        ($this->createUnitService)(
+            new CreateUnitRequest(
+                $requestAuthorId,
+                $courseId,
+                $name,
+                $description,
+                $level,
+                new DateTimeImmutable(),
+                null,
+                $status
+            )
+        );
 
         return $this->handleView(
             $this->view(['message' => 'Unit has been successfully created'], Response::HTTP_CREATED)

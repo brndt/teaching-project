@@ -6,8 +6,15 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class SearchUserConnectionsByCriteriaRequest
 {
-    public function __construct(private string $requestAuthorId, private string $userId, private ?string $orderBy, private ?string $order, private ?string $operator, private ?int $offset, private ?int $limit)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $userId,
+        private ?string $orderBy,
+        private ?string $order,
+        private ?string $operator,
+        private ?int $offset,
+        private ?int $limit
+    ) {
     }
 
     public function getRequestAuthorId(): string

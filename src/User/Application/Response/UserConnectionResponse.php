@@ -6,8 +6,12 @@ namespace LaSalle\StudentTeacher\User\Application\Response;
 
 final class UserConnectionResponse
 {
-    public function __construct(private string $userId, private string $friendId, private ?string $status = null, private ?string $specifierId = null)
-    {
+    public function __construct(
+        private string $userId,
+        private string $friendId,
+        private ?string $status = null,
+        private ?string $specifierId = null
+    ) {
     }
 
     public function getUserId(): string

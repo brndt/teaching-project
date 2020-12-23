@@ -1,5 +1,6 @@
 <doctrine-mapping>
-  <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResourceStudentAnswer" table="video_resource_student_answer">
-    <field name="studentAnswer" type="string" />
-  </entity>
+    <entity name="LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResourceStudentAnswer"
+            table="video_resource_student_answer">
+        <field name="studentAnswer" type="string"/>
+    </entity>
 </doctrine-mapping>

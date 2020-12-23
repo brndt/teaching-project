@@ -18,8 +18,12 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
 
 abstract class RefreshTokenService
 {
-    public function __construct(protected RefreshTokenRepository $refreshTokenRepository, protected TokenManager $tokenManager, protected UserRepository $userRepository, protected RandomStringGenerator $randomStringGenerator)
-    {
+    public function __construct(
+        protected RefreshTokenRepository $refreshTokenRepository,
+        protected TokenManager $tokenManager,
+        protected UserRepository $userRepository,
+        protected RandomStringGenerator $randomStringGenerator
+    ) {
     }
 
     protected function createIdFromPrimitive(string $uuid): Uuid

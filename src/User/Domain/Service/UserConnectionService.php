@@ -47,6 +47,13 @@ final class UserConnectionService
         ] ? [$firstUser, $secondUser] : [$secondUser, $firstUser];
     }
 
+    private function ensureRolesAreNotEqual(User $firstUser, User $secondUser): void
+    {
+        if ($this->identifyIfTeacherOfStudent($firstUser) === $this->identifyIfTeacherOfStudent($secondUser)) {
+            throw new RolesOfUsersEqualException();
+        }
+    }
+
     private function identifyIfTeacherOfStudent(User $user): string
     {
         if ($user->isInRole(new Role(Role::STUDENT))) {
@@ -56,13 +63,6 @@ final class UserConnectionService
             return Role::TEACHER;
         }
         throw new PermissionDeniedException();
-    }
-
-    private function ensureRolesAreNotEqual(User $firstUser, User $secondUser): void
-    {
-        if ($this->identifyIfTeacherOfStudent($firstUser) === $this->identifyIfTeacherOfStudent($secondUser)) {
-            throw new RolesOfUsersEqualException();
-        }
     }
 
     public function identifySpecifier(User $authorId, User $firstUser, User $secondUser): User

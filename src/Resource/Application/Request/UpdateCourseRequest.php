@@ -4,10 +4,21 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Request;
 
+use DateTimeImmutable;
+
 final class UpdateCourseRequest
 {
-    public function __construct(private string $requestAuthorId, private string $id, private string $teacherId, private string $categoryId, private string $name, private ?string $description, private string $level, private ?\DateTimeImmutable $modified, private string $status)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $id,
+        private string $teacherId,
+        private string $categoryId,
+        private string $name,
+        private ?string $description,
+        private string $level,
+        private ?DateTimeImmutable $modified,
+        private string $status
+    ) {
     }
 
     public function getRequestAuthorId(): string
@@ -45,12 +56,12 @@ final class UpdateCourseRequest
         return $this->level;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function getModified(): ?\DateTimeImmutable
+    public function getModified(): ?DateTimeImmutable
     {
         return $this->modified;
     }

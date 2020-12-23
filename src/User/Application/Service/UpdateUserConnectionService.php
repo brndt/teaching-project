@@ -46,7 +46,10 @@ final class UpdateUserConnectionService
         $userConnection = $this->userConnectionService->findUserConnection($student, $teacher);
 
         $newState = $this->stateFactory->create($request->getStatus());
-        $isSpecifierChanged = $this->userConnectionService->verifySpecifierChanged($newSpecifier->getId(), $userConnection->getSpecifierId());
+        $isSpecifierChanged = $this->userConnectionService->verifySpecifierChanged(
+            $newSpecifier->getId(),
+            $userConnection->getSpecifierId()
+        );
 
         $userConnection->setState($newState, $isSpecifierChanged);
 

@@ -15,6 +15,12 @@ final class SendEmailConfirmationOnEmailConfirmationRequestReceived
 
     public function __invoke(EmailConfirmationRequestReceivedDomainEvent $event): void
     {
-        ($this->emailSender)->sendEmailConfirmation($event->getEmail(), $event->getAggregateId(), $event->getFirstName(), $event->getLastName(), $event->getConfirmationToken());
+        ($this->emailSender)->sendEmailConfirmation(
+            $event->getEmail(),
+            $event->getAggregateId(),
+            $event->getFirstName(),
+            $event->getLastName(),
+            $event->getConfirmationToken()
+        );
     }
 }

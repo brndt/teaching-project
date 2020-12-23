@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateVideoResourceStudentAnswerRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\VideoResourceStudentAnswer;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
@@ -51,7 +52,7 @@ final class CreateVideoResourceStudentAnswerService
             $requestAuthorId,
             null,
             null,
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             null,
             null,
             new Status(Status::PUBLISHED),

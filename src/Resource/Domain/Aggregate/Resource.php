@@ -10,8 +10,16 @@ use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 abstract class Resource
 {
-    public function __construct(private Uuid $id, private Uuid $unitId, private string $name, private ?string $description, private string $content, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private Status $status)
-    {
+    public function __construct(
+        private Uuid $id,
+        private Uuid $unitId,
+        private string $name,
+        private ?string $description,
+        private string $content,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private Status $status
+    ) {
     }
 
     public function getId(): Uuid

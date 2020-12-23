@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateStudentCoursePermissionRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\CoursePermission;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
@@ -52,7 +53,7 @@ final class CreateStudentCoursePermissionService
             $this->repository->nextIdentity(),
             $courseId,
             $studentId,
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             null,
             $request->getUntil(),
             new Status($request->getStatus())

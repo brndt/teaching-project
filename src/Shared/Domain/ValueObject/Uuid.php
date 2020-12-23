@@ -6,15 +6,11 @@ namespace LaSalle\StudentTeacher\Shared\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
+use Stringable;
 
-class Uuid implements \Stringable
+class Uuid implements Stringable
 {
     private string $id;
-
-    public static function  generate(): self
-    {
-        return new self(RamseyUuid::uuid4()->toString());
-    }
 
     /**
      * @throws InvalidUuidException
@@ -25,21 +21,6 @@ class Uuid implements \Stringable
         $this->setUuid($id);
     }
 
-    public function toString(): string
-    {
-        return $this->id;
-    }
-
-    public function __toString(): string
-    {
-        return $this->id;
-    }
-
-    private function setUuid(string $id): void
-    {
-        $this->id = $id;
-    }
-
     private static function assertUuidIsValid(string $id): void
     {
         if (false === RamseyUuid::isValid($id)) {
@@ -47,8 +28,28 @@ class Uuid implements \Stringable
         }
     }
 
+    private function setUuid(string $id): void
+    {
+        $this->id = $id;
+    }
+
+    public static function generate(): self
+    {
+        return new self(RamseyUuid::uuid4()->toString());
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
+    }
+
     public function equalsTo(self $uuid): bool
     {
         return $uuid->toString() === $this->toString();
+    }
+
+    public function toString(): string
+    {
+        return $this->id;
     }
 }

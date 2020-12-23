@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Service;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceRequest;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\TestResource;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
@@ -57,7 +58,7 @@ final class CreateTestResourceService
             $request->getName(),
             $request->getDescription(),
             $request->getContent(),
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             null,
             new Status($request->getStatus()),
             ...array_map($this->questionMaker(), $request->getQuestions()),

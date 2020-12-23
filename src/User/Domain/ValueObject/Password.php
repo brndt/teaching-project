@@ -5,14 +5,24 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException;
-use LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException;
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException;
+use Stringable;
 
-final class Password implements \Stringable
+final class Password implements Stringable
 {
     private string $password;
+
+    private function __construct(string $password)
+    {
+        $this->setValue($password);
+    }
+
+    private function setValue(string $password)
+    {
+        $this->password = $password;
+    }
 
     public static function fromHashedPassword(string $hashedPassword): self
     {
@@ -30,33 +40,6 @@ final class Password implements \Stringable
         self::assertNumberContaining($plainPassword);
         self::assertLetterContaining($plainPassword);
         return new self(self::hash_password($plainPassword));
-    }
-
-    public function toString(): string
-    {
-        return $this->password;
-    }
-
-    public function __toString(): string
-    {
-        return $this->password;
-    }
-
-    public function verify(string $plainPassword): void
-    {
-        if (false === password_verify($plainPassword, $this->toString())) {
-            throw new IncorrectPasswordException();
-        }
-    }
-
-    private function __construct(string $password)
-    {
-        $this->setValue($password);
-    }
-
-    private function setValue(string $password)
-    {
-        $this->password = $password;
     }
 
     private static function assertMinimunLength(string $password): void
@@ -83,6 +66,23 @@ final class Password implements \Stringable
     private static function hash_password(string $password): string
     {
         return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public function __toString(): string
+    {
+        return $this->password;
+    }
+
+    public function verify(string $plainPassword): void
+    {
+        if (false === password_verify($plainPassword, $this->toString())) {
+            throw new IncorrectPasswordException();
+        }
+    }
+
+    public function toString(): string
+    {
+        return $this->password;
     }
 
 }

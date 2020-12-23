@@ -19,6 +19,11 @@ final class EmailConfirmationRequestReceivedDomainEvent extends DomainEvent
         parent::__construct($aggregateId);
     }
 
+    public static function eventName(): string
+    {
+        return 'email.confirmation.request.received';
+    }
+
     public function getConfirmationToken(): string
     {
         return $this->confirmationToken;
@@ -37,10 +42,5 @@ final class EmailConfirmationRequestReceivedDomainEvent extends DomainEvent
     public function getLastName(): string
     {
         return $this->lastName;
-    }
-
-    public static function eventName(): string
-    {
-        return 'email.confirmation.request.received';
     }
 }

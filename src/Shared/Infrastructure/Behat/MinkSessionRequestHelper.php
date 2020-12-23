@@ -18,13 +18,13 @@ final class MinkSessionRequestHelper
         $this->request($method, $url, $optionalParams);
     }
 
-    public function sendRequestWithPyStringNode($method, $url, PyStringNode $body): void
-    {
-        $this->request($method, $url, ['content' => $body->getRaw()]);
-    }
-
     public function request($method, $url, array $optionalParams = []): Crawler
     {
         return $this->sessionHelper->sendRequest($method, $url, $optionalParams);
+    }
+
+    public function sendRequestWithPyStringNode($method, $url, PyStringNode $body): void
+    {
+        $this->request($method, $url, ['content' => $body->getRaw()]);
     }
 }

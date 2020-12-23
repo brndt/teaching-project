@@ -10,17 +10,17 @@ final class TestAnswer
     {
     }
 
-    public function toValues(): array
-    {
-        return [
-            'answer'     => $this->answer(),
-            'isCorrect' => $this->isCorrect(),
-        ];
-    }
-
     public static function fromValues(array $values): self
     {
         return new self($values['answer'], $values['isCorrect']);
+    }
+
+    public function toValues(): array
+    {
+        return [
+            'answer' => $this->answer(),
+            'isCorrect' => $this->isCorrect(),
+        ];
     }
 
     public function answer(): string

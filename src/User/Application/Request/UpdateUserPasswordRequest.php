@@ -6,8 +6,12 @@ namespace LaSalle\StudentTeacher\User\Application\Request;
 
 final class UpdateUserPasswordRequest
 {
-    public function __construct(private string $requestAuthorId, private string $userId, private string $oldPassword, private string $newPassword)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $userId,
+        private string $oldPassword,
+        private string $newPassword
+    ) {
     }
 
     public function getRequestAuthorId(): string

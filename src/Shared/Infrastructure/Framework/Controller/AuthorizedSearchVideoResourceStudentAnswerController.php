@@ -8,16 +8,15 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchTestResourceStudentAnswerRequest;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchVideoResourceStudentAnswerRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchTestResourceStudentAnswerService;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchVideoResourceStudentAnswerService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchVideoResourceStudentAnswerController extends AbstractFOSRestController
 {
-    public function __construct(private AuthorizedSearchVideoResourceStudentAnswerService $searchVideoResourceStudentAnswerService)
-    {
+    public function __construct(
+        private AuthorizedSearchVideoResourceStudentAnswerService $searchVideoResourceStudentAnswerService
+    ) {
     }
 
     /**

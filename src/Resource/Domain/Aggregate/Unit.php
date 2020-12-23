@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Domain\Aggregate;
 
+use DateTimeImmutable;
 use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 
 final class Unit
 {
-    public function __construct(private Uuid $id, private Uuid $courseId, private string $name, private ?string $description, private string $level, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private Status $status)
-    {
+    public function __construct(
+        private Uuid $id,
+        private Uuid $courseId,
+        private string $name,
+        private ?string $description,
+        private string $level,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private Status $status
+    ) {
     }
 
     public function getId(): Uuid
@@ -63,22 +72,22 @@ final class Unit
         $this->level = $level;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeImmutable $created): void
+    public function setCreated(DateTimeImmutable $created): void
     {
         $this->created = $created;
     }
 
-    public function getModified(): ?\DateTimeImmutable
+    public function getModified(): ?DateTimeImmutable
     {
         return $this->modified;
     }
 
-    public function setModified(?\DateTimeImmutable $modified): void
+    public function setModified(?DateTimeImmutable $modified): void
     {
         $this->modified = $modified;
     }

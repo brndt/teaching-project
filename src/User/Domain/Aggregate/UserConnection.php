@@ -9,8 +9,12 @@ use LaSalle\StudentTeacher\User\Domain\ValueObject\State\State;
 
 final class UserConnection
 {
-    public function __construct(private Uuid $studentId, private Uuid $teacherId, private State $state, private Uuid $specifierId)
-    {
+    public function __construct(
+        private Uuid $studentId,
+        private Uuid $teacherId,
+        private State $state,
+        private Uuid $specifierId
+    ) {
     }
 
     public function getStudentId(): Uuid

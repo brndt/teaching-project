@@ -29,7 +29,9 @@ final class UpdateUserPasswordController extends AbstractFOSRestController
         $oldPassword = $paramFetcher->get('oldPassword');
         $newPassword = $paramFetcher->get('newPassword');
 
-        ($this->updateUserPassword)(new UpdateUserPasswordRequest($requestAuthorId, $userId, $oldPassword, $newPassword));
+        ($this->updateUserPassword)(
+            new UpdateUserPasswordRequest($requestAuthorId, $userId, $oldPassword, $newPassword)
+        );
 
         return $this->handleView(
             $this->view(['message' => 'Your account has been successfully changed'], Response::HTTP_OK)

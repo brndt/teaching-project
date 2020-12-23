@@ -6,7 +6,6 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCourseByIdRequest;
 use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCourseByIdService;
 use Symfony\Component\HttpFoundation\Response;

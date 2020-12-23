@@ -13,7 +13,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
-use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filter;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
@@ -28,8 +27,12 @@ final class AuthorizedSearchUnitsByCriteriaService
     private UserService $userService;
     private UnitService $unitService;
 
-    public function __construct(private CourseRepository $courseRepository, private UnitRepository $unitRepository, UserRepository $userRepository, private AuthorizationService $authorizationService)
-    {
+    public function __construct(
+        private CourseRepository $courseRepository,
+        private UnitRepository $unitRepository,
+        UserRepository $userRepository,
+        private AuthorizationService $authorizationService
+    ) {
         $this->unitService = new UnitService($unitRepository);
         $this->courseService = new CourseService($courseRepository);
         $this->userService = new UserService($userRepository);

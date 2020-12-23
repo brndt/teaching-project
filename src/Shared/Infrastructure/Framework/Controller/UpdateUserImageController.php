@@ -21,8 +21,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UpdateUserImageController extends AbstractFOSRestController
 {
-    public function __construct(private UpdateUserImageService $updateUserImage, private ValidatorInterface $validator, private SearchUserCredentialsByIdService $searchUser)
-    {
+    public function __construct(
+        private UpdateUserImageService $updateUserImage,
+        private ValidatorInterface $validator,
+        private SearchUserCredentialsByIdService $searchUser
+    ) {
     }
 
     /**
@@ -40,7 +43,10 @@ final class UpdateUserImageController extends AbstractFOSRestController
             $imageViolations = $this->hasImageViolations($newImageAsFile);
             if (null !== $imageViolations) {
                 return $this->handleView(
-                    $this->view(['code' => Response::HTTP_BAD_REQUEST, 'message' => $imageViolations], Response::HTTP_BAD_REQUEST)
+                    $this->view(
+                        ['code' => Response::HTTP_BAD_REQUEST, 'message' => $imageViolations],
+                        Response::HTTP_BAD_REQUEST
+                    )
                 );
             }
             $fileUploader = new FileUploader($this->getParameter('imagesDirectory'));

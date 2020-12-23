@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Application\Request;
 
+use DateTimeImmutable;
+
 final class CreateUserRequest
 {
-    public function __construct(private string $email, private string $password, private string $firstName, private string $lastName, private array $roles, private \DateTimeImmutable $created)
-    {
+    public function __construct(
+        private string $email,
+        private string $password,
+        private string $firstName,
+        private string $lastName,
+        private array $roles,
+        private DateTimeImmutable $created
+    ) {
     }
 
     public function getEmail(): string
@@ -35,7 +43,7 @@ final class CreateUserRequest
         return $this->roles;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }

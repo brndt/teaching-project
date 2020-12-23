@@ -8,8 +8,18 @@ use DateTimeImmutable;
 
 final class VideoResourceResponse
 {
-    public function __construct(private string $id, private string $unitId, private string $name, private ?string $description, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private string $status, private string $content, private string $videoUrl, private string $videoDescription)
-    {
+    public function __construct(
+        private string $id,
+        private string $unitId,
+        private string $name,
+        private ?string $description,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private string $status,
+        private string $content,
+        private string $videoUrl,
+        private string $videoDescription
+    ) {
     }
 
     public function getId(): string

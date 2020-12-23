@@ -15,8 +15,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UpdateUserInformationController extends AbstractFOSRestController
 {
-    public function __construct(private UpdateUserInformationService $updateUserInformation, private ValidatorInterface $validator)
-    {
+    public function __construct(
+        private UpdateUserInformationService $updateUserInformation,
+        private ValidatorInterface $validator
+    ) {
     }
 
     /**

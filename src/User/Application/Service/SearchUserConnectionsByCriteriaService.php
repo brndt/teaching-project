@@ -62,6 +62,14 @@ final class SearchUserConnectionsByCriteriaService
         return new UserConnectionCollectionResponse(...$this->buildTeacherResponse(...$connections));
     }
 
+    private function createFiltersByUserId(User $user): array
+    {
+        if (true === $user->isInRole(new Role(Role::STUDENT))) {
+            return [['field' => 'studentId', 'operator' => '=', 'value' => $user->getId()->toString()]];
+        }
+        return [['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]];
+    }
+
     private function buildStudentResponse(UserConnection ...$connections): array
     {
         return array_map(
@@ -90,13 +98,5 @@ final class SearchUserConnectionsByCriteriaService
             },
             $connections
         );
-    }
-
-    private function createFiltersByUserId(User $user): array
-    {
-        if (true === $user->isInRole(new Role(Role::STUDENT))) {
-            return [['field' => 'studentId', 'operator' => '=', 'value' => $user->getId()->toString()]];
-        }
-        return [['field' => 'teacherId', 'operator' => '=', 'value' => $user->getId()->toString()]];
     }
 }

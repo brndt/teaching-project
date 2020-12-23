@@ -4,10 +4,20 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Application\Response;
 
+use DateTimeImmutable;
+
 final class UnitResponse
 {
-    public function __construct(private string $id, private string $courseId, private string $name, private ?string $description, private string $level, private \DateTimeImmutable $created, private ?\DateTimeImmutable $modified, private string $status)
-    {
+    public function __construct(
+        private string $id,
+        private string $courseId,
+        private string $name,
+        private ?string $description,
+        private string $level,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private string $status
+    ) {
     }
 
     public function getId(): string
@@ -35,12 +45,12 @@ final class UnitResponse
         return $this->level;
     }
 
-    public function getCreated(): \DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function getModified(): ?\DateTimeImmutable
+    public function getModified(): ?DateTimeImmutable
     {
         return $this->modified;
     }

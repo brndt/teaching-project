@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
+use DateTimeImmutable;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -35,7 +36,7 @@ final class SignUpUserController extends AbstractFOSRestController
         $roles = $paramFetcher->get('roles');
 
         ($this->createUser)(
-            new CreateUserRequest($email, $password, $firstName, $lastName, $roles, new \DateTimeImmutable())
+            new CreateUserRequest($email, $password, $firstName, $lastName, $roles, new DateTimeImmutable())
         );
 
         return $this->handleView($this->view(['message' => 'User has been created'], Response::HTTP_CREATED));

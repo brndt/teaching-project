@@ -10,7 +10,6 @@ use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Criteria;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\Shared\Infrastructure\Persistence\Doctrine\DoctrineCriteriaConverter;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
 
 final class DoctrineCategoryRepository implements CategoryRepository
 {

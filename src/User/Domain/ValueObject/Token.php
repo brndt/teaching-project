@@ -15,9 +15,9 @@ final class Token implements Stringable
         $this->setValue($token);
     }
 
-    public function toString(): string
+    private function setValue(string $token): void
     {
-        return $this->token;
+        $this->token = $token;
     }
 
     public function __toString(): string
@@ -30,8 +30,8 @@ final class Token implements Stringable
         return $confirmationToken->toString() === $this->toString();
     }
 
-    private function setValue(string $token): void
+    public function toString(): string
     {
-        $this->token = $token;
+        return $this->token;
     }
 }

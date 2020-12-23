@@ -6,8 +6,13 @@ namespace LaSalle\StudentTeacher\User\Application\Response;
 
 final class UserCredentialsResponse
 {
-    public function __construct(private string $id, private string $email, private string $password, private array $roles, private bool $enabled)
-    {
+    public function __construct(
+        private string $id,
+        private string $email,
+        private string $password,
+        private array $roles,
+        private bool $enabled
+    ) {
     }
 
     public function getId(): string

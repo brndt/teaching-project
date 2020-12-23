@@ -8,8 +8,16 @@ use DateTimeImmutable;
 
 class CreateUnitRequest
 {
-    public function __construct(private string $requestAuthorId, private string $courseId, private string $name, private ?string $description, private string $level, private DateTimeImmutable $created, private ?DateTimeImmutable $modified, private string $status)
-    {
+    public function __construct(
+        private string $requestAuthorId,
+        private string $courseId,
+        private string $name,
+        private ?string $description,
+        private string $level,
+        private DateTimeImmutable $created,
+        private ?DateTimeImmutable $modified,
+        private string $status
+    ) {
     }
 
     /**

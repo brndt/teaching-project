@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\User\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\User\Domain\Exception\InvalidNameException;
+use Stringable;
 
-final class Name implements \Stringable
+final class Name implements Stringable
 {
     private string $name;
 
@@ -16,16 +17,6 @@ final class Name implements \Stringable
     public function __construct(string $name)
     {
         $this->setValue($name);
-    }
-
-    public function toString(): string
-    {
-        return $this->name;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 
     private function setValue(string $name)
@@ -39,6 +30,16 @@ final class Name implements \Stringable
         if (0 === preg_match("/^[a-zA-Z'-]+( [a-zA-Z'-]+)*$/", $name)) {
             throw new InvalidNameException();
         }
+    }
+
+    public function toString(): string
+    {
+        return $this->name;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
 }

@@ -19,6 +19,11 @@ final class PasswordResetRequestReceivedDomainEvent extends DomainEvent
         parent::__construct($aggregateId);
     }
 
+    public static function eventName(): string
+    {
+        return 'password.reset.request.received';
+    }
+
     public function getConfirmationToken(): string
     {
         return $this->confirmationToken;
@@ -37,10 +42,5 @@ final class PasswordResetRequestReceivedDomainEvent extends DomainEvent
     public function getLastName(): string
     {
         return $this->lastName;
-    }
-
-    public static function eventName(): string
-    {
-        return 'password.reset.request.received';
     }
 }

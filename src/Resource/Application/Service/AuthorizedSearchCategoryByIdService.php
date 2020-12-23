@@ -8,8 +8,6 @@ use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategory
 use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CategoryService;
 use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
