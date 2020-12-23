@@ -16,6 +16,7 @@ composer composer-install composer-update:
 		composer:2 $(CMD) \
 			--ignore-platform-reqs \
 			--no-ansi \
+			--no-scripts \
 			--no-interaction
 
 reload:
