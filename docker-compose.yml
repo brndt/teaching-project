@@ -30,9 +30,11 @@ services:
   php-consume:
     container_name: consumer
     build:
-      ./docker/php-consume
+      ./docker/php
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://rabbitmq:rabbitmq_pass@rabbitmq:5672/%2f/messages
+    entrypoint: /bin/sh
+    command: "/usr/share/nginx/html/docker/php/extensions/message-consumer.sh"
     volumes:
       - ./:/usr/share/nginx/html
     networks:
