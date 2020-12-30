@@ -1,4 +1,4 @@
-# Education platform
+# Educational platform
 
 Educational platform developed using DDD, REST and Clean Architecture concepts.
 
