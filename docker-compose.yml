@@ -10,14 +10,14 @@ services:
       - 8080:80
     volumes:
       - ./:/usr/share/nginx/html
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./etc/infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - backend
 
   php-fpm:
     container_name: fpm
     build:
-      ./docker/php
+      ./etc/infrastructure/php
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://rabbitmq:rabbitmq_pass@rabbitmq:5672/%2f/messages
     ports:
@@ -30,11 +30,11 @@ services:
   php-consume:
     container_name: consumer
     build:
-      ./docker/php
+      ./etc/infrastructure/php
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://rabbitmq:rabbitmq_pass@rabbitmq:5672/%2f/messages
     entrypoint: /bin/sh
-    command: "/usr/share/nginx/html/docker/php/extensions/message-consumer.sh"
+    command: "/usr/share/nginx/html/etc/infrastructure/php/extensions/message-consumer.sh"
     volumes:
       - ./:/usr/share/nginx/html
     networks:
@@ -55,7 +55,7 @@ services:
   rabbitmq:
     container_name: rabbitmq
     build:
-      ./docker/rabbitmq
+      ./etc/infrastructure/rabbitmq
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
       RABBITMQ_DEFAULT_USER: "rabbitmq"
