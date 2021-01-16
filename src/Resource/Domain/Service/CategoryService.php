@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Domain\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryAlreadyExists;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCategoryByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\CategoryResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCategoryByIdService;
+use LaSalle\StudentTeacher\Resource\Category\Application\AuthorizedSearchCategoryByIdRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\AuthorizedSearchCategoryByIdService;
+use LaSalle\StudentTeacher\Resource\Category\Application\CategoryResponse;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryNotFound;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Category;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;

@@ -7,8 +7,8 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchVideoResourceByIdRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchVideoResourceByIdService;
+use LaSalle\StudentTeacher\Resource\Resource\Application\AuthorizedSearchVideoResourceByIdRequest;
+use LaSalle\StudentTeacher\Resource\Resource\Application\AuthorizedSearchVideoResourceByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchVideoResourceByIdController extends AbstractFOSRestController

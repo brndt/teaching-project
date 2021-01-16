@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
 use DateTimeImmutable;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateCourseRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateCourseService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryNotFound;
+use LaSalle\StudentTeacher\Resource\Course\Application\CreateCourseRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\CreateCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;

@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaSalle\StudentTeacher\Resource\Unit\Application;
+
+use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
+use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
+use LaSalle\StudentTeacher\Resource\Domain\ValueObject\Status;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
+use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+
+final class CreateUnitService
+{
+    private UserService $userService;
+    private CourseService $courseService;
+    private UnitService $unitService;
+
+    public function __construct(
+        private UnitRepository $unitRepository,
+        UserRepository $userRepository,
+        CourseRepository $courseRepository,
+        private AuthorizationService $authorizationService
+    ) {
+        $this->userService = new UserService($userRepository);
+        $this->unitService = new UnitService($unitRepository);
+        $this->courseService = new CourseService($courseRepository);
+    }
+
+    public function __invoke(CreateUnitRequest $request): void
+    {
+        $requestAuthorId = new Uuid($request->getRequestAuthorId());
+        $requestAuthor = $this->userService->findUser($requestAuthorId);
+
+        $id = $this->unitRepository->nextIdentity();
+
+        $courseId = new Uuid($request->getCourseId());
+        $course = $this->courseService->findCourse($courseId);
+
+        $status = new Status($request->getStatus());
+
+        $this->unitService->ensureUnitNotExistsWithThisName($request->getName());
+
+        $unit = new Unit(
+            $id,
+            $courseId,
+            $request->getName(),
+            $request->getDescription(),
+            $request->getLevel(),
+            $request->getCreated(),
+            $request->getModified(),
+            $status
+        );
+
+        $this->authorizationService->ensureUserHasPermissionsToManageCourse($requestAuthor, $course);
+
+        $this->unitRepository->save($unit);
+    }
+}

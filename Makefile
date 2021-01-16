@@ -44,8 +44,8 @@ run-tests:
 	mkdir -p build/test_results/phpunit
 	php ./bin/console doctrine:database:create --env=test --if-not-exists
 	php ./bin/console doctrine:schema:update --force --env=test
-	./vendor/bin/phpunit --exclude-group='disabled' --log-junit build/test_results/phpunit/junit.xml tests
-	./vendor/bin/behat --format=progress -v
+	php ./vendor/bin/phpunit --exclude-group='disabled' --log-junit build/test_results/phpunit/junit.xml tests
+	php ./vendor/bin/behat --format=progress -v
 
 .PHONY: run-parallel-tests
 run-parallel-tests:

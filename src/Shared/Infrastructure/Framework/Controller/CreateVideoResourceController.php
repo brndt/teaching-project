@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateVideoResourceRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateVideoResourceService;
+use LaSalle\StudentTeacher\Resource\Resource\Application\CreateVideoResourceRequest;
+use LaSalle\StudentTeacher\Resource\VideoResource\Application\CreateVideoResourceService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateVideoResourceController extends AbstractFOSRestController

@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchStudentCoursePermissionRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchStudentCoursePermissionService;
+use LaSalle\StudentTeacher\Resource\StudentCoursePermission\Application\AuthorizedSearchStudentCoursePermissionRequest;
+use LaSalle\StudentTeacher\Resource\StudentCoursePermission\Application\AuthorizedSearchStudentCoursePermissionService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchStudentCoursePermissionController extends AbstractFOSRestController

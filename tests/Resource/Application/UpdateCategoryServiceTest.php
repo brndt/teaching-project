@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCategoryService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryAlreadyExists;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryNotFound;
+use LaSalle\StudentTeacher\Resource\Category\Application\UpdateCategoryRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\UpdateCategoryService;
 use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;

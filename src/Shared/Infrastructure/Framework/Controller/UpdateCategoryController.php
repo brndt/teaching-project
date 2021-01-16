@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCategoryService;
+use LaSalle\StudentTeacher\Resource\Category\Application\UpdateCategoryRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\UpdateCategoryService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateCategoryController extends AbstractFOSRestController

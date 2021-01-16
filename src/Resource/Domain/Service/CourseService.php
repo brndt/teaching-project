@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\Resource\Domain\Service;
 
-use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
+use LaSalle\StudentTeacher\Resource\Course\Application\Exception\CourseNotFoundException;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;

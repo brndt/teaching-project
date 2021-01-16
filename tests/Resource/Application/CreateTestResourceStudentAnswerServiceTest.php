@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateTestResourceStudentAnswerRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateTestResourceStudentAnswerService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\ResourceStudentAnswerRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Application\CreateTestResourceStudentAnswerRequest;
+use LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Application\CreateTestResourceStudentAnswerService;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;

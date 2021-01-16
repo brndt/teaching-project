@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchCoursesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
-use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Course\Application\CourseCollectionResponse;
+use LaSalle\StudentTeacher\Resource\Course\Application\CourseResponse;
+use LaSalle\StudentTeacher\Resource\Course\Application\UnauthorizedSearchCoursesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\UnauthorizedSearchCoursesByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use PHPUnit\Framework\MockObject\MockObject;

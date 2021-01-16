@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\UnauthorizedSearchUnitsByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\UnitCollectionResponse;
-use LaSalle\StudentTeacher\Resource\Application\Response\UnitResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\UnauthorizedSearchUnitsByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Unit;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\Unit\Application\UnauthorizedSearchUnitsByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Unit\Application\UnauthorizedSearchUnitsByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Unit\Application\UnitCollectionResponse;
+use LaSalle\StudentTeacher\Resource\Unit\Application\UnitResponse;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Builder\UnitBuilder;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryAlreadyExists;
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateCategoryService;
+use LaSalle\StudentTeacher\Resource\Category\Application\CreateCategoryRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\CreateCategoryService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryAlreadyExists;
 use LaSalle\StudentTeacher\Resource\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Application\Response\CourseCollectionResponse;
-use LaSalle\StudentTeacher\Resource\Application\Response\CourseResponse;
-use LaSalle\StudentTeacher\Resource\Application\Service\AuthorizedSearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Course\Application\AuthorizedSearchCoursesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\AuthorizedSearchCoursesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Course\Application\CourseCollectionResponse;
+use LaSalle\StudentTeacher\Resource\Course\Application\CourseResponse;
 use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;

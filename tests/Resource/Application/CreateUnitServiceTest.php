@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Request\CreateUnitRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\CreateUnitService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\Unit\Application\CreateUnitRequest;
+use LaSalle\StudentTeacher\Resource\Unit\Application\CreateUnitService;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
 use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
 use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;

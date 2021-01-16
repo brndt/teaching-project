@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\Resource\Application;
 
-use LaSalle\StudentTeacher\Resource\Application\Exception\CategoryNotFound;
-use LaSalle\StudentTeacher\Resource\Application\Exception\CourseNotFoundException;
-use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCourseService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryNotFound;
+use LaSalle\StudentTeacher\Resource\Course\Application\Exception\CourseNotFoundException;
+use LaSalle\StudentTeacher\Resource\Course\Application\UpdateCourseRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\UpdateCourseService;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CategoryRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
 use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;

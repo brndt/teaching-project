@@ -9,8 +9,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Application\Request\UpdateCourseRequest;
-use LaSalle\StudentTeacher\Resource\Application\Service\UpdateCourseService;
+use LaSalle\StudentTeacher\Resource\Course\Application\UpdateCourseRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\UpdateCourseService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateCourseController extends AbstractFOSRestController
