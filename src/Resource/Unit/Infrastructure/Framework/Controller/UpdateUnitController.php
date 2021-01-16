@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Unit\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -25,7 +25,7 @@ final class UpdateUnitController extends AbstractFOSRestController
      * @RequestParam(name="level")
      * @RequestParam(name="status")
      */
-    public function postAction(ParamFetcher $paramFetcher, string $courseId, string $unitId): Response
+    public function __invoke(ParamFetcher $paramFetcher, string $courseId, string $unitId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $name = $paramFetcher->get('name');

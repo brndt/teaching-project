@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Course\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -19,7 +19,7 @@ final class AuthorizedSearchCourseByIdController extends AbstractFOSRestControll
     /**
      * @Rest\Get("/api/v1/panel/courses/{courseId}")
      */
-    public function getAction(string $courseId): Response
+    public function __invoke(string $courseId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
 

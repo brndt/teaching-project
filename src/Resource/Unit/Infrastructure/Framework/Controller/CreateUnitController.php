@@ -2,47 +2,42 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Unit\Infrastructure\Framework\Controller;
 
 use DateTimeImmutable;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Course\Application\Request\CreateCourseRequest;
-use LaSalle\StudentTeacher\Resource\Course\Application\Service\CreateCourseService;
+use LaSalle\StudentTeacher\Resource\Unit\Application\Request\CreateUnitRequest;
+use LaSalle\StudentTeacher\Resource\Unit\Application\Service\CreateUnitService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CreateCourseController extends AbstractFOSRestController
+final class CreateUnitController extends AbstractFOSRestController
 {
-    public function __construct(private CreateCourseService $createCourse)
+    public function __construct(private CreateUnitService $createUnitService)
     {
     }
 
     /**
-     * @Rest\Post("/api/v1/panel/courses")
-     * @RequestParam(name="teacherId")
-     * @RequestParam(name="categoryId")
+     * @Rest\Post("/api/v1/panel/courses/{courseId}/units")
      * @RequestParam(name="name")
      * @RequestParam(name="description", nullable=true)
      * @RequestParam(name="level")
      * @RequestParam(name="status")
      */
-    public function postAction(ParamFetcher $paramFetcher): Response
+    public function __invoke(string $courseId, ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $teacherId = $paramFetcher->get('teacherId');
-        $categoryId = $paramFetcher->get('categoryId');
         $name = $paramFetcher->get('name');
         $description = $paramFetcher->get('description');
         $level = $paramFetcher->get('level');
         $status = $paramFetcher->get('status');
 
-        ($this->createCourse)(
-            new CreateCourseRequest(
+        ($this->createUnitService)(
+            new CreateUnitRequest(
                 $requestAuthorId,
-                $teacherId,
-                $categoryId,
+                $courseId,
                 $name,
                 $description,
                 $level,
@@ -53,7 +48,7 @@ final class CreateCourseController extends AbstractFOSRestController
         );
 
         return $this->handleView(
-            $this->view(['message' => 'Course has been successfully created'], Response::HTTP_CREATED)
+            $this->view(['message' => 'Unit has been successfully created'], Response::HTTP_CREATED)
         );
     }
 }

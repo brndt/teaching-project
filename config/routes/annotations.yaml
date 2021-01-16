@@ -2,6 +2,10 @@ controllers:
   resource: ../../src/Shared/Infrastructure/Framework/Controller
   type: annotation
 
+controllers_with_new_namespace:
+  resource: '../../src/*/*/Infrastructure/Framework/Controller/*'
+  type: annotation
+
 kernel:
   resource: ../../src/Kernel.php
   type: annotation

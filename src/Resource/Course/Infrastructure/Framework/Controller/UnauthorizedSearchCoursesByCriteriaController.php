@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Course\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -27,7 +27,7 @@ final class UnauthorizedSearchCoursesByCriteriaController extends AbstractFOSRes
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function getAction(ParamFetcher $paramFetcher): Response
+    public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $teacherId = $paramFetcher->get('teacherId');
         $categoryId = $paramFetcher->get('categoryId');

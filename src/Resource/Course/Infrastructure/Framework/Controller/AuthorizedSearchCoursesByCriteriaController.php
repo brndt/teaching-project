@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Course\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Category\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Category\Application\Service\AuthorizedSearchCategoriesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Course\Application\Request\AuthorizedSearchCoursesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\Service\AuthorizedSearchCoursesByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
+final class AuthorizedSearchCoursesByCriteriaController extends AbstractFOSRestController
 {
-    public function __construct(private AuthorizedSearchCategoriesByCriteriaService $searchCategoriesByCriteria)
+    public function __construct(private AuthorizedSearchCoursesByCriteriaService $searchCourses)
     {
     }
 
     /**
-     * @Rest\Get("/api/v1/panel/categories/")
-     * @QueryParam(name="name", strict=true, nullable=true)
+     * @Rest\Get("/api/v1/panel/courses")
+     * @QueryParam(name="teacherId", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
@@ -29,18 +29,17 @@ final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRe
     public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
-        $name = $paramFetcher->get('name');
-        $filters = empty($name) ? [] : [['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name]];
+        $teacherId = $paramFetcher->get('teacherId');
         $orderBy = $paramFetcher->get('orderBy');
         $order = $paramFetcher->get('order');
         $operator = 'AND';
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        $categories = ($this->searchCategoriesByCriteria)(
-            new AuthorizedSearchCategoriesByCriteriaRequest(
+        $courses = ($this->searchCourses)(
+            new AuthorizedSearchCoursesByCriteriaRequest(
                 $requestAuthorId,
-                $filters,
+                $teacherId,
                 $orderBy,
                 $order,
                 $operator,
@@ -50,7 +49,7 @@ final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRe
         );
 
         return $this->handleView(
-            $this->view($categories, Response::HTTP_OK)
+            $this->view($courses, Response::HTTP_OK)
         );
     }
 }

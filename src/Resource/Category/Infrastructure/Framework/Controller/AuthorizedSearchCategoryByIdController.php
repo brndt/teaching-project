@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Category\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -19,7 +19,7 @@ final class AuthorizedSearchCategoryByIdController extends AbstractFOSRestContro
     /**
      * @Rest\Get("/api/v1/panel/categories/{categoryId}")
      */
-    public function getAction(string $categoryId): Response
+    public function __invoke(string $categoryId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
 

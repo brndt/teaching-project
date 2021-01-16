@@ -2,39 +2,38 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Category\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Unit\Application\Request\UnauthorizedSearchUnitsByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Unit\Application\Service\UnauthorizedSearchUnitsByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Request\UnauthorizedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\Service\UnauthorizedSearchCategoriesByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
-class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestController
+final class UnauthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    public function __construct(
-        private UnauthorizedSearchUnitsByCriteriaService $unauthorizedSearchUnitByCriteriaService
-    ) {
+    public function __construct(private UnauthorizedSearchCategoriesByCriteriaService $searchCategoriesByCriteria)
+    {
     }
 
     /**
-     * @Rest\Get("/api/v1/courses/{courseId}/units")
-     * @QueryParam(name="teacherId", strict=true, nullable=true),
+     * @Rest\Get("/api/v1/categories/")
+     * @QueryParam(name="name", strict=true, nullable=true)
      * @QueryParam(name="orderBy", strict=true, nullable=true)
      * @QueryParam(name="order", strict=true, nullable=true, default="none")
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function postAction(ParamFetcher $paramFetcher, string $courseId): Response
+    public function __invoke(ParamFetcher $paramFetcher): Response
     {
-        $teacherId = $paramFetcher->get('teacherId');
+        $name = $paramFetcher->get('name');
 
         $filters = [['field' => 'status', 'operator' => '=', 'value' => 'published']];
 
-        if (true !== empty($courseId)) {
-            $filters[] = ['field' => 'courseId', 'operator' => '=', 'value' => $courseId];
+        if (true !== empty($name)) {
+            $filters[] = ['field' => 'name', 'operator' => 'CONTAINS', 'value' => $name];
         }
 
         $orderBy = $paramFetcher->get('orderBy');
@@ -43,8 +42,8 @@ class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestControl
         $offset = (int)$paramFetcher->get('offset');
         $limit = (int)$paramFetcher->get('limit');
 
-        $unitsResponse = ($this->unauthorizedSearchUnitByCriteriaService)(
-            new UnauthorizedSearchUnitsByCriteriaRequest(
+        $categories = ($this->searchCategoriesByCriteria)(
+            new UnauthorizedSearchCategoriesByCriteriaRequest(
                 $filters,
                 $orderBy,
                 $order,
@@ -55,8 +54,7 @@ class UnauthorizedSearchUnitsByCriteriaController extends AbstractFOSRestControl
         );
 
         return $this->handleView(
-            $this->view($unitsResponse, Response::HTTP_OK)
+            $this->view($categories, Response::HTTP_OK)
         );
     }
-
 }

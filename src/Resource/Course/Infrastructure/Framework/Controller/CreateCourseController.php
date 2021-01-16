@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Course\Infrastructure\Framework\Controller;
 
 use DateTimeImmutable;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Course\Application\Request\UpdateCourseRequest;
-use LaSalle\StudentTeacher\Resource\Course\Application\Service\UpdateCourseService;
+use LaSalle\StudentTeacher\Resource\Course\Application\Request\CreateCourseRequest;
+use LaSalle\StudentTeacher\Resource\Course\Application\Service\CreateCourseService;
 use Symfony\Component\HttpFoundation\Response;
 
-final class UpdateCourseController extends AbstractFOSRestController
+final class CreateCourseController extends AbstractFOSRestController
 {
-    public function __construct(private UpdateCourseService $updateCourse)
+    public function __construct(private CreateCourseService $createCourse)
     {
     }
 
     /**
-     * @Rest\Patch("/api/v1/panel/courses/{courseId}")
+     * @Rest\Post("/api/v1/panel/courses")
      * @RequestParam(name="teacherId")
      * @RequestParam(name="categoryId")
      * @RequestParam(name="name")
@@ -28,7 +28,7 @@ final class UpdateCourseController extends AbstractFOSRestController
      * @RequestParam(name="level")
      * @RequestParam(name="status")
      */
-    public function postAction(ParamFetcher $paramFetcher, string $courseId): Response
+    public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $teacherId = $paramFetcher->get('teacherId');
@@ -38,22 +38,22 @@ final class UpdateCourseController extends AbstractFOSRestController
         $level = $paramFetcher->get('level');
         $status = $paramFetcher->get('status');
 
-        ($this->updateCourse)(
-            new UpdateCourseRequest(
+        ($this->createCourse)(
+            new CreateCourseRequest(
                 $requestAuthorId,
-                $courseId,
                 $teacherId,
                 $categoryId,
                 $name,
                 $description,
                 $level,
                 new DateTimeImmutable(),
+                null,
                 $status
             )
         );
 
         return $this->handleView(
-            $this->view(['message' => 'Course has been successfully updated'], Response::HTTP_OK)
+            $this->view(['message' => 'Course has been successfully created'], Response::HTTP_CREATED)
         );
     }
 }

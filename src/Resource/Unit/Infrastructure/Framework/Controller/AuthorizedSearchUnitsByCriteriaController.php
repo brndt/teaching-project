@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Unit\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -25,7 +25,7 @@ final class AuthorizedSearchUnitsByCriteriaController extends AbstractFOSRestCon
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function getAction(string $courseId, ParamFetcher $paramFetcher): Response
+    public function __invoke(string $courseId, ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $orderBy = $paramFetcher->get('orderBy');

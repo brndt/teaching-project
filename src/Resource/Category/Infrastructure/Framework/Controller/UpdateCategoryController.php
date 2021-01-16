@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
+namespace LaSalle\StudentTeacher\Resource\Category\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -23,7 +23,7 @@ final class UpdateCategoryController extends AbstractFOSRestController
      * @RequestParam(name="name")
      * @RequestParam(name="status")
      */
-    public function postAction(ParamFetcher $paramFetcher, string $categoryId): Response
+    public function __invoke(ParamFetcher $paramFetcher, string $categoryId): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $name = $paramFetcher->get('name');
