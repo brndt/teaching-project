@@ -6,8 +6,8 @@ namespace LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use LaSalle\StudentTeacher\Resource\Category\Application\AuthorizedSearchCategoryByIdRequest;
-use LaSalle\StudentTeacher\Resource\Category\Application\AuthorizedSearchCategoryByIdService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Request\AuthorizedSearchCategoryByIdRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\Service\AuthorizedSearchCategoryByIdService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchCategoryByIdController extends AbstractFOSRestController

@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Category\Application\UnauthorizedSearchCategoriesByCriteriaRequest;
-use LaSalle\StudentTeacher\Resource\Category\Application\UnauthorizedSearchCategoriesByCriteriaService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Request\UnauthorizedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\Service\UnauthorizedSearchCategoriesByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UnauthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController

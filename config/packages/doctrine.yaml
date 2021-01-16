@@ -11,9 +11,9 @@ doctrine:
       name: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\NameType
       token: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\TokenType
       state: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\StateType
-      status: LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Type\StatusType
-      test_questions: LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Type\TestQuestionsType
-      test_student_assumptions: LaSalle\StudentTeacher\Resource\Infrastructure\Persistence\Doctrine\Type\TestStudentAssumptionsType
+      status: LaSalle\StudentTeacher\Shared\Infrastructure\Persistence\Doctrine\Type\StatusType
+      test_questions: LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Infrastructure\Persistence\Doctrine\Type\TestQuestionsType
+      test_student_assumptions: LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Infrastructure\Persistence\Doctrine\Type\TestStudentAssumptionsType
 
   orm:
     auto_generate_proxy_classes: true
@@ -25,8 +25,33 @@ doctrine:
         type: xml
         dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Mapping'
         prefix: LaSalle\StudentTeacher\User\Domain\Aggregate
+      Category:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Resource/Category/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\Category\Domain\Aggregate
+      Course:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Resource/Course/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\Course\Domain\Aggregate
+      Unit:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Resource/Unit/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\Unit\Domain\Aggregate
       Resource:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/Resource/Infrastructure/Persistence/Doctrine/Mapping'
-        prefix: LaSalle\StudentTeacher\Resource\Domain\Aggregate
+        dir: '%kernel.project_dir%/src/Resource/Resource/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\Resource\Domain\Aggregate
+      CoursePermission:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Resource/CoursePermission/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\CoursePermission\Domain\Aggregate
+      ResourceStudentAnswer:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Resource/ResourceStudentAnswer/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Domain\Aggregate

@@ -18,11 +18,11 @@ fos_rest:
     map_exception_codes: true
     codes:
       InvalidArgumentException: 400
-      LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryAlreadyExists: 400
-      LaSalle\StudentTeacher\Resource\Category\Application\Exception\CategoryNotFound: 404
-      LaSalle\StudentTeacher\Resource\Course\Application\Exception\CourseNotFoundException: 404
-      LaSalle\StudentTeacher\Resource\Domain\Exception\UnitAlreadyExistsException: 400
-      LaSalle\StudentTeacher\Resource\Domain\Exception\UnitNotFoundException: 400
+      LaSalle\StudentTeacher\Resource\Category\Domain\Exception\CategoryAlreadyExists: 400
+      LaSalle\StudentTeacher\Resource\Category\Domain\Exception\CategoryNotFound: 404
+      LaSalle\StudentTeacher\Resource\Course\Domain\Exception\CourseNotFoundException: 404
+      LaSalle\StudentTeacher\Resource\Unit\Domain\Exception\UnitAlreadyExistsException: 400
+      LaSalle\StudentTeacher\Resource\Unit\Domain\Exception\UnitNotFoundException: 400
       LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException: 403
       LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException: 400
       LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException: 404

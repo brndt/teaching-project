@@ -8,13 +8,13 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Category\Application\AuthorizedSearchCategoriesByCriteria;
-use LaSalle\StudentTeacher\Resource\Category\Application\AuthorizedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\Request\AuthorizedSearchCategoriesByCriteriaRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\Service\AuthorizedSearchCategoriesByCriteriaService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRestController
 {
-    public function __construct(private AuthorizedSearchCategoriesByCriteria $searchCategoriesByCriteria)
+    public function __construct(private AuthorizedSearchCategoriesByCriteriaService $searchCategoriesByCriteria)
     {
     }
 
@@ -26,7 +26,7 @@ final class AuthorizedSearchCategoriesByCriteriaController extends AbstractFOSRe
      * @QueryParam(name="offset", strict=true, nullable=true, requirements="\d+")
      * @QueryParam(name="limit", strict=true, nullable=true, requirements="\d+", default=10)
      */
-    public function getAction(ParamFetcher $paramFetcher): Response
+    public function __invoke(ParamFetcher $paramFetcher): Response
     {
         $requestAuthorId = $this->getUser()->getId();
         $name = $paramFetcher->get('name');

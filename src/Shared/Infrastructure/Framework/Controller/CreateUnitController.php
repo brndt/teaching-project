@@ -9,8 +9,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Unit\Application\CreateUnitRequest;
-use LaSalle\StudentTeacher\Resource\Unit\Application\CreateUnitService;
+use LaSalle\StudentTeacher\Resource\Unit\Application\Request\CreateUnitRequest;
+use LaSalle\StudentTeacher\Resource\Unit\Application\Service\CreateUnitService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateUnitController extends AbstractFOSRestController

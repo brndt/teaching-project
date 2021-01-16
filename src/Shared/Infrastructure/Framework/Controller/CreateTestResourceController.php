@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Resource\Application\CreateTestResourceRequest;
-use LaSalle\StudentTeacher\Resource\Resource\Application\CreateTestResourceService;
+use LaSalle\StudentTeacher\Resource\Resource\Application\Request\CreateTestResourceRequest;
+use LaSalle\StudentTeacher\Resource\Resource\Application\Service\CreateTestResourceService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateTestResourceController extends AbstractFOSRestController

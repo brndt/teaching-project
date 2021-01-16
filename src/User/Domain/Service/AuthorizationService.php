@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace LaSalle\StudentTeacher\User\Domain\Service;
 
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Course;
-use LaSalle\StudentTeacher\Resource\Domain\Aggregate\Resource;
-use LaSalle\StudentTeacher\Resource\Domain\Exception\CoursePermissionNotFound;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Service\CoursePermissionService;
-use LaSalle\StudentTeacher\Resource\Domain\Service\CourseService;
-use LaSalle\StudentTeacher\Resource\Domain\Service\UnitService;
+use LaSalle\StudentTeacher\Resource\Course\Domain\Aggregate\Course;
+use LaSalle\StudentTeacher\Resource\Course\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\Course\Domain\Service\CourseService;
+use LaSalle\StudentTeacher\Resource\CoursePermission\Domain\Exception\CoursePermissionNotFound;
+use LaSalle\StudentTeacher\Resource\CoursePermission\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\CoursePermission\Domain\Service\CoursePermissionService;
+use LaSalle\StudentTeacher\Resource\Resource\Domain\Aggregate\Resource;
+use LaSalle\StudentTeacher\Resource\Unit\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\Unit\Domain\Service\UnitService;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
 use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;

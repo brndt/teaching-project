@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\LaSalle\StudentTeacher\User\Application\Service;
 
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CoursePermissionRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\CourseRepository;
-use LaSalle\StudentTeacher\Resource\Domain\Repository\UnitRepository;
+use LaSalle\StudentTeacher\Resource\Course\Domain\Repository\CourseRepository;
+use LaSalle\StudentTeacher\Resource\CoursePermission\Domain\Repository\CoursePermissionRepository;
+use LaSalle\StudentTeacher\Resource\Unit\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;

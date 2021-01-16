@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Category\Application\CreateCategoryRequest;
-use LaSalle\StudentTeacher\Resource\Category\Application\CreateCategoryService;
+use LaSalle\StudentTeacher\Resource\Category\Application\Request\CreateCategoryRequest;
+use LaSalle\StudentTeacher\Resource\Category\Application\Service\CreateCategoryService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateCategoryController extends AbstractFOSRestController

@@ -8,8 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use LaSalle\StudentTeacher\Resource\Unit\Application\UpdateUnitRequest;
-use LaSalle\StudentTeacher\Resource\Unit\Application\UpdateUnitService;
+use LaSalle\StudentTeacher\Resource\Unit\Application\Response\UpdateUnitRequest;
+use LaSalle\StudentTeacher\Resource\Unit\Application\Service\UpdateUnitService;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUnitController extends AbstractFOSRestController

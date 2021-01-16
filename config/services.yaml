@@ -18,18 +18,8 @@ services:
     resource: '../src/*'
     exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-  # controllers are imported separately to make sure services can be injected
-  # as action arguments even if you don't extend any base controller class
-  LaSalle\StudentTeacher\Shared\Infrastructure\Framework\Controller\:
-    resource: '../src/Shared/Infrastructure/Framework/Controller'
-    tags: ['controller.service_arguments']
-
   LaSalle\StudentTeacher\Shared\Domain\Event\DomainEventBus:
     alias: 'LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus'
-
-  #LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus:
-  #  arguments:
-  #    $eventBus: '@event.bus'
 
   acme_api.event.jwt_created_listener:
     class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Event\JWTCreatedListener
