@@ -24,27 +24,27 @@ fos_rest:
       LaSalle\StudentTeacher\Resource\Unit\Domain\Exception\UnitAlreadyExistsException: 400
       LaSalle\StudentTeacher\Resource\Unit\Domain\Exception\UnitNotFoundException: 400
       LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedException: 403
-      LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenIsExpiredException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\ConfirmationTokenNotFoundException: 404
-      LaSalle\StudentTeacher\User\Application\Exception\ConnectionAlreadyExistsException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\ConnectionNotFoundException: 404
-      LaSalle\StudentTeacher\User\Application\Exception\IncorrectConfirmationTokenException: 403
-      LaSalle\StudentTeacher\User\Application\Exception\IncorrectPasswordException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenIsExpiredException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\RefreshTokenNotFoundException: 404
-      LaSalle\StudentTeacher\User\Application\Exception\RolesOfUsersEqualException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyEnabledException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\UserAlreadyExistsException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\EmailAlreadyExistsException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\UsersAreEqualException: 400
-      LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException: 404
-      LaSalle\StudentTeacher\User\Application\Exception\UserNotEnabledException: 403
+      LaSalle\StudentTeacher\User\User\Application\Exception\ConfirmationTokenIsExpiredException: 400
+      LaSalle\StudentTeacher\User\User\Application\Exception\ConfirmationTokenNotFoundException: 404
+      LaSalle\StudentTeacher\User\Connection\Application\Exception\ConnectionAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\Connection\Application\Exception\ConnectionNotFoundException: 404
+      LaSalle\StudentTeacher\User\RefreshToken\Application\Exception\IncorrectConfirmationTokenException: 403
+      LaSalle\StudentTeacher\User\User\Application\Exception\IncorrectPasswordException: 400
+      LaSalle\StudentTeacher\User\RefreshToken\Application\Exception\RefreshTokenIsExpiredException: 400
+      LaSalle\StudentTeacher\User\RefreshToken\Application\Exception\RefreshTokenNotFoundException: 404
+      LaSalle\StudentTeacher\User\User\Application\Exception\RolesOfUsersEqualException: 400
+      LaSalle\StudentTeacher\User\Shared\Application\Exception\UserAlreadyEnabledException: 400
+      LaSalle\StudentTeacher\User\Shared\Application\Exception\UserAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\User\Application\Exception\EmailAlreadyExistsException: 400
+      LaSalle\StudentTeacher\User\Shared\Application\Exception\UsersAreEqualException: 400
+      LaSalle\StudentTeacher\User\Shared\Application\Exception\UserNotFoundException: 404
+      LaSalle\StudentTeacher\User\Shared\Application\Exception\UserNotEnabledException: 403
       LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidNameException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidNumberContainingException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidPasswordLengthException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidRoleException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidStateException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidLetterContainingException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\InvalidEmailException: 400
-      LaSalle\StudentTeacher\User\Domain\Exception\IncorrectStateException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidNameException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidNumberContainingException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidPasswordLengthException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidRoleException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidStateException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidLetterContainingException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\InvalidEmailException: 400
+      LaSalle\StudentTeacher\User\User\Domain\Exception\IncorrectStateException: 400

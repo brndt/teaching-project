@@ -16,15 +16,15 @@ use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidStatusException;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
+use LaSalle\StudentTeacher\User\Shared\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\User\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Role;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Category\Domain\CategoryBuilder;
-use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
+use Test\LaSalle\StudentTeacher\User\User\Domain\UserBuilder;
 
 final class CreateCategoryServiceTest extends TestCase
 {

@@ -3,7 +3,7 @@ security:
         LaSalle\StudentTeacher\User\Infrastructure\Framework\Entity\SymfonyUser: bcrypt
     providers:
         fos_userbundle:
-            id: LaSalle\StudentTeacher\User\Infrastructure\Framework\Provider\IdUserProvider
+            id: LaSalle\StudentTeacher\User\Shared\Infrastructure\Framework\Provider\IdUserProvider
 
     firewalls:
 

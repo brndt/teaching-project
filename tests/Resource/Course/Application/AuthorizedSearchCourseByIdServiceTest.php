@@ -14,13 +14,13 @@ use LaSalle\StudentTeacher\Resource\CoursePermission\Domain\Repository\CoursePer
 use LaSalle\StudentTeacher\Resource\Unit\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Domain\Exception\InvalidUuidException;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Application\Exception\UserNotFoundException;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\Shared\Application\Exception\UserNotFoundException;
+use LaSalle\StudentTeacher\User\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\User\Domain\Service\AuthorizationService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Course\Domain\CourseBuilder;
-use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
+use Test\LaSalle\StudentTeacher\User\User\Domain\UserBuilder;
 
 final class AuthorizedSearchCourseByIdServiceTest extends TestCase
 {

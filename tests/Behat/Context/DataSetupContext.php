@@ -19,17 +19,17 @@ use LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Domain\ValueObject\Tes
 use LaSalle\StudentTeacher\Resource\Unit\Domain\Aggregate\Unit;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Email;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Name;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Password;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\State\Pended;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Token;
+use LaSalle\StudentTeacher\User\Connection\Domain\Aggregate\UserConnection;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Email;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Name;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Password;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Roles;
+use LaSalle\StudentTeacher\Shared\Domain\ValueObject\State\Pended;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Token;
 use Test\LaSalle\StudentTeacher\Resource\Category\Domain\CategoryBuilder;
 use Test\LaSalle\StudentTeacher\Resource\Course\Domain\CourseBuilder;
-use Test\LaSalle\StudentTeacher\User\Builder\RefreshTokenBuilder;
-use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
+use Test\LaSalle\StudentTeacher\User\RefreshToken\Domain\RefreshTokenBuilder;
+use Test\LaSalle\StudentTeacher\User\User\Domain\UserBuilder;
 
 class DataSetupContext implements Context, SnippetAcceptingContext
 {

@@ -4,13 +4,13 @@ doctrine:
     driver: 'pdo_pgsql'
     charset: utf8
     types:
-      roles: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\RolesType
-      uuid: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\UuidType
-      password: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
-      email: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\EmailType
-      name: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\NameType
-      token: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\TokenType
-      state: LaSalle\StudentTeacher\User\Infrastructure\Persistence\Doctrine\Type\StateType
+      roles: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\RolesType
+      uuid: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\UuidType
+      password: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\PasswordType
+      email: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\EmailType
+      name: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\NameType
+      token: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\TokenType
+      state: LaSalle\StudentTeacher\User\User\Infrastructure\Persistence\Doctrine\Type\StateType
       status: LaSalle\StudentTeacher\Shared\Infrastructure\Persistence\Doctrine\Type\StatusType
       test_questions: LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Infrastructure\Persistence\Doctrine\Type\TestQuestionsType
       test_student_assumptions: LaSalle\StudentTeacher\Resource\ResourceStudentAnswer\Infrastructure\Persistence\Doctrine\Type\TestStudentAssumptionsType
@@ -23,8 +23,18 @@ doctrine:
       User:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Mapping'
-        prefix: LaSalle\StudentTeacher\User\Domain\Aggregate
+        dir: '%kernel.project_dir%/src/User/User/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\User\User\Domain\Aggregate
+      RefreshToken:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/User/RefreshToken/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\User\RefreshToken\Domain\Aggregate
+      UserConnection:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/User/Connection/Infrastructure/Persistence/Doctrine/Mapping'
+        prefix: LaSalle\StudentTeacher\User\Connection\Domain\Aggregate
       Category:
         is_bundle: false
         type: xml

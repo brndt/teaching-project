@@ -10,14 +10,14 @@ use LaSalle\StudentTeacher\Resource\Unit\Application\Response\UpdateUnitRequest;
 use LaSalle\StudentTeacher\Resource\Unit\Application\Service\UpdateUnitService;
 use LaSalle\StudentTeacher\Resource\Unit\Domain\Repository\UnitRepository;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Roles;
+use LaSalle\StudentTeacher\User\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Role;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Roles;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Course\Domain\CourseBuilder;
 use Test\LaSalle\StudentTeacher\Resource\Unit\Domain\UnitBuilder;
-use Test\LaSalle\StudentTeacher\User\Builder\UserBuilder;
+use Test\LaSalle\StudentTeacher\User\User\Domain\UserBuilder;
 
 final class UpdateUnitServiceTest extends TestCase
 {

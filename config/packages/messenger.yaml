@@ -3,6 +3,6 @@ framework:
     transports:
       async: "%env(MESSENGER_TRANSPORT_DSN)%"
     routing:
-      'LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent': async
-      'LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent': async
-      'LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainEvent': async
+      'LaSalle\StudentTeacher\User\User\Domain\Event\UserCreatedDomainEvent': async
+      'LaSalle\StudentTeacher\User\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent': async
+      'LaSalle\StudentTeacher\User\User\Domain\Event\PasswordResetRequestReceivedDomainEvent': async

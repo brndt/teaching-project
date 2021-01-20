@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaSalle\StudentTeacher\Shared\Domain\ValueObject;
 
 use LaSalle\StudentTeacher\Shared\Domain\Utils;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Role;
 use ReflectionClass;
 use Stringable;
 

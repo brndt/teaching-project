@@ -22,7 +22,7 @@ services:
     alias: 'LaSalle\StudentTeacher\Shared\Infrastructure\Event\MessengerDomainEventBus'
 
   acme_api.event.jwt_created_listener:
-    class: LaSalle\StudentTeacher\User\Infrastructure\Framework\Event\JWTCreatedListener
+    class: LaSalle\StudentTeacher\User\User\Infrastructure\Framework\Event\JWTCreatedListener
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
@@ -30,17 +30,17 @@ services:
   #  tags:
   #    - { name: 'kernel.event_listener', event: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnUserCreated:
+  LaSalle\StudentTeacher\User\User\Application\Event\SendEmailConfirmationOnUserCreated:
           autoconfigure: false
           tags:
-              - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\UserCreatedDomainEvent }
+              - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\User\Domain\Event\UserCreatedDomainEvent }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendEmailConfirmationOnEmailConfirmationRequestReceived:
+  LaSalle\StudentTeacher\User\User\Application\Event\SendEmailConfirmationOnEmailConfirmationRequestReceived:
     autoconfigure: false
     tags:
-      - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent }
+      - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\User\Domain\Event\EmailConfirmationRequestReceivedDomainEvent }
 
-  LaSalle\StudentTeacher\User\Application\Event\SendPasswordResetOnPasswordRequestReceived:
+  LaSalle\StudentTeacher\User\User\Application\Event\SendPasswordResetOnPasswordRequestReceived:
     autoconfigure: false
     tags:
-      - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\Domain\Event\PasswordResetRequestReceivedDomainEvent }
+      - { name: messenger.message_handler, handles: LaSalle\StudentTeacher\User\User\Domain\Event\PasswordResetRequestReceivedDomainEvent }

@@ -1,8 +1,0 @@
-<doctrine-mapping>
-    <entity name="LaSalle\StudentTeacher\User\Domain\Aggregate\UserConnection" table="user_connection">
-        <id name="studentId" type="uuid" nullable="false"/>
-        <id name="teacherId" type="uuid" nullable="false"/>
-        <field name="state" type="state" nullable="false"/>
-        <field name="specifierId" type="uuid" nullable="false"/>
-    </entity>
-</doctrine-mapping>

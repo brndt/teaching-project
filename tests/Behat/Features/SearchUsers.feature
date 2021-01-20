@@ -44,7 +44,7 @@ Feature: Search users
     And the response content should be:
      """
     [
-     {
+    {
       "id": "cfe849f3-7832-435a-b484-83fabf530794",
       "firstName": "irving",
       "lastName": "cruz",

@@ -10,9 +10,9 @@ use LaSalle\StudentTeacher\Resource\Category\Domain\Repository\CategoryRepositor
 use LaSalle\StudentTeacher\Resource\Category\Domain\Service\CategoryService;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Status;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
-use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\User\Domain\Service\UserService;
 
 final class CreateCategoryService
 {

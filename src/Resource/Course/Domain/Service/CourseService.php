@@ -11,8 +11,8 @@ use LaSalle\StudentTeacher\Shared\Application\Exception\PermissionDeniedExceptio
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filter;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\Aggregate\User;
-use LaSalle\StudentTeacher\User\Domain\ValueObject\Role;
+use LaSalle\StudentTeacher\User\User\Domain\Aggregate\User;
+use LaSalle\StudentTeacher\User\User\Domain\ValueObject\Role;
 
 final class CourseService
 {

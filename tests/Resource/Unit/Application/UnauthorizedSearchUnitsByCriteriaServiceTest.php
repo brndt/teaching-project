@@ -11,7 +11,7 @@ use LaSalle\StudentTeacher\Resource\Unit\Application\Response\UnitResponse;
 use LaSalle\StudentTeacher\Resource\Unit\Application\Service\UnauthorizedSearchUnitsByCriteriaService;
 use LaSalle\StudentTeacher\Resource\Unit\Domain\Aggregate\Unit;
 use LaSalle\StudentTeacher\Resource\Unit\Domain\Repository\UnitRepository;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\User\Domain\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 use Test\LaSalle\StudentTeacher\Resource\Unit\Domain\UnitBuilder;
 

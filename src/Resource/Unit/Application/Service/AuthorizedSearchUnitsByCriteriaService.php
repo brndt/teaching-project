@@ -17,9 +17,9 @@ use LaSalle\StudentTeacher\Shared\Domain\Criteria\Filters;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Operator;
 use LaSalle\StudentTeacher\Shared\Domain\Criteria\Order;
 use LaSalle\StudentTeacher\Shared\Domain\ValueObject\Uuid;
-use LaSalle\StudentTeacher\User\Domain\Repository\UserRepository;
-use LaSalle\StudentTeacher\User\Domain\Service\AuthorizationService;
-use LaSalle\StudentTeacher\User\Domain\Service\UserService;
+use LaSalle\StudentTeacher\User\User\Domain\Repository\UserRepository;
+use LaSalle\StudentTeacher\User\User\Domain\Service\AuthorizationService;
+use LaSalle\StudentTeacher\User\User\Domain\Service\UserService;
 
 final class AuthorizedSearchUnitsByCriteriaService
 {

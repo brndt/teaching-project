@@ -1,0 +1,17 @@
+<doctrine-mapping>
+    <entity name="LaSalle\StudentTeacher\User\User\Domain\Aggregate\User" table="user_account">
+        <id name="id" type="uuid"/>
+        <field name="email" type="email" unique="true" nullable="false"/>
+        <field name="firstName" type="name" nullable="false"/>
+        <field name="lastName" type="name" nullable="false"/>
+        <field name="roles" type="roles" nullable="false"/>
+        <field name="password" type="password" nullable="false"/>
+        <field name="image" type="string" nullable="true"/>
+        <field name="education" type="string" nullable="true"/>
+        <field name="experience" type="string" nullable="true"/>
+        <field name="created" type="datetime_immutable" nullable="false"/>
+        <field name="confirmationToken" type="token" nullable="true"/>
+        <field name="expirationDate" type="datetime_immutable" nullable="true"/>
+        <field name="enabled" type="boolean" nullable="false" default="false"/>
+    </entity>
+</doctrine-mapping>
